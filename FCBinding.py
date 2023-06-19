@@ -26,7 +26,6 @@ from menu.FileMenu import QFileMenu, QFileMenuPanel
 from menu.RecentFilesManager import QRecentFilesManager
 from PySide2 import QtCore, QtGui, QtWidgets
 from Preferences import Preferences
-from dock import ModernDock
 import webbrowser
 import os
 
@@ -113,13 +112,13 @@ class ModernMenu(QModernMenu):
         # Add settings to file menu
         fileMenu.addSeparator()
         fileMenu.addButton(
-            icon= path+'Patreon', title='Support Developer',handler=self.open_donation, 
+            icon= path+'Patreon', title='Support Developer',handler=self.open_donation,
             statusTip='Support Hakan Seven to see more update on ModernUI')
 
         # Add settings to file menu
         fileMenu.addSeparator()
         fileMenu.addButton(
-            icon= path+'Settings', title='Modern Settings',handler=Preferences, 
+            icon= path+'Settings', title='Modern Settings',handler=Preferences,
             statusTip='Set Modern Menu Preferences')
 
         # Add recent files
@@ -155,10 +154,10 @@ class ModernMenu(QModernMenu):
 
         # Hide selected workbench toolbars
         #mw.menuBar().hide()
-        self.createFileMenu()
-        for tbb in mw.findChildren(QtWidgets.QToolBar):
-            if tbb.objectName() in ["draft_status_scale_widget", "draft_snap_widget"]: continue
-            tbb.hide()
+        # self.createFileMenu()
+        # for tbb in mw.findChildren(QtWidgets.QToolBar):
+        #     if tbb.objectName() in ["draft_status_scale_widget", "draft_snap_widget"]: continue
+        #     tbb.hide()
 
         # Import active workbench toolbars to menu sections
         NORParam = p.GetString("NumberOfRows", "3")
@@ -216,7 +215,7 @@ class ModernMenu(QModernMenu):
         position = position.split(",")
 
         for i in workbench_list:
-            if i not in enabled and i not in partially and i not in unchecked: 
+            if i not in enabled and i not in partially and i not in unchecked:
                 enabled.append(i)
 
                 if i not in position:
@@ -269,7 +268,7 @@ class ModernMenu(QModernMenu):
 
 
 
-    
+
 class run:
     """
     Activate Modern UI.
@@ -286,5 +285,3 @@ class run:
             if disable: return
             mw.addDockWidget(
                 QtCore.Qt.TopDockWidgetArea, MenuDock())
-            CollapsDock = p.GetString("CollapsibleDock", "On")
-            if CollapsDock == "On": ModernDock.run()
