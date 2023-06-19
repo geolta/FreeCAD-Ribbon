@@ -118,6 +118,11 @@ class ModernMenu(RibbonBar):
                 )
                 btn.setDefaultAction(action)
 
+                # add dropdown menu if necessary
+                if button.menu() is not None:
+                    btn.setMenu(button.menu())
+                    btn.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+
                 styleParam = p.GetString("IconStyle", "Icon and text")
                 if styleParam == "Text":
                     btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
