@@ -69,8 +69,8 @@ class ModernMenu(RibbonBar):
         Import selected workbench toolbars to ModernMenu section.
         """
         # Get selected tab
-        Defaults = ["Workbench", "View", "Macro"]
-        show = ["File", "Structure"]
+        ignoredToolbars = ["Workbench", "View", "Macro", "File"]
+        iconOnlyToolbars = ["Structure"]
 
         index = self.tabBar().currentIndex()
         tabName = self.tabBar().tabText(index)
@@ -96,7 +96,7 @@ class ModernMenu(RibbonBar):
             return
 
         for toolbar in workbench.listToolbars():
-            if toolbar in Defaults:
+            if toolbar in ignoredToolbars:
                 continue
             panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
 
@@ -122,7 +122,7 @@ class ModernMenu(RibbonBar):
                 if styleParam == "Text":
                     btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
 
-                elif styleParam == "Icon" or toolbar in show:
+                elif styleParam == "Icon" or toolbar in iconOnlyToolbars:
                     btn.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
 
         self.Enabled[tabName] = True
