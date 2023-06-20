@@ -20,14 +20,15 @@
 # *                                                                     *
 # ***********************************************************************
 
-import FreeCAD, FreeCADGui
+import FreeCAD as App
+import FreeCADGui as Gui
 from pyqtribbon import RibbonBar
-from PySide2 import QtCore, QtGui, QtWidgets
-from Preferences import Preferences
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QToolButton, QToolBar
 import os
 
-mw = FreeCADGui.getMainWindow()
-p = FreeCAD.ParamGet("User parameter:BaseApp/ModernUI")
+mw = Gui.getMainWindow()
+p = App.ParamGet("User parameter:BaseApp/ModernUI")
 path = os.path.dirname(__file__) + "/Resources/icons/"
 
 
@@ -71,8 +72,8 @@ class ModernMenu(RibbonBar):
 
         # add quick access buttons
         for commandName in ModernMenu.quickAccessCommands:
-            button = QtWidgets.QToolButton()
-            action = FreeCADGui.Command.get(commandName).getAction()
+            button = QToolButton()
+            action = Gui.Command.get(commandName).getAction()
             # XXX for debugging purposes
             if len(action) == 0:
                 print(f"{commandName} has no action")
@@ -84,7 +85,7 @@ class ModernMenu(RibbonBar):
 
         # add category for each workbench
         enabledList, positionList = self.getParameters()
-        WBList = FreeCADGui.listWorkbenches()
+        WBList = Gui.listWorkbenches()
         for position in positionList:
             if position in enabledList:
                 Name = WBList[position].MenuText
@@ -106,13 +107,13 @@ class ModernMenu(RibbonBar):
         tabName = tabName.replace("&", "")
         if tabName == "Modern UI":
             return
-        FreeCADGui.activateWorkbench(self.actions[tabName])
-        workbench = FreeCADGui.activeWorkbench()
+        Gui.activateWorkbench(self.actions[tabName])
+        workbench = Gui.activeWorkbench()
 
         # Hide selected workbench toolbars
         # mw.menuBar().hide()
         # self.createFileMenu()
-        # for tbb in mw.findChildren(QtWidgets.QToolBar):
+        # for tbb in mw.findChildren(QToolBar):
         #     if tbb.objectName() in ["draft_status_scale_widget", "draft_snap_widget"]: continue
         #     tbb.hide()
 
@@ -127,8 +128,8 @@ class ModernMenu(RibbonBar):
             panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
 
             # Import toolbars buttons to menu buttons
-            TB = mw.findChildren(QtWidgets.QToolBar, toolbar)
-            for button in TB[0].findChildren(QtWidgets.QToolButton):
+            TB = mw.findChildren(QToolBar, toolbar)
+            for button in TB[0].findChildren(QToolButton):
                 if button.text() == "":
                     continue
                 action = button.defaultAction()
@@ -140,21 +141,21 @@ class ModernMenu(RibbonBar):
                     size = True
 
                 btn = panel.addSmallButton(
-                    action.text(), action.icon(), alignment=QtCore.Qt.AlignLeft
+                    action.text(), action.icon(), alignment=Qt.AlignLeft
                 )
                 btn.setDefaultAction(action)
 
                 # add dropdown menu if necessary
                 if button.menu() is not None:
                     btn.setMenu(button.menu())
-                    btn.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+                    btn.setPopupMode(QToolButton.InstantPopup)
 
                 styleParam = p.GetString("IconStyle", "Icon and text")
                 if styleParam == "Text":
-                    btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
+                    btn.setToolButtonStyle(Qt.ToolButtonTextOnly)
 
                 elif styleParam == "Icon" or toolbar in ModernMenu.iconOnlyToolbars:
-                    btn.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+                    btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         self.Enabled[tabName] = True
 
@@ -162,7 +163,7 @@ class ModernMenu(RibbonBar):
         """
         Get saved parameters.
         """
-        workbench_list = [*FreeCADGui.listWorkbenches()]
+        workbench_list = [*Gui.listWorkbenches()]
         workbenches = ",".join(workbench_list)
         enabled = p.GetString("Enabled", workbenches)
         partially = p.GetString("Partially")
@@ -196,7 +197,7 @@ class run:
         disable = 0
         if name != "NoneWorkbench":
             # Disable connection after activation
-            mw = FreeCADGui.getMainWindow()
+            mw = Gui.getMainWindow()
             mw.workbenchActivated.disconnect(run)
             if disable:
                 return
