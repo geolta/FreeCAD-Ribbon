@@ -36,6 +36,20 @@ class ModernMenu(RibbonBar):
     Create ModernMenu QWidget.
     """
 
+    ignoredToolbars = ["Workbench", "View", "Macro", "File"]
+    iconOnlyToolbars = ["Structure"]
+    quickAccessCommands = [
+        "Std_New",
+        "Std_Open",
+        "Std_Save",
+        "Std_Cut",
+        "Std_Copy",
+        "Std_Paste",
+        "Std_Undo",
+        "Std_Redo",
+        "Std_Refresh",
+    ]
+
     actions = {}
     Enabled = {}
 
@@ -54,6 +68,21 @@ class ModernMenu(RibbonBar):
         """
         Create menu tabs.
         """
+
+        # add quick access buttons
+        for commandName in ModernMenu.quickAccessCommands:
+            button = QtWidgets.QToolButton()
+            action = FreeCADGui.Command.get(commandName).getAction()
+            # XXX for debugging purposes
+            if len(action) == 0:
+                print(f"{commandName} has no action")
+            elif len(action) > 1:
+                print(f"{commandName} has more than one action")
+
+            button.setDefaultAction(action[0])
+            self.addQuickAccessButton(button)
+
+        # add category for each workbench
         enabledList, positionList = self.getParameters()
         WBList = FreeCADGui.listWorkbenches()
         for position in positionList:
@@ -68,9 +97,6 @@ class ModernMenu(RibbonBar):
         """
         Import selected workbench toolbars to ModernMenu section.
         """
-        # Get selected tab
-        ignoredToolbars = ["Workbench", "View", "Macro", "File"]
-        iconOnlyToolbars = ["Structure"]
 
         index = self.tabBar().currentIndex()
         tabName = self.tabBar().tabText(index)
@@ -96,7 +122,7 @@ class ModernMenu(RibbonBar):
             return
 
         for toolbar in workbench.listToolbars():
-            if toolbar in ignoredToolbars:
+            if toolbar in ModernMenu.ignoredToolbars:
                 continue
             panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
 
@@ -127,7 +153,7 @@ class ModernMenu(RibbonBar):
                 if styleParam == "Text":
                     btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextOnly)
 
-                elif styleParam == "Icon" or toolbar in iconOnlyToolbars:
+                elif styleParam == "Icon" or toolbar in ModernMenu.iconOnlyToolbars:
                     btn.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
 
         self.Enabled[tabName] = True
