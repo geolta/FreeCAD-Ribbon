@@ -20,12 +20,16 @@
 # *                                                                     *
 # ***********************************************************************
 
+import os
+import json
+
+from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget
+from pyqtribbon import RibbonBar
+
 import FreeCAD as App
 import FreeCADGui as Gui
-from pyqtribbon import RibbonBar
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QToolButton, QToolBar
-import os
+
 
 mw = Gui.getMainWindow()
 p = App.ParamGet("User parameter:BaseApp/ModernUI")
