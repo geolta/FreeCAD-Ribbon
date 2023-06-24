@@ -35,6 +35,8 @@ Since this addon is more like a draft, there is no real preferences page, but th
 - `ShowText` (bool) whether to display tool text for small buttons
 - `Enabled` (string) comma-separated list of workbenches that shall be displayed as tabs
 
+The way the tools / commands are displayed in the tabs is determined by `RibbonStructure.json`. There you can change the order of the tools in the tool groups and set the size of it. Until now, there are only a few entries for the Sketcher Workbench and the measurement tools, feel free to improve this :)
+
 ## Discussion
 Feel free to discuss this addon on the [FreeCAD Forum](XXX). This is also the place where I discuss the limitations of this approach as a Python Addon.
 
