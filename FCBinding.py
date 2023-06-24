@@ -54,6 +54,7 @@ class ModernMenu(RibbonBar):
         "Std_Redo",
         "Std_Refresh",
     ]
+    ribbonStructure = None
 
     actions = {}
     Enabled = {}
@@ -65,6 +66,10 @@ class ModernMenu(RibbonBar):
         super().__init__()
 
         self.tabBar().currentChanged.connect(self.selectWorkbench)
+
+        # read ribbon structure from JSON file
+        with open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"), "r") as file:
+            ModernMenu.ribbonStructure = json.load(file)
 
         self.createModernMenu()
         self.selectWorkbench()
@@ -129,24 +134,61 @@ class ModernMenu(RibbonBar):
         for toolbar in workbench.listToolbars():
             if toolbar in ModernMenu.ignoredToolbars:
                 continue
+
             panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
 
-            # Import toolbars buttons to menu buttons
+            # get list of all buttons in toolbar
             TB = mw.findChildren(QToolBar, toolbar)
-            for button in TB[0].findChildren(QToolButton):
+            allButtons = TB[0].findChildren(QToolButton)
+
+            # order buttons like defined in ribbonStructure
+            if toolbar in ModernMenu.ribbonStructure and "order" in ModernMenu.ribbonStructure[toolbar]:
+                    positionsList = ModernMenu.ribbonStructure[toolbar]["order"]
+
+                    # XXX check that positionsList consists of strings only
+
+                    def sortButtons(button):
+                        if button.text() == "":
+                            return -1
+
+                        position = None
+                        try:
+                            position = positionsList.index(button.defaultAction().data())
+                        except ValueError:
+                            position = 999999
+
+                        return position
+
+                    allButtons.sort(key=sortButtons)
+
+            # add buttons to panel
+            for button in allButtons:
                 if button.text() == "":
                     continue
                 action = button.defaultAction()
 
-                sizeParam = p.GetString("IconSize", "Small")
-                if sizeParam == "Small":
-                    size = False
-                else:
-                    size = True
+                # get button size from ribbonStructure
+                try:
+                    buttonSize = ModernMenu.ribbonStructure[toolbar]["commands"][action.data()]["size"]
+                except KeyError:
+                    buttonSize = "small" # small as default
 
-                btn = panel.addSmallButton(
-                    action.text(), action.icon(), alignment=Qt.AlignLeft
-                )
+                if buttonSize == "small":
+                    btn = panel.addSmallButton(
+                        action.text(), action.icon(), alignment=Qt.AlignLeft
+                    )
+                    btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
+                elif buttonSize == "medium":
+                    btn = panel.addMediumButton(
+                        action.text(), action.icon(), alignment=Qt.AlignLeft
+                    )
+                elif buttonSize == "large":
+                    btn = panel.addLargeButton(
+                        action.text(), action.icon()
+                    )
+                else:
+                    raise NotImplementedError("Given button size not implemented, only small, medium and large are available.")
+
                 btn.setDefaultAction(action)
 
                 # add dropdown menu if necessary

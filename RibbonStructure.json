@@ -1,0 +1,35 @@
+{
+    "Sketcher geometries": {
+        "order": [
+            "Sketcher_CreatePolyline"
+        ],
+        "commands": {
+            "Sketcher_CreatePolyline": {
+                "size": "large"
+            }
+        }
+    },
+    "Sketcher constraints": {
+        "order": [
+            "Sketcher_ConstrainDistance", "Sketcher_ConstrainDistanceY", "Sketcher_ConstrainVertical", "Sketcher_ConstrainCoincident", "Sketcher_ConstrainDistanceX", "Sketcher_ConstrainHorizontal", "Sketcher_ConstrainPointOnObject"
+        ],
+        "commands": {
+            "Sketcher_ConstrainDistance": {
+                "size": "large"
+            }
+        }
+    },
+    "Measure": {
+        "order": [
+            "Part_Measure_Linear", "Part_Measure_Clear_All"
+        ],
+        "commands": {
+            "Part_Measure_Linear": {
+                "size": "medium"
+            },
+            "Part_Measure_Clear_All": {
+                "size": "medium"
+            }
+        }
+    }
+}
