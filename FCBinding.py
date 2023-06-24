@@ -197,8 +197,7 @@ class ModernMenu(RibbonBar):
                         action.text(),
                         action.icon(),
                         alignment=Qt.AlignLeft,
-                        showText=showText,
-                    )
+                    )  # medium will always have text
                 elif buttonSize == "large":
                     btn = panel.addLargeButton(
                         action.text(), action.icon()
