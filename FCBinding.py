@@ -168,41 +168,46 @@ class ModernMenu(RibbonBar):
                     continue
                 action = button.defaultAction()
 
+                # whether to show text of the button
+                showText = (
+                    p.GetBool("ShowText", False)
+                    and not toolbar in ModernMenu.iconOnlyToolbars
+                )
+
                 # get button size from ribbonStructure
                 try:
                     buttonSize = ModernMenu.ribbonStructure[toolbar]["commands"][action.data()]["size"]
                 except KeyError:
-                    buttonSize = "small" # small as default
+                    buttonSize = "small"  # small as default
 
                 if buttonSize == "small":
                     btn = panel.addSmallButton(
-                        action.text(), action.icon(), alignment=Qt.AlignLeft
+                        action.text(),
+                        action.icon(),
+                        alignment=Qt.AlignLeft,
+                        showText=showText,
                     )
-                    btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
                 elif buttonSize == "medium":
                     btn = panel.addMediumButton(
-                        action.text(), action.icon(), alignment=Qt.AlignLeft
+                        action.text(),
+                        action.icon(),
+                        alignment=Qt.AlignLeft,
+                        showText=showText,
                     )
                 elif buttonSize == "large":
                     btn = panel.addLargeButton(
                         action.text(), action.icon()
-                    )
+                    )  # large will always have text and are aligned in center
                 else:
-                    raise NotImplementedError("Given button size not implemented, only small, medium and large are available.")
+                    raise NotImplementedError(
+                        "Given button size not implemented, only small, medium and large are available."
+                    )
 
                 btn.setDefaultAction(action)
-
                 # add dropdown menu if necessary
                 if button.menu() is not None:
                     btn.setMenu(button.menu())
                     btn.setPopupMode(QToolButton.InstantPopup)
-
-                styleParam = p.GetString("IconStyle", "Icon and text")
-                if styleParam == "Text":
-                    btn.setToolButtonStyle(Qt.ToolButtonTextOnly)
-
-                elif styleParam == "Icon" or toolbar in ModernMenu.iconOnlyToolbars:
-                    btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         self.Enabled[tabName] = True
 
