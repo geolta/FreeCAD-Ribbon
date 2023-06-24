@@ -68,7 +68,9 @@ class ModernMenu(RibbonBar):
         self.tabBar().currentChanged.connect(self.selectWorkbench)
 
         # read ribbon structure from JSON file
-        with open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"), "r") as file:
+        with open(
+            os.path.join(os.path.dirname(__file__), "RibbonStructure.json"), "r"
+        ) as file:
             ModernMenu.ribbonStructure = json.load(file)
 
         self.createModernMenu()
@@ -143,24 +145,27 @@ class ModernMenu(RibbonBar):
             allButtons = TB[0].findChildren(QToolButton)
 
             # order buttons like defined in ribbonStructure
-            if toolbar in ModernMenu.ribbonStructure and "order" in ModernMenu.ribbonStructure[toolbar]:
-                    positionsList = ModernMenu.ribbonStructure[toolbar]["order"]
+            if (
+                toolbar in ModernMenu.ribbonStructure
+                and "order" in ModernMenu.ribbonStructure[toolbar]
+            ):
+                positionsList = ModernMenu.ribbonStructure[toolbar]["order"]
 
-                    # XXX check that positionsList consists of strings only
+                # XXX check that positionsList consists of strings only
 
-                    def sortButtons(button):
-                        if button.text() == "":
-                            return -1
+                def sortButtons(button):
+                    if button.text() == "":
+                        return -1
 
-                        position = None
-                        try:
-                            position = positionsList.index(button.defaultAction().data())
-                        except ValueError:
-                            position = 999999
+                    position = None
+                    try:
+                        position = positionsList.index(button.defaultAction().data())
+                    except ValueError:
+                        position = 999999
 
-                        return position
+                    return position
 
-                    allButtons.sort(key=sortButtons)
+                allButtons.sort(key=sortButtons)
 
             # add buttons to panel
             for button in allButtons:
