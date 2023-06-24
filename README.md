@@ -15,7 +15,7 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 1. When you restarted you don't see any toolbar.
 1. Create a macro.
 1. Paste this code in to macro.
-    ```
+    ```python
     from PySide2 import QtCore, QtGui, QtWidgets
     mw = FreeCADGui.getMainWindow()
     mw.menuBar().show()
@@ -38,7 +38,7 @@ Since this addon is more like a draft, there is no real preferences page, but th
 The way the tools / commands are displayed in the tabs is determined by `RibbonStructure.json`. There you can change the order of the tools in the tool groups and set the size of it. Until now, there are only a few entries for the Sketcher Workbench and the measurement tools, feel free to improve this :)
 
 ## Discussion
-Feel free to discuss this addon on the [FreeCAD Forum](XXX). This is also the place where I discuss the limitations of this approach as a Python Addon.
+Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). This is also the place where I discuss the limitations of this approach as a Python Addon.
 
 ## Known Issues
 - When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.
