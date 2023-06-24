@@ -103,6 +103,9 @@ class ModernMenu(RibbonBar):
 
                 self.addCategory(Name)
 
+        # application icon
+        self.setApplicationIcon(Gui.getIcon("freecad"))
+
     def selectWorkbench(self):
         """
         Import selected workbench toolbars to ModernMenu section.
@@ -114,8 +117,6 @@ class ModernMenu(RibbonBar):
 
         # Activate selected workbench
         tabName = tabName.replace("&", "")
-        if tabName == "Modern UI":
-            return
         Gui.activateWorkbench(self.actions[tabName])
         workbench = Gui.activeWorkbench()
 
