@@ -32,7 +32,7 @@ import FreeCADGui as Gui
 
 
 mw = Gui.getMainWindow()
-p = App.ParamGet("User parameter:BaseApp/ModernUI")
+p = App.ParamGet("User parameter:BaseApp/RibbonUI")
 path = os.path.dirname(__file__) + "/Resources/icons/"
 
 
@@ -95,15 +95,17 @@ class ModernMenu(RibbonBar):
             self.addQuickAccessButton(button)
 
         # add category for each workbench
-        enabledList, positionList = self.getParameters()
+        enabledList = self.getEnabledWorkbenches()
         WBList = Gui.listWorkbenches()
-        for position in positionList:
-            if position in enabledList:
-                Name = WBList[position].MenuText
-                self.actions[Name] = position
-                self.Enabled[Name] = False
+        for workbenchName in enabledList:
+            if workbenchName == "":
+                continue
 
-                self.addCategory(Name)
+            Name = WBList[workbenchName].MenuText
+            self.actions[Name] = workbenchName
+            self.Enabled[Name] = False
+
+            self.addCategory(Name)
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
@@ -214,30 +216,14 @@ class ModernMenu(RibbonBar):
 
         self.Enabled[tabName] = True
 
-    def getParameters(self):
-        """
-        Get saved parameters.
-        """
-        workbench_list = [*Gui.listWorkbenches()]
-        workbenches = ",".join(workbench_list)
-        enabled = p.GetString("Enabled", workbenches)
-        partially = p.GetString("Partially")
-        unchecked = p.GetString("Unchecked")
-        position = p.GetString("Position", workbenches)
+    def getEnabledWorkbenches(self):
 
+        enabled = p.GetString(
+            "Enabled",
+            App.ParamGet("User parameter:BaseApp/Workbenches").GetString("Enabled"),
+        )
         enabled = enabled.split(",")
-        partially = partially.split(",")
-        unchecked = unchecked.split(",")
-        position = position.split(",")
-
-        for i in workbench_list:
-            if i not in enabled and i not in partially and i not in unchecked:
-                enabled.append(i)
-
-                if i not in position:
-                    position.append(i)
-
-        return enabled, position
+        return enabled
 
 
 class run:
