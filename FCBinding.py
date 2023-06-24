@@ -24,7 +24,7 @@ import os
 import json
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget
+from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
 from pyqtribbon import RibbonBar
 
 import FreeCAD as App
@@ -258,4 +258,12 @@ class run:
                 return
 
             ribbon = ModernMenu()
-            mw.setMenuBar(ribbon)
+            # mw.setMenuBar(ribbon)
+
+            ribbonDock = QDockWidget()
+            ribbonDock.setTitleBarWidget(QWidget())
+            ribbonDock.setMinimumHeight(0)
+            sp = ribbonDock.sizePolicy()
+            sp.setVerticalPolicy(QSizePolicy.Ignored)
+            ribbonDock.setWidget(ribbon)
+            mw.addDockWidget(Qt.TopDockWidgetArea, ribbonDock)
