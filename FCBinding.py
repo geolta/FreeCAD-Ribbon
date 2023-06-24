@@ -122,12 +122,10 @@ class ModernMenu(RibbonBar):
         Gui.activateWorkbench(self.actions[tabName])
         workbench = Gui.activeWorkbench()
 
-        # Hide selected workbench toolbars
-        # mw.menuBar().hide()
-        # self.createFileMenu()
-        # for tbb in mw.findChildren(QToolBar):
-        #     if tbb.objectName() in ["draft_status_scale_widget", "draft_snap_widget"]: continue
-        #     tbb.hide()
+        # hide normal toolbars
+        for tbb in mw.findChildren(QToolBar):
+            if tbb.objectName() not in ["", "draft_status_scale_widget", "draft_snap_widget"]:
+                tbb.hide()
 
         if self.Enabled[tabName]:
             return
