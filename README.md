@@ -31,11 +31,16 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 
 ## Settings
 
-Since this addon is more like a draft, there is no real preferences page, but the following settings can be set manually under `Tools / Edit Parameters...` and the path `BaseApp/RibbonUI`:
-- `ShowText` (bool) whether to display tool text for small buttons
-- `Enabled` (string) comma-separated list of workbenches that shall be displayed as tabs
+Since this addon is more like a draft, there is no preferences page, all settings can be accessed via  `RibbonStructure.json`, there is determined
+- which toolbars are ignored and not displayed (`ignoredToolbars`)
+- which toolbars will always display icons only, regardless of the `showText` variable (see below) (`iconOnlyToolbars`)
+- which commands are displayed in the tab bar (`quickAccessCommands`)
+- which workbenches do not appear in the tab bar (`ignoredWorkbenches`)
+- whether small buttons display text as well (`showText`)
+- the order of tools in the toolbars (`toolbars / <toolbar name> / order`)
+- the size of a tool button (`toolbars / <toolbar name> / commands / <command name> / size`)
 
-The way the tools / commands are displayed in the tabs is determined by `RibbonStructure.json`. There you can change the order of the tools in the tool groups and set the size of it. Until now, there are only a few entries for the Sketcher Workbench and the measurement tools, feel free to improve this :)
+Until now, there are only a few defaults, more or less for testing, feel free to change something and restart FreeCAD to see the results :)
 
 ## Discussion
 Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). This is also the place where I discuss the limitations of this approach as a Python Addon.
