@@ -25,6 +25,7 @@ import json
 
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide2.QtGui import QIcon
 from pyqtribbon import RibbonBar
 
 import FreeCAD as App
@@ -180,6 +181,13 @@ class ModernMenu(RibbonBar):
                     action.setText(text)
                 except KeyError:
                     text = action.text()
+
+                # try to get alternative icon from ribbonStructure
+                try:
+                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["icon"]
+                    action.setIcon(QIcon(os.path.join(path, icon)))
+                except KeyError:
+                    icon = action.icon()
 
                 # get button size from ribbonStructure
                 try:

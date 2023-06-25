@@ -41,7 +41,8 @@
             "commands": {
                 "Sketcher_CreatePolyline": {
                     "size": "large",
-                    "text": "Polyline"
+                    "text": "Polyline",
+                    "icon": "Sketcher_CreatePolyline_big.svg"
                 }
             }
         },
@@ -58,7 +59,8 @@
             "commands": {
                 "Sketcher_ConstrainDistance": {
                     "size": "large",
-                    "text": "Distance"
+                    "text": "Distance",
+                    "icon": "Constraint_Length_big.svg"
                 }
             }
         },
