@@ -1,34 +1,77 @@
 {
-    "Sketcher geometries": {
-        "order": [
-            "Sketcher_CreatePolyline"
-        ],
-        "commands": {
-            "Sketcher_CreatePolyline": {
-                "size": "large"
+    "ignoredToolbars": [
+        "Workbench",
+        "View",
+        "Macro",
+        "File"
+    ],
+    "iconOnlyToolbars": [
+        "Structure"
+    ],
+    "quickAccessCommands": [
+        "Std_New",
+        "Std_Open",
+        "Std_Save",
+        "Std_Cut",
+        "Std_Copy",
+        "Std_Paste",
+        "Std_Undo",
+        "Std_Redo",
+        "Std_Refresh"
+    ],
+    "ignoredWorkbenches": [
+        "Inspection",
+        "OpenSCAD",
+        "<none>",
+        "Start",
+        "Drawing",
+        "Points",
+        "Robot",
+        "Test Framework",
+        "Web",
+        "Raytracing",
+        "Reverse Engineering"
+    ],
+    "showText": false,
+    "toolbars": {
+        "Sketcher geometries": {
+            "order": [
+                "Sketcher_CreatePolyline"
+            ],
+            "commands": {
+                "Sketcher_CreatePolyline": {
+                    "size": "large"
+                }
             }
-        }
-    },
-    "Sketcher constraints": {
-        "order": [
-            "Sketcher_ConstrainDistance", "Sketcher_ConstrainDistanceY", "Sketcher_ConstrainVertical", "Sketcher_ConstrainCoincident", "Sketcher_ConstrainDistanceX", "Sketcher_ConstrainHorizontal", "Sketcher_ConstrainPointOnObject"
-        ],
-        "commands": {
-            "Sketcher_ConstrainDistance": {
-                "size": "large"
+        },
+        "Sketcher constraints": {
+            "order": [
+                "Sketcher_ConstrainDistance",
+                "Sketcher_ConstrainDistanceY",
+                "Sketcher_ConstrainVertical",
+                "Sketcher_ConstrainCoincident",
+                "Sketcher_ConstrainDistanceX",
+                "Sketcher_ConstrainHorizontal",
+                "Sketcher_ConstrainPointOnObject"
+            ],
+            "commands": {
+                "Sketcher_ConstrainDistance": {
+                    "size": "large"
+                }
             }
-        }
-    },
-    "Measure": {
-        "order": [
-            "Part_Measure_Linear", "Part_Measure_Clear_All"
-        ],
-        "commands": {
-            "Part_Measure_Linear": {
-                "size": "medium"
-            },
-            "Part_Measure_Clear_All": {
-                "size": "medium"
+        },
+        "Measure": {
+            "order": [
+                "Part_Measure_Linear",
+                "Part_Measure_Clear_All"
+            ],
+            "commands": {
+                "Part_Measure_Linear": {
+                    "size": "medium"
+                },
+                "Part_Measure_Clear_All": {
+                    "size": "medium"
+                }
             }
         }
     }

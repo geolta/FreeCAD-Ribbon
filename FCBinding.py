@@ -32,7 +32,6 @@ import FreeCADGui as Gui
 
 
 mw = Gui.getMainWindow()
-p = App.ParamGet("User parameter:BaseApp/RibbonUI")
 path = os.path.dirname(__file__) + "/Resources/icons/"
 
 
@@ -41,19 +40,6 @@ class ModernMenu(RibbonBar):
     Create ModernMenu QWidget.
     """
 
-    ignoredToolbars = ["Workbench", "View", "Macro", "File"]
-    iconOnlyToolbars = ["Structure"]
-    quickAccessCommands = [
-        "Std_New",
-        "Std_Open",
-        "Std_Save",
-        "Std_Cut",
-        "Std_Copy",
-        "Std_Paste",
-        "Std_Undo",
-        "Std_Redo",
-        "Std_Refresh",
-    ]
     ribbonStructure = None
 
     actions = {}
@@ -82,7 +68,7 @@ class ModernMenu(RibbonBar):
         """
 
         # add quick access buttons
-        for commandName in ModernMenu.quickAccessCommands:
+        for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
             button = QToolButton()
             action = Gui.Command.get(commandName).getAction()
             # XXX for debugging purposes
@@ -95,13 +81,15 @@ class ModernMenu(RibbonBar):
             self.addQuickAccessButton(button)
 
         # add category for each workbench
-        enabledList = self.getEnabledWorkbenches()
-        WBList = Gui.listWorkbenches()
-        for workbenchName in enabledList:
-            if workbenchName == "":
+        for workbenchName, workbench in Gui.listWorkbenches().items():
+            if (
+                workbenchName == ""
+                or workbench.MenuText
+                in ModernMenu.ribbonStructure["ignoredWorkbenches"]
+            ):
                 continue
 
-            Name = WBList[workbenchName].MenuText
+            Name = workbench.MenuText
             self.actions[Name] = workbenchName
             self.Enabled[Name] = False
 
@@ -126,7 +114,11 @@ class ModernMenu(RibbonBar):
 
         # hide normal toolbars
         for tbb in mw.findChildren(QToolBar):
-            if tbb.objectName() not in ["", "draft_status_scale_widget", "draft_snap_widget"]:
+            if tbb.objectName() not in [
+                "",
+                "draft_status_scale_widget",
+                "draft_snap_widget",
+            ]:
                 tbb.hide()
 
         if self.Enabled[tabName]:
@@ -135,7 +127,7 @@ class ModernMenu(RibbonBar):
             return
 
         for toolbar in workbench.listToolbars():
-            if toolbar in ModernMenu.ignoredToolbars:
+            if toolbar in ModernMenu.ribbonStructure["ignoredToolbars"]:
                 continue
 
             panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
@@ -146,10 +138,10 @@ class ModernMenu(RibbonBar):
 
             # order buttons like defined in ribbonStructure
             if (
-                toolbar in ModernMenu.ribbonStructure
-                and "order" in ModernMenu.ribbonStructure[toolbar]
+                toolbar in ModernMenu.ribbonStructure["toolbars"]
+                and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
             ):
-                positionsList = ModernMenu.ribbonStructure[toolbar]["order"]
+                positionsList = ModernMenu.ribbonStructure["toolbars"][toolbar]["order"]
 
                 # XXX check that positionsList consists of strings only
 
@@ -175,13 +167,13 @@ class ModernMenu(RibbonBar):
 
                 # whether to show text of the button
                 showText = (
-                    p.GetBool("ShowText", False)
-                    and not toolbar in ModernMenu.iconOnlyToolbars
+                    ModernMenu.ribbonStructure["showText"]
+                    and not toolbar in ModernMenu.ribbonStructure["iconOnlyToolbars"]
                 )
 
                 # get button size from ribbonStructure
                 try:
-                    buttonSize = ModernMenu.ribbonStructure[toolbar]["commands"][action.data()]["size"]
+                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["size"]
                 except KeyError:
                     buttonSize = "small"  # small as default
 
@@ -214,15 +206,6 @@ class ModernMenu(RibbonBar):
                     btn.setPopupMode(QToolButton.InstantPopup)
 
         self.Enabled[tabName] = True
-
-    def getEnabledWorkbenches(self):
-
-        enabled = p.GetString(
-            "Enabled",
-            App.ParamGet("User parameter:BaseApp/Workbenches").GetString("Enabled"),
-        )
-        enabled = enabled.split(",")
-        return enabled
 
 
 class run:
