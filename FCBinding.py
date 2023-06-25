@@ -171,6 +171,16 @@ class ModernMenu(RibbonBar):
                     and not toolbar in ModernMenu.ribbonStructure["iconOnlyToolbars"]
                 )
 
+                # try to get alternative text from ribbonStructure
+                try:
+                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["text"]
+                    # the text would be overwritten again when the state of the action changes
+                    # (e.g. when getting enabled / disabled), therefore the action itself
+                    # is manipulated.
+                    action.setText(text)
+                except KeyError:
+                    text = action.text()
+
                 # get button size from ribbonStructure
                 try:
                     buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["size"]

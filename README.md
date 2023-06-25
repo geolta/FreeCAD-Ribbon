@@ -39,6 +39,7 @@ Since this addon is more like a draft, there is no preferences page, all setting
 - whether small buttons display text as well (`showText`)
 - the order of tools in the toolbars (`toolbars / <toolbar name> / order`)
 - the size of a tool button (`toolbars / <toolbar name> / commands / <command name> / size`)
+- an alternative text of a tool button (`toolbars / <toolbar name> / commands / <command name> / text`)
 
 Until now, there are only a few defaults, more or less for testing, feel free to change something and restart FreeCAD to see the results :)
 
