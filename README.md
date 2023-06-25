@@ -7,7 +7,7 @@ A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [Hakan
 This is not finished or intended for production use, but rather to look at where the limitations of this approach, implementing it as an external Python addon, lie.
 
 ## Installation
-Download this repository, extract the folder and copy it to the `Mod` folder of your FreeCAD installation.
+Download this repository, extract the folder and copy it to the `Mod` folder of FreeCAD, detailed information can be found at the [FreeCAD Wiki](https://wiki.freecad.org/Installing_more_workbenches).
 
 ## Uninstallation
 1. Remove the folder of this in the `Mod` folder of your FreeCAD installation
@@ -31,7 +31,7 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 
 ## Settings
 
-Since this addon is more like a draft, there is no preferences page, all settings can be accessed via  `RibbonStructure.json`, there is determined
+Since this addon is more like a draft, there is no preferences page, all settings can be accessed via  `RibbonStructure.json`, you can find the file in the folder of this addon. The file determines
 - which toolbars are ignored and not displayed (`ignoredToolbars`)
 - which toolbars will always display icons only, regardless of the `showText` variable (see below) (`iconOnlyToolbars`)
 - which commands are displayed in the tab bar (`quickAccessCommands`)
