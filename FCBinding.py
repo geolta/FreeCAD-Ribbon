@@ -44,8 +44,8 @@ class ModernMenu(RibbonBar):
 
     ribbonStructure = None
 
-    actions = {}
-    Enabled = {}
+    wbNameMapping = {}
+    isWbLoaded = {}
 
     def __init__(self):
         """
@@ -62,14 +62,14 @@ class ModernMenu(RibbonBar):
             ModernMenu.ribbonStructure = json.load(file)
 
         self.createModernMenu()
-        self.selectWorkbench()
+        self.onUserChangedWorkbench()
 
     def connectSignals(self):
-        self.tabBar().currentChanged.connect(self.selectWorkbench)
+        self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
         mw.workbenchActivated.connect(self.onWbActivated)
 
     def disconnectSignals(self):
-        self.tabBar().currentChanged.disconnect(self.selectWorkbench)
+        self.tabBar().currentChanged.disconnect(self.onUserChangedWorkbench)
         mw.workbenchActivated.disconnect(self.onWbActivated)
 
     def createModernMenu(self):
@@ -99,18 +99,18 @@ class ModernMenu(RibbonBar):
             ):
                 continue
 
-            Name = workbench.MenuText
-            self.actions[Name] = workbenchName
-            self.Enabled[Name] = False
+            name = workbench.MenuText
+            self.wbNameMapping[name] = workbenchName
+            self.isWbLoaded[name] = False
 
-            self.addCategory(Name)
-            # set icon
+            self.addCategory(name)
+            # set tab icon
             self.tabBar().setTabIcon(len(self.categories())-1, QIcon(workbench.Icon))
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
 
-    def selectWorkbench(self):
+    def onUserChangedWorkbench(self):
         """
         Import selected workbench toolbars to ModernMenu section.
         """
@@ -119,37 +119,20 @@ class ModernMenu(RibbonBar):
         tabName = self.tabBar().tabText(index)
         category = self.currentCategory()
 
-        # Activate selected workbench
+        # activate selected workbench
         tabName = tabName.replace("&", "")
-        Gui.activateWorkbench(self.actions[tabName])
+        Gui.activateWorkbench(self.wbNameMapping[tabName])
         self.onWbActivated()
 
     def onWbActivated(self):
         # switch tab if necessary
-        currentWbIndex = self.tabBar().indexOf(Gui.activeWorkbench().MenuText)
-        currentTabIndex = self.tabBar().currentIndex()
-
-        if currentWbIndex != currentTabIndex:
-            self.disconnectSignals()
-            self.tabBar().setCurrentIndex(currentWbIndex)
-            self.connectSignals()
-
-        # create panels
-        workbench = Gui.activeWorkbench()
+        self.updateCurrentTab()
 
         # hide normal toolbars
-        for tbb in mw.findChildren(QToolBar):
-            if tbb.objectName() not in [
-                "",
-                "draft_status_scale_widget",
-                "draft_snap_widget",
-            ]:
-                tbb.hide()
+        self.hideClassicToolbars()
 
-        # create panels
-        tabName = self.tabBar().tabText(self.tabBar().currentIndex()).replace("&", "")
-        if self.Enabled[tabName]:
-            return
+        # ensure that workbench is already loaded
+        workbench = Gui.activeWorkbench()
         if not hasattr(workbench, "__Workbench__"):
             # XXX for debugging purposes
             print(f"wb {workbench.MenuText} not loaded")
@@ -159,6 +142,15 @@ class ModernMenu(RibbonBar):
             timer.setSingleShot(True)
             timer.start(100)
 
+            return
+
+        # create panels
+        self.buildPanels()
+
+    def buildPanels(self):
+        workbench = Gui.activeWorkbench()
+        tabName = self.tabBar().tabText(self.tabBar().currentIndex()).replace("&", "")
+        if self.isWbLoaded[tabName]:
             return
 
         for toolbar in workbench.listToolbars():
@@ -257,7 +249,25 @@ class ModernMenu(RibbonBar):
                     btn.setMenu(button.menu())
                     btn.setPopupMode(QToolButton.InstantPopup)
 
-        self.Enabled[tabName] = True
+        self.isWbLoaded[tabName] = True
+
+    def updateCurrentTab(self):
+        currentWbIndex = self.tabBar().indexOf(Gui.activeWorkbench().MenuText)
+        currentTabIndex = self.tabBar().currentIndex()
+
+        if currentWbIndex != currentTabIndex:
+            self.disconnectSignals()
+            self.tabBar().setCurrentIndex(currentWbIndex)
+            self.connectSignals()
+
+    def hideClassicToolbars(self):
+        for toolbar in mw.findChildren(QToolBar):
+            if toolbar.objectName() not in [
+                "",
+                "draft_status_scale_widget",
+                "draft_snap_widget",
+            ]:
+                toolbar.hide()
 
 
 class run:
