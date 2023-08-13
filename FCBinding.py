@@ -23,7 +23,7 @@
 import os
 import json
 
-from PySide2.QtCore import Qt
+from PySide2.QtCore import Qt, QTimer
 from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
 from PySide2.QtGui import QIcon
 from pyqtribbon import RibbonBar
@@ -34,6 +34,7 @@ import FreeCADGui as Gui
 
 mw = Gui.getMainWindow()
 path = os.path.dirname(__file__) + "/Resources/icons/"
+timer = QTimer()
 
 
 class ModernMenu(RibbonBar):
@@ -52,7 +53,7 @@ class ModernMenu(RibbonBar):
         """
         super().__init__()
 
-        self.tabBar().currentChanged.connect(self.selectWorkbench)
+        self.connectSignals()
 
         # read ribbon structure from JSON file
         with open(
@@ -62,6 +63,14 @@ class ModernMenu(RibbonBar):
 
         self.createModernMenu()
         self.selectWorkbench()
+
+    def connectSignals(self):
+        self.tabBar().currentChanged.connect(self.selectWorkbench)
+        mw.workbenchActivated.connect(self.onWbActivated)
+
+    def disconnectSignals(self):
+        self.tabBar().currentChanged.disconnect(self.selectWorkbench)
+        mw.workbenchActivated.disconnect(self.onWbActivated)
 
     def createModernMenu(self):
         """
@@ -113,6 +122,19 @@ class ModernMenu(RibbonBar):
         # Activate selected workbench
         tabName = tabName.replace("&", "")
         Gui.activateWorkbench(self.actions[tabName])
+        self.onWbActivated()
+
+    def onWbActivated(self):
+        # switch tab if necessary
+        currentWbIndex = self.tabBar().indexOf(Gui.activeWorkbench().MenuText)
+        currentTabIndex = self.tabBar().currentIndex()
+
+        if currentWbIndex != currentTabIndex:
+            self.disconnectSignals()
+            self.tabBar().setCurrentIndex(currentWbIndex)
+            self.connectSignals()
+
+        # create panels
         workbench = Gui.activeWorkbench()
 
         # hide normal toolbars
@@ -124,16 +146,26 @@ class ModernMenu(RibbonBar):
             ]:
                 tbb.hide()
 
+        # create panels
+        tabName = self.tabBar().tabText(self.tabBar().currentIndex()).replace("&", "")
         if self.Enabled[tabName]:
             return
         if not hasattr(workbench, "__Workbench__"):
+            # XXX for debugging purposes
+            print(f"wb {workbench.MenuText} not loaded")
+
+            # wait for 0.1s hoping that after that time the workbench is loaded
+            timer.timeout.connect(self.onWbActivated)
+            timer.setSingleShot(True)
+            timer.start(100)
+
             return
 
         for toolbar in workbench.listToolbars():
             if toolbar in ModernMenu.ribbonStructure["ignoredToolbars"]:
                 continue
 
-            panel = category.addPanel(toolbar.replace(tabName + " ", "").capitalize())
+            panel = self.currentCategory().addPanel(toolbar.replace(tabName + " ", "").capitalize())
 
             # get list of all buttons in toolbar
             TB = mw.findChildren(QToolBar, toolbar)
