@@ -95,6 +95,8 @@ class ModernMenu(RibbonBar):
             self.Enabled[Name] = False
 
             self.addCategory(Name)
+            # set icon
+            self.tabBar().setTabIcon(len(self.categories())-1, QIcon(workbench.Icon))
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
