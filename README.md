@@ -1,13 +1,13 @@
 ## FreeCAD Ribbon UI
 
-A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [HakanSeven](https://github.com/HakanSeven12/Modern-UI) and the [PyQtRibbon library](https://github.com/haiiliin/pyqtribbon).
+A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [HakanSeven](https://github.com/HakanSeven12/Modern-UI) and the [PyQtRibbon library](https://github.com/haiiliin/pyqtribbon) that got slight modifications for this purpose.
 
 ![Screenshots of FreeCAD with the Ribbon UI](Screenshot.png)
 
 This is not finished or intended for production use, but rather to look at where the limitations of this approach, implementing it as an external Python addon, lie.
 
 ## Installation
-Download this repository, extract the folder and copy it to the `Mod` folder of FreeCAD, detailed information can be found at the [FreeCAD Wiki](https://wiki.freecad.org/Installing_more_workbenches). Additionally, you have to install the python library `pyqtribbon` by executing the command `pip install pyqtribbon` in the terminal. Now restart FreeCAD and you will see a ribbon interface :)
+Download this repository, extract the folder and copy it to the `Mod` folder of FreeCAD, detailed information can be found at the [FreeCAD Wiki](https://wiki.freecad.org/Installing_more_workbenches). Now restart FreeCAD and you will see a ribbon interface :)
 
 ## Uninstallation
 1. Remove the folder of this in the `Mod` folder of your FreeCAD installation
