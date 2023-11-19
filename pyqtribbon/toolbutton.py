@@ -9,9 +9,9 @@ class RibbonToolButton(QtWidgets.QToolButton):
 
     _buttonStyle: RibbonButtonStyle
 
-    _largeButtonIconSize = 64
-    _mediumButtonIconSize = 48
-    _smallButtonIconSize = 32
+    _smallButtonIconSize = 24
+    _mediumButtonIconSize = int(_smallButtonIconSize * 1.5)
+    _largeButtonIconSize = _smallButtonIconSize * 2
 
     _maximumIconSize = 64
 
@@ -26,6 +26,13 @@ class RibbonToolButton(QtWidgets.QToolButton):
         self.setButtonStyle(RibbonButtonStyle.Large)
         self.setAutoRaise(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
+
+    @staticmethod
+    def setBaseIconSize(size: int):
+        RibbonToolButton._smallButtonIconSize = size
+        RibbonToolButton._mediumButtonIconSize = int(size * 1.5)
+        RibbonToolButton._largeButtonIconSize = size * 2
+        RibbonToolButton._maximumIconSize = size * 2
 
     def setMaximumIconSize(self, size: int):
         """Set the maximum icon size of the button.

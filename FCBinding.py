@@ -26,6 +26,7 @@ import json
 from PySide2.QtCore import Qt, QTimer
 from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
 from PySide2.QtGui import QIcon
+
 from pyqtribbon import RibbonBar
 
 import FreeCAD as App
@@ -51,7 +52,13 @@ class ModernMenu(RibbonBar):
         """
         Constructor
         """
-        super().__init__()
+
+        # use icon size from FreeCAD preferences
+        iconSize: int = App.ParamGet(
+            "User parameter:BaseApp/Preferences/General"
+        ).GetInt("ToolbarIconSize", 24)
+
+        super().__init__(iconSize=iconSize)
 
         self.connectSignals()
 
@@ -105,7 +112,7 @@ class ModernMenu(RibbonBar):
 
             self.addCategory(name)
             # set tab icon
-            self.tabBar().setTabIcon(len(self.categories())-1, QIcon(workbench.Icon))
+            self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
@@ -157,7 +164,9 @@ class ModernMenu(RibbonBar):
             if toolbar in ModernMenu.ribbonStructure["ignoredToolbars"]:
                 continue
 
-            panel = self.currentCategory().addPanel(toolbar.replace(tabName + " ", "").capitalize())
+            panel = self.currentCategory().addPanel(
+                toolbar.replace(tabName + " ", "").capitalize()
+            )
 
             # get list of all buttons in toolbar
             TB = mw.findChildren(QToolBar, toolbar)

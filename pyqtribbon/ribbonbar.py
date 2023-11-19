@@ -12,6 +12,7 @@ from .constants import RibbonCategoryStyle, RibbonStyle, contextColors
 from .menu import RibbonMenu
 from .tabbar import RibbonTabBar
 from .titlewidget import RibbonApplicationButton, RibbonTitleWidget
+from .toolbutton import RibbonToolButton
 from .utils import DataFile
 
 
@@ -55,7 +56,7 @@ class RibbonBar(QtWidgets.QMenuBar):
     _currentTabIndex = 0
 
     @typing.overload
-    def __init__(self, title: str = "Ribbon Bar Title", maxRows=6, parent=None):
+    def __init__(self, title: str = "Ribbon Bar Title", maxRows=6, iconSize=32, parent=None):
         pass
 
     @typing.overload
@@ -67,20 +68,27 @@ class RibbonBar(QtWidgets.QMenuBar):
 
         :param title: The title of the ribbon.
         :param maxRows: The maximum number of rows.
+        :param iconSize: The size of a small icon.
         :param parent: The parent widget of the ribbon.
         """
-        if (args and not isinstance(args[0], QtWidgets.QWidget)) or ("title" in kwargs or "maxRows" in kwargs):
+
+        if (args and not isinstance(args[0], QtWidgets.QWidget)) or ("title" in kwargs or "maxRows" in kwargs or "iconSize" in kwargs):
             title = args[0] if len(args) > 0 else kwargs.get("title", "Ribbon Bar Title")
             maxRows = args[1] if len(args) > 1 else kwargs.get("maxRows", 6)
-            parent = args[2] if len(args) > 2 else kwargs.get("parent", None)
+            iconSize = args[2] if len(args) > 2 else kwargs.get("iconSize", 32)
+            parent = args[3] if len(args) > 3 else kwargs.get("parent", None)
         else:
             title = ""
             maxRows = 6
+            iconSize = 32
             parent = args[1] if len(args) > 1 else kwargs.get("parent", None)
         super().__init__(parent)
         self._categories = {}
         self._maxRows = maxRows
+        self._ribbonHeight = 180-(32-iconSize)*3
         self.setFixedHeight(self._ribbonHeight)
+
+        RibbonToolButton.setBaseIconSize(iconSize)
 
         self._titleWidget = RibbonTitleWidget(title, self)
         self._stackedWidget = RibbonStackedWidget(self)
