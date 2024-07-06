@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-from qtpy import QtGui
+from PySide2 import QtGui
 
 
 class RibbonCategoryStyle(IntEnum):

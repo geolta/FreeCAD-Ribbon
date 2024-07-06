@@ -1,4 +1,4 @@
-from qtpy import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 
 class RibbonScreenShotWindow(QtWidgets.QMainWindow):

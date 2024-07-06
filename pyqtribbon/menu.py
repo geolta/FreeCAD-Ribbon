@@ -1,6 +1,6 @@
 import typing
 
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class RibbonMenu(QtWidgets.QMenu):

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, Iterable, List, Union, overload
 
 import numpy as np
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 from .constants import ColumnWise, Large, RibbonButtonStyle, Small
 from .gallery import RibbonGallery

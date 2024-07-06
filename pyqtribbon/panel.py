@@ -5,7 +5,7 @@ import re
 from typing import Any, Callable, Dict, List, Union, overload
 
 import numpy as np
-from qtpy import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 from .constants import ColumnWise, Large, Medium, RibbonButtonStyle, Small
 from .gallery import RibbonGallery
