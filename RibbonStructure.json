@@ -3,7 +3,10 @@
         "Workbench",
         "View",
         "Macro",
-        "File"
+        "File",
+        "Help",
+        "Edit",
+        "Clipboard"
     ],
     "iconOnlyToolbars": [
         "Structure"
@@ -23,17 +26,35 @@
         "Inspection",
         "OpenSCAD",
         "<none>",
-        "Start",
-        "Drawing",
         "Points",
         "Robot",
         "Test Framework",
-        "Web",
-        "Raytracing",
         "Reverse Engineering"
     ],
     "showText": false,
     "toolbars": {
+        "Part Design Helper": {
+            "order": [
+                "PartDesign_CompSketches"
+            ],
+            "commands": {
+                "PartDesign_CompSketches": {
+                    "size": "large",
+                    "text": "Sketch"
+                }
+            }
+        },
+        "Part Design Modeling": {
+            "order": [
+                "PartDesign_Pad"
+            ],
+            "commands": {
+                "PartDesign_Pad": {
+                    "size": "large",
+                    "text": "Pad"
+                }
+            }
+        },
         "Sketcher geometries": {
             "order": [
                 "Sketcher_CreatePolyline"
@@ -41,40 +62,18 @@
             "commands": {
                 "Sketcher_CreatePolyline": {
                     "size": "large",
-                    "text": "Polyline",
-                    "icon": "Sketcher_CreatePolyline_big.svg"
+                    "text": "Polyline"
                 }
             }
         },
         "Sketcher constraints": {
             "order": [
-                "Sketcher_ConstrainDistance",
-                "Sketcher_ConstrainDistanceY",
-                "Sketcher_ConstrainVertical",
-                "Sketcher_ConstrainCoincident",
-                "Sketcher_ConstrainDistanceX",
-                "Sketcher_ConstrainHorizontal",
-                "Sketcher_ConstrainPointOnObject"
+                "Sketcher_CompDimensionTools"
             ],
             "commands": {
-                "Sketcher_ConstrainDistance": {
+                "Sketcher_CompDimensionTools": {
                     "size": "large",
-                    "text": "Distance",
-                    "icon": "Constraint_Length_big.svg"
-                }
-            }
-        },
-        "Measure": {
-            "order": [
-                "Part_Measure_Linear",
-                "Part_Measure_Clear_All"
-            ],
-            "commands": {
-                "Part_Measure_Linear": {
-                    "size": "medium"
-                },
-                "Part_Measure_Clear_All": {
-                    "size": "medium"
+                    "text": "Dimension"
                 }
             }
         }

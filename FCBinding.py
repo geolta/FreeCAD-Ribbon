@@ -58,7 +58,7 @@ class ModernMenu(RibbonBar):
             "User parameter:BaseApp/Preferences/General"
         ).GetInt("ToolbarIconSize", 24)
 
-        super().__init__(iconSize=iconSize)
+        super().__init__(title="", iconSize=iconSize)
 
         self.connectSignals()
 

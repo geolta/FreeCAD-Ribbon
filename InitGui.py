@@ -24,5 +24,6 @@ import FreeCADGui
 import FCBinding
 
 # When WB activated run Modern UI
+print("Activating Ribbon Bar...")
 mw = FreeCADGui.getMainWindow()
 mw.workbenchActivated.connect(FCBinding.run)
