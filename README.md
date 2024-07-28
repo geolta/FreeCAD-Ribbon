@@ -47,8 +47,8 @@ Until now, there are only a few defaults, more or less for testing, feel free to
 Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). This is also the place where I discuss the limitations of this approach as a Python Addon.
 
 ## Known Issues
-- When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.
-- The workbench that should be loaded on startup is ignored, it will always start with the Arch workbench and you have to switch manually.
+- ~~When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.~~ (fixed)
+- ~~The workbench that should be loaded on startup is ignored, it will always start with the Arch workbench and you have to switch manually.~~ (fixed)
 
 ## License
 GPL v3.0 (see [LICENSE](LICENSE))
