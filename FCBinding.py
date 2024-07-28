@@ -87,6 +87,11 @@ class ModernMenu(RibbonBar):
         """
         Create menu tabs.
         """
+        # Get the order of workbenches from Parameters
+        WorkbenchOrderParam = (
+            "User parameter:BaseApp/Preferences/Workbench/Ordered"
+        )
+        WorkbenchOrder = App.ParamGet(WorkbenchOrderParam)
 
         # add quick access buttons
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
@@ -103,20 +108,22 @@ class ModernMenu(RibbonBar):
 
         # add category for each workbench
         for workbenchName, workbench in Gui.listWorkbenches().items():
-            if (
-                workbenchName == ""
-                or workbench.MenuText
-                in ModernMenu.ribbonStructure["ignoredWorkbenches"]
-            ):
-                continue
+            for WorkBenchOrdered in WorkbenchOrder:
+                if WorkBenchOrdered == workbenchName:
+                    if (
+                        workbenchName == ""
+                        or workbench.MenuText
+                        in ModernMenu.ribbonStructure["ignoredWorkbenches"]
+                    ):
+                        continue
 
-            name = workbench.MenuText
-            self.wbNameMapping[name] = workbenchName
-            self.isWbLoaded[name] = False
+                    name = workbench.MenuText
+                    self.wbNameMapping[name] = workbenchName
+                    self.isWbLoaded[name] = False
 
-            self.addCategory(name)
-            # set tab icon
-            self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
+                    self.addCategory(name)
+                    # set tab icon
+                    self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
