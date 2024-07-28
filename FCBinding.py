@@ -23,19 +23,14 @@
 import os
 import json
 
-# from PySide.QtCore import Qt, QTimer
-# from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-# from PySide.QtGui import QIcon
+from PySide.QtCore import Qt, QTimer
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtGui import QIcon
 
 from pyqtribbon import RibbonBar
 
 import FreeCAD as App
 import FreeCADGui as Gui
-
-from PySide.QtCore import Qt, QTimer
-from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtGui import QIcon
-
 
 mw = Gui.getMainWindow()
 path = os.path.dirname(__file__) + "/Resources/icons/"
@@ -87,11 +82,6 @@ class ModernMenu(RibbonBar):
         """
         Create menu tabs.
         """
-        # Get the order of workbenches from Parameters
-        WorkbenchOrderParam = (
-            "User parameter:BaseApp/Preferences/Workbench/Ordered"
-        )
-        WorkbenchOrder = App.ParamGet(WorkbenchOrderParam)
 
         # add quick access buttons
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
@@ -106,10 +96,15 @@ class ModernMenu(RibbonBar):
             button.setDefaultAction(action[0])
             self.addQuickAccessButton(button)
 
+        # Get the order of workbenches from Parameters
+        WorkbenchOrderParam = (
+            "User parameter:BaseApp/Preferences/Workbenches/"
+        )
+        WorkbenchOrderedList = App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
         # add category for each workbench
-        for workbenchName, workbench in Gui.listWorkbenches().items():
-            for WorkBenchOrdered in WorkbenchOrder:
-                if WorkBenchOrdered == workbenchName:
+        for i in range(len(WorkbenchOrderedList)):
+            for workbenchName, workbench in Gui.listWorkbenches().items():
+                if workbenchName == WorkbenchOrderedList[i]:
                     if (
                         workbenchName == ""
                         or workbench.MenuText
