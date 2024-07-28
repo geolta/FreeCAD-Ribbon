@@ -39,8 +39,8 @@ class RibbonTitleWidget(QtWidgets.QFrame):
     _quickAccessButtons = []
     _rightToolButtons = []
 
-    _quickAccessButtonHeight = 30
-    _rightButtonHeight = 24
+    _quickAccessButtonHeight = 15  # Set FreeCAD logo size
+    _rightButtonHeight = 15  # Set Tabbar title font size
 
     # Mouse move events
     _start_point = None
@@ -115,7 +115,8 @@ class RibbonTitleWidget(QtWidgets.QFrame):
         self._tabBar.setExpanding(False)
         self._tabBar.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)  # type: ignore
         font = self._tabBar.font()
-        font.setPointSize(font.pointSize() + 3)
+        # font.setPointSize(font.pointSize() + 3)
+        font.setPointSize(font.pointSize())
         self._tabBar.setFont(font)
         self._tabBar.setShape(QtWidgets.QTabBar.RoundedNorth)
         self._tabBar.setDocumentMode(True)
@@ -128,7 +129,6 @@ class RibbonTitleWidget(QtWidgets.QFrame):
         font = self._titleLabel.font()
         font.setPointSize(font.pointSize() + 3)
         self._titleLabel.setFont(font)
-
         self._tabBarLayout.addWidget(self._quickAccessToolBarWidget, 0, QtCore.Qt.AlignVCenter)
         self._tabBarLayout.addWidget(self._tabBar, 0, QtCore.Qt.AlignVCenter)
         self._tabBarLayout.addWidget(self._titleLabel, 1, QtCore.Qt.AlignVCenter)
