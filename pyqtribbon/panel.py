@@ -5,7 +5,7 @@ import re
 from typing import Any, Callable, Dict, List, Union, overload
 
 import numpy as np
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 from .constants import ColumnWise, Large, Medium, RibbonButtonStyle, Small
 from .gallery import RibbonGallery
@@ -44,8 +44,8 @@ class RibbonGridLayoutManager(object):
         if mode == ColumnWise:
             for row in range(self.cells.shape[0] - rowSpan + 1):
                 for col in range(self.cells.shape[1] - colSpan + 1):
-                    if self.cells[row : row + rowSpan, col : col + colSpan].all():
-                        self.cells[row : row + rowSpan, col : col + colSpan] = False
+                    if self.cells[row: row + rowSpan, col: col + colSpan].all():
+                        self.cells[row: row + rowSpan, col: col + colSpan] = False
                         return row, col
         else:
             for col in range(self.cells.shape[1]):
@@ -62,7 +62,7 @@ class RibbonGridLayoutManager(object):
             cols -= 1
             colSpan1 -= 1
         self.cells = np.append(self.cells, np.ones((self.rows, colSpan1), dtype=bool), axis=1)
-        self.cells[:rowSpan, cols : cols + colSpan] = False
+        self.cells[:rowSpan, cols: cols + colSpan] = False
         return 0, cols
 
 
@@ -512,7 +512,8 @@ class RibbonPanel(QtWidgets.QFrame):
         # Create the new method
         return functools.partial(base_method, rowSpan=rowSpan)
 
-    addComboBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QComboBox, initializer=QtWidgets.QComboBox.addItems)  # fmt: skip
+    addComboBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QComboBox,
+                                          initializer=QtWidgets.QComboBox.addItems)  # fmt: skip
     addFontComboBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QFontComboBox)
     addLineEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QLineEdit)
     addTextEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QTextEdit)

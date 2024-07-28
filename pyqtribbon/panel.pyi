@@ -3,14 +3,17 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, Iterable, List, Union, overload
 
 import numpy as np
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 from .constants import ColumnWise, Large, RibbonButtonStyle, Small
 from .gallery import RibbonGallery
 from .separator import RibbonSeparator
 from .toolbutton import RibbonToolButton
 
-class RibbonPanelTitle(QtWidgets.QLabel): ...
+
+class RibbonPanelTitle(QtWidgets.QLabel):
+    ...
+
 
 class RibbonGridLayoutManager(object):
     rows: int
@@ -19,11 +22,15 @@ class RibbonGridLayoutManager(object):
     def __init__(self, rows: int): ...
     def request_cells(self, rowSpan: int = 1, colSpan: int = 1, mode=ColumnWise): ...
 
+
 class RibbonPanelItemWidget(QtWidgets.QFrame):
     def __init__(self, parent=None): ...
     def addWidget(self, widget): ...
 
-class RibbonPanelOptionButton(QtWidgets.QToolButton): ...
+
+class RibbonPanelOptionButton(QtWidgets.QToolButton):
+    ...
+
 
 class RibbonPanel(QtWidgets.QFrame):
     _maxRows: int = 6
@@ -64,6 +71,7 @@ class RibbonPanel(QtWidgets.QFrame):
     def setPanelOptionToolTip(self, text: str): ...
     def rowHeight(self) -> int: ...
     def addWidgetsBy(self, data: Dict[str, Dict]) -> Dict[str, QtWidgets.QWidget]: ...
+
     def addWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -74,6 +82,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
+
     def addSmallWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -83,6 +92,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
+
     def addMediumWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -92,6 +102,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
+
     def addLargeWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -104,6 +115,7 @@ class RibbonPanel(QtWidgets.QFrame):
     def removeWidget(self, widget: QtWidgets.QWidget): ...
     def widget(self, index: int) -> QtWidgets.QWidget: ...
     def widgets(self) -> List[QtWidgets.QWidget]: ...
+
     def addButton(
         self,
         text: str = None,
@@ -121,6 +133,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addSmallButton(
         self,
         text: str = None,
@@ -137,6 +150,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addMediumButton(
         self,
         text: str = None,
@@ -153,6 +167,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addLargeButton(
         self,
         text: str = None,
@@ -169,6 +184,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addToggleButton(
         self,
         text: str = None,
@@ -185,6 +201,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addSmallToggleButton(
         self,
         text: str = None,
@@ -200,6 +217,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addMediumToggleButton(
         self,
         text: str = None,
@@ -215,6 +233,7 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
+
     def addLargeToggleButton(
         self,
         text: str = None,
@@ -246,6 +265,7 @@ class RibbonPanel(QtWidgets.QFrame):
         **kwargs,
     ) -> QtWidgets.QWidget: ...
     def __getattr__(self, method: str) -> Callable: ...
+
     def addComboBox(
         self,
         items: Iterable[str],
@@ -259,6 +279,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallComboBox = addComboBox
     addMediumComboBox = addComboBox
     addLargeComboBox = addComboBox
+
     def addFontComboBox(
         self,
         *,
@@ -271,6 +292,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallFontComboBox = addFontComboBox
     addMediumFontComboBox = addFontComboBox
     addLargeFontComboBox = addFontComboBox
+
     def addLineEdit(
         self,
         *,
@@ -283,6 +305,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallLineEdit = addLineEdit
     addMediumLineEdit = addLineEdit
     addLargeLineEdit = addLineEdit
+
     def addTextEdit(
         self,
         *,
@@ -295,6 +318,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallTextEdit = addTextEdit
     addMediumTextEdit = addTextEdit
     addLargeTextEdit = addTextEdit
+
     def addPlainTextEdit(
         self,
         *,
@@ -307,6 +331,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallPlainTextEdit = addPlainTextEdit
     addMediumPlainTextEdit = addPlainTextEdit
     addLargePlainTextEdit = addPlainTextEdit
+
     def addLabel(
         self,
         text: str,
@@ -320,6 +345,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallLabel = addLabel
     addMediumLabel = addLabel
     addLargeLabel = addLabel
+
     def addProgressBar(
         self,
         *,
@@ -332,6 +358,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallProgressBar = addProgressBar
     addMediumProgressBar = addProgressBar
     addLargeProgressBar = addProgressBar
+
     def addSlider(
         self,
         *,
@@ -344,6 +371,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallSlider = addSlider
     addMediumSlider = addSlider
     addLargeSlider = addSlider
+
     def addSpinBox(
         self,
         *,
@@ -356,6 +384,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallSpinBox = addSpinBox
     addMediumSpinBox = addSpinBox
     addLargeSpinBox = addSpinBox
+
     def addDoubleSpinBox(
         self,
         *,
@@ -368,6 +397,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallDoubleSpinBox = addDoubleSpinBox
     addMediumDoubleSpinBox = addDoubleSpinBox
     addLargeDoubleSpinBox = addDoubleSpinBox
+
     def addDateEdit(
         self,
         *,
@@ -380,6 +410,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallDateEdit = addDateEdit
     addMediumDateEdit = addDateEdit
     addLargeDateEdit = addDateEdit
+
     def addTimeEdit(
         self,
         *,
@@ -392,6 +423,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallTimeEdit = addTimeEdit
     addMediumTimeEdit = addTimeEdit
     addLargeTimeEdit = addTimeEdit
+
     def addDateTimeEdit(
         self,
         *,
@@ -404,6 +436,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallDateTimeEdit = addDateTimeEdit
     addMediumDateTimeEdit = addDateTimeEdit
     addLargeDateTimeEdit = addDateTimeEdit
+
     def addTableWidget(
         self,
         *,
@@ -416,6 +449,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallTableWidget = addTableWidget
     addMediumTableWidget = addTableWidget
     addLargeTableWidget = addTableWidget
+
     def addTreeWidget(
         self,
         *,
@@ -428,6 +462,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallTreeWidget = addTreeWidget
     addMediumTreeWidget = addTreeWidget
     addLargeTreeWidget = addTreeWidget
+
     def addListWidget(
         self,
         *,
@@ -440,6 +475,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallListWidget = addListWidget
     addMediumListWidget = addListWidget
     addLargeListWidget = addListWidget
+
     def addCalendarWidget(
         self,
         *,
@@ -452,6 +488,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallCalendarWidget = addCalendarWidget
     addMediumCalendarWidget = addCalendarWidget
     addLargeCalendarWidget = addCalendarWidget
+
     def addSeparator(
         self,
         orientation=QtCore.Qt.Vertical,
@@ -466,6 +503,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallSeparator = addSeparator
     addMediumSeparator = addSeparator
     addLargeSeparator = addSeparator
+
     def addHorizontalSeparator(
         self,
         width=6,
@@ -479,6 +517,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallHorizontalSeparator = addHorizontalSeparator
     addMediumHorizontalSeparator = addHorizontalSeparator
     addLargeHorizontalSeparator = addHorizontalSeparator
+
     def addVerticalSeparator(
         self,
         width=6,
@@ -492,6 +531,7 @@ class RibbonPanel(QtWidgets.QFrame):
     addSmallVerticalSeparator = addVerticalSeparator
     addMediumVerticalSeparator = addVerticalSeparator
     addLargeVerticalSeparator = addVerticalSeparator
+
     def addGallery(
         self,
         minimumWidth=800,

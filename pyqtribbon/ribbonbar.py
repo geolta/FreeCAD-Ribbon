@@ -1,6 +1,6 @@
 import typing
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 from .category import (
     RibbonCategory,
@@ -122,7 +122,7 @@ class RibbonBar(QtWidgets.QMenuBar):
     def actionAt(self, QPoint):
         raise NotImplementedError("RibbonBar.actionAt() is not implemented in the ribbon bar.")
 
-    def actionGeometry(self, QAction):
+    def actionGeometry(self, QWidgetAction):
         raise NotImplementedError("RibbonBar.actionGeometry() is not implemented in the ribbon bar.")
 
     def activeAction(self):
@@ -143,10 +143,10 @@ class RibbonBar(QtWidgets.QMenuBar):
     def cornerWidget(self, corner=None, *args, **kwargs):
         raise NotImplementedError("RibbonBar.cornerWidget() is not implemented in the ribbon bar.")
 
-    def insertMenu(self, QAction, QMenu):
+    def insertMenu(self, QWidgetAction, QMenu):
         raise NotImplementedError("RibbonBar.insertMenu() is not implemented in the ribbon bar.")
 
-    def insertSeparator(self, QAction):
+    def insertSeparator(self, QWidgetAction):
         raise NotImplementedError("RibbonBar.insertSeparator() is not implemented in the ribbon bar.")
 
     def isDefaultUp(self):
@@ -155,7 +155,7 @@ class RibbonBar(QtWidgets.QMenuBar):
     def isNativeMenuBar(self):
         raise NotImplementedError("RibbonBar.isNativeMenuBar() is not implemented in the ribbon bar.")
 
-    def setActiveAction(self, QAction):
+    def setActiveAction(self, QWidgetAction):
         raise NotImplementedError("RibbonBar.setActiveAction() is not implemented in the ribbon bar.")
 
     def setCornerWidget(self, QWidget, corner=None, *args, **kwargs):

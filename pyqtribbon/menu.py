@@ -1,6 +1,6 @@
 import typing
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 
 class RibbonMenu(QtWidgets.QMenu):
@@ -105,13 +105,12 @@ class RibbonPermanentMenu(RibbonMenu):
     """
     A permanent menu.
     """
-
-    actionAdded = QtCore.Signal(QtWidgets.QAction)
+    actionAdded = QtCore.Signal(QtWidgets.QWidgetAction)
 
     def hideEvent(self, a0: QtGui.QHideEvent) -> None:
         self.show()
 
-    def addAction(self, *args, **kwargs) -> QtWidgets.QAction:
+    def addAction(self, *args, **kwargs) -> QtWidgets.QWidgetAction:
         action = super().addAction(*args, **kwargs)
         self.actionAdded.emit(action)
         return action
