@@ -7,6 +7,10 @@ A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [Hakan
 This is not finished or intended for production use, but rather to look at where the limitations of this approach, implementing it as an external Python addon, lie.
 
 ## Installation
+There are two options for installing this addon:
+### Custom Repository for Addon Manager
+Go to `Edit/Preferences/Addon-Manager` and add the custom repository `https://github.com/geolta/FreeCAD-Ribbon.git` with the branch `main`. Now you can go to the Addon Manager (`Tools/Addon-Manager`) and install "FreeCAD Ribbon" (maybe you have to update your local cache first). Now restart FreeCAD and you will see a ribbon interface :)
+### Manual Installation
 Download this repository, extract the folder and copy it to the `Mod` folder of FreeCAD, detailed information can be found at the [FreeCAD Wiki](https://wiki.freecad.org/Installing_more_workbenches). Now restart FreeCAD and you will see a ribbon interface :)
 
 ## Uninstallation
@@ -47,8 +51,8 @@ Until now, there are only a few defaults, more or less for testing, feel free to
 Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). This is also the place where I discuss the limitations of this approach as a Python Addon.
 
 ## Known Issues
-- When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.
-- The workbench that should be loaded on startup is ignored, it will always start with the Arch workbench and you have to switch manually.
+- ~~When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.~~ (fixed)
+- ~~The workbench that should be loaded on startup is ignored, it will always start with the Arch workbench and you have to switch manually.~~ (fixed)
 
 ## License
 GPL v3.0 (see [LICENSE](LICENSE))
