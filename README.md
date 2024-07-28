@@ -16,7 +16,7 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 1. Create a macro.
 1. Paste this code in to macro.
     ```python
-    from PySide2 import QtCore, QtGui, QtWidgets
+    from PySide import QtCore, QtGui, QtWidgets
     mw = FreeCADGui.getMainWindow()
     mw.menuBar().show()
 

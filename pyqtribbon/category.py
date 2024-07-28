@@ -1,6 +1,6 @@
 import typing
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 from .constants import RibbonCategoryStyle
 from .panel import RibbonPanel
@@ -45,7 +45,8 @@ class RibbonCategoryLayoutWidget(QtWidgets.QFrame):
 
         # Contents of the category scroll area
         self._categoryScrollAreaContents = RibbonCategoryScrollAreaContents()  # type: ignore
-        self._categoryScrollAreaContents.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)  # type: ignore
+        self._categoryScrollAreaContents.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)  # type: ignore
         self._categoryLayout = QtWidgets.QHBoxLayout(self._categoryScrollAreaContents)
         self._categoryLayout.setContentsMargins(0, 0, 0, 0)
         self._categoryLayout.setSpacing(5)

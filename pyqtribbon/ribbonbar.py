@@ -1,6 +1,6 @@
 import typing
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide import QtCore, QtGui, QtWidgets
 
 from .category import (
     RibbonCategory,

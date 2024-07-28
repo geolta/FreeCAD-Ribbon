@@ -23,9 +23,9 @@
 import os
 import json
 
-from PySide2.QtCore import Qt, QTimer
-from PySide2.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide2.QtGui import QIcon
+from PySide.QtCore import Qt, QTimer
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtGui import QIcon
 
 from pyqtribbon import RibbonBar
 
