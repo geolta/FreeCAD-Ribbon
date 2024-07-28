@@ -27,7 +27,7 @@
     <workbench>
       <freecadmin>0.21.0</freecadmin>
       <!-- <icon>Resources/Icons/BillOfMaterialsWB.svg</icon> -->
-      <depend optional="True" type="python">pyqtribbon</depend>
+      <!-- <depend optional="True" type="python">pyqtribbon</depend> -->
       <!-- <classname>BillOfMaterialsWB</classname> -->
       <subdirectory>./</subdirectory>
     </workbench>
