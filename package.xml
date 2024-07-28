@@ -3,15 +3,15 @@
 
   <name>FreeCAD Ribbon</name>
 
-  <description>Aa Ribbon for FreeCAD</description>
+  <description>A Ribbon for FreeCAD</description>
 
   <version>0.0.3</version>
 
-  <date>2024-01-03</date>
+  <date>2024-07-28</date>
 
-  <maintainer email="paul.ebbers@gmail.com">Paul Ebbers</maintainer>
+  <maintainer>geolta</maintainer>
 
-  <license file="LICENSE">MIT</license>
+  <license file="LICENSE">GPL v3.0</license>
 
   <pythonmin>3.8.0</pythonmin>
 
@@ -19,16 +19,13 @@
 
   <url branch="main" type="repository">https://github.com/geolta/FreeCAD-Ribbon</url>
 
-  <url type="readme">hhttps://github.com/geolta/FreeCAD-Ribbon/blob/main/README.md</url>
+  <url type="readme">https://github.com/geolta/FreeCAD-Ribbon/blob/main/README.md</url>
 
   <icon></icon>
 
   <content>
     <workbench>
       <freecadmin>0.21.0</freecadmin>
-      <!-- <icon>Resources/Icons/BillOfMaterialsWB.svg</icon> -->
-      <!-- <depend optional="True" type="python">pyqtribbon</depend> -->
-      <!-- <classname>BillOfMaterialsWB</classname> -->
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
