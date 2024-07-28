@@ -32,9 +32,9 @@ from pyqtribbon import RibbonBar
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide6.QtGui import QIcon
+from PySide.QtCore import Qt, QTimer
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtGui import QIcon
 
 
 mw = Gui.getMainWindow()
