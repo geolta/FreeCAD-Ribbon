@@ -95,6 +95,7 @@ class ModernMenu(RibbonBar):
 
             button.setDefaultAction(action[0])
             self.addQuickAccessButton(button)
+            self.setQuickAccessButtonHeight(15)
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = (
@@ -309,6 +310,9 @@ class run:
             ribbonDock.setTitleBarWidget(QWidget())
             ribbonDock.setMinimumHeight(0)
             sp = ribbonDock.sizePolicy()
-            sp.setVerticalPolicy(QSizePolicy.Ignored)
+            sp.setVerticalPolicy(QSizePolicy.Policy.MinimumExpanding)
+            sp.setVerticalStretch(0)
+            sp.setRetainSizeWhenHidden(False)
+
             ribbonDock.setWidget(ribbon)
             mw.addDockWidget(Qt.TopDockWidgetArea, ribbonDock)
