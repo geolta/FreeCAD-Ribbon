@@ -32,11 +32,15 @@ class RibbonGalleryListWidget(QtWidgets.QListWidget):
 
     def scrollToNextRow(self) -> None:
         """Scroll to the next row."""
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() + self.verticalScrollBar().singleStep())
+        self.verticalScrollBar().setValue(
+            self.verticalScrollBar().value() + self.verticalScrollBar().singleStep()
+        )
 
     def scrollToPreviousRow(self) -> None:
         """Scroll to the previous row."""
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - self.verticalScrollBar().singleStep())
+        self.verticalScrollBar().setValue(
+            self.verticalScrollBar().value() - self.verticalScrollBar().singleStep()
+        )
 
 
 class RibbonGalleryButton(QtWidgets.QToolButton):
@@ -80,7 +84,9 @@ class RibbonGallery(QtWidgets.QFrame):
             "minimumWidth" in kwargs or "popupHideOnClick" in kwargs
         ):
             minimumWidth = args[0] if len(args) > 0 else kwargs.get("minimumWidth", 800)
-            popupHideOnClick = args[1] if len(args) > 1 else kwargs.get("popupHideOnClick", False)
+            popupHideOnClick = (
+                args[1] if len(args) > 1 else kwargs.get("popupHideOnClick", False)
+            )
             parent = args[2] if len(args) > 2 else kwargs.get("parent", None)
         else:
             minimumWidth = 800
@@ -148,7 +154,11 @@ class RibbonGallery(QtWidgets.QFrame):
 
     def resizeEvent(self, a0: QtGui.QResizeEvent) -> None:
         """Resize the gallery."""
-        height = self.height() - self._mainLayout.contentsMargins().top() - self._mainLayout.contentsMargins().bottom()
+        height = (
+            self.height()
+            - self._mainLayout.contentsMargins().top()
+            - self._mainLayout.contentsMargins().bottom()
+        )
         self._upButton.setFixedSize(height // 4, height // 3)  # type: ignore
         self._downButton.setFixedSize(height // 4, height // 3)  # type: ignore
         self._moreButton.setFixedSize(height // 4, height // 3)  # type: ignore
@@ -163,7 +173,8 @@ class RibbonGallery(QtWidgets.QFrame):
         self._popupWidget.move(self.mapToGlobal(self.geometry().topLeft()))
         self._popupWidget.resize(
             QtCore.QSize(
-                max(self.popupWindowSize().width(), self.width()), max(self.popupWindowSize().height(), self.height())
+                max(self.popupWindowSize().width(), self.width()),
+                max(self.popupWindowSize().height(), self.height()),
             )
         )
         self._popupMenu.setFixedWidth(
@@ -196,7 +207,10 @@ class RibbonGallery(QtWidgets.QFrame):
         button = self.sender()
         if isinstance(button, RibbonToolButton):
             row = self._popupButtons.index(button)
-            self._listWidget.scrollTo(self._listWidget.model().index(row, 0), QtWidgets.QAbstractItemView.EnsureVisible)
+            self._listWidget.scrollTo(
+                self._listWidget.model().index(row, 0),
+                QtWidgets.QAbstractItemView.EnsureVisible,
+            )
             if self._buttons[row].isCheckable():
                 self._buttons[row].setChecked(not self._buttons[row].isChecked())
 
@@ -218,7 +232,9 @@ class RibbonGallery(QtWidgets.QFrame):
         """
         item = QtWidgets.QListWidgetItem()
         item.setSizeHint(widget.sizeHint())
-        self._popupListWidget.setSpacing((self.height() - item.sizeHint().height()) // 2)
+        self._popupListWidget.setSpacing(
+            (self.height() - item.sizeHint().height()) // 2
+        )
         self._popupListWidget.addItem(item)
         self._popupListWidget.setItemWidget(item, widget)
 

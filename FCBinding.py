@@ -98,10 +98,10 @@ class ModernMenu(RibbonBar):
             self.setQuickAccessButtonHeight(15)
 
         # Get the order of workbenches from Parameters
-        WorkbenchOrderParam = (
-            "User parameter:BaseApp/Preferences/Workbenches/"
+        WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
+        WorkbenchOrderedList = (
+            App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
         )
-        WorkbenchOrderedList = App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
         # add category for each workbench
         for i in range(len(WorkbenchOrderedList)):
             for workbenchName, workbench in Gui.listWorkbenches().items():
@@ -119,7 +119,9 @@ class ModernMenu(RibbonBar):
 
                     self.addCategory(name)
                     # set tab icon
-                    self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
+                    self.tabBar().setTabIcon(
+                        len(self.categories()) - 1, QIcon(workbench.Icon)
+                    )
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
@@ -216,7 +218,9 @@ class ModernMenu(RibbonBar):
 
                 # try to get alternative text from ribbonStructure
                 try:
-                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["text"]
+                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                        action.data()
+                    ]["text"]
                     # the text would be overwritten again when the state of the action changes
                     # (e.g. when getting enabled / disabled), therefore the action itself
                     # is manipulated.
@@ -226,14 +230,18 @@ class ModernMenu(RibbonBar):
 
                 # try to get alternative icon from ribbonStructure
                 try:
-                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["icon"]
+                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                        action.data()
+                    ]["icon"]
                     action.setIcon(QIcon(os.path.join(path, icon)))
                 except KeyError:
                     icon = action.icon()
 
                 # get button size from ribbonStructure
                 try:
-                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["size"]
+                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                        "commands"
+                    ][action.data()]["size"]
                 except KeyError:
                     buttonSize = "small"  # small as default
 

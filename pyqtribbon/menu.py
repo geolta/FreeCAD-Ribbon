@@ -86,7 +86,9 @@ class RibbonMenu(QtWidgets.QMenu):
         :param spacing: The spacing.
         """
         spacer = QtWidgets.QLabel()
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        spacer.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         spacer.setFixedHeight(spacing)
         self.addWidget(spacer)
 
@@ -105,6 +107,7 @@ class RibbonPermanentMenu(RibbonMenu):
     """
     A permanent menu.
     """
+
     actionAdded = QtCore.Signal(QtWidgets.QWidgetAction)
 
     def hideEvent(self, a0: QtGui.QHideEvent) -> None:

@@ -27,8 +27,14 @@ class RibbonSeparator(QtWidgets.QFrame):
         :param width: The width of the separator.
         :param parent: The parent widget.
         """
-        if (args and not isinstance(args[0], QtWidgets.QWidget)) or ("orientation" in kwargs or "width" in kwargs):
-            orientation = args[0] if len(args) > 0 else kwargs.get("orientation", QtCore.Qt.Vertical)
+        if (args and not isinstance(args[0], QtWidgets.QWidget)) or (
+            "orientation" in kwargs or "width" in kwargs
+        ):
+            orientation = (
+                args[0]
+                if len(args) > 0
+                else kwargs.get("orientation", QtCore.Qt.Vertical)
+            )
             width = args[1] if len(args) > 1 else kwargs.get("width", 6)
             parent = args[2] if len(args) > 2 else kwargs.get("parent", None)
         else:

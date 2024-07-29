@@ -44,15 +44,20 @@ class RibbonGridLayoutManager(object):
         if mode == ColumnWise:
             for row in range(self.cells.shape[0] - rowSpan + 1):
                 for col in range(self.cells.shape[1] - colSpan + 1):
-                    if self.cells[row: row + rowSpan, col: col + colSpan].all():
-                        self.cells[row: row + rowSpan, col: col + colSpan] = False
+                    if self.cells[row : row + rowSpan, col : col + colSpan].all():
+                        self.cells[row : row + rowSpan, col : col + colSpan] = False
                         return row, col
         else:
             for col in range(self.cells.shape[1]):
                 if self.cells[0, col:].all():
                     if self.cells.shape[1] - col < colSpan:
                         self.cells = np.append(
-                            self.cells, np.ones((self.rows, colSpan - (self.cells.shape[1] - col)), dtype=bool), axis=1
+                            self.cells,
+                            np.ones(
+                                (self.rows, colSpan - (self.cells.shape[1] - col)),
+                                dtype=bool,
+                            ),
+                            axis=1,
                         )
                     self.cells[0, col:] = False
                     return 0, col
@@ -61,8 +66,10 @@ class RibbonGridLayoutManager(object):
         if self.cells[:, -1].all():
             cols -= 1
             colSpan1 -= 1
-        self.cells = np.append(self.cells, np.ones((self.rows, colSpan1), dtype=bool), axis=1)
-        self.cells[:rowSpan, cols: cols + colSpan] = False
+        self.cells = np.append(
+            self.cells, np.ones((self.rows, colSpan1), dtype=bool), axis=1
+        )
+        self.cells[:rowSpan, cols : cols + colSpan] = False
         return 0, cols
 
 
@@ -122,7 +129,9 @@ class RibbonPanel(QtWidgets.QFrame):
     panelOptionClicked = QtCore.Signal(bool)
 
     @overload
-    def __init__(self, title: str = "", maxRows: int = 6, showPanelOptionButton=True, parent=None):
+    def __init__(
+        self, title: str = "", maxRows: int = 6, showPanelOptionButton=True, parent=None
+    ):
         pass
 
     @overload
@@ -137,10 +146,14 @@ class RibbonPanel(QtWidgets.QFrame):
         :param showPanelOptionButton: Whether to show the panel option button.
         :param parent: The parent widget.
         """
-        if (args and not isinstance(args[0], QtWidgets.QWidget)) or ("title" in kwargs or "maxRows" in kwargs):
+        if (args and not isinstance(args[0], QtWidgets.QWidget)) or (
+            "title" in kwargs or "maxRows" in kwargs
+        ):
             title = args[0] if len(args) > 0 else kwargs.get("title", "")
             maxRows = args[1] if len(args) > 1 else kwargs.get("maxRows", 6)
-            showPanelOptionButton = args[2] if len(args) > 2 else kwargs.get("showPanelOptionButton", True)
+            showPanelOptionButton = (
+                args[2] if len(args) > 2 else kwargs.get("showPanelOptionButton", True)
+            )
             parent = args[3] if len(args) > 3 else kwargs.get("parent", None)
         else:
             title = ""
@@ -294,7 +307,8 @@ class RibbonPanel(QtWidgets.QFrame):
                 - self._titleWidget.height()
                 - self._actionsLayout.contentsMargins().top()
                 - self._actionsLayout.contentsMargins().bottom()
-                - self._actionsLayout.verticalSpacing() * (self._gridLayoutManager.rows - 1)
+                - self._actionsLayout.verticalSpacing()
+                * (self._gridLayoutManager.rows - 1)
             )
             / self._gridLayoutManager.rows
         )
@@ -359,17 +373,20 @@ class RibbonPanel(QtWidgets.QFrame):
         rowSpan = self.defaultRowSpan(rowSpan)
         self._widgets.append(widget)
         row, col = self._gridLayoutManager.request_cells(rowSpan, colSpan, mode)
-        maximumHeight = self.rowHeight() * rowSpan + self._actionsLayout.verticalSpacing() * (rowSpan - 2)
+        maximumHeight = (
+            self.rowHeight() * rowSpan
+            + self._actionsLayout.verticalSpacing() * (rowSpan - 2)
+        )
         widget.setMaximumHeight(maximumHeight)
         if fixedHeight is True or fixedHeight > 0:
             fixedHeight = (
                 int(fixedHeight * maximumHeight)
                 if 0 < fixedHeight <= 1
-                else fixedHeight
-                if 1 < fixedHeight < maximumHeight
-                else maximumHeight
+                else fixedHeight if 1 < fixedHeight < maximumHeight else maximumHeight
             )
-            fixedHeight = max(fixedHeight, 0.4 * maximumHeight)  # minimum height is 40% of the maximum height
+            fixedHeight = max(
+                fixedHeight, 0.4 * maximumHeight
+            )  # minimum height is 40% of the maximum height
             widget.setFixedHeight(fixedHeight)
         item = RibbonPanelItemWidget(self)
         item.addWidget(widget)
@@ -428,7 +445,9 @@ class RibbonPanel(QtWidgets.QFrame):
 
         :return: The button that was added.
         """
-        assert isinstance(rowSpan, RibbonButtonStyle), "rowSpan must be an instance of RibbonButtonStyle"
+        assert isinstance(
+            rowSpan, RibbonButtonStyle
+        ), "rowSpan must be an instance of RibbonButtonStyle"
         style = rowSpan
         button = RibbonToolButton(self)
         button.setButtonStyle(style)
@@ -457,9 +476,11 @@ class RibbonPanel(QtWidgets.QFrame):
         kwargs["rowSpan"] = (
             self.defaultRowSpan(Small)
             if style == Small
-            else self.defaultRowSpan(Medium)
-            if style == Medium
-            else self.defaultRowSpan(Large)
+            else (
+                self.defaultRowSpan(Medium)
+                if style == Medium
+                else self.defaultRowSpan(Large)
+            )
         )
         self.addWidget(button, **kwargs)
         return button
@@ -503,7 +524,9 @@ class RibbonPanel(QtWidgets.QFrame):
         # Get the widget class and the size
         size = match.group(1)
         base_method_name = f"add{match.group(2)}"
-        assert hasattr(self, base_method_name), f"Invalid method name {base_method_name}"
+        assert hasattr(
+            self, base_method_name
+        ), f"Invalid method name {base_method_name}"
 
         # Get the base method
         base_method = getattr(self, base_method_name)
@@ -514,24 +537,44 @@ class RibbonPanel(QtWidgets.QFrame):
 
     addComboBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QComboBox,
                                           initializer=QtWidgets.QComboBox.addItems)  # fmt: skip
-    addFontComboBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QFontComboBox)
+    addFontComboBox = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QFontComboBox
+    )
     addLineEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QLineEdit)
     addTextEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QTextEdit)
-    addPlainTextEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QPlainTextEdit)
-    addLabel = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QLabel, initializer=QtWidgets.QLabel.setText)
+    addPlainTextEdit = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QPlainTextEdit
+    )
+    addLabel = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QLabel, initializer=QtWidgets.QLabel.setText
+    )
     addProgressBar = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QProgressBar)
     addSlider = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QSlider)
     addSpinBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QSpinBox)
-    addDoubleSpinBox = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QDoubleSpinBox)
+    addDoubleSpinBox = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QDoubleSpinBox
+    )
     addDateEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QDateEdit)
     addTimeEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QTimeEdit)
-    addDateTimeEdit = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QDateTimeEdit)
-    addTableWidget = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QTableWidget, rowSpan=Large)
-    addTreeWidget = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QTreeWidget, rowSpan=Large)
-    addListWidget = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QListWidget, rowSpan=Large)
-    addCalendarWidget = functools.partialmethod(_addAnyWidget, cls=QtWidgets.QCalendarWidget, rowSpan=Large)
+    addDateTimeEdit = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QDateTimeEdit
+    )
+    addTableWidget = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QTableWidget, rowSpan=Large
+    )
+    addTreeWidget = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QTreeWidget, rowSpan=Large
+    )
+    addListWidget = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QListWidget, rowSpan=Large
+    )
+    addCalendarWidget = functools.partialmethod(
+        _addAnyWidget, cls=QtWidgets.QCalendarWidget, rowSpan=Large
+    )
 
-    def addSeparator(self, orientation=QtCore.Qt.Vertical, width=6, **kwargs) -> RibbonSeparator:
+    def addSeparator(
+        self, orientation=QtCore.Qt.Vertical, width=6, **kwargs
+    ) -> RibbonSeparator:
         """Add a separator to the panel.
 
         :param orientation: The orientation of the separator.
@@ -543,10 +586,16 @@ class RibbonPanel(QtWidgets.QFrame):
         kwargs["rowSpan"] = Large if "rowSpan" not in kwargs else kwargs["rowSpan"]
         return self.addWidget(RibbonSeparator(orientation, width), **kwargs)
 
-    addHorizontalSeparator = functools.partialmethod(addSeparator, orientation=QtCore.Qt.Horizontal)
-    addVerticalSeparator = functools.partialmethod(addSeparator, orientation=QtCore.Qt.Vertical)
+    addHorizontalSeparator = functools.partialmethod(
+        addSeparator, orientation=QtCore.Qt.Horizontal
+    )
+    addVerticalSeparator = functools.partialmethod(
+        addSeparator, orientation=QtCore.Qt.Vertical
+    )
 
-    def addGallery(self, minimumWidth=800, popupHideOnClick=False, **kwargs) -> RibbonGallery:
+    def addGallery(
+        self, minimumWidth=800, popupHideOnClick=False, **kwargs
+    ) -> RibbonGallery:
         """Add a gallery to the panel.
 
         :param minimumWidth: The minimum width of the gallery.
@@ -558,7 +607,10 @@ class RibbonPanel(QtWidgets.QFrame):
         kwargs["rowSpan"] = Large if "rowSpan" not in kwargs else kwargs["rowSpan"]
         rowSpan = self.defaultRowSpan(kwargs["rowSpan"])
         gallery = RibbonGallery(minimumWidth, popupHideOnClick, self)
-        maximumHeight = self.rowHeight() * rowSpan + self._actionsLayout.verticalSpacing() * (rowSpan - 2)
+        maximumHeight = (
+            self.rowHeight() * rowSpan
+            + self._actionsLayout.verticalSpacing() * (rowSpan - 2)
+        )
         gallery.setFixedHeight(maximumHeight)
         return self.addWidget(gallery, **kwargs)
 
