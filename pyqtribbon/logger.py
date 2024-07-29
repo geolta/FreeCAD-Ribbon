@@ -1,6 +1,7 @@
 """
 https://timlehr.com/python-exception-hooks-with-qt-message-box/
 """
+
 import logging
 import sys
 import traceback
@@ -25,9 +26,15 @@ class UncaughtHook(QtCore.QObject):
         """
         if QtWidgets.QApplication.instance() is not None:
             errorbox = QtWidgets.QMessageBox()
-            errorbox.setWindowIcon(QtWidgets.QApplication.style().standardIcon(QtWidgets.QStyle.SP_MessageBoxCritical))
+            errorbox.setWindowIcon(
+                QtWidgets.QApplication.style().standardIcon(
+                    QtWidgets.QStyle.SP_MessageBoxCritical
+                )
+            )
             errorbox.setWindowTitle("Critical error occurred")
-            errorbox.setText(f"Oops. An unexpected error occurred:\n```\n{log_msg}\n```")
+            errorbox.setText(
+                f"Oops. An unexpected error occurred:\n```\n{log_msg}\n```"
+            )
             errorbox.setTextFormat(QtCore.Qt.TextFormat.MarkdownText)
             errorbox.exec()
         else:
@@ -42,7 +49,12 @@ class UncaughtHook(QtCore.QObject):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
         else:
             exc_info = (exc_type, exc_value, exc_traceback)
-            log_msg = "\n".join(["".join(traceback.format_tb(exc_traceback)), f"{exc_type.__name__}: {exc_value}"])
+            log_msg = "\n".join(
+                [
+                    "".join(traceback.format_tb(exc_traceback)),
+                    f"{exc_type.__name__}: {exc_value}",
+                ]
+            )
             log.critical(f"Uncaught exception:\n {log_msg}", exc_info=exc_info)
 
             # trigger message box show

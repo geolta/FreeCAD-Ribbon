@@ -23,19 +23,14 @@
 import os
 import json
 
-# from PySide.QtCore import Qt, QTimer
-# from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-# from PySide.QtGui import QIcon
+from PySide.QtCore import Qt, QTimer
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtGui import QIcon
 
 from pyqtribbon import RibbonBar
 
 import FreeCAD as App
 import FreeCADGui as Gui
-
-from PySide.QtCore import Qt, QTimer
-from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtGui import QIcon
-
 
 mw = Gui.getMainWindow()
 path = os.path.dirname(__file__) + "/Resources/icons/"
@@ -100,23 +95,33 @@ class ModernMenu(RibbonBar):
 
             button.setDefaultAction(action[0])
             self.addQuickAccessButton(button)
+            self.setQuickAccessButtonHeight(15)
 
+        # Get the order of workbenches from Parameters
+        WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
+        WorkbenchOrderedList = (
+            App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
+        )
         # add category for each workbench
-        for workbenchName, workbench in Gui.listWorkbenches().items():
-            if (
-                workbenchName == ""
-                or workbench.MenuText
-                in ModernMenu.ribbonStructure["ignoredWorkbenches"]
-            ):
-                continue
+        for i in range(len(WorkbenchOrderedList)):
+            for workbenchName, workbench in Gui.listWorkbenches().items():
+                if workbenchName == WorkbenchOrderedList[i]:
+                    if (
+                        workbenchName == ""
+                        or workbench.MenuText
+                        in ModernMenu.ribbonStructure["ignoredWorkbenches"]
+                    ):
+                        continue
 
-            name = workbench.MenuText
-            self.wbNameMapping[name] = workbenchName
-            self.isWbLoaded[name] = False
+                    name = workbench.MenuText
+                    self.wbNameMapping[name] = workbenchName
+                    self.isWbLoaded[name] = False
 
-            self.addCategory(name)
-            # set tab icon
-            self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
+                    self.addCategory(name)
+                    # set tab icon
+                    self.tabBar().setTabIcon(
+                        len(self.categories()) - 1, QIcon(workbench.Icon)
+                    )
 
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
@@ -213,7 +218,9 @@ class ModernMenu(RibbonBar):
 
                 # try to get alternative text from ribbonStructure
                 try:
-                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["text"]
+                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                        action.data()
+                    ]["text"]
                     # the text would be overwritten again when the state of the action changes
                     # (e.g. when getting enabled / disabled), therefore the action itself
                     # is manipulated.
@@ -223,14 +230,18 @@ class ModernMenu(RibbonBar):
 
                 # try to get alternative icon from ribbonStructure
                 try:
-                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["icon"]
+                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                        action.data()
+                    ]["icon"]
                     action.setIcon(QIcon(os.path.join(path, icon)))
                 except KeyError:
                     icon = action.icon()
 
                 # get button size from ribbonStructure
                 try:
-                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["size"]
+                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                        "commands"
+                    ][action.data()]["size"]
                 except KeyError:
                     buttonSize = "small"  # small as default
 
@@ -307,6 +318,9 @@ class run:
             ribbonDock.setTitleBarWidget(QWidget())
             ribbonDock.setMinimumHeight(0)
             sp = ribbonDock.sizePolicy()
-            sp.setVerticalPolicy(QSizePolicy.Ignored)
+            sp.setVerticalPolicy(QSizePolicy.Policy.MinimumExpanding)
+            sp.setVerticalStretch(0)
+            sp.setRetainSizeWhenHidden(False)
+
             ribbonDock.setWidget(ribbon)
             mw.addDockWidget(Qt.TopDockWidgetArea, ribbonDock)

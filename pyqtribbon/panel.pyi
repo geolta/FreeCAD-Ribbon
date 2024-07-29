@@ -10,10 +10,7 @@ from .gallery import RibbonGallery
 from .separator import RibbonSeparator
 from .toolbutton import RibbonToolButton
 
-
-class RibbonPanelTitle(QtWidgets.QLabel):
-    ...
-
+class RibbonPanelTitle(QtWidgets.QLabel): ...
 
 class RibbonGridLayoutManager(object):
     rows: int
@@ -22,15 +19,11 @@ class RibbonGridLayoutManager(object):
     def __init__(self, rows: int): ...
     def request_cells(self, rowSpan: int = 1, colSpan: int = 1, mode=ColumnWise): ...
 
-
 class RibbonPanelItemWidget(QtWidgets.QFrame):
     def __init__(self, parent=None): ...
     def addWidget(self, widget): ...
 
-
-class RibbonPanelOptionButton(QtWidgets.QToolButton):
-    ...
-
+class RibbonPanelOptionButton(QtWidgets.QToolButton): ...
 
 class RibbonPanel(QtWidgets.QFrame):
     _maxRows: int = 6
@@ -54,7 +47,9 @@ class RibbonPanel(QtWidgets.QFrame):
     _panelOption: RibbonPanelOptionButton
 
     @overload
-    def __init__(self, title: str = "", maxRows: int = 6, showPanelOptionButton=True, parent=None): ...
+    def __init__(
+        self, title: str = "", maxRows: int = 6, showPanelOptionButton=True, parent=None
+    ): ...
     @overload
     def __init__(self, parent=None): ...
     def __init__(self, *args, **kwargs): ...
@@ -71,7 +66,6 @@ class RibbonPanel(QtWidgets.QFrame):
     def setPanelOptionToolTip(self, text: str): ...
     def rowHeight(self) -> int: ...
     def addWidgetsBy(self, data: Dict[str, Dict]) -> Dict[str, QtWidgets.QWidget]: ...
-
     def addWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -82,7 +76,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
-
     def addSmallWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -92,7 +85,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
-
     def addMediumWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -102,7 +94,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> QtWidgets.QWidget | Any: ...
-
     def addLargeWidget(
         self,
         widget: QtWidgets.QWidget,
@@ -115,7 +106,6 @@ class RibbonPanel(QtWidgets.QFrame):
     def removeWidget(self, widget: QtWidgets.QWidget): ...
     def widget(self, index: int) -> QtWidgets.QWidget: ...
     def widgets(self) -> List[QtWidgets.QWidget]: ...
-
     def addButton(
         self,
         text: str = None,
@@ -133,7 +123,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addSmallButton(
         self,
         text: str = None,
@@ -150,7 +139,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addMediumButton(
         self,
         text: str = None,
@@ -167,7 +155,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addLargeButton(
         self,
         text: str = None,
@@ -184,7 +171,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addToggleButton(
         self,
         text: str = None,
@@ -201,7 +187,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addSmallToggleButton(
         self,
         text: str = None,
@@ -217,7 +202,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addMediumToggleButton(
         self,
         text: str = None,
@@ -233,7 +217,6 @@ class RibbonPanel(QtWidgets.QFrame):
         alignment=QtCore.Qt.AlignCenter,
         fixedHeight: Union[bool, float] = False,
     ) -> RibbonToolButton: ...
-
     def addLargeToggleButton(
         self,
         text: str = None,
@@ -265,7 +248,6 @@ class RibbonPanel(QtWidgets.QFrame):
         **kwargs,
     ) -> QtWidgets.QWidget: ...
     def __getattr__(self, method: str) -> Callable: ...
-
     def addComboBox(
         self,
         items: Iterable[str],
