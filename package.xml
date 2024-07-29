@@ -5,7 +5,7 @@
 
   <description>A Ribbon for FreeCAD</description>
 
-  <version>0.0.3</version>
+  <version>0.0.4</version>
 
   <date>2024-07-28</date>
 
@@ -26,6 +26,8 @@
   <content>
     <workbench>
       <freecadmin>0.21.0</freecadmin>
+      <icon>Resources/Icons/FreecadNew.svg</icon>
+      <depend optional="False" type="python">pyqtribbon</depend>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
