@@ -11,6 +11,7 @@ RibbonCategory, RibbonCategoryScrollArea, RibbonCategoryScrollAreaContents {
 RibbonTabBar::tab {
 	padding-left: 10px;
 	padding-right: 10px;
+    iconSize: 24px 24px
 }
 
 RibbonTabBar::tab:selected {

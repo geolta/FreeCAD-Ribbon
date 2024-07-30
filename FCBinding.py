@@ -23,9 +23,9 @@
 import os
 import json
 
-from PySide.QtCore import Qt, QTimer
+from PySide.QtCore import Qt, QTimer, QSize
 from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtGui import QIcon
+from PySide.QtGui import QIcon, QFont
 
 from pyqtribbon import RibbonBar
 
@@ -33,7 +33,8 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 mw = Gui.getMainWindow()
-path = os.path.dirname(__file__) + "/Resources/icons/"
+pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
+pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
 timer = QTimer()
 
 
@@ -47,17 +48,16 @@ class ModernMenu(RibbonBar):
     wbNameMapping = {}
     isWbLoaded = {}
 
+    # use icon size from FreeCAD preferences
+    iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt(
+        "ToolbarIconSize", 24
+    )
+
     def __init__(self):
         """
         Constructor
         """
-
-        # use icon size from FreeCAD preferences
-        iconSize: int = App.ParamGet(
-            "User parameter:BaseApp/Preferences/General"
-        ).GetInt("ToolbarIconSize", 24)
-
-        super().__init__(title="", iconSize=iconSize)
+        super().__init__(title="", iconSize=self.iconSize)
 
         self.connectSignals()
 
@@ -67,8 +67,11 @@ class ModernMenu(RibbonBar):
         ) as file:
             ModernMenu.ribbonStructure = json.load(file)
 
+        # Create the ribbon
         self.createModernMenu()
         self.onUserChangedWorkbench()
+
+        self.setStyleSheet(pathStylSheets + "base.qss")
 
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
@@ -84,7 +87,9 @@ class ModernMenu(RibbonBar):
         """
 
         # add quick access buttons
+        i = 0  # Start value for button count. Used for width of quixkaccess toolbar
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
+            i = i + 1
             button = QToolButton()
             action = Gui.Command.get(commandName).getAction()
             # XXX for debugging purposes
@@ -95,7 +100,13 @@ class ModernMenu(RibbonBar):
 
             button.setDefaultAction(action[0])
             self.addQuickAccessButton(button)
-            self.setQuickAccessButtonHeight(15)
+
+        # Set the height of the quickaccess toolbar
+        self.quickAccessToolBar().setFixedHeight(self.iconSize * 1.5)
+        # Set the width of the quickaccess toolbar.
+        self.quickAccessToolBar().setMinimumWidth(
+            self.iconSize * i * 3.7795275591 * 0.5
+        )
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
@@ -123,6 +134,11 @@ class ModernMenu(RibbonBar):
                         len(self.categories()) - 1, QIcon(workbench.Icon)
                     )
 
+        # Set the font size of the ribbon tab titles
+        self.tabBar().font().setPointSizeF(12)
+
+        # application icon size
+        self.applicationOptionButton().setFixedHeight(self.iconSize)
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
 
@@ -233,7 +249,7 @@ class ModernMenu(RibbonBar):
                     icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
                         action.data()
                     ]["icon"]
-                    action.setIcon(QIcon(os.path.join(path, icon)))
+                    action.setIcon(QIcon(os.path.join(pathIcons, icon)))
                 except KeyError:
                     icon = action.icon()
 
@@ -251,16 +267,20 @@ class ModernMenu(RibbonBar):
                         action.icon(),
                         alignment=Qt.AlignLeft,
                         showText=showText,
+                        fixedHeight=24,
                     )
                 elif buttonSize == "medium":
                     btn = panel.addMediumButton(
                         action.text(),
                         action.icon(),
                         alignment=Qt.AlignLeft,
+                        fixedHeight=32,
                     )  # medium will always have text
                 elif buttonSize == "large":
                     btn = panel.addLargeButton(
-                        action.text(), action.icon()
+                        action.text(),
+                        action.icon(),
+                        fixedHeight=64,
                     )  # large will always have text and are aligned in center
                 else:
                     raise NotImplementedError(
@@ -312,15 +332,7 @@ class run:
                 return
 
             ribbon = ModernMenu()
-            # mw.setMenuBar(ribbon)
-
-            ribbonDock = QDockWidget()
-            ribbonDock.setTitleBarWidget(QWidget())
-            ribbonDock.setMinimumHeight(0)
-            sp = ribbonDock.sizePolicy()
-            sp.setVerticalPolicy(QSizePolicy.Policy.MinimumExpanding)
-            sp.setVerticalStretch(0)
-            sp.setRetainSizeWhenHidden(False)
-
-            ribbonDock.setWidget(ribbon)
-            mw.addDockWidget(Qt.TopDockWidgetArea, ribbonDock)
+            # Give an offset otherwise the ribbon will go through the menu bar
+            ribbon.setContentsMargins(0, 20, 0, 0)
+            # Create the ribbon
+            mw.setMenuBar(ribbon)
