@@ -49,9 +49,9 @@ class ModernMenu(RibbonBar):
     isWbLoaded = {}
 
     # use icon size from FreeCAD preferences
-    iconSize: int = App.ParamGet(
-        "User parameter:BaseApp/Preferences/General"
-    ).GetInt("ToolbarIconSize", 24)
+    iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt(
+        "ToolbarIconSize", 24
+    )
 
     def __init__(self):
         """
@@ -104,7 +104,9 @@ class ModernMenu(RibbonBar):
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setFixedHeight(self.iconSize * 1.5)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 3.7795275591 * 0.5)
+        self.quickAccessToolBar().setMinimumWidth(
+            self.iconSize * i * 3.7795275591 * 0.5
+        )
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
@@ -265,14 +267,14 @@ class ModernMenu(RibbonBar):
                         action.icon(),
                         alignment=Qt.AlignLeft,
                         showText=showText,
-                        fixedHeight=24
+                        fixedHeight=24,
                     )
                 elif buttonSize == "medium":
                     btn = panel.addMediumButton(
                         action.text(),
                         action.icon(),
                         alignment=Qt.AlignLeft,
-                        fixedHeight=32
+                        fixedHeight=32,
                     )  # medium will always have text
                 elif buttonSize == "large":
                     btn = panel.addLargeButton(
