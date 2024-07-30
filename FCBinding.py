@@ -190,7 +190,8 @@ class ModernMenu(RibbonBar):
                 continue
 
             panel = self.currentCategory().addPanel(
-                toolbar.replace(tabName + " ", "").capitalize()
+                title=toolbar.replace(tabName + " ", "").capitalize(),
+                showPanelOptionButton=False,
             )
 
             # get list of all buttons in toolbar
