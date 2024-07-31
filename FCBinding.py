@@ -19,22 +19,30 @@
 # * USA                                                                 *
 # *                                                                     *
 # ***********************************************************************
-
-import os
-import json
-
-from PySide.QtCore import Qt, QTimer, QSize
-from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtGui import QIcon, QFont
-
-from pyqtribbon import RibbonBar
-
 import FreeCAD as App
 import FreeCADGui as Gui
 
+import json
+import os
+import sys
+import traceback
+import logging
+import webbrowser
+
+from PySide6.QtGui import QIcon, QFont, QAction
+from PySide6.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide6.QtCore import Qt, QTimer, QSize, Signal, QObject
+
+from pyqtribbon import RibbonBar
+
+# Get the main window of FreeCAD
 mw = Gui.getMainWindow()
+
+# Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
 pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
+
+# Define a timer
 timer = QTimer()
 
 
@@ -71,6 +79,7 @@ class ModernMenu(RibbonBar):
         self.createModernMenu()
         self.onUserChangedWorkbench()
 
+        # Set the custom stylesheet
         self.setStyleSheet(pathStylSheets + "base.qss")
 
     def connectSignals(self):
@@ -135,12 +144,33 @@ class ModernMenu(RibbonBar):
                     )
 
         # Set the font size of the ribbon tab titles
-        self.tabBar().font().setPointSizeF(12)
+        self.tabBar().font().setPointSizeF(10)
+
+        # Set the size of the collpseRibbonButton
+        self.collapseRibbonButton().setFixedSize(16, 16)
+
+        # Set the helpbutton
+        self.helpRibbonButton().setEnabled(True)
+        self.helpRibbonButton().setFixedHeight(24)
+        # Set the widht of the right toolbar
+        self.rightToolBar().setMinimumWidth(self.iconSize * 2 * 1.5)
+        # Define an action for the help button
+        action = QAction()
+        action.setIcon(Gui.getIcon("help"))
+        action.triggered.connect(self.onHelpClicked)
+        self.helpRibbonButton().setDefaultAction(action)
 
         # application icon size
         self.applicationOptionButton().setFixedHeight(self.iconSize)
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
+
+    def onHelpClicked(self):
+        HelpParam = "User parameter:BaseApp/Preferences/Mod/Help"
+        HelpAdress = App.ParamGet(HelpParam).GetString("Location")
+        if HelpAdress == "":
+            HelpAdress = "https://wiki.freecad.org/Main_Page"
+        webbrowser.open(HelpAdress, new=2, autoraise=True)
 
     def onUserChangedWorkbench(self):
         """
@@ -149,7 +179,7 @@ class ModernMenu(RibbonBar):
 
         index = self.tabBar().currentIndex()
         tabName = self.tabBar().tabText(index)
-        category = self.currentCategory()
+        # category = self.currentCategory()
 
         # activate selected workbench
         tabName = tabName.replace("&", "")
@@ -190,7 +220,8 @@ class ModernMenu(RibbonBar):
                 continue
 
             panel = self.currentCategory().addPanel(
-                toolbar.replace(tabName + " ", "").capitalize()
+                title=toolbar.replace(tabName + " ", "").capitalize(),
+                showPanelOptionButton=False,
             )
 
             # get list of all buttons in toolbar
@@ -205,7 +236,6 @@ class ModernMenu(RibbonBar):
                 positionsList = ModernMenu.ribbonStructure["toolbars"][toolbar]["order"]
 
                 # XXX check that positionsList consists of strings only
-
                 def sortButtons(button):
                     if button.text() == "":
                         return -1
@@ -224,74 +254,78 @@ class ModernMenu(RibbonBar):
             for button in allButtons:
                 if button.text() == "":
                     continue
-                action = button.defaultAction()
-
-                # whether to show text of the button
-                showText = (
-                    ModernMenu.ribbonStructure["showText"]
-                    and not toolbar in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                )
-
-                # try to get alternative text from ribbonStructure
                 try:
-                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                        action.data()
-                    ]["text"]
-                    # the text would be overwritten again when the state of the action changes
-                    # (e.g. when getting enabled / disabled), therefore the action itself
-                    # is manipulated.
-                    action.setText(text)
-                except KeyError:
-                    text = action.text()
+                    action = button.defaultAction()
 
-                # try to get alternative icon from ribbonStructure
-                try:
-                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                        action.data()
-                    ]["icon"]
-                    action.setIcon(QIcon(os.path.join(pathIcons, icon)))
-                except KeyError:
-                    icon = action.icon()
-
-                # get button size from ribbonStructure
-                try:
-                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                        "commands"
-                    ][action.data()]["size"]
-                except KeyError:
-                    buttonSize = "small"  # small as default
-
-                if buttonSize == "small":
-                    btn = panel.addSmallButton(
-                        action.text(),
-                        action.icon(),
-                        alignment=Qt.AlignLeft,
-                        showText=showText,
-                        fixedHeight=24,
-                    )
-                elif buttonSize == "medium":
-                    btn = panel.addMediumButton(
-                        action.text(),
-                        action.icon(),
-                        alignment=Qt.AlignLeft,
-                        fixedHeight=32,
-                    )  # medium will always have text
-                elif buttonSize == "large":
-                    btn = panel.addLargeButton(
-                        action.text(),
-                        action.icon(),
-                        fixedHeight=64,
-                    )  # large will always have text and are aligned in center
-                else:
-                    raise NotImplementedError(
-                        "Given button size not implemented, only small, medium and large are available."
+                    # whether to show text of the button
+                    showText = (
+                        ModernMenu.ribbonStructure["showText"]
+                        and toolbar
+                        not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
                     )
 
-                btn.setDefaultAction(action)
-                # add dropdown menu if necessary
-                if button.menu() is not None:
-                    btn.setMenu(button.menu())
-                    btn.setPopupMode(QToolButton.InstantPopup)
+                    # try to get alternative text from ribbonStructure
+                    try:
+                        text = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["text"]
+                        # the text would be overwritten again when the state of the action changes
+                        # (e.g. when getting enabled / disabled), therefore the action itself
+                        # is manipulated.
+                        action.setText(text)
+                    except KeyError:
+                        text = action.text()
+
+                    # try to get alternative icon from ribbonStructure
+                    try:
+                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["icon"]
+                        action.setIcon(QIcon(os.path.join(pathIcons, icon)))
+                    except KeyError:
+                        icon = action.icon()
+
+                    # get button size from ribbonStructure
+                    try:
+                        buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["size"]
+                    except KeyError:
+                        buttonSize = "small"  # small as default
+
+                    if buttonSize == "small":
+                        btn = panel.addSmallButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignLeft,
+                            showText=showText,
+                            fixedHeight=24,
+                        )
+                    elif buttonSize == "medium":
+                        btn = panel.addMediumButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignLeft,
+                            fixedHeight=32,
+                        )  # medium will always have text
+                    elif buttonSize == "large":
+                        btn = panel.addLargeButton(
+                            action.text(),
+                            action.icon(),
+                            fixedHeight=64,
+                        )  # large will always have text and are aligned in center
+                    else:
+                        raise NotImplementedError(
+                            "Given button size not implemented, only small, medium and large are available."
+                        )
+
+                    btn.setDefaultAction(action)
+                    # add dropdown menu if necessary
+                    if button.menu() is not None:
+                        btn.setMenu(button.menu())
+                        btn.setPopupMode(QToolButton.InstantPopup)
+                except Exception:
+                    continue
 
         self.isWbLoaded[tabName] = True
 
@@ -336,3 +370,49 @@ class run:
             ribbon.setContentsMargins(0, 20, 0, 0)
             # Create the ribbon
             mw.setMenuBar(ribbon)
+
+
+# region - Exception handler--------------------------------------------------------------
+#
+#
+# https://pyqribbon.readthedocs.io/en/stable/apidoc/pyqtribbon.logger.html
+# https: // timlehr.com/2018/01/python-exception-hooks-with-qt-message-box/index.html
+class UncaughtHook(QObject):
+    _exception_caught = Signal(object)
+
+    def __init__(self, *args, **kwargs):
+        super(UncaughtHook, self).__init__(*args, **kwargs)
+
+        # this registers the exception_hook() function as hook with the Python interpreter
+        sys.excepthook = self.exception_hook
+
+        # connect signal to execute the message box function always on main thread
+        # self._exception_caught.connect(show_exception_box)
+
+    def exception_hook(self, exc_type, exc_value, exc_traceback):
+        """Function handling uncaught exceptions.
+        It is triggered each time an uncaught exception occurs.
+        """
+        if issubclass(exc_type, KeyboardInterrupt):
+            # ignore keyboard interrupt to support console applications
+            sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        else:
+            # ----------Suppressed original handling---------------------------------------
+            # exc_info = (exc_type, exc_value, exc_traceback)
+            # log_msg = '\n'.join([''.join(traceback.format_tb(exc_traceback)),
+            #                      '{0}: {1}'.format(exc_type.__name__, exc_value)])
+            # log.critical("Uncaught exception:\n {0}".format(log_msg), exc_info=exc_info)
+
+            # trigger message box show
+            # self._exception_caught.emit(log_msg)
+
+            App.Console.PrintWarning(
+                "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!"
+            )
+
+
+# create a global instance of our exception class to register the hook
+qt_exception_hook = UncaughtHook()
+#
+#
+# endregion=========================================================================================

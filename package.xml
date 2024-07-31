@@ -32,6 +32,7 @@
        <!-- If this package is installed, the Addon Manager may warn the user to remove it -->
       <replace>CommandPanel</replace>
       <replace>ToolbarStyle</replace>
+      <replace>PieMenu</replace>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
