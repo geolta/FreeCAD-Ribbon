@@ -50,6 +50,7 @@ class ModernMenu(RibbonBar):
     """
     Create ModernMenu QWidget.
     """
+
     ribbonStructure = None
 
     wbNameMapping = {}
@@ -126,7 +127,8 @@ class ModernMenu(RibbonBar):
             for workbenchName, workbench in Gui.listWorkbenches().items():
                 if workbenchName == WorkbenchOrderedList[i]:
                     if (
-                        workbenchName == "" or workbench.MenuText
+                        workbenchName == ""
+                        or workbench.MenuText
                         in ModernMenu.ribbonStructure["ignoredWorkbenches"]
                     ):
                         continue
@@ -151,9 +153,7 @@ class ModernMenu(RibbonBar):
         self.helpRibbonButton().setEnabled(True)
         self.helpRibbonButton().setFixedHeight(24)
         # Set the widht of the right toolbar
-        self.rightToolBar().setMinimumWidth(
-            self.iconSize * 2 * 1.5
-        )
+        self.rightToolBar().setMinimumWidth(self.iconSize * 2 * 1.5)
         # Define an action for the help button
         action = QAction()
         action.setIcon(Gui.getIcon("help"))
@@ -230,7 +230,8 @@ class ModernMenu(RibbonBar):
 
             # order buttons like defined in ribbonStructure
             if (
-                toolbar in ModernMenu.ribbonStructure["toolbars"] and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
+                toolbar in ModernMenu.ribbonStructure["toolbars"]
+                and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
             ):
                 positionsList = ModernMenu.ribbonStructure["toolbars"][toolbar]["order"]
 
@@ -258,14 +259,16 @@ class ModernMenu(RibbonBar):
 
                     # whether to show text of the button
                     showText = (
-                        ModernMenu.ribbonStructure["showText"] and toolbar not in ModernMenu.ribbonStructure
-                        ["iconOnlyToolbars"])
+                        ModernMenu.ribbonStructure["showText"]
+                        and toolbar
+                        not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
+                    )
 
                     # try to get alternative text from ribbonStructure
                     try:
-                        text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                            action.data()
-                        ]["text"]
+                        text = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["text"]
                         # the text would be overwritten again when the state of the action changes
                         # (e.g. when getting enabled / disabled), therefore the action itself
                         # is manipulated.
@@ -275,9 +278,9 @@ class ModernMenu(RibbonBar):
 
                     # try to get alternative icon from ribbonStructure
                     try:
-                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                            action.data()
-                        ]["icon"]
+                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["icon"]
                         action.setIcon(QIcon(os.path.join(pathIcons, icon)))
                     except KeyError:
                         icon = action.icon()
@@ -404,7 +407,8 @@ class UncaughtHook(QObject):
             # self._exception_caught.emit(log_msg)
 
             App.Console.PrintWarning(
-                "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!")
+                "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!"
+            )
 
 
 # create a global instance of our exception class to register the hook
