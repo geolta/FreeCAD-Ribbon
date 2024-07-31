@@ -19,22 +19,32 @@
 # * USA                                                                 *
 # *                                                                     *
 # ***********************************************************************
-
-import os
-import json
-
-from PySide.QtCore import Qt, QTimer, QSize
-from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtGui import QIcon, QFont
-
-from pyqtribbon import RibbonBar
-
 import FreeCAD as App
 import FreeCADGui as Gui
 
+import json
+import os
+
+from PySide.QtGui import QIcon, QFont
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
+
+from pyqtribbon import RibbonBar
+
+# import custom exception handlers
+from Exceptions import UncaughtHook
+
+# create a global instance of our exception class to register the hook
+qt_exception_hook = UncaughtHook()
+
+# Get the main window of FreeCAD
 mw = Gui.getMainWindow()
+
+# Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
 pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
+
+# Define a timer
 timer = QTimer()
 
 
@@ -42,7 +52,6 @@ class ModernMenu(RibbonBar):
     """
     Create ModernMenu QWidget.
     """
-
     ribbonStructure = None
 
     wbNameMapping = {}
@@ -149,7 +158,7 @@ class ModernMenu(RibbonBar):
 
         index = self.tabBar().currentIndex()
         tabName = self.tabBar().tabText(index)
-        category = self.currentCategory()
+        # category = self.currentCategory()
 
         # activate selected workbench
         tabName = tabName.replace("&", "")
@@ -200,13 +209,11 @@ class ModernMenu(RibbonBar):
 
             # order buttons like defined in ribbonStructure
             if (
-                toolbar in ModernMenu.ribbonStructure["toolbars"]
-                and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
+                toolbar in ModernMenu.ribbonStructure["toolbars"] and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
             ):
                 positionsList = ModernMenu.ribbonStructure["toolbars"][toolbar]["order"]
 
                 # XXX check that positionsList consists of strings only
-
                 def sortButtons(button):
                     if button.text() == "":
                         return -1
@@ -225,74 +232,76 @@ class ModernMenu(RibbonBar):
             for button in allButtons:
                 if button.text() == "":
                     continue
-                action = button.defaultAction()
-
-                # whether to show text of the button
-                showText = (
-                    ModernMenu.ribbonStructure["showText"]
-                    and not toolbar in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                )
-
-                # try to get alternative text from ribbonStructure
                 try:
-                    text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                        action.data()
-                    ]["text"]
-                    # the text would be overwritten again when the state of the action changes
-                    # (e.g. when getting enabled / disabled), therefore the action itself
-                    # is manipulated.
-                    action.setText(text)
-                except KeyError:
-                    text = action.text()
+                    action = button.defaultAction()
 
-                # try to get alternative icon from ribbonStructure
-                try:
-                    icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
-                        action.data()
-                    ]["icon"]
-                    action.setIcon(QIcon(os.path.join(pathIcons, icon)))
-                except KeyError:
-                    icon = action.icon()
+                    # whether to show text of the button
+                    showText = (
+                        ModernMenu.ribbonStructure["showText"] and toolbar not in ModernMenu.ribbonStructure
+                        ["iconOnlyToolbars"])
 
-                # get button size from ribbonStructure
-                try:
-                    buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                        "commands"
-                    ][action.data()]["size"]
-                except KeyError:
-                    buttonSize = "small"  # small as default
+                    # try to get alternative text from ribbonStructure
+                    try:
+                        text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                            action.data()
+                        ]["text"]
+                        # the text would be overwritten again when the state of the action changes
+                        # (e.g. when getting enabled / disabled), therefore the action itself
+                        # is manipulated.
+                        action.setText(text)
+                    except KeyError:
+                        text = action.text()
 
-                if buttonSize == "small":
-                    btn = panel.addSmallButton(
-                        action.text(),
-                        action.icon(),
-                        alignment=Qt.AlignLeft,
-                        showText=showText,
-                        fixedHeight=24,
-                    )
-                elif buttonSize == "medium":
-                    btn = panel.addMediumButton(
-                        action.text(),
-                        action.icon(),
-                        alignment=Qt.AlignLeft,
-                        fixedHeight=32,
-                    )  # medium will always have text
-                elif buttonSize == "large":
-                    btn = panel.addLargeButton(
-                        action.text(),
-                        action.icon(),
-                        fixedHeight=64,
-                    )  # large will always have text and are aligned in center
-                else:
-                    raise NotImplementedError(
-                        "Given button size not implemented, only small, medium and large are available."
-                    )
+                    # try to get alternative icon from ribbonStructure
+                    try:
+                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][
+                            action.data()
+                        ]["icon"]
+                        action.setIcon(QIcon(os.path.join(pathIcons, icon)))
+                    except KeyError:
+                        icon = action.icon()
 
-                btn.setDefaultAction(action)
-                # add dropdown menu if necessary
-                if button.menu() is not None:
-                    btn.setMenu(button.menu())
-                    btn.setPopupMode(QToolButton.InstantPopup)
+                    # get button size from ribbonStructure
+                    try:
+                        buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
+                            "commands"
+                        ][action.data()]["size"]
+                    except KeyError:
+                        buttonSize = "small"  # small as default
+
+                    if buttonSize == "small":
+                        btn = panel.addSmallButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignLeft,
+                            showText=showText,
+                            fixedHeight=24,
+                        )
+                    elif buttonSize == "medium":
+                        btn = panel.addMediumButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignLeft,
+                            fixedHeight=32,
+                        )  # medium will always have text
+                    elif buttonSize == "large":
+                        btn = panel.addLargeButton(
+                            action.text(),
+                            action.icon(),
+                            fixedHeight=64,
+                        )  # large will always have text and are aligned in center
+                    else:
+                        raise NotImplementedError(
+                            "Given button size not implemented, only small, medium and large are available."
+                        )
+
+                    btn.setDefaultAction(action)
+                    # add dropdown menu if necessary
+                    if button.menu() is not None:
+                        btn.setMenu(button.menu())
+                        btn.setPopupMode(QToolButton.InstantPopup)
+                except Exception:
+                    continue
 
         self.isWbLoaded[tabName] = True
 
