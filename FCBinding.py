@@ -29,9 +29,9 @@ import traceback
 import logging
 import webbrowser
 
-from PySide6.QtGui import QIcon, QFont, QAction
-from PySide6.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide6.QtCore import Qt, QTimer, QSize, Signal, QObject
+from PySide.QtGui import QIcon, QFont, QAction
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
 
 from pyqtribbon import RibbonBar
 
