@@ -31,12 +31,6 @@ from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
 
 from pyqtribbon import RibbonBar
 
-# import custom exception handlers
-from Exceptions import UncaughtHook
-
-# create a global instance of our exception class to register the hook
-qt_exception_hook = UncaughtHook()
-
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
 
