@@ -29,6 +29,10 @@
       <icon>Resources/Icons/FreecadNew.svg</icon>
       <depend optional="False" type="python">pyqtribbon</depend>
       <depend optional="False" type="python">qtpy</depend>
+       <!-- If this package is installed, the Addon Manager may warn the user to remove it -->
+      <replace>CommandPanel</replace>
+      <replace>ToolbarStyle</replace>
+      <replace>PieMenu</replace>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
