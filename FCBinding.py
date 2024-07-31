@@ -29,7 +29,7 @@ from PySide.QtGui import QIcon, QFont
 from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
 from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
 
-from pyqtribbon_local import RibbonBar
+from pyqtribbon import RibbonBar
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
