@@ -27,10 +27,11 @@ import os
 import sys
 import traceback
 import logging
+import webbrowser
 
-from PySide.QtGui import QIcon, QFont
-from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
+from PySide6.QtGui import QIcon, QFont, QAction
+from PySide6.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide6.QtCore import Qt, QTimer, QSize, Signal, QObject
 
 from pyqtribbon import RibbonBar
 
@@ -77,6 +78,7 @@ class ModernMenu(RibbonBar):
         self.createModernMenu()
         self.onUserChangedWorkbench()
 
+        # Set the custom stylesheet
         self.setStyleSheet(pathStylSheets + "base.qss")
 
     def connectSignals(self):
@@ -140,12 +142,35 @@ class ModernMenu(RibbonBar):
                     )
 
         # Set the font size of the ribbon tab titles
-        self.tabBar().font().setPointSizeF(12)
+        self.tabBar().font().setPointSizeF(10)
+
+        # Set the size of the collpseRibbonButton
+        self.collapseRibbonButton().setFixedSize(16, 16)
+
+        # Set the helpbutton
+        self.helpRibbonButton().setEnabled(True)
+        self.helpRibbonButton().setFixedHeight(24)
+        # Set the widht of the right toolbar
+        self.rightToolBar().setMinimumWidth(
+            self.iconSize * 2 * 1.5
+        )
+        # Define an action for the help button
+        action = QAction()
+        action.setIcon(Gui.getIcon("help"))
+        action.triggered.connect(self.onHelpClicked)
+        self.helpRibbonButton().setDefaultAction(action)
 
         # application icon size
         self.applicationOptionButton().setFixedHeight(self.iconSize)
         # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
+
+    def onHelpClicked(self):
+        HelpParam = "User parameter:BaseApp/Preferences/Mod/Help"
+        HelpAdress = App.ParamGet(HelpParam).GetString("Location")
+        if HelpAdress == "":
+            HelpAdress = "https://wiki.freecad.org/Main_Page"
+        webbrowser.open(HelpAdress, new=2, autoraise=True)
 
     def onUserChangedWorkbench(self):
         """
