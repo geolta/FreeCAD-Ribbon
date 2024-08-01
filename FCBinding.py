@@ -35,6 +35,15 @@ import traceback
 import logging
 import webbrowser
 
+from PySide.QtGui import QIcon, QFont, QAction
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
+from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
+
+from pyqtribbon import RibbonBar
+
+# Get the main window of FreeCAD
+mw = Gui.getMainWindow()
+
 # Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
 pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
