@@ -23,14 +23,14 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 from inspect import getsourcefile
-from PySide6.QtGui import QPalette, QIcon
-from PySide6.QtWidgets import (
+from PySide.QtGui import QPalette, QIcon
+from PySide.QtWidgets import (
     QListWidgetItem,
     QDialogButtonBox,
     QTableWidgetItem,
     QTableWidget,
 )
-from PySide6.QtCore import SIGNAL, Qt
+from PySide.QtCore import SIGNAL, Qt
 import sys
 
 # Get the resources
