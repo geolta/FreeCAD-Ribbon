@@ -130,3 +130,5 @@ dmypy.json
 
 .vscode
 __pycache__
+.pre-commit-config.yaml
+.pre-commit-search-and-replace.yaml
