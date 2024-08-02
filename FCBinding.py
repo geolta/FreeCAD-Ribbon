@@ -399,7 +399,7 @@ class UncaughtHook(QObject):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
         else:
             # ----------Suppressed original handling---------------------------------------
-            # exc_info = (exc_type, exc_value, exc_traceback)
+            exc_info = (exc_type, exc_value, exc_traceback)
             # log_msg = '\n'.join([''.join(traceback.format_tb(exc_traceback)),
             #                      '{0}: {1}'.format(exc_type.__name__, exc_value)])
             # log.critical("Uncaught exception:\n {0}".format(log_msg), exc_info=exc_info)
@@ -410,10 +410,11 @@ class UncaughtHook(QObject):
             App.Console.PrintWarning(
                 "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!"
             )
+            App.Console.PrintWarning(exc_info)
 
 
 # create a global instance of our exception class to register the hook
-qt_exception_hook = UncaughtHook()
+# qt_exception_hook = UncaughtHook()
 #
 #
 # endregion=========================================================================================
