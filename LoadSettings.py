@@ -23,9 +23,14 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 from inspect import getsourcefile
-from PySide6.QtGui import QPalette, QIcon
-from PySide6.QtWidgets import QListWidgetItem, QDialogButtonBox, QTableWidgetItem, QTableWidget
-from PySide6.QtCore import SIGNAL, Qt
+from PySide.QtGui import QPalette, QIcon
+from PySide.QtWidgets import (
+    QListWidgetItem,
+    QDialogButtonBox,
+    QTableWidgetItem,
+    QTableWidget,
+)
+from PySide.QtCore import SIGNAL, Qt
 import sys
 
 # Get the resources
@@ -124,9 +129,13 @@ class LoadDialog(Settings_ui.Ui_Form):
         # endregion----------------------------------------------------------------------------------
 
         # region - connect controls with functions----------------------------------------------------
-        self.form.WorkbenchList.currentTextChanged.connect(self.on_WorkbenchList__TextChanged)
+        self.form.WorkbenchList.currentTextChanged.connect(
+            self.on_WorkbenchList__TextChanged
+        )
 
-        self.form.ToolbarList.currentTextChanged.connect(self.on_ToolbarList__TextChanged)
+        self.form.ToolbarList.currentTextChanged.connect(
+            self.on_ToolbarList__TextChanged
+        )
         # endregion
 
         # test = QTableWidget()
@@ -140,7 +149,9 @@ class LoadDialog(Settings_ui.Ui_Form):
     # region - Control functions----------------------------------------------------------------------
     # Add all toolbars of the selected workbench to the toolbar list(QComboBox)
     def on_WorkbenchList__TextChanged(self):
-        wbToolbars = Gui.getWorkbench(self.form.WorkbenchList.currentText()).listToolbars()
+        wbToolbars = Gui.getWorkbench(
+            self.form.WorkbenchList.currentText()
+        ).listToolbars()
         self.form.ToolbarList.clear()
         for Toolbar in wbToolbars:
             self.form.ToolbarList.addItem(Toolbar, "")
@@ -171,11 +182,16 @@ class LoadDialog(Settings_ui.Ui_Form):
                 pass
 
             try:
-                if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
+                if (
+                    command.getInfo()["menuText"] != ""
+                    or command.getInfo()["menuText"] != "separator"
+                ):
                     CommandName = QTableWidgetItem()
                     CommandName.setText(command.getInfo()["menuText"].replace("&", ""))
                     if Icon is not None:
-                        self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
+                        self.form.tableWidget.insertRow(
+                            self.form.tableWidget.rowCount()
+                        )
                         CommandName.setIcon(Icon)
                         RowNumber = self.form.tableWidget.rowCount() - 1
                         self.form.tableWidget.setItem(RowNumber, 0, CommandName)
