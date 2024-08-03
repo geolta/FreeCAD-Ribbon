@@ -120,10 +120,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.addWorkbenches()
 
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.form.WorkbenchList.clear()
         self.on_WorkbenchList__TextChanged()
 
-        self.form.ToolbarList.clear()
         self.on_ToolbarList__TextChanged()
 
         # Add all commands to the listbox for available commands
@@ -207,6 +205,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     # region - Functions------------------------------------------------------------------------------
     def addWorkbenches(self):
+        self.form.WorkbenchList.clear()
         for workbench in self.List_Workbenches:
             # Define a new ListWidgetItem.
             ListWidgetItem = QListWidgetItem()
@@ -219,6 +218,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     def AddCommands(self):
+        self.form.CommandsAvailable.clear()
         for command in self.List_Commands:
             ListWidgetItem = QListWidgetItem()
             ListWidgetItem.setText(command[0])
