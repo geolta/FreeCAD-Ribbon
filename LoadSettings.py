@@ -128,13 +128,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # endregion----------------------------------------------------------------------------------
 
         # region - connect controls with functions----------------------------------------------------
-        self.form.WorkbenchList.currentTextChanged.connect(
-            self.on_WorkbenchList__TextChanged
-        )
+        self.form.WorkbenchList.currentTextChanged.connect(self.on_WorkbenchList__TextChanged)
 
-        self.form.ToolbarList.currentTextChanged.connect(
-            self.on_ToolbarList__TextChanged
-        )
+        self.form.ToolbarList.currentTextChanged.connect(self.on_ToolbarList__TextChanged)
         # endregion
 
         self.form.tableWidget.setEnabled(True)
@@ -145,9 +141,7 @@ class LoadDialog(Settings_ui.Ui_Form):
     # region - Control functions----------------------------------------------------------------------
     # Add all toolbars of the selected workbench to the toolbar list(QComboBox)
     def on_WorkbenchList__TextChanged(self):
-        wbToolbars = Gui.getWorkbench(
-            self.form.WorkbenchList.currentText()
-        ).listToolbars()
+        wbToolbars = Gui.getWorkbench(self.form.WorkbenchList.currentText()).listToolbars()
         self.form.ToolbarList.clear()
         for Toolbar in wbToolbars:
             self.form.ToolbarList.addItem(Toolbar, "")
@@ -179,36 +173,28 @@ class LoadDialog(Settings_ui.Ui_Form):
             CommandName.setText(command.getInfo()["menuText"].replace("&", ""))
             if Icon is not None:
                 CommandName.setIcon(Icon)
-            self.form.tableWidget.setItem(
-                self.form.tableWidget.rowCount() - 1, 0, CommandName
-            )
+            self.form.tableWidget.setItem(self.form.tableWidget.rowCount() - 1, 0, CommandName)
 
             Icon_small = QTableWidgetItem()
             Icon_small.setFlags(Qt.ItemFlag.ItemIsEnabled)
             Icon_small.setFlags(Qt.ItemFlag.ItemIsSelectable)
             Icon_small.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
             Icon_small.setCheckState(Qt.CheckState.Checked)
-            self.form.tableWidget.setItem(
-                self.form.tableWidget.rowCount() - 1, 1, Icon_small
-            )
+            self.form.tableWidget.setItem(self.form.tableWidget.rowCount() - 1, 1, Icon_small)
 
             Icon_medium = QTableWidgetItem()
             Icon_medium.setFlags(Qt.ItemFlag.ItemIsEnabled)
             Icon_medium.setFlags(Qt.ItemFlag.ItemIsSelectable)
             Icon_medium.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
             Icon_medium.setCheckState(Qt.CheckState.Unchecked)
-            self.form.tableWidget.setItem(
-                self.form.tableWidget.rowCount() - 1, 2, Icon_medium
-            )
+            self.form.tableWidget.setItem(self.form.tableWidget.rowCount() - 1, 2, Icon_medium)
 
             Icon_large = QTableWidgetItem()
             Icon_large.setFlags(Qt.ItemFlag.ItemIsEnabled)
             Icon_medium.setFlags(Qt.ItemFlag.ItemIsSelectable)
             Icon_large.setFlags(Qt.ItemFlag.ItemIsUserCheckable)
             Icon_large.setCheckState(Qt.CheckState.Unchecked)
-            self.form.tableWidget.setItem(
-                self.form.tableWidget.rowCount() - 1, 3, Icon_large
-            )
+            self.form.tableWidget.setItem(self.form.tableWidget.rowCount() - 1, 3, Icon_large)
 
         return
 
