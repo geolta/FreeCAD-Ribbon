@@ -23,18 +23,10 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide.QtGui import QIcon, QFont, QAction
-from PySide.QtWidgets import (
-    QToolButton,
-    QToolBar,
-    QDockWidget,
-    QWidget,
-    QSizePolicy,
-    QLayout,
-    QMenu,
-)
+from PySide.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy, QLayout, QMenu
 from PySide.QtCore import Qt, QTimer, QSize, Signal, QObject
 
-from pyqtribbon import RibbonBar, RibbonStyle
+from pyqtribbon import RibbonBar
 
 import json
 import os
@@ -44,7 +36,7 @@ import logging
 import webbrowser
 
 from pyqtribbon import RibbonBar
-from pyqtribbon.ribbonbar import RibbonMenu
+import LoadSettings
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -56,8 +48,6 @@ pathUI = os.path.dirname(__file__) + "/Resources/ui/"
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
-
-import LoadSettings
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -77,9 +67,7 @@ class ModernMenu(RibbonBar):
     isWbLoaded = {}
 
     # use icon size from FreeCAD preferences
-    iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt(
-        "ToolbarIconSize", 24
-    )
+    iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt("ToolbarIconSize", 24)
 
     def __init__(self):
         """
@@ -90,25 +78,26 @@ class ModernMenu(RibbonBar):
         self.connectSignals()
 
         # read ribbon structure from JSON file
-        with open(
-            os.path.join(os.path.dirname(__file__), "RibbonStructure.json"), "r"
-        ) as file:
+        with open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"), "r") as file:
             ModernMenu.ribbonStructure = json.load(file)
 
         # Create the ribbon
         self.createModernMenu()
         self.onUserChangedWorkbench()
 
-        # Set the custom stylesheet
-        self.setStyleSheet(pathStylSheets + "base.qss")
+        # # Set the custom stylesheet
+        # self.setStyleSheet(pathStylSheets + "base.qss")
+        return
 
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
         mw.workbenchActivated.connect(self.onWbActivated)
+        return
 
     def disconnectSignals(self):
         self.tabBar().currentChanged.disconnect(self.onUserChangedWorkbench)
         mw.workbenchActivated.disconnect(self.onWbActivated)
+        return
 
     def createModernMenu(self):
         """
@@ -133,24 +122,16 @@ class ModernMenu(RibbonBar):
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setFixedHeight(self.iconSize * 1.5)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(
-            self.iconSize * i * 3.7795275591 * 0.5
-        )
+        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 3.7795275591 * 0.5)
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
-        WorkbenchOrderedList = (
-            App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
-        )
+        WorkbenchOrderedList = App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
         # add category for each workbench
         for i in range(len(WorkbenchOrderedList)):
             for workbenchName, workbench in Gui.listWorkbenches().items():
                 if workbenchName == WorkbenchOrderedList[i]:
-                    if (
-                        workbenchName == ""
-                        or workbench.MenuText
-                        in ModernMenu.ribbonStructure["ignoredWorkbenches"]
-                    ):
+                    if workbenchName == "" or workbench.MenuText in ModernMenu.ribbonStructure["ignoredWorkbenches"]:
                         continue
 
                     name = workbench.MenuText
@@ -159,9 +140,7 @@ class ModernMenu(RibbonBar):
 
                     self.addCategory(name)
                     # set tab icon
-                    self.tabBar().setTabIcon(
-                        len(self.categories()) - 1, QIcon(workbench.Icon)
-                    )
+                    self.tabBar().setTabIcon(len(self.categories()) - 1, QIcon(workbench.Icon))
 
         # Set the font size of the ribbon tab titles
         self.tabBar().font().setPointSizeF(10)
@@ -186,6 +165,7 @@ class ModernMenu(RibbonBar):
         SettingsMenu = self.addFileMenu()
         SettingsButton = SettingsMenu.addAction("Settings")
         SettingsButton.triggered.connect(self.loadSettingsMenu)
+        return
 
     def loadSettingsMenu(self):
         LoadSettings.main()
@@ -197,6 +177,7 @@ class ModernMenu(RibbonBar):
         if HelpAdress == "":
             HelpAdress = "https://wiki.freecad.org/Main_Page"
         webbrowser.open(HelpAdress, new=2, autoraise=True)
+        return
 
     def onUserChangedWorkbench(self):
         """
@@ -211,6 +192,7 @@ class ModernMenu(RibbonBar):
         tabName = tabName.replace("&", "")
         Gui.activateWorkbench(self.wbNameMapping[tabName])
         self.onWbActivated()
+        return
 
     def onWbActivated(self):
         # switch tab if necessary
@@ -234,6 +216,7 @@ class ModernMenu(RibbonBar):
 
         # create panels
         self.buildPanels()
+        return
 
     def buildPanels(self):
         workbench = Gui.activeWorkbench()
@@ -286,15 +269,12 @@ class ModernMenu(RibbonBar):
                     # whether to show text of the button
                     showText = (
                         ModernMenu.ribbonStructure["showText"]
-                        and toolbar
-                        not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
+                        and toolbar not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
                     )
 
                     # try to get alternative text from ribbonStructure
                     try:
-                        text = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["text"]
+                        text = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["text"]
                         # the text would be overwritten again when the state of the action changes
                         # (e.g. when getting enabled / disabled), therefore the action itself
                         # is manipulated.
@@ -304,18 +284,14 @@ class ModernMenu(RibbonBar):
 
                     # try to get alternative icon from ribbonStructure
                     try:
-                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["icon"]
+                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["icon"]
                         action.setIcon(QIcon(os.path.join(pathIcons, icon)))
                     except KeyError:
                         icon = action.icon()
 
                     # get button size from ribbonStructure
                     try:
-                        buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["size"]
+                        buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar]["commands"][action.data()]["size"]
                     except KeyError:
                         buttonSize = "small"  # small as default
 
@@ -357,6 +333,7 @@ class ModernMenu(RibbonBar):
                     continue
 
         self.isWbLoaded[tabName] = True
+        return
 
     def updateCurrentTab(self):
         currentWbIndex = self.tabBar().indexOf(Gui.activeWorkbench().MenuText)
@@ -366,6 +343,7 @@ class ModernMenu(RibbonBar):
             self.disconnectSignals()
             self.tabBar().setCurrentIndex(currentWbIndex)
             self.connectSignals()
+        return
 
     def hideClassicToolbars(self):
         for toolbar in mw.findChildren(QToolBar):
@@ -375,6 +353,7 @@ class ModernMenu(RibbonBar):
                 "draft_snap_widget",
             ]:
                 toolbar.hide()
+        return
 
 
 class run:
@@ -399,6 +378,7 @@ class run:
             ribbon.setContentsMargins(0, 20, 0, 0)
             # Create the ribbon
             mw.setMenuBar(ribbon)
+        return
 
 
 # region - Exception handler--------------------------------------------------------------
@@ -439,6 +419,7 @@ class UncaughtHook(QObject):
                 "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!"
             )
             App.Console.PrintWarning(exc_info)
+        return
 
 
 # create a global instance of our exception class to register the hook

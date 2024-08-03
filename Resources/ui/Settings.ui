@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>584</width>
+    <width>579</width>
     <height>724</height>
    </rect>
   </property>
@@ -550,7 +550,7 @@
          <string>Command 1</string>
         </property>
         <property name="flags">
-         <set>ItemIsEnabled</set>
+         <set>ItemIsSelectable|ItemIsEnabled</set>
         </property>
        </item>
        <item row="0" column="1">
@@ -573,7 +573,7 @@
          <enum>Checked</enum>
         </property>
         <property name="flags">
-         <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
         </property>
        </item>
        <item row="0" column="2">
@@ -587,7 +587,7 @@
          <enum>Checked</enum>
         </property>
         <property name="flags">
-         <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
         </property>
        </item>
        <item row="0" column="3">
@@ -601,7 +601,7 @@
          <enum>Checked</enum>
         </property>
         <property name="flags">
-         <set>ItemIsUserCheckable|ItemIsEnabled</set>
+         <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
         </property>
        </item>
       </widget>
@@ -766,12 +766,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>147</x>
-     <y>53</y>
+     <x>120</x>
+     <y>57</y>
     </hint>
     <hint type="destinationlabel">
-     <x>457</x>
-     <y>112</y>
+     <x>119</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>
