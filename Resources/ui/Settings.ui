@@ -58,7 +58,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="QAToolbars">
       <attribute name="title">
@@ -104,7 +104,7 @@
         <item row="1" column="1">
          <layout class="QGridLayout" name="gridLayout">
           <item row="4" column="0">
-           <widget class="QToolButton" name="toolButton_3">
+           <widget class="QToolButton" name="MoveUp_Command">
             <property name="text">
              <string>...</string>
             </property>
@@ -114,7 +114,7 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QToolButton" name="toolButton_4">
+           <widget class="QToolButton" name="MoveDown_Command">
             <property name="text">
              <string>...</string>
             </property>
@@ -124,7 +124,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QToolButton" name="toolButton_2">
+           <widget class="QToolButton" name="Remove_Command">
             <property name="text">
              <string>...</string>
             </property>
@@ -134,7 +134,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="Add_Command">
             <property name="text">
              <string>...</string>
             </property>
@@ -254,7 +254,7 @@
            </spacer>
           </item>
           <item row="4" column="0">
-           <widget class="QToolButton" name="toolButton_5">
+           <widget class="QToolButton" name="MoveUp_Workbench">
             <property name="text">
              <string>...</string>
             </property>
@@ -264,7 +264,7 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QToolButton" name="toolButton_6">
+           <widget class="QToolButton" name="MoveDown_Workbench">
             <property name="text">
              <string>...</string>
             </property>
@@ -274,7 +274,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QToolButton" name="toolButton_7">
+           <widget class="QToolButton" name="Remove_Workbench">
             <property name="text">
              <string>...</string>
             </property>
@@ -284,7 +284,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QToolButton" name="toolButton_8">
+           <widget class="QToolButton" name="Add_Workbench">
             <property name="text">
              <string>...</string>
             </property>
@@ -352,7 +352,7 @@
          <number>6</number>
         </property>
         <item row="1" column="0">
-         <widget class="QListWidget" name="WorkbenchesAvailable_3">
+         <widget class="QListWidget" name="ToolbarsToInclude">
           <item>
            <property name="text">
             <string>New Item</string>
@@ -364,7 +364,7 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QListWidget" name="WorkbenchesSelected_3">
+         <widget class="QListWidget" name="ToolbarsIncluded">
           <item>
            <property name="text">
             <string>New Item</string>
@@ -391,7 +391,7 @@
            </spacer>
           </item>
           <item row="4" column="0">
-           <widget class="QToolButton" name="toolButton_17">
+           <widget class="QToolButton" name="MoveUp_Toolbar">
             <property name="text">
              <string>...</string>
             </property>
@@ -401,7 +401,7 @@
            </widget>
           </item>
           <item row="5" column="0">
-           <widget class="QToolButton" name="toolButton_18">
+           <widget class="QToolButton" name="MoveDown_Toolbar">
             <property name="text">
              <string>...</string>
             </property>
@@ -411,7 +411,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QToolButton" name="toolButton_19">
+           <widget class="QToolButton" name="Remove_Toolbar">
             <property name="text">
              <string>...</string>
             </property>
@@ -421,7 +421,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QToolButton" name="toolButton_20">
+           <widget class="QToolButton" name="Add_Toolbar">
             <property name="text">
              <string>...</string>
             </property>
@@ -670,7 +670,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QFrame" name="frame">
+          <widget class="QGroupBox" name="groupBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -680,25 +680,9 @@
              <height>50</height>
             </size>
            </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+           <property name="title">
+            <string>Backup location</string>
            </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <widget class="QLabel" name="label_3">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>0</y>
-              <width>181</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Backup location:</string>
-            </property>
-           </widget>
            <widget class="QWidget" name="layoutWidget">
             <property name="geometry">
              <rect>
@@ -709,8 +693,17 @@
              </rect>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="leftMargin">
+              <number>6</number>
+             </property>
+             <property name="rightMargin">
+              <number>6</number>
+             </property>
              <item>
               <widget class="QLabel" name="label_4">
+               <property name="frameShape">
+                <enum>QFrame::Box</enum>
+               </property>
                <property name="text">
                 <string>...\</string>
                </property>
@@ -741,7 +734,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item row="4" column="0">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -754,6 +747,73 @@
          </property>
         </spacer>
        </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Select stylesheet</string>
+         </property>
+         <widget class="QWidget" name="layoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>20</y>
+            <width>531</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="text">
+              <string>...\</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="StyleSheetLocation">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>20</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Browse..</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="AutoHide">
+         <property name="text">
+          <string>Autohide the ribbon</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -761,22 +821,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>EnableBackup</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>frame</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>119</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>119</x>
-     <y>89</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
