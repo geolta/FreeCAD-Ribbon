@@ -38,7 +38,9 @@ class Ui_Form(object):
 
         self.gridLayout_6.addWidget(self.RestoreJson, 0, 2, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
 
         self.gridLayout_6.addItem(self.horizontalSpacer, 0, 1, 1, 1)
 
@@ -94,15 +96,21 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.Add_Command, 1, 0, 1, 1)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout.addItem(self.verticalSpacer, 6, 0, 1, 1)
 
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_3 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed
+        )
 
         self.gridLayout.addItem(self.verticalSpacer_3, 3, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout.addItem(self.verticalSpacer_2, 0, 0, 1, 1)
 
@@ -138,7 +146,9 @@ class Ui_Form(object):
 
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_4 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout_4.addItem(self.verticalSpacer_4, 0, 0, 1, 1)
 
@@ -166,11 +176,15 @@ class Ui_Form(object):
 
         self.gridLayout_4.addWidget(self.Add_Workbench, 1, 0, 1, 1)
 
-        self.verticalSpacer_5 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_5 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout_4.addItem(self.verticalSpacer_5, 6, 0, 1, 1)
 
-        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_6 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed
+        )
 
         self.gridLayout_4.addItem(self.verticalSpacer_6, 3, 0, 1, 1)
 
@@ -206,7 +220,9 @@ class Ui_Form(object):
 
         self.gridLayout_18 = QGridLayout()
         self.gridLayout_18.setObjectName("gridLayout_18")
-        self.verticalSpacer_15 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_15 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout_18.addItem(self.verticalSpacer_15, 0, 0, 1, 1)
 
@@ -234,11 +250,15 @@ class Ui_Form(object):
 
         self.gridLayout_18.addWidget(self.Add_Toolbar, 1, 0, 1, 1)
 
-        self.verticalSpacer_16 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_16 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout_18.addItem(self.verticalSpacer_16, 6, 0, 1, 1)
 
-        self.verticalSpacer_17 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
+        self.verticalSpacer_17 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed
+        )
 
         self.gridLayout_18.addItem(self.verticalSpacer_17, 3, 0, 1, 1)
 
@@ -276,21 +296,29 @@ class Ui_Form(object):
         __qtablewidgetitem6.setCheckState(Qt.Checked)
         __qtablewidgetitem6.setTextAlignment(Qt.AlignCenter)
         __qtablewidgetitem6.setBackground(brush)
-        __qtablewidgetitem6.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        __qtablewidgetitem6.setFlags(
+            Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled
+        )
         self.tableWidget.setItem(0, 1, __qtablewidgetitem6)
         __qtablewidgetitem7 = QTableWidgetItem()
         __qtablewidgetitem7.setCheckState(Qt.Checked)
         __qtablewidgetitem7.setTextAlignment(Qt.AlignCenter)
-        __qtablewidgetitem7.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        __qtablewidgetitem7.setFlags(
+            Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled
+        )
         self.tableWidget.setItem(0, 2, __qtablewidgetitem7)
         __qtablewidgetitem8 = QTableWidgetItem()
         __qtablewidgetitem8.setCheckState(Qt.Checked)
         __qtablewidgetitem8.setTextAlignment(Qt.AlignCenter)
-        __qtablewidgetitem8.setFlags(Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        __qtablewidgetitem8.setFlags(
+            Qt.ItemIsSelectable | Qt.ItemIsUserCheckable | Qt.ItemIsEnabled
+        )
         self.tableWidget.setItem(0, 3, __qtablewidgetitem8)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setGeometry(QRect(10, 70, 541, 561))
-        self.tableWidget.setStyleSheet("border-color: rgb(167, 167rgb(217, 217, 217), 167);")
+        self.tableWidget.setStyleSheet(
+            "border-color: rgb(167, 167rgb(217, 217, 217), 167);"
+        )
         self.tableWidget.setFrameShape(QFrame.StyledPanel)
         self.tableWidget.setFrameShadow(QFrame.Plain)
         self.tableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
@@ -318,7 +346,9 @@ class Ui_Form(object):
         sizePolicy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.WorkbenchList.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.WorkbenchList.sizePolicy().hasHeightForWidth()
+        )
         self.WorkbenchList.setSizePolicy(sizePolicy)
 
         self.gridLayout_5.addWidget(self.WorkbenchList, 0, 1, 1, 1)
@@ -371,7 +401,9 @@ class Ui_Form(object):
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(20)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.BackUpLocation.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.BackUpLocation.sizePolicy().hasHeightForWidth()
+        )
         self.BackUpLocation.setSizePolicy(sizePolicy1)
         self.BackUpLocation.setMinimumSize(QSize(20, 0))
 
@@ -381,7 +413,9 @@ class Ui_Form(object):
 
         self.gridLayout_9.addLayout(self.gridLayout_8, 0, 0, 1, 1)
 
-        self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_7 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
 
         self.gridLayout_9.addItem(self.verticalSpacer_7, 4, 0, 1, 1)
 
@@ -402,7 +436,9 @@ class Ui_Form(object):
 
         self.StyleSheetLocation = QPushButton(self.layoutWidget_2)
         self.StyleSheetLocation.setObjectName("StyleSheetLocation")
-        sizePolicy1.setHeightForWidth(self.StyleSheetLocation.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.StyleSheetLocation.sizePolicy().hasHeightForWidth()
+        )
         self.StyleSheetLocation.setSizePolicy(sizePolicy1)
         self.StyleSheetLocation.setMinimumSize(QSize(20, 0))
 
@@ -442,7 +478,9 @@ class Ui_Form(object):
         __sortingEnabled1 = self.CommandsAvailable.isSortingEnabled()
         self.CommandsAvailable.setSortingEnabled(False)
         ___qlistwidgetitem1 = self.CommandsAvailable.item(0)
-        ___qlistwidgetitem1.setText(QCoreApplication.translate("Form", "New Item", None))
+        ___qlistwidgetitem1.setText(
+            QCoreApplication.translate("Form", "New Item", None)
+        )
         self.CommandsAvailable.setSortingEnabled(__sortingEnabled1)
 
         self.MoveUp_Command.setText(QCoreApplication.translate("Form", "...", None))
@@ -450,22 +488,29 @@ class Ui_Form(object):
         self.Remove_Command.setText(QCoreApplication.translate("Form", "...", None))
         self.Add_Command.setText(QCoreApplication.translate("Form", "...", None))
         self.label_5.setText(
-            QCoreApplication.translate("Form", "Select commands to add to the quick access toolbar", None)
+            QCoreApplication.translate(
+                "Form", "Select commands to add to the quick access toolbar", None
+            )
         )
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.QAToolbars), QCoreApplication.translate("Form", "Quick access toolbar", None)
+            self.tabWidget.indexOf(self.QAToolbars),
+            QCoreApplication.translate("Form", "Quick access toolbar", None),
         )
 
         __sortingEnabled2 = self.WorkbenchesAvailable.isSortingEnabled()
         self.WorkbenchesAvailable.setSortingEnabled(False)
         ___qlistwidgetitem2 = self.WorkbenchesAvailable.item(0)
-        ___qlistwidgetitem2.setText(QCoreApplication.translate("Form", "New Item", None))
+        ___qlistwidgetitem2.setText(
+            QCoreApplication.translate("Form", "New Item", None)
+        )
         self.WorkbenchesAvailable.setSortingEnabled(__sortingEnabled2)
 
         __sortingEnabled3 = self.WorkbenchesSelected.isSortingEnabled()
         self.WorkbenchesSelected.setSortingEnabled(False)
         ___qlistwidgetitem3 = self.WorkbenchesSelected.item(0)
-        ___qlistwidgetitem3.setText(QCoreApplication.translate("Form", "New Item", None))
+        ___qlistwidgetitem3.setText(
+            QCoreApplication.translate("Form", "New Item", None)
+        )
         self.WorkbenchesSelected.setSortingEnabled(__sortingEnabled3)
 
         self.MoveUp_Workbench.setText(QCoreApplication.translate("Form", "...", None))
@@ -480,19 +525,24 @@ class Ui_Form(object):
             )
         )
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Workbenches), QCoreApplication.translate("Form", "Workbenches", None)
+            self.tabWidget.indexOf(self.Workbenches),
+            QCoreApplication.translate("Form", "Workbenches", None),
         )
 
         __sortingEnabled4 = self.ToolbarsToExclude.isSortingEnabled()
         self.ToolbarsToExclude.setSortingEnabled(False)
         ___qlistwidgetitem4 = self.ToolbarsToExclude.item(0)
-        ___qlistwidgetitem4.setText(QCoreApplication.translate("Form", "New Item", None))
+        ___qlistwidgetitem4.setText(
+            QCoreApplication.translate("Form", "New Item", None)
+        )
         self.ToolbarsToExclude.setSortingEnabled(__sortingEnabled4)
 
         __sortingEnabled5 = self.ToolbarsExcluded.isSortingEnabled()
         self.ToolbarsExcluded.setSortingEnabled(False)
         ___qlistwidgetitem5 = self.ToolbarsExcluded.item(0)
-        ___qlistwidgetitem5.setText(QCoreApplication.translate("Form", "New Item", None))
+        ___qlistwidgetitem5.setText(
+            QCoreApplication.translate("Form", "New Item", None)
+        )
         self.ToolbarsExcluded.setSortingEnabled(__sortingEnabled5)
 
         self.MoveUp_Toolbar.setText(QCoreApplication.translate("Form", "...", None))
@@ -507,7 +557,8 @@ class Ui_Form(object):
             )
         )
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Toolbars), QCoreApplication.translate("Form", "Toolbars", None)
+            self.tabWidget.indexOf(self.Toolbars),
+            QCoreApplication.translate("Form", "Toolbars", None),
         )
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", "Command", None))
@@ -523,25 +574,45 @@ class Ui_Form(object):
         __sortingEnabled6 = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         ___qtablewidgetitem5 = self.tableWidget.item(0, 0)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("Form", "Command 1", None))
+        ___qtablewidgetitem5.setText(
+            QCoreApplication.translate("Form", "Command 1", None)
+        )
         self.tableWidget.setSortingEnabled(__sortingEnabled6)
 
-        self.label_2.setText(QCoreApplication.translate("Form", "Select toolbar:", None))
-        self.label.setText(QCoreApplication.translate("Form", "Select workbench:", None))
+        self.label_2.setText(
+            QCoreApplication.translate("Form", "Select toolbar:", None)
+        )
+        self.label.setText(
+            QCoreApplication.translate("Form", "Select workbench:", None)
+        )
         self.IconOnly.setText(QCoreApplication.translate("Form", "Icon only", None))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.RibbonDesign), QCoreApplication.translate("Form", "Ribbon design", None)
+            self.tabWidget.indexOf(self.RibbonDesign),
+            QCoreApplication.translate("Form", "Ribbon design", None),
         )
-        self.EnableBackup.setText(QCoreApplication.translate("Form", "Create backup", None))
-        self.groupBox.setTitle(QCoreApplication.translate("Form", "Backup location", None))
+        self.EnableBackup.setText(
+            QCoreApplication.translate("Form", "Create backup", None)
+        )
+        self.groupBox.setTitle(
+            QCoreApplication.translate("Form", "Backup location", None)
+        )
         self.label_4.setText(QCoreApplication.translate("Form", "...\\", None))
-        self.BackUpLocation.setText(QCoreApplication.translate("Form", "Browse..", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("Form", "Select stylesheet", None))
+        self.BackUpLocation.setText(
+            QCoreApplication.translate("Form", "Browse..", None)
+        )
+        self.groupBox_2.setTitle(
+            QCoreApplication.translate("Form", "Select stylesheet", None)
+        )
         self.label_7.setText(QCoreApplication.translate("Form", "...\\", None))
-        self.StyleSheetLocation.setText(QCoreApplication.translate("Form", "Browse..", None))
-        self.AutoHide.setText(QCoreApplication.translate("Form", "Autohide the ribbon", None))
+        self.StyleSheetLocation.setText(
+            QCoreApplication.translate("Form", "Browse..", None)
+        )
+        self.AutoHide.setText(
+            QCoreApplication.translate("Form", "Autohide the ribbon", None)
+        )
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Settings), QCoreApplication.translate("Form", "Settings", None)
+            self.tabWidget.indexOf(self.Settings),
+            QCoreApplication.translate("Form", "Settings", None),
         )
 
     # retranslateUi
