@@ -22,9 +22,9 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon
-from PySide.QtWidgets import QListWidgetItem, QTableWidgetItem
-from PySide.QtCore import Qt, SIGNAL
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QListWidgetItem, QTableWidgetItem
+from PySide6.QtCore import Qt, SIGNAL
 import sys
 import json
 
@@ -137,13 +137,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(
-            self, self.List_Workbenches, self.List_IgnoredToolbars
-        )
+        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
         # load the commands in the table.
-        self.on_ToolbarList__TextChanged(
-            self.List_Workbenches, self.Dict_RibbonCommandPanel
-        )
+        self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         # -- Excluded toolbars --
         self.ExcludedToolbars()
@@ -156,22 +152,21 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(
-                self, self.List_Workbenches, self.List_IgnoredToolbars
-            )
+            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
         def LoadToolbars():
-            self.on_ToolbarList__TextChanged(
-                self.List_Workbenches, self.Dict_RibbonCommandPanel
-            )
+            self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
         #
+        # -- TabWidget
+        # Set the first tab activated
+        self.form.tabWidget.setCurrentWidget(self.form.tabWidget.widget(0))
         # -- Ribbon design tab --
         # Settings for the table widget
         self.form.tableWidget.setEnabled(True)
@@ -234,15 +229,21 @@ class LoadDialog(Settings_ui.Ui_Form):
             if command is None:
                 continue
 
+            # Get the text
+            text = command.getInfo()["menuText"].replace("&", "")
+            textAddition = ""
             # get the icon for this command if there isn't one, leave it None
             Icon = Gui.getIcon("freecad")
             try:
                 Icon = Gui.getIcon(command.getInfo()["pixmap"])
+                # If this is a dropdown, get it's first command and get the icon from thant.
+                action = command.getAction()
+                if len(action) > 1:
+                    command_0 = Gui.Command.get(action[0].data())
+                    Icon = Gui.getIcon(command_0.getInfo()["pixmap"])
+                    textAddition = "..."
             except Exception:
                 pass
-
-            # Get the text
-            text = command.getInfo()["menuText"].replace("&", "")
 
             # Set the default check states
             checked_small = Qt.CheckState.Checked
@@ -277,15 +278,12 @@ class LoadDialog(Settings_ui.Ui_Form):
                             checked_large = Qt.CheckState.Checked
 
             # Create the row in the table
-            if (
-                command.getInfo()["menuText"] != ""
-                or command.getInfo()["menuText"] != "separator"
-            ):
+            if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
                 # Define a table widget item
                 TableWidgetItem = QTableWidgetItem()
-                TableWidgetItem.setText(text)
+                TableWidgetItem.setText(text + textAddition)
                 if Icon is not None:
                     TableWidgetItem.setIcon(Icon)
 
