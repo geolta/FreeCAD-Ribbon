@@ -290,7 +290,6 @@ class LoadDialog(Settings_ui.Ui_Form):
         for Toolbar in self.StringList_Toolbars:
             IsSelected = False
             for IgnoredToolbar in self.List_IgnoredToolbars:
-                print(f"{Toolbar}, {IgnoredToolbar}")
                 if Toolbar == IgnoredToolbar:
                     IsSelected = True
 
