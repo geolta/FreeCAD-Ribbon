@@ -22,9 +22,9 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon
-from PySide.QtWidgets import QListWidgetItem, QTableWidgetItem
-from PySide.QtCore import Qt, SIGNAL
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QListWidgetItem, QTableWidgetItem
+from PySide6.QtCore import Qt, SIGNAL
 import sys
 import json
 
@@ -54,7 +54,7 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_IconOnlyToolbars = []
     List_QuickAccessCommands = []
     List_IgnoredWorkbenches = []
-    List_RibbonCommandSettings = []
+    Dict_RibbonCommandPanel = {}
 
     ShowText = False
 
@@ -70,6 +70,14 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Read the jason file and fill the lists
         self.ReadJson()
+
+        self.form.WorkbenchList.clear()
+        self.form.WorkbenchesAvailable.clear()
+        self.form.WorkbenchesSelected.clear()
+        self.form.ToolbarsToExclude.clear()
+        self.form.ToolbarsExcluded.clear()
+        self.form.CommandsAvailable.clear()
+        self.form.CommandesSelected.clear()
 
         # region - create the lists ------------------------------------------------------------------
         #
@@ -129,11 +137,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(
-            self, self.List_Workbenches, self.List_IgnoredToolbars
-        )
+        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
         # load the commands in the table.
-        self.on_ToolbarList__TextChanged(self, self.List_Workbenches)
+        self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         # -- Excluded toolbars --
         self.ExcludedToolbars()
@@ -146,14 +152,12 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(
-                self, self.List_Workbenches, self.List_IgnoredToolbars
-            )
+            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
         def LoadToolbars():
-            self.on_ToolbarList__TextChanged(self, self.List_Workbenches)
+            self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
         # endregion
@@ -191,8 +195,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.on_ToolbarList__TextChanged
         return
 
-    @staticmethod
-    def on_ToolbarList__TextChanged(self, WorkBenchList):
+    # @staticmethod
+    def on_ToolbarList__TextChanged(self, WorkBenchList, RibbonCommandsList: dict):
         # Get the correct workbench name
         WorkBenchName = ""
         for WorkBench in WorkBenchList:
@@ -219,42 +223,76 @@ class LoadDialog(Settings_ui.Ui_Form):
         for ToolbarCommand in ToolbarCommands:
             # Get the command
             command = Gui.Command.get(ToolbarCommand)
+            if command is None:
+                continue
+
             # get the icon for this command if there isn't one, leave it None
-            Icon = None
+            Icon = Gui.getIcon("freecad")
             try:
                 Icon = Gui.getIcon(command.getInfo()["pixmap"])
             except Exception:
                 pass
 
+            # Get the text
+            text = command.getInfo()["menuText"].replace("&", "")
+
+            # Set the default check states
+            checked_small = Qt.CheckState.Checked
+            checked_medium = Qt.CheckState.Unchecked
+            checked_large = Qt.CheckState.Unchecked
+
+            # Go through the toolbars in the Json Ribbon list
+            for toolbar in RibbonCommandsList:
+                # Get the toolbar
+                panel_Json = RibbonCommandsList[toolbar]
+                # Get the order
+                order = panel_Json["order"]
+                # Get the commands
+                commands_Json = panel_Json["commands"]
+                # For each json command, if it maches the command
+                # Get the size, text and icon.
+                for command_Json in commands_Json:
+                    if command_Json == command.getInfo()["name"]:
+                        size = commands_Json[command_Json]["size"]
+                        text_Json = commands_Json[command_Json]["text"]
+                        Icon_Json_Name = commands_Json[command_Json]["icon"]
+                        Icon = Gui.getIcon(Icon_Json_Name)
+                        text = text_Json
+
+                        if size == "medium":
+                            checked_small = Qt.CheckState.Unchecked
+                            checked_medium = Qt.CheckState.Checked
+                            checked_large = Qt.CheckState.Unchecked
+                        if size == "large":
+                            checked_small = Qt.CheckState.Unchecked
+                            checked_medium = Qt.CheckState.Unchecked
+                            checked_large = Qt.CheckState.Checked
+
             # Create the row in the table
-            try:
-                if (
-                    command.getInfo()["menuText"] != ""
-                    or command.getInfo()["menuText"] != "separator"
-                ):
-                    CommandName = QTableWidgetItem()
-                    CommandName.setText(command.getInfo()["menuText"].replace("&", ""))
-                    if Icon is not None:
-                        self.form.tableWidget.insertRow(
-                            self.form.tableWidget.rowCount()
-                        )
-                        CommandName.setIcon(Icon)
-                        RowNumber = self.form.tableWidget.rowCount() - 1
-                        self.form.tableWidget.setItem(RowNumber, 0, CommandName)
+            if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
+                # add a row to the table widget
+                self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
+                # Define a table widget item
+                TableWidgetItem = QTableWidgetItem()
+                TableWidgetItem.setText(text)
+                if Icon is not None:
+                    TableWidgetItem.setIcon(Icon)
 
-                        Icon_small = QTableWidgetItem()
-                        Icon_small.setCheckState(Qt.CheckState.Checked)
-                        self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
+                # Get the last rownumber and set this row with the TableWidgetItem
+                RowNumber = self.form.tableWidget.rowCount() - 1
+                self.form.tableWidget.setItem(RowNumber, 0, TableWidgetItem)
 
-                        Icon_medium = QTableWidgetItem()
-                        Icon_medium.setCheckState(Qt.CheckState.Unchecked)
-                        self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
+                Icon_small = QTableWidgetItem()
+                Icon_small.setCheckState(checked_small)
+                self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
 
-                        Icon_large = QTableWidgetItem()
-                        Icon_large.setCheckState(Qt.CheckState.Unchecked)
-                        self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
-            except Exception:
-                pass
+                Icon_medium = QTableWidgetItem()
+                Icon_medium.setCheckState(checked_medium)
+                self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
+
+                Icon_large = QTableWidgetItem()
+                Icon_large.setCheckState(checked_large)
+                self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
 
         return
 
@@ -356,8 +394,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         self.ShowText = bool(data["showText"])
 
-        for RibbonPanel in data["toolbars"]:
-            self.List_IconOnlyToolbars.append(RibbonPanel)
+        self.Dict_RibbonCommandPanel = data["toolbars"]
 
         JsonFile.close()
         return
