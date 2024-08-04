@@ -58,7 +58,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="QAToolbars">
       <attribute name="title">
@@ -327,7 +327,7 @@
         <item row="0" column="0" colspan="3">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select workbenches to include in the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select workbenches to&lt;span style=&quot; font-weight:600;&quot;&gt; include&lt;/span&gt; in the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -464,7 +464,7 @@
         <item row="0" column="0" colspan="3">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select toolbars to exclude from the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select toolbars to &lt;span style=&quot; font-weight:600;&quot;&gt;exclude&lt;/span&gt; from the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
