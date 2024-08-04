@@ -5,13 +5,13 @@
 
   <description>A Ribbon for FreeCAD</description>
 
-  <version>0.0.2</version>
+  <version>0.0.5</version>
 
   <date>2024-07-28</date>
 
   <maintainer>geolta</maintainer>
 
-  <license file="LICENSE">GPL v3.0</license>
+  <license file="LICENSE">MIT License</license>
 
   <pythonmin>3.8.0</pythonmin>
 
@@ -26,6 +26,13 @@
   <content>
     <workbench>
       <freecadmin>0.21.0</freecadmin>
+      <icon>Resources/Icons/FreecadNew.svg</icon>
+      <depend optional="False" type="python">pyqtribbon</depend>
+      <depend optional="False" type="python">qtpy</depend>
+       <!-- If this package is installed, the Addon Manager may warn the user to remove it -->
+      <replace>CommandPanel</replace>
+      <replace>ToolbarStyle</replace>
+      <replace>PieMenu</replace>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
