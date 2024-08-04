@@ -22,9 +22,9 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QListWidgetItem, QTableWidgetItem
-from PySide6.QtCore import Qt, SIGNAL
+from PySide.QtGui import QIcon
+from PySide.QtWidgets import QListWidgetItem, QTableWidgetItem
+from PySide.QtCore import Qt, SIGNAL
 import sys
 import json
 
@@ -137,9 +137,13 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
+        self.on_WorkbenchList__TextChanged(
+            self, self.List_Workbenches, self.List_IgnoredToolbars
+        )
         # load the commands in the table.
-        self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
+        self.on_ToolbarList__TextChanged(
+            self.List_Workbenches, self.Dict_RibbonCommandPanel
+        )
 
         # -- Excluded toolbars --
         self.ExcludedToolbars()
@@ -152,12 +156,16 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
+            self.on_WorkbenchList__TextChanged(
+                self, self.List_Workbenches, self.List_IgnoredToolbars
+            )
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
         def LoadToolbars():
-            self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
+            self.on_ToolbarList__TextChanged(
+                self.List_Workbenches, self.Dict_RibbonCommandPanel
+            )
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
         # endregion
@@ -269,7 +277,10 @@ class LoadDialog(Settings_ui.Ui_Form):
                             checked_large = Qt.CheckState.Checked
 
             # Create the row in the table
-            if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
+            if (
+                command.getInfo()["menuText"] != ""
+                or command.getInfo()["menuText"] != "separator"
+            ):
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
                 # Define a table widget item
