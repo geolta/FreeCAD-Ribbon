@@ -129,7 +129,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
+        self.on_WorkbenchList__TextChanged(
+            self, self.List_Workbenches, self.List_IgnoredToolbars
+        )
         # load the commands in the table.
         self.on_ToolbarList__TextChanged(self, self.List_Workbenches)
 
@@ -144,7 +146,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
+            self.on_WorkbenchList__TextChanged(
+                self, self.List_Workbenches, self.List_IgnoredToolbars
+            )
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
@@ -224,11 +228,16 @@ class LoadDialog(Settings_ui.Ui_Form):
 
             # Create the row in the table
             try:
-                if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
+                if (
+                    command.getInfo()["menuText"] != ""
+                    or command.getInfo()["menuText"] != "separator"
+                ):
                     CommandName = QTableWidgetItem()
                     CommandName.setText(command.getInfo()["menuText"].replace("&", ""))
                     if Icon is not None:
-                        self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
+                        self.form.tableWidget.insertRow(
+                            self.form.tableWidget.rowCount()
+                        )
                         CommandName.setIcon(Icon)
                         RowNumber = self.form.tableWidget.rowCount() - 1
                         self.form.tableWidget.setItem(RowNumber, 0, CommandName)
