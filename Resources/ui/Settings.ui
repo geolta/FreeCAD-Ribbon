@@ -58,7 +58,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="QAToolbars">
       <attribute name="title">
@@ -352,7 +352,7 @@
          <number>6</number>
         </property>
         <item row="1" column="0">
-         <widget class="QListWidget" name="ToolbarsToInclude">
+         <widget class="QListWidget" name="ToolbarsToExclude">
           <item>
            <property name="text">
             <string>New Item</string>
@@ -364,7 +364,7 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QListWidget" name="ToolbarsIncluded">
+         <widget class="QListWidget" name="ToolbarsExcluded">
           <item>
            <property name="text">
             <string>New Item</string>
@@ -464,7 +464,7 @@
         <item row="0" column="0" colspan="3">
          <widget class="QLabel" name="label_13">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select toolbars to include in every tab of the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select toolbars to exclude from the ribbon.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>

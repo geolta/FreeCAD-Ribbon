@@ -202,19 +202,19 @@ class Ui_Form(object):
         self.gridLayout_17 = QGridLayout(self.layoutWidget_6)
         self.gridLayout_17.setObjectName(u"gridLayout_17")
         self.gridLayout_17.setContentsMargins(6, 0, 0, 0)
-        self.ToolbarsToInclude = QListWidget(self.layoutWidget_6)
-        __qlistwidgetitem4 = QListWidgetItem(self.ToolbarsToInclude)
+        self.ToolbarsToExclude = QListWidget(self.layoutWidget_6)
+        __qlistwidgetitem4 = QListWidgetItem(self.ToolbarsToExclude)
         __qlistwidgetitem4.setCheckState(Qt.Checked);
-        self.ToolbarsToInclude.setObjectName(u"ToolbarsToInclude")
+        self.ToolbarsToExclude.setObjectName(u"ToolbarsToExclude")
 
-        self.gridLayout_17.addWidget(self.ToolbarsToInclude, 1, 0, 1, 1)
+        self.gridLayout_17.addWidget(self.ToolbarsToExclude, 1, 0, 1, 1)
 
-        self.ToolbarsIncluded = QListWidget(self.layoutWidget_6)
-        __qlistwidgetitem5 = QListWidgetItem(self.ToolbarsIncluded)
+        self.ToolbarsExcluded = QListWidget(self.layoutWidget_6)
+        __qlistwidgetitem5 = QListWidgetItem(self.ToolbarsExcluded)
         __qlistwidgetitem5.setCheckState(Qt.Checked);
-        self.ToolbarsIncluded.setObjectName(u"ToolbarsIncluded")
+        self.ToolbarsExcluded.setObjectName(u"ToolbarsExcluded")
 
-        self.gridLayout_17.addWidget(self.ToolbarsIncluded, 1, 2, 1, 1)
+        self.gridLayout_17.addWidget(self.ToolbarsExcluded, 1, 2, 1, 1)
 
         self.gridLayout_18 = QGridLayout()
         self.gridLayout_18.setObjectName(u"gridLayout_18")
@@ -438,7 +438,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -490,24 +490,24 @@ class Ui_Form(object):
         self.label_6.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select workbenches to include in the ribbon.</p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Workbenches), QCoreApplication.translate("Form", u"Workbenches", None))
 
-        __sortingEnabled4 = self.ToolbarsToInclude.isSortingEnabled()
-        self.ToolbarsToInclude.setSortingEnabled(False)
-        ___qlistwidgetitem4 = self.ToolbarsToInclude.item(0)
+        __sortingEnabled4 = self.ToolbarsToExclude.isSortingEnabled()
+        self.ToolbarsToExclude.setSortingEnabled(False)
+        ___qlistwidgetitem4 = self.ToolbarsToExclude.item(0)
         ___qlistwidgetitem4.setText(QCoreApplication.translate("Form", u"New Item", None));
-        self.ToolbarsToInclude.setSortingEnabled(__sortingEnabled4)
+        self.ToolbarsToExclude.setSortingEnabled(__sortingEnabled4)
 
 
-        __sortingEnabled5 = self.ToolbarsIncluded.isSortingEnabled()
-        self.ToolbarsIncluded.setSortingEnabled(False)
-        ___qlistwidgetitem5 = self.ToolbarsIncluded.item(0)
+        __sortingEnabled5 = self.ToolbarsExcluded.isSortingEnabled()
+        self.ToolbarsExcluded.setSortingEnabled(False)
+        ___qlistwidgetitem5 = self.ToolbarsExcluded.item(0)
         ___qlistwidgetitem5.setText(QCoreApplication.translate("Form", u"New Item", None));
-        self.ToolbarsIncluded.setSortingEnabled(__sortingEnabled5)
+        self.ToolbarsExcluded.setSortingEnabled(__sortingEnabled5)
 
         self.MoveUp_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
         self.MoveDown_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
         self.Remove_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
         self.Add_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
-        self.label_13.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select toolbars to include in every tab of the ribbon.</p></body></html>", None))
+        self.label_13.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select toolbars to exclude from the ribbon.</p></body></html>", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Toolbars), QCoreApplication.translate("Form", u"Toolbars", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"Command", None));

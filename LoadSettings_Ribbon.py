@@ -26,6 +26,7 @@ from PySide.QtGui import QIcon
 from PySide.QtWidgets import QListWidgetItem, QTableWidgetItem
 from PySide.QtCore import Qt, SIGNAL
 import sys
+import json
 
 # Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
@@ -52,7 +53,10 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_IgnoredToolbars = []
     List_IconOnlyToolbars = []
     List_QuickAccessCommands = []
+    List_IgnoredWorkbenches = []
     List_RibbonCommandSettings = []
+
+    ShowText = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -64,6 +68,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowStaysOnTopHint)
 
+        # Read the jason file and fill the lists
+        self.ReadJson()
+
         # region - create the lists ------------------------------------------------------------------
         #
         # Create a list of all workbenches with their icon
@@ -74,7 +81,8 @@ class LoadDialog(Settings_ui.Ui_Form):
                 IconName = str(Gui.getWorkbench(key).Icon)
                 if IconName != "":
                     Icon = Gui.getIcon(IconName)
-                self.List_Workbenches.append([str(key), Icon])
+                WorkbenchName = Gui.getWorkbench(key).MenuText
+                self.List_Workbenches.append([str(key), Icon, WorkbenchName])
 
         # Create a list of all toolbars
         # Store the current active workbench
@@ -117,41 +125,38 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - Load all controls------------------------------------------------------------------
         #
-        #
-        # Ribbon design tab
-        #
+        # -- Ribbon design tab --
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(self)
+        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
         # load the commands in the table.
-        self.on_ToolbarList__TextChanged(self)
-        #
-        #
-        # Quick access toolbar tab
-        #
+        self.on_ToolbarList__TextChanged(self, self.List_Workbenches)
+
+        # -- Excluded toolbars --
+        self.ExcludedToolbars()
+
+        # -- Quick access toolbar tab --
         # Add all commands to the listbox for the quick access toolbar
-        self.AddCommands()
+        self.QuickAccessCommands()
         #
         # endregion-----------------------------------------------------------------------------------
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(self)
+            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
         def LoadToolbars():
-            self.on_ToolbarList__TextChanged(self)
+            self.on_ToolbarList__TextChanged(self, self.List_Workbenches)
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
         # endregion
 
-        # region - Modifiy controls
+        # region - Modifiy controls-------------------------------------------------------------------
         #
-        #
-        # Ribbon design tab
-        #
+        # -- Ribbon design tab --
         # Settings for the table widget
         self.form.tableWidget.setEnabled(True)
         self.form.tableWidget.horizontalHeader().setVisible(True)
@@ -163,38 +168,61 @@ class LoadDialog(Settings_ui.Ui_Form):
     # region - Control functions----------------------------------------------------------------------
     # Add all toolbars of the selected workbench to the toolbar list(QComboBox)
     @staticmethod
-    def on_WorkbenchList__TextChanged(self):
-        wbToolbars = Gui.getWorkbench(self.form.WorkbenchList.currentText()).listToolbars()
+    def on_WorkbenchList__TextChanged(self, WorkBenchList, IgnoredToolbarsList):
+        WorkBenchName = ""
+        for WorkBench in WorkBenchList:
+            if WorkBench[2] == self.form.WorkbenchList.currentText():
+                WorkBenchName = WorkBench[0]
+
+        wbToolbars = Gui.getWorkbench(WorkBenchName).listToolbars()
+
         self.form.ToolbarList.clear()
         for Toolbar in wbToolbars:
-            self.form.ToolbarList.addItem(Toolbar, "")
+            IsIgnored = False
+            for IgnoredToolbar in IgnoredToolbarsList:
+                if Toolbar == IgnoredToolbar:
+                    IsIgnored = True
+            if IsIgnored is False:
+                self.form.ToolbarList.addItem(Toolbar, "")
         self.on_ToolbarList__TextChanged
         return
 
     @staticmethod
-    def on_ToolbarList__TextChanged(self):
-        Workbench = Gui.getWorkbench(self.form.WorkbenchList.currentText())
+    def on_ToolbarList__TextChanged(self, WorkBenchList):
+        # Get the correct workbench name
+        WorkBenchName = ""
+        for WorkBench in WorkBenchList:
+            if WorkBench[2] == self.form.WorkbenchList.currentText():
+                WorkBenchName = WorkBench[0]
+
+        # Get the workbench object
+        Workbench = Gui.getWorkbench(WorkBenchName)
+        # Get the toolbar name
         Toolbar = self.form.ToolbarList.currentText()
+        # Copy the workbench commands
         Commands = Workbench.getToolbarItems().copy()
 
         # Clear the table
         self.form.tableWidget.setRowCount(0)
 
+        # Get the commands in this toolbar
         ToolbarCommands = []
         for key in Commands:
             if key == Toolbar:
                 ToolbarCommands = Commands[key]
 
+        # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
             # Get the command
             command = Gui.Command.get(ToolbarCommand)
-            # get the icon for this command
+            # get the icon for this command if there isn't one, leave it None
             Icon = None
             try:
                 Icon = Gui.getIcon(command.getInfo()["pixmap"])
             except Exception:
                 pass
 
+            # Create the row in the table
             try:
                 if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
                     CommandName = QTableWidgetItem()
@@ -225,27 +253,105 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     # region - Functions------------------------------------------------------------------------------
     def addWorkbenches(self):
+        """Fill the Workbenches available, selected and workbench list"""
         self.form.WorkbenchList.clear()
+        self.form.WorkbenchesAvailable.clear()
+        self.form.WorkbenchesSelected.clear()
+
         for workbench in self.List_Workbenches:
+            # Default a workbench is selected
+            # if in List_IgnoredWorkbenches, set IsSelected to false
+            IsSelected = True
+            for IgnoredWorkbench in self.List_IgnoredWorkbenches:
+                if workbench[2] == IgnoredWorkbench:
+                    IsSelected = False
+
             # Define a new ListWidgetItem.
             ListWidgetItem = QListWidgetItem()
-            ListWidgetItem.setText(workbench[0])
+            ListWidgetItem.setText(workbench[2])
             icon = QIcon(workbench[1])
             ListWidgetItem.setIcon(icon)
-            # Add the ListWidgetItem to the ListItem Widget
-            self.form.WorkbenchList.addItem(icon, workbench[0])
+
+            # Add the ListWidgetItem to the correct ListWidget
+            if IsSelected is False:
+                self.form.WorkbenchesAvailable.addItem(ListWidgetItem)
+            if IsSelected is True:
+                self.form.WorkbenchesSelected.addItem(ListWidgetItem)
+                self.form.WorkbenchList.addItem(icon, workbench[2])
+
+        # Set the text in the combobox to the name of the active workbench
         self.form.WorkbenchList.setCurrentText(Gui.activeWorkbench().name())
         return
 
-    def AddCommands(self):
+    def ExcludedToolbars(self):
+        self.form.ToolbarsToExclude.clear()
+        self.form.ToolbarsExcluded.clear()
+
+        for Toolbar in self.StringList_Toolbars:
+            IsSelected = False
+            for IgnoredToolbar in self.List_IgnoredToolbars:
+                print(f"{Toolbar}, {IgnoredToolbar}")
+                if Toolbar == IgnoredToolbar:
+                    IsSelected = True
+
+            ListWidgetItem = QListWidgetItem()
+            ListWidgetItem.setText(Toolbar)
+            if IsSelected is False:
+                self.form.ToolbarsToExclude.addItem(ListWidgetItem)
+            if IsSelected is True:
+                self.form.ToolbarsExcluded.addItem(ListWidgetItem)
+        return
+
+    def QuickAccessCommands(self):
+        """Fill the Quick Commands Available and Selected"""
         self.form.CommandsAvailable.clear()
+        self.form.CommandesSelected.clear()
+
         for command in self.List_Commands:
+            # Default a command is not selected
+            # If in List_QuickAccessCommands set IsSelected to True
+            IsSelected = False
+            for QuickCommand in self.List_QuickAccessCommands:
+                if command[0] == QuickCommand:
+                    IsSelected = True
+
+            # Define a new ListWidgetItem.
             ListWidgetItem = QListWidgetItem()
             ListWidgetItem.setText(command[0])
             icon = QIcon(command[1])
+            ListWidgetItem.setIcon(icon)
+
+            # Add the ListWidgetItem to the correct ListWidget
             if icon is not None:
-                ListWidgetItem.setIcon(icon)
-                self.form.CommandsAvailable.addItem(ListWidgetItem)
+                if IsSelected is False:
+                    self.form.CommandsAvailable.addItem(ListWidgetItem)
+                if IsSelected is True:
+                    self.form.CommandesSelected.addItem(ListWidgetItem)
+        return
+
+    def ReadJson(self):
+        """Read the Json file and fill the lists and set settings"""
+        JsonFile = open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"))
+        data = json.load(JsonFile)
+
+        for IgnoredToolbar in data["ignoredToolbars"]:
+            self.List_IgnoredToolbars.append(IgnoredToolbar)
+
+        for IconOnlyToolbar in data["iconOnlyToolbars"]:
+            self.List_IconOnlyToolbars.append(IconOnlyToolbar)
+
+        for QuickAccessCommand in data["quickAccessCommands"]:
+            self.List_QuickAccessCommands.append(QuickAccessCommand)
+
+        for IgnoredWorkbench in data["ignoredWorkbenches"]:
+            self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
+
+        self.ShowText = bool(data["showText"])
+
+        for RibbonPanel in data["toolbars"]:
+            self.List_IconOnlyToolbars.append(RibbonPanel)
+
+        JsonFile.close()
         return
 
     # endregion
