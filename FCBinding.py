@@ -22,6 +22,15 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
+from PySide.QtGui import QIcon, QAction
+from PySide.QtWidgets import (
+    QToolButton,
+    QToolBar,
+)
+from PySide.QtCore import Qt, QTimer, Signal, QObject
+
+from pyqtribbon import RibbonBar
+
 import json
 import os
 import sys
@@ -29,11 +38,8 @@ import traceback
 import logging
 import webbrowser
 
-from PySide6.QtGui import QIcon, QFont, QAction
-from PySide6.QtWidgets import QToolButton, QToolBar, QDockWidget, QWidget, QSizePolicy
-from PySide6.QtCore import Qt, QTimer, QSize, Signal, QObject
-
 from pyqtribbon import RibbonBar
+import LoadSettings_Ribbon
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -41,6 +47,13 @@ mw = Gui.getMainWindow()
 # Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
 pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
+pathUI = os.path.dirname(__file__) + "/Resources/ui/"
+sys.path.append(pathIcons)
+sys.path.append(pathStylSheets)
+sys.path.append(pathUI)
+
+# Get the main window of FreeCAD
+mw = Gui.getMainWindow()
 
 # Define a timer
 timer = QTimer()
@@ -81,14 +94,17 @@ class ModernMenu(RibbonBar):
 
         # Set the custom stylesheet
         self.setStyleSheet(pathStylSheets + "base.qss")
+        return
 
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
         mw.workbenchActivated.connect(self.onWbActivated)
+        return
 
     def disconnectSignals(self):
         self.tabBar().currentChanged.disconnect(self.onUserChangedWorkbench)
         mw.workbenchActivated.disconnect(self.onWbActivated)
+        return
 
     def createModernMenu(self):
         """
@@ -160,10 +176,17 @@ class ModernMenu(RibbonBar):
         action.triggered.connect(self.onHelpClicked)
         self.helpRibbonButton().setDefaultAction(action)
 
-        # application icon size
+        # Set the application button
         self.applicationOptionButton().setFixedHeight(self.iconSize)
-        # application icon
         self.setApplicationIcon(Gui.getIcon("freecad"))
+        SettingsMenu = self.addFileMenu()
+        SettingsButton = SettingsMenu.addAction("Settings")
+        SettingsButton.triggered.connect(self.loadSettingsMenu)
+        return
+
+    def loadSettingsMenu(self):
+        LoadSettings_Ribbon.main()
+        return
 
     def onHelpClicked(self):
         HelpParam = "User parameter:BaseApp/Preferences/Mod/Help"
@@ -171,6 +194,7 @@ class ModernMenu(RibbonBar):
         if HelpAdress == "":
             HelpAdress = "https://wiki.freecad.org/Main_Page"
         webbrowser.open(HelpAdress, new=2, autoraise=True)
+        return
 
     def onUserChangedWorkbench(self):
         """
@@ -185,6 +209,7 @@ class ModernMenu(RibbonBar):
         tabName = tabName.replace("&", "")
         Gui.activateWorkbench(self.wbNameMapping[tabName])
         self.onWbActivated()
+        return
 
     def onWbActivated(self):
         # switch tab if necessary
@@ -208,6 +233,7 @@ class ModernMenu(RibbonBar):
 
         # create panels
         self.buildPanels()
+        return
 
     def buildPanels(self):
         workbench = Gui.activeWorkbench()
@@ -281,7 +307,8 @@ class ModernMenu(RibbonBar):
                         icon = ModernMenu.ribbonStructure["toolbars"][toolbar][
                             "commands"
                         ][action.data()]["icon"]
-                        action.setIcon(QIcon(os.path.join(pathIcons, icon)))
+                        # action.setIcon(QIcon(os.path.join(pathIcons, icon)))
+                        action.setIcon(Gui.getIcon(icon))
                     except KeyError:
                         icon = action.icon()
 
@@ -306,12 +333,15 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignLeft,
+                            showText=showText,
                             fixedHeight=32,
                         )  # medium will always have text
                     elif buttonSize == "large":
                         btn = panel.addLargeButton(
                             action.text(),
                             action.icon(),
+                            alignment=Qt.AlignLeft,
+                            showText=showText,
                             fixedHeight=64,
                         )  # large will always have text and are aligned in center
                     else:
@@ -328,6 +358,7 @@ class ModernMenu(RibbonBar):
                     continue
 
         self.isWbLoaded[tabName] = True
+        return
 
     def updateCurrentTab(self):
         currentWbIndex = self.tabBar().indexOf(Gui.activeWorkbench().MenuText)
@@ -337,6 +368,7 @@ class ModernMenu(RibbonBar):
             self.disconnectSignals()
             self.tabBar().setCurrentIndex(currentWbIndex)
             self.connectSignals()
+        return
 
     def hideClassicToolbars(self):
         for toolbar in mw.findChildren(QToolBar):
@@ -346,6 +378,7 @@ class ModernMenu(RibbonBar):
                 "draft_snap_widget",
             ]:
                 toolbar.hide()
+        return
 
 
 class run:
@@ -370,6 +403,7 @@ class run:
             ribbon.setContentsMargins(0, 20, 0, 0)
             # Create the ribbon
             mw.setMenuBar(ribbon)
+        return
 
 
 # region - Exception handler--------------------------------------------------------------
@@ -398,7 +432,7 @@ class UncaughtHook(QObject):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
         else:
             # ----------Suppressed original handling---------------------------------------
-            # exc_info = (exc_type, exc_value, exc_traceback)
+            exc_info = (exc_type, exc_value, exc_traceback)
             # log_msg = '\n'.join([''.join(traceback.format_tb(exc_traceback)),
             #                      '{0}: {1}'.format(exc_type.__name__, exc_value)])
             # log.critical("Uncaught exception:\n {0}".format(log_msg), exc_info=exc_info)
@@ -409,10 +443,12 @@ class UncaughtHook(QObject):
             App.Console.PrintWarning(
                 "RibbonUI: There was an error. This is probally caused by an incompatible FreeCAD plugin!"
             )
+            App.Console.PrintWarning(exc_info)
+        return
 
 
 # create a global instance of our exception class to register the hook
-qt_exception_hook = UncaughtHook()
+# qt_exception_hook = UncaughtHook()
 #
 #
 # endregion=========================================================================================
