@@ -22,11 +22,14 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QAction
-from PySide.QtWidgets import QListWidgetItem, QTableWidgetItem
-from PySide.QtCore import Qt, SIGNAL
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QListWidgetItem, QTableWidgetItem, QListWidget
+from PySide6.QtCore import Qt, SIGNAL
 import sys
 import json
+from pathlib import Path
+from datetime import datetime
+import shutil
 
 # Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
@@ -50,11 +53,15 @@ class LoadDialog(Settings_ui.Ui_Form):
     StringList_Toolbars = []
     List_Commands = []
 
+    # Create lists for the several list in the json file.
     List_IgnoredToolbars = []
     List_IconOnlyToolbars = []
     List_QuickAccessCommands = []
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
+    # create a list for the changed data for the customized buttons.
+    # a list is chosen, so the order list is easier to create from the list widgets
+    List_RibbonCommandPanel_new = []
 
     ShowText = False
 
@@ -126,8 +133,9 @@ class LoadDialog(Settings_ui.Ui_Form):
                 # get the icon for this command
                 if command.getInfo()["pixmap"] != "":
                     Icon = Gui.getIcon(command.getInfo()["pixmap"])
+                    MenuName = command.getInfo()["menuText"].replace("&", "")
                     # Add the command and its icon to the command list
-                    self.List_Commands.append([CommandName, Icon])
+                    self.List_Commands.append([CommandName, Icon, MenuName])
         #
         # endregion ----------------------------------------------------------------------
 
@@ -137,13 +145,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Add all workbenches to the ListItem Widget. In this case a dropdown list.
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
-        self.on_WorkbenchList__TextChanged(
-            self, self.List_Workbenches, self.List_IgnoredToolbars
-        )
+        self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
         # load the commands in the table.
-        self.on_ToolbarList__TextChanged(
-            self.List_Workbenches, self.Dict_RibbonCommandPanel
-        )
+        self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         # -- Excluded toolbars --
         self.ExcludedToolbars()
@@ -156,18 +160,22 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged(
-                self, self.List_Workbenches, self.List_IgnoredToolbars
-            )
+            self.on_WorkbenchList__TextChanged(self, self.List_Workbenches, self.List_IgnoredToolbars)
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
         def LoadToolbars():
-            self.on_ToolbarList__TextChanged(
-                self.List_Workbenches, self.Dict_RibbonCommandPanel
-            )
+            self.on_ToolbarList__TextChanged(self.List_Workbenches, self.Dict_RibbonCommandPanel)
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
+
+        def GenerateJson():
+            self.on_GenerateJson_clicked(self)
+
+        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
+
+        self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
+
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -240,15 +248,18 @@ class LoadDialog(Settings_ui.Ui_Form):
             # Get the text
             text = command.getInfo()["menuText"].replace("&", "")
             textAddition = ""
+            iconName = ""
             # get the icon for this command if there isn't one, leave it None
             Icon = Gui.getIcon("freecad")
             try:
                 Icon = Gui.getIcon(command.getInfo()["pixmap"])
+                iconName = command.getInfo()["pixmap"]
                 # If this is a dropdown, get it's first command and get the icon from thant.
                 action = command.getAction()
                 if len(action) > 1:
                     command_0 = Gui.Command.get(action[0].data())
                     Icon = Gui.getIcon(command_0.getInfo()["pixmap"])
+                    iconName = command.getInfo()["pixmap"]
                     textAddition = "..."
             except Exception:
                 pass
@@ -257,6 +268,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             checked_small = Qt.CheckState.Checked
             checked_medium = Qt.CheckState.Unchecked
             checked_large = Qt.CheckState.Unchecked
+            # set the default size
+            size = "small"
 
             # Go through the toolbars in the Json Ribbon list
             for toolbar in RibbonCommandsList:
@@ -286,10 +299,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                             checked_large = Qt.CheckState.Checked
 
             # Create the row in the table
-            if (
-                command.getInfo()["menuText"] != ""
-                or command.getInfo()["menuText"] != "separator"
-            ):
+            if command.getInfo()["menuText"] != "" or command.getInfo()["menuText"] != "separator":
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
                 # Define a table widget item
@@ -314,7 +324,110 @@ class LoadDialog(Settings_ui.Ui_Form):
                 Icon_large.setCheckState(checked_large)
                 self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
 
+                # add a ListItem to the list_RibbonCommandPanel_new if the icon size is not small
+                if size != "small":
+                    ListItem = [toolbar, command.getInfo()["name"], size, text, iconName]
+                    for i in range(len(self.List_RibbonCommandPanel_new)):
+                        if toolbar == self.List_RibbonCommandPanel_new[i][0]:
+                            if command.getInfo()["name"] == self.List_RibbonCommandPanel_new[i][1]:
+                                self.List_RibbonCommandPanel_new[i] = ListItem
+
+                        if i == len(self.List_RibbonCommandPanel_new) - 1:
+                            self.List_RibbonCommandPanel_new.append(ListItem)
+
+            # Set the IconOnlyToolbars control
+            toolbar = self.form.ToolbarList.currentText()
+
+            for item in self.List_IconOnlyToolbars:
+                if item == toolbar:
+                    self.form.IconOnly.setChecked(True)
+
         return
+
+    def on_IconOnly_clicked(self):
+        if self.form.IconOnly.checked is True:
+            toolbar = self.form.ToolbarList.currentText()
+
+            isInList = False
+            for item in self.List_IconOnlyToolbars:
+                if item == toolbar:
+                    isInList = True
+
+            if isInList is False:
+                self.List_IconOnlyToolbars.append(toolbar)
+
+    def on_tableCell_clicked(self, item):
+        # Get the row and column of the clicked item (cell)
+        row = item.row()
+        column = item.column()
+        # get the name of the toolbar
+        toolbar = self.form.ToolbarList.currentText()
+        # create a empty size string
+        size = "small"
+        # Get the command text from the first cell in the row
+        commandText = self.form.tableWidget.item(row, 0).text()
+
+        # Get the checkedstate from the clicked cell
+        CheckState = self.form.tableWidget.item(row, column).checkState()
+        # Go through the cells in the row. If checkstate is checkd, uncheck the other cells in the row
+        for i in range(1, self.form.tableWidget.columnCount()):
+            if CheckState == Qt.CheckState.Checked:
+                if i == column:
+                    self.form.tableWidget.item(row, i).setCheckState(Qt.CheckState.Checked)
+                    if i == 1:
+                        size = "small"
+                    if i == 2:
+                        size = "medium"
+                    if i == 3:
+                        size = "large"
+                else:
+                    self.form.tableWidget.item(row, i).setCheckState(Qt.CheckState.Unchecked)
+
+        # Defien empty strings for the command name and icon name
+        commandName = ""
+        iconName = ""
+
+        # If the icon size is not small, add it to the ribbon command list.
+        if size != "small":
+            # Go through the list with all available commands.
+            # If the commandText is in this list, get the command name.
+            for i in range(len(self.List_Commands)):
+                if commandText == self.List_Commands[i][2]:
+                    commandName = self.List_Commands[i][0]
+                    # With the commandname, get the command and then the iconname
+                    command = Gui.Command.get(commandName)
+                    iconName = command.getInfo()["pixmap"]
+                    # create an List item
+                    ListItem = [toolbar, commandName, size, commandText, iconName]
+
+                    # Go through the list for the new Ribbon commands
+                    # If the command exists, replace it with the ListItem
+                    # When you reach the end of the list, its not in it.
+                    # Add it to the list.
+                    for i in range(len(self.List_RibbonCommandPanel_new)):
+                        if toolbar == self.List_RibbonCommandPanel_new[i][0]:
+                            if commandName == self.List_RibbonCommandPanel_new[i][1]:
+                                self.List_RibbonCommandPanel_new[i] = ListItem
+
+                        if i == len(self.List_RibbonCommandPanel_new) - 1:
+                            self.List_RibbonCommandPanel_new.append(ListItem)
+        if size == "small":
+            # Go through the list with all available commands.
+            # If the commandText is in this list, get the command name.
+            for i in range(len(self.List_Commands)):
+                if commandText == self.List_Commands[i][2]:
+                    commandName = self.List_Commands[i][0]
+                    # If the command is in the list remove it
+                    for i in range(len(self.List_RibbonCommandPanel_new)):
+                        if toolbar == self.List_RibbonCommandPanel_new[i][0]:
+                            if commandName == self.List_RibbonCommandPanel_new[i][1]:
+                                self.List_RibbonCommandPanel_new.pop(i)
+
+        return
+
+    @staticmethod
+    def on_GenerateJson_clicked(self):
+        self.WriteJson()
 
     # endregion---------------------------------------------------------------------------------------
 
@@ -397,27 +510,147 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def ReadJson(self):
         """Read the Json file and fill the lists and set settings"""
+        # OPen the JsonFile and load the data
         JsonFile = open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"))
         data = json.load(JsonFile)
 
+        # Get all the ignored toolbars
         for IgnoredToolbar in data["ignoredToolbars"]:
             self.List_IgnoredToolbars.append(IgnoredToolbar)
 
+        # Get all the icon only toolbars
         for IconOnlyToolbar in data["iconOnlyToolbars"]:
             self.List_IconOnlyToolbars.append(IconOnlyToolbar)
 
+        # Get all the quick access command
         for QuickAccessCommand in data["quickAccessCommands"]:
             self.List_QuickAccessCommands.append(QuickAccessCommand)
 
+        # Get all the ignored workbenches
         for IgnoredWorkbench in data["ignoredWorkbenches"]:
             self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
+        # Get the showtext value
         self.ShowText = bool(data["showText"])
 
+        # Get the dict with the customized date for the buttons
         self.Dict_RibbonCommandPanel = data["toolbars"]
+        for toolbar in self.Dict_RibbonCommandPanel:
+            # Get the commands in this toolbar
+            commands = self.Dict_RibbonCommandPanel[toolbar]["commands"]
+            # Go through the commands and get the size, text and icon
+            for command in commands:
+                size = commands[command]["size"]
+                text = commands[command]["text"]
+                icon = commands[command]["icon"]
+
+                # add the toolbar, command, size, text and icon as one item to the List.
+                self.List_RibbonCommandPanel_new.append([toolbar, command, size, text, icon])
 
         JsonFile.close()
         return
+
+    def WriteJson(self):
+        # Create the internal lists
+        List_IgnoredToolbars = []
+        List_IconOnlyToolbars = []
+        List_QuickAccessCommands = []
+        List_IgnoredWorkbenches = []
+
+        # IgnoredToolbars
+        ExcludedToolbars = self.ListWidgetItems(self.form.ToolbarsExcluded)
+        for i1 in range(len(ExcludedToolbars)):
+            IgnoredToolbar = QListWidgetItem(ExcludedToolbars[i1]).text()
+            List_IgnoredToolbars.append(IgnoredToolbar)
+
+        # IconOnlyToolbars
+        List_IconOnlyToolbars = self.List_IconOnlyToolbars
+
+        # QuickAccessCommands
+        SelectedCommands = self.ListWidgetItems(self.form.CommandesSelected)
+        for i2 in range(len(SelectedCommands)):
+            QuickAccessCommand = QListWidgetItem(SelectedCommands[i2]).text()
+            List_QuickAccessCommands.append(QuickAccessCommand)
+
+        # IgnoredWorkbences
+        AvailableWorkbenches = self.ListWidgetItems(self.form.WorkbenchesAvailable)
+        for i3 in range(len(AvailableWorkbenches)):
+            IgnoredWorkbench = QListWidgetItem(AvailableWorkbenches[i3]).text()
+            List_IgnoredWorkbenches.append(IgnoredWorkbench)
+
+        # RibbonTabs
+        toolbars = {}
+        # Go through the RibbonCommandPanel list.
+        for i in range(len(self.List_RibbonCommandPanel_new)):
+            # Get the toolbar
+            toolbar = self.List_RibbonCommandPanel_new[i][0]
+
+            # Create a list for the order and a dict for the commands
+            order = []
+            commands = {}
+            for j in range(len(self.List_RibbonCommandPanel_new)):
+                # Go through the list again. If the toolbar is equal to the matches the first item of this iteration:
+                # Define the command. This way ,you get all the commands per toolbar
+                if toolbar == self.List_RibbonCommandPanel_new[j][0]:
+                    command = self.List_RibbonCommandPanel_new[j][1]
+
+                    # Create a dict for the command properties
+                    commandProperties = {}
+                    # Go through the list another time.
+                    # Now if the command matches an item of this iteration, get the properties.
+                    # This way you get the properties per command per toolbar
+                    for k in range(len(self.List_RibbonCommandPanel_new)):
+                        if command == self.List_RibbonCommandPanel_new[k][1]:
+                            commandProperties["size"] = self.List_RibbonCommandPanel_new[k][2]
+                            commandProperties["text"] = self.List_RibbonCommandPanel_new[k][3]
+                            commandProperties["icon"] = self.List_RibbonCommandPanel_new[k][4]
+
+                            # add the properties to the command dict
+                            commands[command] = commandProperties
+                            # add the command to the order list.
+                            skip = False
+                            for m in range(len(order)):
+                                if order[m] == command:
+                                    skip = True
+                            if skip is False:
+                                order.append(command)
+
+            # add the toolbar with the order and command to the dict "toolbars"
+            toolbars[toolbar] = {"order": order, "commands": commands}
+
+        # Create a resulting dict
+        resultingDict = {}
+        # add the various lists to the resulting dict.
+        resultingDict["ignoredToolbars"] = List_IgnoredToolbars
+        resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
+        resultingDict["quickAccessCommands"] = List_QuickAccessCommands
+        resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
+        # Add the show text property to the dict
+        resultingDict["showText"] = False
+        # add the ribbondata(toolbars) to the dict
+        resultingDict["toolbars"] = toolbars
+
+        # get the path for the Json file
+        JsonPath = "D:\\OneDrive\\Desktop"
+        JsonFile = os.path.join(JsonPath, "test.json")
+
+        # create a copy and rename it as a backup if enabled
+        BackupPath = JsonPath  # to change when settings are enabled
+        Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
+        BackupName = f"RibbonStructure_{Suffix}.json"
+        BackupFile = os.path.join(BackupPath, BackupName)
+        shutil.copy(JsonFile, BackupFile)
+
+        # Writing to sample.json
+        with open(JsonFile, "w") as outfile:
+            json.dump(resultingDict, outfile, indent=4)
+
+    def ListWidgetItems(self, ListWidget: QListWidget) -> list:
+        items = []
+        for x in range(ListWidget.count()):
+            items.append(ListWidget.item(x))
+
+        return items
 
     # endregion
 
