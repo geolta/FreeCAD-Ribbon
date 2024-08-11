@@ -255,8 +255,8 @@ class ModernMenu(RibbonBar):
 
                         position = None
                         try:
-                            position = positionsList.index(button.defaultAction().data())
-                            # position = positionsList.index(button.text)
+                            # position = positionsList.index(button.defaultAction().data())
+                            position = positionsList.index(button.text())
                         except ValueError:
                             position = 999999
 
@@ -295,7 +295,11 @@ class ModernMenu(RibbonBar):
                             "commands"
                         ][action.data()]["icon"]
                         # action.setIcon(QIcon(os.path.join(pathIcons, icon)))
-                        action.setIcon(Gui.getIcon(icon))
+                        if icon != "":
+                            action.setIcon(Gui.getIcon(icon))
+                        if icon == "":
+                            if len(action) > 1:
+                                icon = action[0].icon()
                     except KeyError:
                         icon = action.icon()
 

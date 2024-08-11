@@ -23,7 +23,17 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 from PySide6.QtGui import QIcon, QAction
-from PySide6.QtWidgets import QListWidgetItem, QTableWidgetItem, QListWidget
+from PySide6.QtWidgets import (
+    QListWidgetItem,
+    QTableWidgetItem,
+    QListWidget,
+    QWidget,
+    QCheckBox,
+    QHBoxLayout,
+    QTableWidget,
+    QToolButton,
+    QLayout,
+)
 from PySide6.QtCore import Qt, SIGNAL
 import sys
 import json
@@ -34,9 +44,11 @@ import shutil
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
 pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
 pathUI = os.path.dirname(__file__) + "/Resources/ui/"
+pathBackup = os.path.dirname(__file__) + "/Backups"
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
+sys.path.append(pathBackup)
 
 # import graphical created Ui. (With QtDesigner or QtCreator)
 import Settings_ui as Settings_ui
@@ -124,6 +136,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                     MenuName = command.getInfo()["menuText"].replace("&", "")
                     # Add the command and its icon to the command list
                     self.List_Commands.append([CommandName, Icon, MenuName])
+
         #
         # endregion ----------------------------------------------------------------------
 
@@ -158,21 +171,26 @@ class LoadDialog(Settings_ui.Ui_Form):
         # endregion-----------------------------------------------------------------------------------
 
         # region - connect controls with functions----------------------------------------------------
+        #
+        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
         def LoadWorkbenches():
             self.on_WorkbenchList__TextChanged()
 
         self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
 
+        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
         def LoadToolbars():
             self.on_ToolbarList__TextChanged()
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
 
+        # Connect the button GenerateJson with the function on_GenerateJson_clicked
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
 
         self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
 
+        # Connect a click event
         self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
 
         # endregion
@@ -186,6 +204,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Settings for the table widget
         self.form.tableWidget.setEnabled(True)
         self.form.tableWidget.horizontalHeader().setVisible(True)
+        self.form.tableWidget.setColumnWidth(0, 150)
+        self.form.tableWidget.resizeColumnsToContents()
         #
         # endregion
 
@@ -246,23 +266,16 @@ class LoadDialog(Settings_ui.Ui_Form):
             CommandName = Command.getInfo()["name"]
 
             # Get the text
-            CommandTitle = Command.getInfo()["menuText"].replace("&", "")
+            MenuName = Command.getInfo()["menuText"].replace("&", "")
             textAddition = ""
             IconName = ""
             # get the icon for this command if there isn't one, leave it None
-            Icon = Gui.getIcon("freecad")
-            try:
-                Icon = Gui.getIcon(Command.getInfo()["pixmap"])
-                IconName = Command.getInfo()["pixmap"]
-                # If this is a dropdown, get it's first command and get the icon from thant.
-                action = Command.getAction()
-                if len(action) > 1:
-                    command_0 = Gui.Command.get(action[0].data())
-                    Icon = Gui.getIcon(command_0.getInfo()["pixmap"])
-                    IconName = Command.getInfo()["pixmap"]
-                    textAddition = "..."
-            except Exception:
-                pass
+            Icon = Gui.getIcon(Command.getInfo()["pixmap"])
+            IconName = Command.getInfo()["pixmap"]
+            action = Command.getAction()
+            if len(action) > 1:
+                Icon = action[0].icon()
+                textAddition = "..."
 
             # Set the default check states
             checked_small = Qt.CheckState.Checked
@@ -276,9 +289,9 @@ class LoadDialog(Settings_ui.Ui_Form):
                 try:
                     for i in range(len(self.List_Workbenches)):
                         if self.List_Workbenches[i][0] == WorkBenchName:
-                            CommandTitle = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-                                Toolbar
-                            ]["commands"][CommandName]["text"]
+                            MenuName = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                "commands"
+                            ][CommandName]["text"]
                             Size = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
                                 "commands"
                             ][CommandName]["size"]
@@ -294,17 +307,17 @@ class LoadDialog(Settings_ui.Ui_Form):
                             Icon_Json_Name = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
                                 Toolbar
                             ]["commands"][CommandName]["icon"]
-                            Icon = Gui.getIcon(Icon_Json_Name)
+                            if Icon_Json_Name != "":
+                                Icon = Gui.getIcon(Icon_Json_Name)
                 except Exception:
                     continue
 
             # Create the row in the table
-            # if Command.getInfo()["menuText"] != "" or Command.getInfo()["menuText"] != "separator":
             # add a row to the table widget
             self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
             # Define a table widget item
             TableWidgetItem = QTableWidgetItem()
-            TableWidgetItem.setText(CommandTitle + textAddition)
+            TableWidgetItem.setText(MenuName + textAddition)
             if Icon is not None:
                 TableWidgetItem.setIcon(Icon)
 
@@ -323,6 +336,31 @@ class LoadDialog(Settings_ui.Ui_Form):
             Icon_large = QTableWidgetItem()
             Icon_large.setCheckState(checked_large)
             self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
+
+            WorkbenchTitle = self.form.WorkbenchList.currentText()
+            for item in self.List_Workbenches:
+                if item[2] == WorkbenchTitle:
+                    WorkBenchName = item[0]
+
+            Order = []
+            for i in range(self.form.tableWidget.rowCount()):
+                Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text())
+
+            self.add_keys_nested_dict(
+                self.Dict_RibbonCommandPanel,
+                ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
+            )
+            self.add_keys_nested_dict(
+                self.Dict_RibbonCommandPanel,
+                ["workbenches", WorkBenchName, "toolbars", Toolbar, "commands", CommandName],
+            )
+
+            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
+                "size": Size,
+                "text": MenuName,
+                "icon": IconName,
+            }
 
             # Set the IconOnlyToolbars control
             Toolbar = self.form.ToolbarList.currentText()
@@ -360,7 +398,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         # create a empty size string
         Size = "small"
         # Get the command text from the first cell in the row
-        CommandTitle = self.form.tableWidget.item(row, 0).text()
+        MenuName = self.form.tableWidget.item(row, 0).text()
 
         # Get the checkedstate from the clicked cell
         CheckState = self.form.tableWidget.item(row, column).checkState()
@@ -384,22 +422,19 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Go through the list with all available commands.
         # If the commandText is in this list, get the command name.
-
         for i in range(len(self.List_Commands)):
-            if CommandTitle == self.List_Commands[i][2]:
+            if MenuName == self.List_Commands[i][2]:
                 CommandName = self.List_Commands[i][0]
-                # With the commandname, get the command and then the iconname
-                Command = Gui.Command.get(CommandName)
-                IconName = Command.getInfo()["pixmap"]
+                Icon = QTableWidgetItem(self.form.tableWidget.item(i, 0)).icon()
+                IconName = Icon.name()
 
-                # try:
                 WorkbenchTitle = self.form.WorkbenchList.currentText()
                 for item in self.List_Workbenches:
                     if item[2] == WorkbenchTitle:
                         WorkBenchName = item[0]
 
                 Order = []
-                for i in range(1, self.form.tableWidget.rowCount()):
+                for i in range(self.form.tableWidget.rowCount()):
                     Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text())
 
                 self.add_keys_nested_dict(
@@ -414,7 +449,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                 self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
                 self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
                     CommandName
-                ] = {"size": Size, "text": CommandTitle, "icon": IconName}
+                ] = {"size": Size, "text": MenuName, "icon": IconName}
 
         return
 
@@ -571,27 +606,25 @@ class LoadDialog(Settings_ui.Ui_Form):
         resultingDict["showText"] = False
 
         # RibbonTabs
-        # Go through the RibbonCommandPanel list.
-        # workbenchDict = {}
-        # for workbench in range(len(self.Dict_RibbonCommandPanel_new)):
+        # Get the Ribbon dictionary
         resultingDict.update(self.Dict_RibbonCommandPanel)
 
         # get the path for the Json file
-        JsonPath = "D:\\OneDrive\\Desktop"
-        JsonFile = os.path.join(JsonPath, "test.json")
+        JsonPath = os.path.dirname(__file__)
+        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
 
         # create a copy and rename it as a backup if enabled
-        BackupPath = JsonPath  # to change when settings are enabled
         Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
         BackupName = f"RibbonStructure_{Suffix}.json"
-        BackupFile = os.path.join(BackupPath, BackupName)
-        # shutil.copy(JsonFile, BackupFile)
+        BackupFile = os.path.join(pathBackup, BackupName)
+        shutil.copy(JsonFile, BackupFile)
 
         # Writing to sample.json
         with open(JsonFile, "w") as outfile:
             json.dump(resultingDict, outfile, indent=4)
 
         outfile.close()
+        return
 
     def add_keys_nested_dict(self, dict, keys):
         for key in keys:
@@ -602,6 +635,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             dict.setdefault(keys[-1], 1)
         except Exception:
             pass
+        return
 
     def ListWidgetItems(self, ListWidget: QListWidget) -> list:
         items = []
@@ -609,6 +643,36 @@ class LoadDialog(Settings_ui.Ui_Form):
             items.append(ListWidget.item(x))
 
         return items
+
+    def AddItem(self, SourceWidget: QListWidget, DestinationWidget: QListWidget):
+        """Move a list item widgtet from one list to another
+
+        Args:
+            SourceWidget (QListWidget): _description_
+            DestinationWidget (QListWidget): _description_
+        """
+        Values = SourceWidget.selectedItems()
+
+        # Go through the items
+        for Value in Values:
+            # Get the item text
+            itemText = QListWidgetItem(Value).text()
+
+            # Add the item to the list with current items
+            DestinationWidget.addItem(itemText)
+
+            # Go through the items on the list with items to add.
+            for i in range(SourceWidget.count()):
+                # Get the item
+                item = SourceWidget.item(i)
+                # If the item is not none and the item text is equeal to itemText,
+                # remove it from the columns to add list.
+                if item is not None:
+                    if item.text() == itemText:
+                        SourceWidget.takeItem(i)
+
+        # Remove the focus from the control
+        SourceWidget.clearFocus()
 
     # endregion
 
