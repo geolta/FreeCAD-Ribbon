@@ -463,7 +463,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
                 Order = []
                 for i in range(self.form.tableWidget.rowCount()):
-                    Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text())
+                    Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text().replace("...", ""))
 
                 self.add_keys_nested_dict(
                     self.Dict_RibbonCommandPanel,
