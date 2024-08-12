@@ -291,17 +291,14 @@ class ModernMenu(RibbonBar):
 
                     # try to get alternative icon from ribbonStructure
                     try:
-                        icon = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"][toolbar][
+                        icon_Json = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"][toolbar][
                             "commands"
                         ][action.data()]["icon"]
                         # action.setIcon(QIcon(os.path.join(pathIcons, icon)))
-                        if icon != "":
-                            action.setIcon(Gui.getIcon(icon))
-                        if icon == "":
-                            if len(action) > 1:
-                                icon = action[0].icon()
+                        if icon_Json != "":
+                            action.setIcon(Gui.getIcon(icon_Json))
                     except KeyError:
-                        icon = action.icon()
+                        icon_Json = action.icon()
 
                     # get button size from ribbonStructure
                     try:

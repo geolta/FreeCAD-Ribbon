@@ -88,18 +88,20 @@ class LoadDialog(Settings_ui.Ui_Form):
         # region - create the lists ------------------------------------------------------------------
         #
         # Create a list of all workbenches with their icon
+        self.List_Workbenches.clear()
         List_Workbenches = Gui.listWorkbenches().copy()
-        for key in List_Workbenches:
-            if str(key) != "" or key is not None:
-                if str(key) != "NoneWorkbench":
+        for WorkBenchName in List_Workbenches:
+            if str(WorkBenchName) != "" or WorkBenchName is not None:
+                if str(WorkBenchName) != "NoneWorkbench":
                     Icon = None
-                    IconName = str(Gui.getWorkbench(key).Icon)
+                    IconName = str(Gui.getWorkbench(WorkBenchName).Icon)
                     if IconName != "":
                         Icon = Gui.getIcon(IconName)
-                    WorkbenchName = Gui.getWorkbench(key).MenuText
-                    self.List_Workbenches.append([str(key), Icon, WorkbenchName])
+                    WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+                    self.List_Workbenches.append([str(WorkBenchName), Icon, WorkbenchTitle])
 
         # Create a list of all toolbars
+        self.StringList_Toolbars.clear()
         # Store the current active workbench
         ActiveWB = Gui.activeWorkbench().name()
         # Go through the list of workbenches
@@ -123,8 +125,17 @@ class LoadDialog(Settings_ui.Ui_Form):
         Gui.activateWorkbench(ActiveWB)
 
         # Create a list of all commands with their icon
-        # Create a copy of the list of command names
-        CommandNames = Gui.listCommands().copy()
+        self.List_Commands.clear()
+        # Create a list of command names
+        CommandNames = []
+        for i in range(len(self.List_Workbenches)):
+            WorkBench = Gui.getWorkbench(self.List_Workbenches[i][0])
+            ToolbarItems = WorkBench.getToolbarItems()
+            for key, value in ToolbarItems.items():
+                for j in range(len(value)):
+                    if CommandNames.__contains__(value[j]) is False:
+                        CommandNames.append(value[j])
+
         # Go through the list
         for CommandName in CommandNames:
             # get the command with this name
@@ -133,9 +144,13 @@ class LoadDialog(Settings_ui.Ui_Form):
                 # get the icon for this command
                 if command.getInfo()["pixmap"] != "":
                     Icon = Gui.getIcon(command.getInfo()["pixmap"])
-                    MenuName = command.getInfo()["menuText"].replace("&", "")
-                    # Add the command and its icon to the command list
-                    self.List_Commands.append([CommandName, Icon, MenuName])
+                else:
+                    Icon = None
+                MenuName = command.getInfo()["menuText"].replace("&", "")
+                # if len(command.getAction()) > 1:
+                #     MenuName = command.getAction()[0].text()
+                # Add the command and its icon to the command list
+                self.List_Commands.append([CommandName, Icon, MenuName])
 
         #
         # endregion ----------------------------------------------------------------------
@@ -204,8 +219,10 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Settings for the table widget
         self.form.tableWidget.setEnabled(True)
         self.form.tableWidget.horizontalHeader().setVisible(True)
-        self.form.tableWidget.setColumnWidth(0, 150)
-        self.form.tableWidget.resizeColumnsToContents()
+        self.form.tableWidget.setColumnWidth(0, 300)
+        self.form.tableWidget.resizeColumnToContents(1)
+        self.form.tableWidget.resizeColumnToContents(2)
+        self.form.tableWidget.resizeColumnToContents(3)
         #
         # endregion
 
@@ -273,9 +290,12 @@ class LoadDialog(Settings_ui.Ui_Form):
             Icon = Gui.getIcon(Command.getInfo()["pixmap"])
             IconName = Command.getInfo()["pixmap"]
             action = Command.getAction()
-            if len(action) > 1:
-                Icon = action[0].icon()
-                textAddition = "..."
+            try:
+                if len(action) > 1:
+                    Icon = action[0].icon()
+                    textAddition = "..."
+            except Exception:
+                pass
 
             # Set the default check states
             checked_small = Qt.CheckState.Checked
@@ -315,11 +335,14 @@ class LoadDialog(Settings_ui.Ui_Form):
             # Create the row in the table
             # add a row to the table widget
             self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
+
             # Define a table widget item
             TableWidgetItem = QTableWidgetItem()
             TableWidgetItem.setText(MenuName + textAddition)
-            if Icon is not None:
+            if Icon is not None:  # At the moment, settings icon size for most dropdowns do not work properly
                 TableWidgetItem.setIcon(Icon)
+            if Icon is None:
+                TableWidgetItem.setFlags(TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled)
 
             # Get the last rownumber and set this row with the TableWidgetItem
             RowNumber = self.form.tableWidget.rowCount() - 1
@@ -327,14 +350,20 @@ class LoadDialog(Settings_ui.Ui_Form):
 
             Icon_small = QTableWidgetItem()
             Icon_small.setCheckState(checked_small)
+            if Icon is None:
+                Icon_small.setFlags(Icon_small.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
 
             Icon_medium = QTableWidgetItem()
             Icon_medium.setCheckState(checked_medium)
+            if Icon is None:
+                Icon_medium.setFlags(Icon_medium.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
 
             Icon_large = QTableWidgetItem()
             Icon_large.setCheckState(checked_large)
+            if Icon is None:
+                Icon_large.setFlags(Icon_large.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
 
             WorkbenchTitle = self.form.WorkbenchList.currentText()
@@ -383,22 +412,25 @@ class LoadDialog(Settings_ui.Ui_Form):
             if isInList is False:
                 self.List_IconOnlyToolbars.append(toolbar)
 
-    def on_tableCell_clicked(self, item):
+    def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
-        row = item.row()
-        column = item.column()
+        row = Item.row()
+        column = Item.column()
         WorkbenchTitle = self.form.WorkbenchList.currentText()
         WorkBenchName = ""
-        for item in self.List_Workbenches:
-            if item[2] == WorkbenchTitle:
-                WorkBenchName = item[0]
+        for WorkbenchItem in self.List_Workbenches:
+            if WorkbenchItem[2] == WorkbenchTitle:
+                WorkBenchName = WorkbenchItem[0]
 
         # get the name of the toolbar
         Toolbar = self.form.ToolbarList.currentText()
         # create a empty size string
         Size = "small"
+        # Defien empty strings for the command name and icon name
+        CommandName = ""
+        IconName = ""
         # Get the command text from the first cell in the row
-        MenuName = self.form.tableWidget.item(row, 0).text()
+        MenuName = self.form.tableWidget.item(row, 0).text().replace("...", "")
 
         # Get the checkedstate from the clicked cell
         CheckState = self.form.tableWidget.item(row, column).checkState()
@@ -416,17 +448,13 @@ class LoadDialog(Settings_ui.Ui_Form):
                 else:
                     self.form.tableWidget.item(row, i).setCheckState(Qt.CheckState.Unchecked)
 
-        # Defien empty strings for the command name and icon name
-        CommandName = ""
-        IconName = ""
-
         # Go through the list with all available commands.
         # If the commandText is in this list, get the command name.
         for i in range(len(self.List_Commands)):
             if MenuName == self.List_Commands[i][2]:
                 CommandName = self.List_Commands[i][0]
-                Icon = QTableWidgetItem(self.form.tableWidget.item(i, 0)).icon()
-                IconName = Icon.name()
+                Command = Gui.Command.get(CommandName)
+                IconName = Command.getInfo()["pixmap"]
 
                 WorkbenchTitle = self.form.WorkbenchList.currentText()
                 for item in self.List_Workbenches:
@@ -514,22 +542,32 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.CommandsAvailable.clear()
         self.form.CommandesSelected.clear()
 
-        for command in self.List_Commands:
+        for ToolbarCommand in self.List_Commands:
+            Command = Gui.Command.get(ToolbarCommand[0])
+
             # Default a command is not selected
             # If in List_QuickAccessCommands set IsSelected to True
             IsSelected = False
             for QuickCommand in self.List_QuickAccessCommands:
-                if command[0] == QuickCommand:
+                if ToolbarCommand[0] == QuickCommand:
                     IsSelected = True
 
             # Define a new ListWidgetItem.
+            textAddition = ""
+            Icon = QIcon(ToolbarCommand[1])
+            action = Command.getAction()
+            try:
+                if len(action) > 1:
+                    Icon = action[0].icon()
+                    # textAddition = "..."
+            except Exception:
+                pass
             ListWidgetItem = QListWidgetItem()
-            ListWidgetItem.setText(command[0])
-            icon = QIcon(command[1])
-            ListWidgetItem.setIcon(icon)
+            ListWidgetItem.setText(ToolbarCommand[0] + textAddition)
+            ListWidgetItem.setIcon(Icon)
 
             # Add the ListWidgetItem to the correct ListWidget
-            if icon is not None:
+            if Icon is not None:
                 if IsSelected is False:
                     self.form.CommandsAvailable.addItem(ListWidgetItem)
                 if IsSelected is True:
