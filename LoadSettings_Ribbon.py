@@ -22,7 +22,7 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtGui import QIcon, QAction, QPalette, QColor
 from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
@@ -33,6 +33,7 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QToolButton,
     QLayout,
+    QStyle,
 )
 from PySide6.QtCore import Qt, SIGNAL
 import sys
@@ -85,6 +86,13 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowStaysOnTopHint)
 
+        # Get the style from the main window and use it for this form
+        mw = Gui.getMainWindow()
+        palette = mw.palette()
+        self.form.setPalette(palette)
+        Style = mw.style()
+        self.form.setStyle(Style)
+
         # region - create the lists ------------------------------------------------------------------
         #
         # Create a list of all workbenches with their icon
@@ -133,13 +141,20 @@ class LoadDialog(Settings_ui.Ui_Form):
             ToolbarItems = WorkBench.getToolbarItems()
             for key, value in ToolbarItems.items():
                 for j in range(len(value)):
-                    if CommandNames.__contains__(value[j]) is False:
-                        CommandNames.append(value[j])
+                    Item = [value[j], self.List_Workbenches[i][0]]
+                    # if CommandNames.__contains__(Item) is False:
+                    IsInList = False
+                    for k in range(len(CommandNames)):
+                        if CommandNames[k][0] == value[j]:
+                            IsInList = True
+                    if IsInList is False:
+                        CommandNames.append(Item)
 
         # Go through the list
         for CommandName in CommandNames:
             # get the command with this name
-            command = Gui.Command.get(CommandName)
+            command = Gui.Command.get(CommandName[0])
+            WorkBenchName = CommandName[1]
             if command is not None:
                 # get the icon for this command
                 if command.getInfo()["pixmap"] != "":
@@ -147,10 +162,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                 else:
                     Icon = None
                 MenuName = command.getInfo()["menuText"].replace("&", "")
-                # if len(command.getAction()) > 1:
-                #     MenuName = command.getAction()[0].text()
-                # Add the command and its icon to the command list
-                self.List_Commands.append([CommandName, Icon, MenuName])
+                self.List_Commands.append([CommandName[0], Icon, MenuName, WorkBenchName])
 
         #
         # endregion ----------------------------------------------------------------------
@@ -164,7 +176,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.ToolbarsToExclude.clear()
         self.form.ToolbarsExcluded.clear()
         self.form.CommandsAvailable.clear()
-        self.form.CommandesSelected.clear()
+        self.form.CommandsSelected.clear()
 
         # region - Load all controls------------------------------------------------------------------
         #
@@ -205,9 +217,34 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
 
-        # Connect a click event
+        # Connect a click event on the tablewidgit on the Ribbon design tab
         self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
 
+        # Connect Add/Remove and move events to the buttons on the QuickAccess Tab
+        self.form.Add_Command.connect(self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked)
+        self.form.Remove_Command.connect(self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked)
+        self.form.MoveUp_Command.connect(self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked)
+        self.form.MoveDown_Command.connect(
+            self.form.MoveDown_Command, SIGNAL("clicked()"), self.on_MoveDownCommand_clicked
+        )
+
+        # Connect Add/Remove events to the buttons on the Toolbars Tab
+        self.form.Add_Toolbar.connect(self.form.Add_Toolbar, SIGNAL("clicked()"), self.on_AddToolbar_clicked)
+        self.form.Remove_Toolbar.connect(self.form.Remove_Toolbar, SIGNAL("clicked()"), self.on_RemoveToolbar_clicked)
+
+        # Connect Add/Remove events to the buttons on the Workbench Tab
+        self.form.Add_Workbench.connect(self.form.Add_Workbench, SIGNAL("clicked()"), self.on_AddWorkbench_clicked)
+        self.form.Remove_Workbench.connect(
+            self.form.Remove_Workbench, SIGNAL("clicked()"), self.on_RemoveWorkbench_clicked
+        )
+
+        # Connect move events to the buttons on the Ribbon design Tab
+        self.form.MoveUp_RibbonCommand.connect(
+            self.form.MoveUp_RibbonCommand, SIGNAL("clicked()"), self.on_MoveUpTableWidget_clicked
+        )
+        self.form.MoveDown_RibbonCommand.connect(
+            self.form.MoveDown_RibbonCommand, SIGNAL("clicked()"), self.on_MoveDownTableWidget_clicked
+        )
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -262,11 +299,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         Workbench = Gui.getWorkbench(WorkBenchName)
         # Get the toolbar name
         Toolbar = self.form.ToolbarList.currentText()
-        # Copy the workbench commands
+        # Copy the workbench Toolbars
         Commands = Workbench.getToolbarItems().copy()
-
-        # Clear the table
-        self.form.tableWidget.setRowCount(0)
 
         # Get the commands in this toolbar
         ToolbarCommands = []
@@ -274,8 +308,29 @@ class LoadDialog(Settings_ui.Ui_Form):
             if key == Toolbar:
                 ToolbarCommands = Commands[key]
 
+        OrderList = ToolbarCommands
+        try:
+            positionsList: list = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                "order"
+            ]
+
+            def SortCommands(Command):
+                for item in positionsList:
+                    for i in range(len(self.List_Commands)):
+                        if self.List_Commands[i][0] == Command:
+                            if self.List_Commands[i][2] == item:
+                                return i
+
+            OrderList.sort(key=SortCommands)
+        except Exception:
+            OrderList = ToolbarCommands
+            pass
+
+        # Clear the table
+        self.form.tableWidget.setRowCount(0)
+
         # Go through the list of toolbar commands
-        for ToolbarCommand in ToolbarCommands:
+        for ToolbarCommand in OrderList:
             # Get the command
             Command = Gui.Command.get(ToolbarCommand)
             if Command is None:
@@ -373,7 +428,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
             Order = []
             for i in range(self.form.tableWidget.rowCount()):
-                Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text())
+                Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text().replace("...", ""))
 
             self.add_keys_nested_dict(
                 self.Dict_RibbonCommandPanel,
@@ -481,6 +536,36 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         return
 
+    def on_AddCommand_clicked(self):
+        self.AddItem(SourceWidget=self.form.CommandsAvailable, DestinationWidget=self.form.CommandsSelected)
+
+    def on_RemoveCommand_clicked(self):
+        self.AddItem(SourceWidget=self.form.CommandsSelected, DestinationWidget=self.form.CommandsAvailable)
+
+    def on_MoveUpCommand_clicked(self):
+        self.MoveItem(ListWidget=self.form.CommandsSelected, Up=True)
+
+    def on_MoveDownCommand_clicked(self):
+        self.MoveItem(ListWidget=self.form.CommandsSelected, Up=False)
+
+    def on_AddToolbar_clicked(self):
+        self.AddItem(SourceWidget=self.form.ToolbarsAvailable, DestinationWidget=self.form.ToolbarsSelected)
+
+    def on_RemoveToolbar_clicked(self):
+        self.AddItem(SourceWidget=self.form.ToolbarsSelected, DestinationWidget=self.form.ToolbarsAvailable)
+
+    def on_AddWorkbench_clicked(self):
+        self.AddItem(SourceWidget=self.form.WorkbenchsAvailable, DestinationWidget=self.form.WorkbenchsSelected)
+
+    def on_RemoveWorkbench_clicked(self):
+        self.AddItem(SourceWidget=self.form.WorkbenchsSelected, DestinationWidget=self.form.WorkbenchsAvailable)
+
+    def on_MoveUpTableWidget_clicked(self):
+        self.MoveItem_TableWidget(self.form.tableWidget, True)
+
+    def on_MoveDownTableWidget_clicked(self):
+        self.MoveItem_TableWidget(self.form.tableWidget, False)
+
     @staticmethod
     def on_GenerateJson_clicked(self):
         self.WriteJson()
@@ -540,7 +625,7 @@ class LoadDialog(Settings_ui.Ui_Form):
     def QuickAccessCommands(self):
         """Fill the Quick Commands Available and Selected"""
         self.form.CommandsAvailable.clear()
-        self.form.CommandesSelected.clear()
+        self.form.CommandsSelected.clear()
 
         for ToolbarCommand in self.List_Commands:
             Command = Gui.Command.get(ToolbarCommand[0])
@@ -559,19 +644,20 @@ class LoadDialog(Settings_ui.Ui_Form):
             try:
                 if len(action) > 1:
                     Icon = action[0].icon()
-                    # textAddition = "..."
+                    textAddition = "..."
             except Exception:
                 pass
             ListWidgetItem = QListWidgetItem()
-            ListWidgetItem.setText(ToolbarCommand[0] + textAddition)
+            ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
             ListWidgetItem.setIcon(Icon)
+            ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
 
             # Add the ListWidgetItem to the correct ListWidget
             if Icon is not None:
                 if IsSelected is False:
                     self.form.CommandsAvailable.addItem(ListWidgetItem)
                 if IsSelected is True:
-                    self.form.CommandesSelected.addItem(ListWidgetItem)
+                    self.form.CommandsSelected.addItem(ListWidgetItem)
         return
 
     def ReadJson(self):
@@ -622,9 +708,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         List_IconOnlyToolbars = self.List_IconOnlyToolbars
 
         # QuickAccessCommands
-        SelectedCommands = self.ListWidgetItems(self.form.CommandesSelected)
+        SelectedCommands = self.ListWidgetItems(self.form.CommandsSelected)
         for i2 in range(len(SelectedCommands)):
-            QuickAccessCommand = QListWidgetItem(SelectedCommands[i2]).text()
+            QuickAccessCommand = QListWidgetItem(SelectedCommands[i2]).toolTip()
             List_QuickAccessCommands.append(QuickAccessCommand)
 
         # IgnoredWorkbences
@@ -694,23 +780,61 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Go through the items
         for Value in Values:
             # Get the item text
-            itemText = QListWidgetItem(Value).text()
+            DestinationItem = QListWidgetItem(Value)
 
             # Add the item to the list with current items
-            DestinationWidget.addItem(itemText)
+            DestinationWidget.addItem(DestinationItem)
 
             # Go through the items on the list with items to add.
             for i in range(SourceWidget.count()):
                 # Get the item
-                item = SourceWidget.item(i)
+                SourceItem = SourceWidget.item(i)
                 # If the item is not none and the item text is equeal to itemText,
                 # remove it from the columns to add list.
-                if item is not None:
-                    if item.text() == itemText:
+                if SourceItem is not None:
+                    if SourceItem.text() == DestinationItem.text():
                         SourceWidget.takeItem(i)
 
-        # Remove the focus from the control
-        SourceWidget.clearFocus()
+        return
+
+    def MoveItem(self, ListWidget: QListWidget, Up: bool = True):
+        # Get the current row
+        Row = ListWidget.currentRow()
+        # remove the current row
+        Item = ListWidget.takeItem(Row)
+        # Add the just removed row, one row higher on the list
+        if Up is True:
+            ListWidget.insertItem(Row - 1, Item)
+            # Set the moved row, to the current row
+            ListWidget.setCurrentRow(Row - 1)
+        if Up is False:
+            ListWidget.insertItem(Row + 1, Item)
+            # Set the moved row, to the current row
+            ListWidget.setCurrentRow(Row + 1)
+
+        return
+
+    def MoveItem_TableWidget(self, TableWidget: QTableWidget, Up: bool = True):
+        row = TableWidget.currentRow()
+        column = TableWidget.currentColumn()
+        if Up is False:
+            if row < TableWidget.rowCount() - 1:
+                TableWidget.insertRow(row + 2)
+                for i in range(TableWidget.columnCount()):
+                    TableWidget.setItem(row + 2, i, TableWidget.takeItem(row, i))
+                    TableWidget.setCurrentCell(row + 2, column)
+                TableWidget.removeRow(row)
+                return
+
+        if Up is True:
+            if row > 0:
+                TableWidget.insertRow(row - 1)
+                for i in range(TableWidget.columnCount()):
+                    TableWidget.setItem(row - 1, i, TableWidget.takeItem(row + 1, i))
+                    TableWidget.setCurrentCell(row - 1, column)
+                TableWidget.removeRow(row + 1)
+                return
+        return
 
     # endregion
 
