@@ -31,6 +31,9 @@
      </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="ResetJson">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Reset</string>
        </property>
@@ -38,6 +41,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="RestoreJson">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Restore</string>
        </property>
@@ -67,7 +73,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideRight</enum>
@@ -826,6 +832,9 @@
       </widget>
      </widget>
      <widget class="QWidget" name="Settings">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>

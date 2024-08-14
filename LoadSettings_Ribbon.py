@@ -34,6 +34,7 @@ from PySide6.QtWidgets import (
     QToolButton,
     QLayout,
     QStyle,
+    QComboBox,
 )
 from PySide6.QtCore import Qt, SIGNAL
 import sys
@@ -71,8 +72,7 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_QuickAccessCommands = []
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
-    # create a list for the changed data for the customized buttons.
-    # a list is chosen, so the order list is easier to create from the list widgets
+    List_SortedCommands = []
 
     ShowText = False
 
@@ -124,11 +124,11 @@ class LoadDialog(Settings_ui.Ui_Form):
                 # Otherwise add it the the list.
                 IsInList = False
                 for i in range(len(self.StringList_Toolbars)):
-                    if Toolbar == self.StringList_Toolbars[i]:
+                    if Toolbar == self.StringList_Toolbars[i][0]:
                         IsInList = True
 
                 if IsInList is False:
-                    self.StringList_Toolbars.append(Toolbar)
+                    self.StringList_Toolbars.append([Toolbar, workbench[2]])
         # re-activate the workbench that was stored.
         Gui.activateWorkbench(ActiveWB)
 
@@ -211,6 +211,20 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
 
+        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
+        def FilterQuickCommands_1():
+            self.on_ListCategory_1_TextChanged()
+
+        # Connect the filter for the quick commands on the quickcommands tab
+        self.form.ListCategory_1.currentTextChanged.connect(FilterQuickCommands_1)
+
+        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
+        def FilterQuickCommands_2():
+            self.on_ListCategory_2_TextChanged()
+
+        # Connect the filter for the toolbars on the toolbar tab
+        self.form.ListCategory_2.currentTextChanged.connect(FilterQuickCommands_2)
+
         # Connect the button GenerateJson with the function on_GenerateJson_clicked
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
@@ -219,6 +233,12 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Connect a click event on the tablewidgit on the Ribbon design tab
         self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
+
+        # Connect the searchbar for the quick commands on the quick commands tab
+        self.form.SearchBar_1.textChanged.connect(self.on_SearchBar_1_TextChanged)
+
+        # Connect the searchbar for the toolbars on the toolbar tab
+        self.form.SearchBar_2.textChanged.connect(self.on_SearchBar_2_TextChanged)
 
         # Connect Add/Remove and move events to the buttons on the QuickAccess Tab
         self.form.Add_Command.connect(self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked)
@@ -289,6 +309,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     # @staticmethod
     def on_ToolbarList__TextChanged(self):
+        # Clear the table
+        self.form.tableWidget.setRowCount(0)
+
         # Get the correct workbench name
         WorkBenchName = ""
         for WorkBench in self.List_Workbenches:
@@ -308,29 +331,21 @@ class LoadDialog(Settings_ui.Ui_Form):
             if key == Toolbar:
                 ToolbarCommands = Commands[key]
 
-        OrderList = ToolbarCommands
-        try:
-            positionsList: list = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                "order"
-            ]
+        # Sort the Toolbarcommands according the sorted list
+        def SortCommands(item):
+            try:
+                Command = Gui.Command.get(item)
+                MenuName = Command.getInfo()["menuText"].replace("&", "")
+                position = self.List_SortedCommands.index(MenuName)
+            except Exception:
+                position = 999999
 
-            def SortCommands(Command):
-                for item in positionsList:
-                    for i in range(len(self.List_Commands)):
-                        if self.List_Commands[i][0] == Command:
-                            if self.List_Commands[i][2] == item:
-                                return i
+            return position
 
-            OrderList.sort(key=SortCommands)
-        except Exception:
-            OrderList = ToolbarCommands
-            pass
-
-        # Clear the table
-        self.form.tableWidget.setRowCount(0)
+        ToolbarCommands.sort(key=SortCommands)
 
         # Go through the list of toolbar commands
-        for ToolbarCommand in OrderList:
+        for ToolbarCommand in ToolbarCommands:
             # Get the command
             Command = Gui.Command.get(ToolbarCommand)
             if Command is None:
@@ -391,6 +406,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             # add a row to the table widget
             self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
 
+            # Fill the table widget ----------------------------------------------------------------------------------
+            #
             # Define a table widget item
             TableWidgetItem = QTableWidgetItem()
             TableWidgetItem.setText(MenuName + textAddition)
@@ -398,38 +415,39 @@ class LoadDialog(Settings_ui.Ui_Form):
                 TableWidgetItem.setIcon(Icon)
             if Icon is None:
                 TableWidgetItem.setFlags(TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled)
-
             # Get the last rownumber and set this row with the TableWidgetItem
             RowNumber = self.form.tableWidget.rowCount() - 1
+
+            # Add the first cell with the table widget
             self.form.tableWidget.setItem(RowNumber, 0, TableWidgetItem)
 
+            # Create the second cell and set the checkstate according the checkstate as defined ealier
             Icon_small = QTableWidgetItem()
             Icon_small.setCheckState(checked_small)
-            if Icon is None:
-                Icon_small.setFlags(Icon_small.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
 
+            # Create the third cell and set the checkstate according the checkstate as defined ealier
             Icon_medium = QTableWidgetItem()
             Icon_medium.setCheckState(checked_medium)
-            if Icon is None:
-                Icon_medium.setFlags(Icon_medium.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
 
+            # Create the last cell and set the checkstate according the checkstate as defined ealier
             Icon_large = QTableWidgetItem()
             Icon_large.setCheckState(checked_large)
-            if Icon is None:
-                Icon_large.setFlags(Icon_large.flags() & ~Qt.ItemFlag.ItemIsEnabled)
             self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
 
+            # Double check the workbench name
             WorkbenchTitle = self.form.WorkbenchList.currentText()
             for item in self.List_Workbenches:
                 if item[2] == WorkbenchTitle:
                     WorkBenchName = item[0]
 
+            # Define the order based on the order in this table widget
             Order = []
             for i in range(self.form.tableWidget.rowCount()):
                 Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text().replace("...", ""))
 
+            # Add or update the dict for the Ribbon command panel
             self.add_keys_nested_dict(
                 self.Dict_RibbonCommandPanel,
                 ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
@@ -438,7 +456,6 @@ class LoadDialog(Settings_ui.Ui_Form):
                 self.Dict_RibbonCommandPanel,
                 ["workbenches", WorkBenchName, "toolbars", Toolbar, "commands", CommandName],
             )
-
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
                 "size": Size,
@@ -452,7 +469,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             for item in self.List_IconOnlyToolbars:
                 if item == Toolbar:
                     self.form.IconOnly.setChecked(True)
-
         return
 
     def on_IconOnly_clicked(self):
@@ -570,6 +586,89 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_GenerateJson_clicked(self):
         self.WriteJson()
 
+    def on_ListCategory_1_TextChanged(self):
+        self.form.CommandsAvailable.clear()
+
+        for ToolbarCommand in self.List_Commands:
+            WorkbenchTitle = Gui.getWorkbench(ToolbarCommand[3]).MenuText
+            if (
+                WorkbenchTitle == self.form.ListCategory_1.currentText()
+                or self.form.ListCategory_1.currentText() == "Any"
+            ):
+                Command = Gui.Command.get(ToolbarCommand[0])
+
+                # Define a new ListWidgetItem.
+                textAddition = ""
+                Icon = QIcon(ToolbarCommand[1])
+                action = Command.getAction()
+                try:
+                    if len(action) > 1:
+                        Icon = action[0].icon()
+                        textAddition = "..."
+                except Exception:
+                    pass
+                ListWidgetItem = QListWidgetItem()
+                ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
+                ListWidgetItem.setIcon(Icon)
+                ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
+
+                # Add the ListWidgetItem to the correct ListWidget
+                if Icon is not None:
+                    self.form.CommandsAvailable.addItem(ListWidgetItem)
+
+    def on_ListCategory_2_TextChanged(self):
+        self.form.ToolbarsToExclude.clear()
+
+        for Toolbar in self.StringList_Toolbars:
+            WorkbenchTitle = Toolbar[1]
+            if (
+                WorkbenchTitle == self.form.ListCategory_2.currentText()
+                or self.form.ListCategory_2.currentText() == "Any"
+            ):
+
+                ListWidgetItem = QListWidgetItem()
+                ListWidgetItem.setText(Toolbar[0])
+
+                # Add the ListWidgetItem to the correct ListWidget
+                self.form.ToolbarsToExclude.addItem(ListWidgetItem)
+
+    def on_SearchBar_1_TextChanged(self):
+        self.form.CommandsAvailable.clear()
+
+        for ToolbarCommand in self.List_Commands:
+            if ToolbarCommand[2].lower().startswith(self.form.SearchBar_1.text().lower()):
+                Command = Gui.Command.get(ToolbarCommand[0])
+
+                # Define a new ListWidgetItem.
+                textAddition = ""
+                Icon = QIcon(ToolbarCommand[1])
+                action = Command.getAction()
+                try:
+                    if len(action) > 1:
+                        Icon = action[0].icon()
+                        textAddition = "..."
+                except Exception:
+                    pass
+                ListWidgetItem = QListWidgetItem()
+                ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
+                ListWidgetItem.setIcon(Icon)
+                ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
+
+                # Add the ListWidgetItem to the correct ListWidget
+                if Icon is not None:
+                    self.form.CommandsAvailable.addItem(ListWidgetItem)
+
+    def on_SearchBar_2_TextChanged(self):
+        self.form.ToolbarsToExclude.clear()
+
+        for Toolbar in self.StringList_Toolbars:
+            if Toolbar[0].lower().startswith(self.form.SearchBar_2.text().lower()):
+                ListWidgetItem = QListWidgetItem()
+                ListWidgetItem.setText(Toolbar[0])
+
+                # Add the ListWidgetItem to the correct ListWidget
+                self.form.ToolbarsToExclude.addItem(ListWidgetItem)
+
     # endregion---------------------------------------------------------------------------------------
 
     # region - Functions------------------------------------------------------------------------------
@@ -600,8 +699,18 @@ class LoadDialog(Settings_ui.Ui_Form):
                 self.form.WorkbenchesSelected.addItem(ListWidgetItem)
                 self.form.WorkbenchList.addItem(icon, workbench[2])
 
+            # Add the ListWidgetItem also to the categoryListWidgets
+            self.form.ListCategory_1.addItem(icon, workbench[2])
+            self.form.ListCategory_2.addItem(icon, workbench[2])
+
+        self.form.ListCategory_1.addItem("Any")
+        self.form.ListCategory_2.addItem("Any")
+        self.form.ListCategory_1.setCurrentText("Any")
+        self.form.ListCategory_2.setCurrentText("Any")
+
         # Set the text in the combobox to the name of the active workbench
         self.form.WorkbenchList.setCurrentText(Gui.activeWorkbench().name())
+
         return
 
     def ExcludedToolbars(self):
@@ -611,11 +720,11 @@ class LoadDialog(Settings_ui.Ui_Form):
         for Toolbar in self.StringList_Toolbars:
             IsSelected = False
             for IgnoredToolbar in self.List_IgnoredToolbars:
-                if Toolbar == IgnoredToolbar:
+                if Toolbar[0] == IgnoredToolbar:
                     IsSelected = True
 
             ListWidgetItem = QListWidgetItem()
-            ListWidgetItem.setText(Toolbar)
+            ListWidgetItem.setText(Toolbar[0])
             if IsSelected is False:
                 self.form.ToolbarsToExclude.addItem(ListWidgetItem)
             if IsSelected is True:
@@ -687,6 +796,11 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Get the dict with the customized date for the buttons
         self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
+
+        for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
+            for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
+                for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"][toolbar]["order"]:
+                    self.List_SortedCommands.append(orderItem)
 
         JsonFile.close()
         return
@@ -834,6 +948,21 @@ class LoadDialog(Settings_ui.Ui_Form):
                     TableWidget.setCurrentCell(row - 1, column)
                 TableWidget.removeRow(row + 1)
                 return
+        return
+
+    def Sort_List(self, TableWidget: QTableWidget, Order: list):
+        row = TableWidget.currentRow()
+        column = TableWidget.currentColumn()
+
+        for i in range(1, len(Order)):
+            for j in range(1, TableWidget.rowCount()):
+                if TableWidget.item(j, 0).text().replace("...", "") == Order[i]:
+                    if row < TableWidget.rowCount() - 1:
+                        TableWidget.insertRow(i)
+                        for k in range(TableWidget.columnCount()):
+                            TableWidget.setItem(i, k, TableWidget.takeItem(row, k))
+                            TableWidget.setCurrentCell(i, column)
+                        TableWidget.removeRow(row)
         return
 
     # endregion
