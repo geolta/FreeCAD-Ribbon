@@ -23,10 +23,7 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide.QtGui import QIcon, QAction
-from PySide.QtWidgets import (
-    QToolButton,
-    QToolBar,
-)
+from PySide.QtWidgets import QToolButton, QToolBar, QPushButton
 from PySide.QtCore import Qt, QTimer, Signal, QObject
 
 from pyqtribbon import RibbonBar
@@ -237,6 +234,7 @@ class ModernMenu(RibbonBar):
 
     def buildPanels(self):
         workbench = Gui.activeWorkbench()
+        workbenchName = workbench.name()
         tabName = self.tabBar().tabText(self.tabBar().currentIndex()).replace("&", "")
         if self.isWbLoaded[tabName]:
             return
@@ -252,29 +250,39 @@ class ModernMenu(RibbonBar):
 
             # get list of all buttons in toolbar
             TB = mw.findChildren(QToolBar, toolbar)
-            allButtons = TB[0].findChildren(QToolButton)
+            allButtons: list = TB[0].findChildren(QToolButton)
 
-            # order buttons like defined in ribbonStructure
-            if (
-                toolbar in ModernMenu.ribbonStructure["toolbars"]
-                and "order" in ModernMenu.ribbonStructure["toolbars"][toolbar]
-            ):
-                positionsList = ModernMenu.ribbonStructure["toolbars"][toolbar]["order"]
+            if workbenchName in ModernMenu.ribbonStructure["workbenches"]:
+                # order buttons like defined in ribbonStructure
+                if (
+                    toolbar
+                    in ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                        "toolbars"
+                    ]
+                    and "order"
+                    in ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                        "toolbars"
+                    ][toolbar]
+                ):
+                    positionsList: list = ModernMenu.ribbonStructure["workbenches"][
+                        workbenchName
+                    ]["toolbars"][toolbar]["order"]
 
-                # XXX check that positionsList consists of strings only
-                def sortButtons(button):
-                    if button.text() == "":
-                        return -1
+                    # XXX check that positionsList consists of strings only
+                    def sortButtons(button: QToolButton):
+                        if button.text() == "":
+                            return -1
 
-                    position = None
-                    try:
-                        position = positionsList.index(button.defaultAction().data())
-                    except ValueError:
-                        position = 999999
+                        position = None
+                        try:
+                            # position = positionsList.index(button.defaultAction().data())
+                            position = positionsList.index(button.text())
+                        except ValueError:
+                            position = 999999
 
-                    return position
+                        return position
 
-                allButtons.sort(key=sortButtons)
+                    allButtons.sort(key=sortButtons)
 
             # add buttons to panel
             for button in allButtons:
@@ -292,9 +300,9 @@ class ModernMenu(RibbonBar):
 
                     # try to get alternative text from ribbonStructure
                     try:
-                        text = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["text"]
+                        text = ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                            "toolbars"
+                        ][toolbar]["commands"][action.data()]["text"]
                         # the text would be overwritten again when the state of the action changes
                         # (e.g. when getting enabled / disabled), therefore the action itself
                         # is manipulated.
@@ -304,19 +312,20 @@ class ModernMenu(RibbonBar):
 
                     # try to get alternative icon from ribbonStructure
                     try:
-                        icon = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["icon"]
+                        icon_Json = ModernMenu.ribbonStructure["workbenches"][
+                            workbenchName
+                        ]["toolbars"][toolbar]["commands"][action.data()]["icon"]
                         # action.setIcon(QIcon(os.path.join(pathIcons, icon)))
-                        action.setIcon(Gui.getIcon(icon))
+                        if icon_Json != "":
+                            action.setIcon(Gui.getIcon(icon_Json))
                     except KeyError:
-                        icon = action.icon()
+                        icon_Json = action.icon()
 
                     # get button size from ribbonStructure
                     try:
-                        buttonSize = ModernMenu.ribbonStructure["toolbars"][toolbar][
-                            "commands"
-                        ][action.data()]["size"]
+                        buttonSize = ModernMenu.ribbonStructure["workbenches"][
+                            workbenchName
+                        ]["toolbars"][toolbar]["commands"][action.data()]["size"]
                     except KeyError:
                         buttonSize = "small"  # small as default
 
@@ -358,6 +367,7 @@ class ModernMenu(RibbonBar):
                     continue
 
         self.isWbLoaded[tabName] = True
+
         return
 
     def updateCurrentTab(self):

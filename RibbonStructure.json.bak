@@ -1,0 +1,85 @@
+{
+    "ignoredToolbars": [
+        "Workbench",
+        "View",
+        "Macro",
+        "File",
+        "Help",
+        "Edit",
+        "Clipboard"
+    ],
+    "iconOnlyToolbars": [
+        "Structure"
+    ],
+    "quickAccessCommands": [
+        "Std_New",
+        "Std_Open",
+        "Std_Save",
+        "Std_Cut",
+        "Std_Copy",
+        "Std_Paste",
+        "Std_Undo",
+        "Std_Redo",
+        "Std_Refresh"
+    ],
+    "ignoredWorkbenches": [
+        "Inspection",
+        "OpenSCAD",
+        "<none>",
+        "Points",
+        "Robot",
+        "Test Framework",
+        "Reverse Engineering"
+    ],
+    "showText": false,
+    "toolbars": {
+        "Part Design Helper": {
+            "order": [
+                "PartDesign_CompSketches"
+            ],
+            "commands": {
+                "PartDesign_CompSketches": {
+                    "size": "large",
+                    "text": "Sketch",
+                    "icon": "Sketcher_NewSketch.svg"
+                }
+            }
+        },
+        "Part Design Modeling": {
+            "order": [
+                "PartDesign_Pad"
+            ],
+            "commands": {
+                "PartDesign_Pad": {
+                    "size": "large",
+                    "text": "Pad",
+                    "icon": "PartDesign_Pad.svg"
+                }
+            }
+        },
+        "Sketcher geometries": {
+            "order": [
+                "Sketcher_CreatePolyline"
+            ],
+            "commands": {
+                "Sketcher_CreatePolyline": {
+                    "size": "large",
+                    "text": "Polyline",
+                    "icon": "Sketcher_CreatePolyline.svg"
+                }
+            }
+        },
+        "Sketcher constraints": {
+            "order": [
+                "Sketcher_CompDimensionTools"
+            ],
+            "commands": {
+                "Sketcher_CompDimensionTools": {
+                    "size": "large",
+                    "text": "Dimension",
+                    "icon": "Constraint_Dimension.svg"
+                }
+            }
+        }
+    }
+}
