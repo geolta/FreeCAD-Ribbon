@@ -41,6 +41,7 @@ import sys
 import json
 from datetime import datetime
 import shutil
+import Standard_Functions_RIbbon as StandardFunctions
 
 # Get the resources
 pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
@@ -84,7 +85,10 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form = Gui.PySideUic.loadUi(os.path.join(pathUI, "Settings.ui"))
 
         # Make sure that the dialog stays on top
-        self.form.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+
+        # Set the settingstab hidden for now:
+        self.form.Settings.setHidden(True)
 
         # Get the style from the main window and use it for this form
         mw = Gui.getMainWindow()
@@ -211,6 +215,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
 
+        # Connect the icon only chekcbox
+        self.form.IconOnly.clicked.connect(self.on_IconOnly_clicked)
+
         # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
         def FilterQuickCommands_1():
             self.on_ListCategory_1_TextChanged()
@@ -245,7 +252,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.Remove_Command.connect(self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked)
         self.form.MoveUp_Command.connect(self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked)
         self.form.MoveDown_Command.connect(
-            self.form.MoveDown_Command, SIGNAL("clicked()"), self.on_MoveDownCommand_clicked
+            self.form.MoveDown_Command,
+            SIGNAL("clicked()"),
+            self.on_MoveDownCommand_clicked,
         )
 
         # Connect Add/Remove events to the buttons on the Toolbars Tab
@@ -255,16 +264,26 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Connect Add/Remove events to the buttons on the Workbench Tab
         self.form.Add_Workbench.connect(self.form.Add_Workbench, SIGNAL("clicked()"), self.on_AddWorkbench_clicked)
         self.form.Remove_Workbench.connect(
-            self.form.Remove_Workbench, SIGNAL("clicked()"), self.on_RemoveWorkbench_clicked
+            self.form.Remove_Workbench,
+            SIGNAL("clicked()"),
+            self.on_RemoveWorkbench_clicked,
         )
 
         # Connect move events to the buttons on the Ribbon design Tab
         self.form.MoveUp_RibbonCommand.connect(
-            self.form.MoveUp_RibbonCommand, SIGNAL("clicked()"), self.on_MoveUpTableWidget_clicked
+            self.form.MoveUp_RibbonCommand,
+            SIGNAL("clicked()"),
+            self.on_MoveUpTableWidget_clicked,
         )
         self.form.MoveDown_RibbonCommand.connect(
-            self.form.MoveDown_RibbonCommand, SIGNAL("clicked()"), self.on_MoveDownTableWidget_clicked
+            self.form.MoveDown_RibbonCommand,
+            SIGNAL("clicked()"),
+            self.on_MoveDownTableWidget_clicked,
         )
+
+        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
+
+        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -454,7 +473,14 @@ class LoadDialog(Settings_ui.Ui_Form):
             )
             self.add_keys_nested_dict(
                 self.Dict_RibbonCommandPanel,
-                ["workbenches", WorkBenchName, "toolbars", Toolbar, "commands", CommandName],
+                [
+                    "workbenches",
+                    WorkBenchName,
+                    "toolbars",
+                    Toolbar,
+                    "commands",
+                    CommandName,
+                ],
             )
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
@@ -472,7 +498,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     def on_IconOnly_clicked(self):
-        if self.form.IconOnly.checked is True:
+        if self.form.IconOnly.isChecked() is True:
             toolbar = self.form.ToolbarList.currentText()
 
             isInList = False
@@ -483,80 +509,47 @@ class LoadDialog(Settings_ui.Ui_Form):
             if isInList is False:
                 self.List_IconOnlyToolbars.append(toolbar)
 
+        if self.form.IconOnly.isChecked() is False:
+            toolbar = self.form.ToolbarList.currentText()
+
+            isInList = False
+            for item in self.List_IconOnlyToolbars:
+                if item == toolbar:
+                    isInList = True
+
+            if isInList is True:
+                self.List_IconOnlyToolbars.remove(toolbar)
+
     def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
         row = Item.row()
         column = Item.column()
-        WorkbenchTitle = self.form.WorkbenchList.currentText()
-        WorkBenchName = ""
-        for WorkbenchItem in self.List_Workbenches:
-            if WorkbenchItem[2] == WorkbenchTitle:
-                WorkBenchName = WorkbenchItem[0]
-
-        # get the name of the toolbar
-        Toolbar = self.form.ToolbarList.currentText()
-        # create a empty size string
-        Size = "small"
-        # Defien empty strings for the command name and icon name
-        CommandName = ""
-        IconName = ""
-        # Get the command text from the first cell in the row
-        MenuName = self.form.tableWidget.item(row, 0).text().replace("...", "")
+        if column == 0:
+            return
 
         # Get the checkedstate from the clicked cell
         CheckState = self.form.tableWidget.item(row, column).checkState()
         # Go through the cells in the row. If checkstate is checkd, uncheck the other cells in the row
-        for i in range(1, self.form.tableWidget.columnCount()):
+        for i3 in range(1, self.form.tableWidget.columnCount()):
             if CheckState == Qt.CheckState.Checked:
-                if i == column:
-                    self.form.tableWidget.item(row, i).setCheckState(Qt.CheckState.Checked)
-                    if i == 1:
-                        Size = "small"
-                    if i == 2:
-                        Size = "medium"
-                    if i == 3:
-                        Size = "large"
+                if i3 == column:
+                    self.form.tableWidget.item(row, i3).setCheckState(Qt.CheckState.Checked)
                 else:
-                    self.form.tableWidget.item(row, i).setCheckState(Qt.CheckState.Unchecked)
-
-        # Go through the list with all available commands.
-        # If the commandText is in this list, get the command name.
-        for i in range(len(self.List_Commands)):
-            if MenuName == self.List_Commands[i][2]:
-                CommandName = self.List_Commands[i][0]
-                Command = Gui.Command.get(CommandName)
-                IconName = Command.getInfo()["pixmap"]
-
-                WorkbenchTitle = self.form.WorkbenchList.currentText()
-                for item in self.List_Workbenches:
-                    if item[2] == WorkbenchTitle:
-                        WorkBenchName = item[0]
-
-                Order = []
-                for i in range(self.form.tableWidget.rowCount()):
-                    Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).text().replace("...", ""))
-
-                self.add_keys_nested_dict(
-                    self.Dict_RibbonCommandPanel,
-                    ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
-                )
-                self.add_keys_nested_dict(
-                    self.Dict_RibbonCommandPanel,
-                    ["workbenches", WorkBenchName, "toolbars", Toolbar, "commands", CommandName],
-                )
-
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                    CommandName
-                ] = {"size": Size, "text": MenuName, "icon": IconName}
-
+                    self.form.tableWidget.item(row, i3).setCheckState(Qt.CheckState.Unchecked)
+        self.UpdateData()
         return
 
     def on_AddCommand_clicked(self):
-        self.AddItem(SourceWidget=self.form.CommandsAvailable, DestinationWidget=self.form.CommandsSelected)
+        self.AddItem(
+            SourceWidget=self.form.CommandsAvailable,
+            DestinationWidget=self.form.CommandsSelected,
+        )
 
     def on_RemoveCommand_clicked(self):
-        self.AddItem(SourceWidget=self.form.CommandsSelected, DestinationWidget=self.form.CommandsAvailable)
+        self.AddItem(
+            SourceWidget=self.form.CommandsSelected,
+            DestinationWidget=self.form.CommandsAvailable,
+        )
 
     def on_MoveUpCommand_clicked(self):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=True)
@@ -565,16 +558,28 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=False)
 
     def on_AddToolbar_clicked(self):
-        self.AddItem(SourceWidget=self.form.ToolbarsAvailable, DestinationWidget=self.form.ToolbarsSelected)
+        self.AddItem(
+            SourceWidget=self.form.ToolbarsAvailable,
+            DestinationWidget=self.form.ToolbarsSelected,
+        )
 
     def on_RemoveToolbar_clicked(self):
-        self.AddItem(SourceWidget=self.form.ToolbarsSelected, DestinationWidget=self.form.ToolbarsAvailable)
+        self.AddItem(
+            SourceWidget=self.form.ToolbarsSelected,
+            DestinationWidget=self.form.ToolbarsAvailable,
+        )
 
     def on_AddWorkbench_clicked(self):
-        self.AddItem(SourceWidget=self.form.WorkbenchsAvailable, DestinationWidget=self.form.WorkbenchsSelected)
+        self.AddItem(
+            SourceWidget=self.form.WorkbenchsAvailable,
+            DestinationWidget=self.form.WorkbenchsSelected,
+        )
 
     def on_RemoveWorkbench_clicked(self):
-        self.AddItem(SourceWidget=self.form.WorkbenchsSelected, DestinationWidget=self.form.WorkbenchsAvailable)
+        self.AddItem(
+            SourceWidget=self.form.WorkbenchsSelected,
+            DestinationWidget=self.form.WorkbenchsAvailable,
+        )
 
     def on_MoveUpTableWidget_clicked(self):
         self.MoveItem_TableWidget(self.form.tableWidget, True)
@@ -582,9 +587,49 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_MoveDownTableWidget_clicked(self):
         self.MoveItem_TableWidget(self.form.tableWidget, False)
 
+    def on_RestoreJson_clicked(self):
+        self.form.setWindowFlags(Qt.WindowType.WindowStaysOnBottomHint)
+        # get the path for the Json file
+        JsonPath = os.path.dirname(__file__)
+        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
+
+        BackupFiles = []
+        # returns a list of names (with extension, without full path) of all files
+        # in backup path
+        for name in os.listdir(pathBackup):
+            if os.path.isfile(os.path.join(pathBackup, name)):
+                if name.lower().endswith("json"):
+                    BackupFiles.append(name)
+
+        if len(BackupFiles) > 0:
+            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
+            BackupFile = os.path.join(pathBackup, SelectedDile)
+            result = shutil.copy(BackupFile, JsonFile)
+            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
+            StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
+
+        self.form.close()
+        return
+
+    def on_ResetJson_clicked(self):
+        self.form.setWindowFlags(Qt.WindowType.WindowStaysOnBottomHint)
+        # get the path for the Json file
+        JsonPath = os.path.dirname(__file__)
+        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
+
+        BackupFile = [os.path.join(JsonPath, "RibbonStructure_default.json")]
+
+        result = shutil.copy(BackupFile, JsonFile)
+        StandardFunctions.Print(f"Ribbonbar reset from {result}!", "Warning")
+        StandardFunctions.Mbox("Settings reset to default!")
+
+        self.form.close()
+        return
+
     @staticmethod
     def on_GenerateJson_clicked(self):
         self.WriteJson()
+        return
 
     def on_ListCategory_1_TextChanged(self):
         self.form.CommandsAvailable.clear()
@@ -615,6 +660,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                 # Add the ListWidgetItem to the correct ListWidget
                 if Icon is not None:
                     self.form.CommandsAvailable.addItem(ListWidgetItem)
+        return
 
     def on_ListCategory_2_TextChanged(self):
         self.form.ToolbarsToExclude.clear()
@@ -678,6 +724,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.WorkbenchesAvailable.clear()
         self.form.WorkbenchesSelected.clear()
 
+        self.form.ListCategory_1.addItem("Any")
+        self.form.ListCategory_2.addItem("Any")
+
         for workbench in self.List_Workbenches:
             # Default a workbench is selected
             # if in List_IgnoredWorkbenches, set IsSelected to false
@@ -703,8 +752,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.ListCategory_1.addItem(icon, workbench[2])
             self.form.ListCategory_2.addItem(icon, workbench[2])
 
-        self.form.ListCategory_1.addItem("Any")
-        self.form.ListCategory_2.addItem("Any")
         self.form.ListCategory_1.setCurrentText("Any")
         self.form.ListCategory_2.setCurrentText("Any")
 
@@ -767,6 +814,82 @@ class LoadDialog(Settings_ui.Ui_Form):
                     self.form.CommandsAvailable.addItem(ListWidgetItem)
                 if IsSelected is True:
                     self.form.CommandsSelected.addItem(ListWidgetItem)
+        return
+
+    def UpdateData(self):
+        for i1 in range(self.form.tableWidget.rowCount()):
+            row = i1
+
+            WorkbenchTitle = self.form.WorkbenchList.currentText()
+            WorkBenchName = ""
+            try:
+                for WorkbenchItem in self.List_Workbenches:
+                    if WorkbenchItem[2] == WorkbenchTitle:
+                        WorkBenchName = WorkbenchItem[0]
+
+                        # get the name of the toolbar
+                        Toolbar = self.form.ToolbarList.currentText()
+                        # create a empty size string
+                        Size = "small"
+                        # Defien empty strings for the command name and icon name
+                        CommandName = ""
+                        IconName = ""
+                        # Get the command text from the first cell in the row
+                        MenuName = self.form.tableWidget.item(row, 0).text().replace("...", "")
+
+                        # Go through the list with all available commands.
+                        # If the commandText is in this list, get the command name.
+                        for i2 in range(len(self.List_Commands)):
+                            if MenuName == self.List_Commands[i2][2] and WorkBenchName == self.List_Commands[i2][3]:
+                                CommandName = self.List_Commands[i2][0]
+                                Command = Gui.Command.get(CommandName)
+                                IconName = Command.getInfo()["pixmap"]
+
+                                # Get the checkedstate from the clicked cell
+                                # CheckState = self.form.tableWidget.item(row, column).checkState()
+                                # Go through the cells in the row. If checkstate is checkd, uncheck the other cells in the row
+                                for i3 in range(1, self.form.tableWidget.columnCount()):
+                                    CheckState = self.form.tableWidget.item(row, i3).checkState()
+                                    if CheckState == Qt.CheckState.Checked:
+                                        if i3 == 1:
+                                            Size = "small"
+                                        if i3 == 2:
+                                            Size = "medium"
+                                        if i3 == 3:
+                                            Size = "large"
+
+                                Order = []
+                                for i4 in range(self.form.tableWidget.rowCount()):
+                                    Order.append(self.form.tableWidget.item(i4, 0).text().replace("...", ""))
+
+                                self.add_keys_nested_dict(
+                                    self.Dict_RibbonCommandPanel,
+                                    ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
+                                )
+                                self.add_keys_nested_dict(
+                                    self.Dict_RibbonCommandPanel,
+                                    [
+                                        "workbenches",
+                                        WorkBenchName,
+                                        "toolbars",
+                                        Toolbar,
+                                        "commands",
+                                        CommandName,
+                                    ],
+                                )
+
+                                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "order"
+                                ] = Order
+                                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "commands"
+                                ][CommandName] = {
+                                    "size": Size,
+                                    "text": MenuName,
+                                    "icon": IconName,
+                                }
+            except Exception:
+                continue
         return
 
     def ReadJson(self):
@@ -935,19 +1058,21 @@ class LoadDialog(Settings_ui.Ui_Form):
             if row < TableWidget.rowCount() - 1:
                 TableWidget.insertRow(row + 2)
                 for i in range(TableWidget.columnCount()):
-                    TableWidget.setItem(row + 2, i, TableWidget.takeItem(row, i))
+                    item = TableWidget.takeItem(row, i)
+                    TableWidget.setItem(row + 2, i, item)
                     TableWidget.setCurrentCell(row + 2, column)
                 TableWidget.removeRow(row)
-                return
 
         if Up is True:
             if row > 0:
                 TableWidget.insertRow(row - 1)
                 for i in range(TableWidget.columnCount()):
-                    TableWidget.setItem(row - 1, i, TableWidget.takeItem(row + 1, i))
+                    item = TableWidget.takeItem(row + 1, i)
+                    TableWidget.setItem(row - 1, i, item)
                     TableWidget.setCurrentCell(row - 1, column)
                 TableWidget.removeRow(row + 1)
-                return
+
+        self.UpdateData()
         return
 
     def Sort_List(self, TableWidget: QTableWidget, Order: list):

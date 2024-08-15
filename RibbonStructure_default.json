@@ -1,0 +1,614 @@
+{
+    "ignoredToolbars": [
+        "Clipboard",
+        "Edit",
+        "File",
+        "Help",
+        "Macro",
+        "View",
+        "Workbench"
+    ],
+    "iconOnlyToolbars": [
+        "Structure"
+    ],
+    "quickAccessCommands": [
+        "Std_New",
+        "Std_Save",
+        "Std_Undo",
+        "Std_Redo",
+        "Std_Refresh",
+        "Std_Cut",
+        "Std_Copy",
+        "Std_Paste"
+    ],
+    "ignoredWorkbenches": [
+        "Inspection",
+        "OpenSCAD",
+        "Points",
+        "Reverse Engineering",
+        "Robot",
+        "Test Framework"
+    ],
+    "showText": false,
+    "workbenches": {
+        "PartDesignWorkbench": {
+            "toolbars": {
+                "Part Design Helper": {
+                    "order": [
+                        "Create datum",
+                        "Create body",
+                        "Validate sketch",
+                        "Check Geometry",
+                        "Create a sub-object(s) shape binder",
+                        "Create a clone",
+                        "Create datum"
+                    ],
+                    "commands": {
+                        "PartDesign_CompSketches": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": ""
+                        },
+                        "PartDesign_Body": {
+                            "size": "small",
+                            "text": "Create body",
+                            "icon": "PartDesign_Body"
+                        },
+                        "Sketcher_ValidateSketch": {
+                            "size": "small",
+                            "text": "Validate sketch...",
+                            "icon": "Sketcher_ValidateSketch"
+                        },
+                        "Part_CheckGeometry": {
+                            "size": "small",
+                            "text": "Check Geometry",
+                            "icon": "Part_CheckGeometry"
+                        },
+                        "PartDesign_SubShapeBinder": {
+                            "size": "small",
+                            "text": "Create a sub-object(s) shape binder",
+                            "icon": "PartDesign_SubShapeBinder"
+                        },
+                        "PartDesign_Clone": {
+                            "size": "small",
+                            "text": "Create a clone",
+                            "icon": "PartDesign_Clone"
+                        },
+                        "PartDesign_CompDatums": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": ""
+                        }
+                    }
+                },
+                "Part Design Modeling": {
+                    "order": [
+                        "Pad",
+                        "Create an additive primitive",
+                        "Create a subtractive primitive",
+                        "Revolution",
+                        "Additive loft",
+                        "Additive pipe",
+                        "Additive helix",
+                        "Pocket",
+                        "Hole",
+                        "Groove",
+                        "Subtractive loft",
+                        "Subtractive pipe",
+                        "Subtractive helix",
+                        "Boolean operation"
+                    ],
+                    "commands": {
+                        "PartDesign_Pad": {
+                            "size": "large",
+                            "text": "Pad",
+                            "icon": "PartDesign_Pad"
+                        },
+                        "PartDesign_Revolution": {
+                            "size": "small",
+                            "text": "Revolution",
+                            "icon": "PartDesign_Revolution"
+                        },
+                        "PartDesign_AdditiveLoft": {
+                            "size": "small",
+                            "text": "Additive loft",
+                            "icon": "PartDesign_AdditiveLoft"
+                        },
+                        "PartDesign_AdditivePipe": {
+                            "size": "small",
+                            "text": "Additive pipe",
+                            "icon": "PartDesign_AdditivePipe"
+                        },
+                        "PartDesign_AdditiveHelix": {
+                            "size": "small",
+                            "text": "Additive helix",
+                            "icon": "PartDesign_AdditiveHelix"
+                        },
+                        "PartDesign_CompPrimitiveAdditive": {
+                            "size": "large",
+                            "text": "Create an additive primitive",
+                            "icon": ""
+                        },
+                        "PartDesign_Pocket": {
+                            "size": "small",
+                            "text": "Pocket",
+                            "icon": "PartDesign_Pocket"
+                        },
+                        "PartDesign_Hole": {
+                            "size": "small",
+                            "text": "Hole",
+                            "icon": "PartDesign_Hole"
+                        },
+                        "PartDesign_Groove": {
+                            "size": "small",
+                            "text": "Groove",
+                            "icon": "PartDesign_Groove"
+                        },
+                        "PartDesign_SubtractiveLoft": {
+                            "size": "small",
+                            "text": "Subtractive loft",
+                            "icon": "PartDesign_SubtractiveLoft"
+                        },
+                        "PartDesign_SubtractivePipe": {
+                            "size": "small",
+                            "text": "Subtractive pipe",
+                            "icon": "PartDesign_SubtractivePipe"
+                        },
+                        "PartDesign_SubtractiveHelix": {
+                            "size": "small",
+                            "text": "Subtractive helix",
+                            "icon": "PartDesign_SubtractiveHelix"
+                        },
+                        "PartDesign_CompPrimitiveSubtractive": {
+                            "size": "large",
+                            "text": "Create a subtractive primitive",
+                            "icon": ""
+                        },
+                        "PartDesign_Boolean": {
+                            "size": "small",
+                            "text": "Boolean operation",
+                            "icon": "PartDesign_Boolean"
+                        },
+                        "asm3AddAttachmentGroup": {
+                            "size": "large",
+                            "text": "Create \"Attachment\" constraint",
+                            "icon": "Assembly_ConstraintAttachment"
+                        }
+                    }
+                },
+                "Sketcher geometries": {
+                    "order": [
+                        "Sketcher_CreatePolyline"
+                    ],
+                    "commands": {
+                        "Sketcher_CreatePolyline": {
+                            "size": "large",
+                            "text": "Polyline",
+                            "icon": "Sketcher_CreatePolyline.svg"
+                        }
+                    }
+                },
+                "Sketcher constraints": {
+                    "order": [
+                        "Sketcher_CompDimensionTools"
+                    ],
+                    "commands": {
+                        "Sketcher_CompDimensionTools": {
+                            "size": "large",
+                            "text": "Dimension",
+                            "icon": "Constraint_Dimension.svg"
+                        }
+                    }
+                },
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
+                }
+            }
+        },
+        "AssemblyWorkbench": {
+            "toolbars": {
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
+                }
+            }
+        },
+        "SketcherWorkbench": {
+            "toolbars": {
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
+                },
+                "Sketcher": {
+                    "order": [
+                        "Create sketch",
+                        "Edit sketch",
+                        "Attach sketch...",
+                        "Reorient sketch...",
+                        "Validate sketch...",
+                        "Merge sketches",
+                        "Mirror sketch"
+                    ],
+                    "commands": {
+                        "Sketcher_NewSketch": {
+                            "size": "large",
+                            "text": "Create sketch",
+                            "icon": "Sketcher_NewSketch"
+                        },
+                        "Sketcher_EditSketch": {
+                            "size": "small",
+                            "text": "Edit sketch",
+                            "icon": "Sketcher_EditSketch"
+                        },
+                        "Sketcher_MapSketch": {
+                            "size": "small",
+                            "text": "Attach sketch...",
+                            "icon": "Sketcher_MapSketch"
+                        },
+                        "Sketcher_ReorientSketch": {
+                            "size": "small",
+                            "text": "Reorient sketch...",
+                            "icon": "Sketcher_ReorientSketch"
+                        },
+                        "Sketcher_ValidateSketch": {
+                            "size": "small",
+                            "text": "Validate sketch...",
+                            "icon": "Sketcher_ValidateSketch"
+                        },
+                        "Sketcher_MergeSketches": {
+                            "size": "small",
+                            "text": "Merge sketches",
+                            "icon": "Sketcher_MergeSketch"
+                        },
+                        "Sketcher_MirrorSketch": {
+                            "size": "small",
+                            "text": "Mirror sketch",
+                            "icon": "Sketcher_MirrorSketch"
+                        }
+                    }
+                },
+                "Sketcher edit mode": {
+                    "order": [
+                        "Leave sketch",
+                        "View sketch",
+                        "View section"
+                    ],
+                    "commands": {
+                        "Sketcher_LeaveSketch": {
+                            "size": "large",
+                            "text": "Leave sketch",
+                            "icon": "Sketcher_LeaveSketch"
+                        },
+                        "Sketcher_ViewSketch": {
+                            "size": "small",
+                            "text": "View sketch",
+                            "icon": "Sketcher_ViewSketch"
+                        },
+                        "Sketcher_ViewSection": {
+                            "size": "small",
+                            "text": "View section",
+                            "icon": "Sketcher_ViewSection"
+                        }
+                    }
+                },
+                "Sketcher geometries": {
+                    "order": [
+                        "Create point",
+                        "Polyline",
+                        "Create line",
+                        "Create arc...",
+                        "Create conic...",
+                        "Create rectangle...",
+                        "Create regular polygon...",
+                        "Slots...",
+                        "Create B-spline...",
+                        "Toggle construction geometry"
+                    ],
+                    "commands": {
+                        "Sketcher_CreatePoint": {
+                            "size": "small",
+                            "text": "Create point",
+                            "icon": "Sketcher_CreatePoint"
+                        },
+                        "Sketcher_CreatePolyline": {
+                            "size": "large",
+                            "text": "Polyline",
+                            "icon": "Sketcher_CreatePolyline"
+                        },
+                        "Sketcher_CreateLine": {
+                            "size": "small",
+                            "text": "Create line",
+                            "icon": "Sketcher_CreateLine"
+                        },
+                        "Sketcher_CompCreateArc": {
+                            "size": "small",
+                            "text": "Create arc",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateConic": {
+                            "size": "small",
+                            "text": "Create conic",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateRectangles": {
+                            "size": "small",
+                            "text": "Create rectangle",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateRegularPolygon": {
+                            "size": "small",
+                            "text": "Create regular polygon",
+                            "icon": ""
+                        },
+                        "Sketcher_CompSlot": {
+                            "size": "small",
+                            "text": "Slots",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateBSpline": {
+                            "size": "small",
+                            "text": "Create B-spline",
+                            "icon": ""
+                        },
+                        "Sketcher_ToggleConstruction": {
+                            "size": "small",
+                            "text": "Toggle construction geometry",
+                            "icon": "Sketcher_ToggleConstruction"
+                        }
+                    }
+                },
+                "Sketcher constraints": {
+                    "order": [
+                        "Dimension",
+                        "Constrain horizontal distance",
+                        "Constrain vertical distance",
+                        "Constrain distance",
+                        "Constrain arc or circle...",
+                        "Constrain angle",
+                        "Constrain lock",
+                        "Constrain coincident",
+                        "Constrain point on object",
+                        "Constrain horizontal/vertical...",
+                        "Constrain parallel",
+                        "Constrain perpendicular",
+                        "Constrain tangent or collinear",
+                        "Constrain equal",
+                        "Constrain symmetric",
+                        "Constrain block",
+                        "Toggle constraints..."
+                    ],
+                    "commands": {
+                        "Sketcher_Dimension": {
+                            "size": "large",
+                            "text": "Dimension",
+                            "icon": "Constraint_Dimension"
+                        },
+                        "Sketcher_ConstrainDistanceX": {
+                            "size": "small",
+                            "text": "Constrain horizontal distance",
+                            "icon": "Constraint_HorizontalDistance"
+                        },
+                        "Sketcher_ConstrainDistanceY": {
+                            "size": "small",
+                            "text": "Constrain vertical distance",
+                            "icon": "Constraint_VerticalDistance"
+                        },
+                        "Sketcher_ConstrainDistance": {
+                            "size": "small",
+                            "text": "Constrain distance",
+                            "icon": "Constraint_Length"
+                        },
+                        "Sketcher_CompConstrainRadDia": {
+                            "size": "small",
+                            "text": "Constrain arc or circle",
+                            "icon": ""
+                        },
+                        "Sketcher_ConstrainAngle": {
+                            "size": "small",
+                            "text": "Constrain angle",
+                            "icon": "Constraint_InternalAngle"
+                        },
+                        "Sketcher_ConstrainLock": {
+                            "size": "small",
+                            "text": "Constrain lock",
+                            "icon": "Constraint_Lock"
+                        },
+                        "Sketcher_ConstrainCoincident": {
+                            "size": "small",
+                            "text": "Constrain coincident",
+                            "icon": "Constraint_PointOnPoint"
+                        },
+                        "Sketcher_ConstrainPointOnObject": {
+                            "size": "small",
+                            "text": "Constrain point on object",
+                            "icon": "Constraint_PointOnObject"
+                        },
+                        "Sketcher_CompHorVer": {
+                            "size": "small",
+                            "text": "Constrain horizontal/vertical",
+                            "icon": ""
+                        },
+                        "Sketcher_ConstrainParallel": {
+                            "size": "small",
+                            "text": "Constrain parallel",
+                            "icon": "Constraint_Parallel"
+                        },
+                        "Sketcher_ConstrainPerpendicular": {
+                            "size": "small",
+                            "text": "Constrain perpendicular",
+                            "icon": "Constraint_Perpendicular"
+                        },
+                        "Sketcher_ConstrainTangent": {
+                            "size": "small",
+                            "text": "Constrain tangent or collinear",
+                            "icon": "Constraint_Tangent"
+                        },
+                        "Sketcher_ConstrainEqual": {
+                            "size": "small",
+                            "text": "Constrain equal",
+                            "icon": "Constraint_EqualLength"
+                        },
+                        "Sketcher_ConstrainSymmetric": {
+                            "size": "small",
+                            "text": "Constrain symmetric",
+                            "icon": "Constraint_Symmetric"
+                        },
+                        "Sketcher_ConstrainBlock": {
+                            "size": "small",
+                            "text": "Constrain block",
+                            "icon": "Constraint_Block"
+                        },
+                        "Sketcher_CompToggleConstraints": {
+                            "size": "small",
+                            "text": "Toggle constraints",
+                            "icon": ""
+                        },
+                        "Draft_Dimension": {
+                            "size": "large",
+                            "text": "Dimension",
+                            "icon": "Draft_Dimension"
+                        },
+                        "TechDraw_CompDimensionTools": {
+                            "size": "large",
+                            "text": "Dimension",
+                            "icon": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

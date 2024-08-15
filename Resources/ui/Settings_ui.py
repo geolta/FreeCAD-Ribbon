@@ -1,17 +1,26 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SettingshvNpCB.ui'
+## Form generated from reading UI file 'Settings.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.6.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QCheckBox,
+    QComboBox, QFrame, QGridLayout, QGroupBox,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QListView, QListWidget, QListWidgetItem, QPushButton,
+    QSizePolicy, QSpacerItem, QTabWidget, QTableWidget,
+    QTableWidgetItem, QToolButton, QVBoxLayout, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -31,13 +40,13 @@ class Ui_Form(object):
 
         self.ResetJson = QPushButton(Form)
         self.ResetJson.setObjectName(u"ResetJson")
-        self.ResetJson.setEnabled(False)
+        self.ResetJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.ResetJson, 0, 0, 1, 1)
 
         self.RestoreJson = QPushButton(Form)
         self.RestoreJson.setObjectName(u"RestoreJson")
-        self.RestoreJson.setEnabled(False)
+        self.RestoreJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.RestoreJson, 0, 2, 1, 1)
 
@@ -418,7 +427,7 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.RibbonDesign, "")
         self.Settings = QWidget()
         self.Settings.setObjectName(u"Settings")
-        self.Settings.setEnabled(False)
+        self.Settings.setEnabled(True)
         self.Settings.setAutoFillBackground(True)
         self.gridLayout_9 = QGridLayout(self.Settings)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
@@ -505,7 +514,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(Form)
