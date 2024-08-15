@@ -26,7 +26,15 @@ import math
 translate = App.Qt.translate
 
 
-def Mbox(text, title="", style=0, IconType="Information", default="", stringList="[,]", OnTop: bool = False):
+def Mbox(
+    text,
+    title="",
+    style=0,
+    IconType="Information",
+    default="",
+    stringList="[,]",
+    OnTop: bool = False,
+):
     """
     Message Styles:\n
     0 : OK                          (text, title, style)\n
@@ -36,9 +44,9 @@ def Mbox(text, title="", style=0, IconType="Information", default="", stringList
     21 : Inputbox with dropdown     (text, title, style, default, stringlist)\n
     Icontype:                       string: NoIcon, Question, Warning, Critical. Default Information
     """
-    from PySide6.QtWidgets import QMessageBox, QInputDialog
-    from PySide6.QtCore import Qt
-    from PySide6 import QtWidgets
+    from PySide.QtWidgets import QMessageBox, QInputDialog
+    from PySide.QtCore import Qt
+    from PySide import QtWidgets
 
     Icon = QMessageBox.Information
     if IconType == "NoIcon":
