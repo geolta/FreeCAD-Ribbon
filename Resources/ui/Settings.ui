@@ -32,7 +32,7 @@
      <item row="0" column="0">
       <widget class="QPushButton" name="ResetJson">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Reset</string>
@@ -42,7 +42,7 @@
      <item row="0" column="2">
       <widget class="QPushButton" name="RestoreJson">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
         <string>Restore</string>
@@ -73,7 +73,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideRight</enum>
@@ -672,7 +672,7 @@
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
           <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectItems</enum>
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="iconSize">
            <size>
@@ -833,7 +833,7 @@
      </widget>
      <widget class="QWidget" name="Settings">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>

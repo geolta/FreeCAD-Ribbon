@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SettingshvNpCB.ui'
+## Form generated from reading UI file 'SettingsEKCmKQ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -31,13 +31,13 @@ class Ui_Form(object):
 
         self.ResetJson = QPushButton(Form)
         self.ResetJson.setObjectName("ResetJson")
-        self.ResetJson.setEnabled(False)
+        self.ResetJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.ResetJson, 0, 0, 1, 1)
 
         self.RestoreJson = QPushButton(Form)
         self.RestoreJson.setObjectName("RestoreJson")
-        self.RestoreJson.setEnabled(False)
+        self.RestoreJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.RestoreJson, 0, 2, 1, 1)
 
@@ -401,7 +401,7 @@ class Ui_Form(object):
         self.tableWidget.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectItems)
+        self.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableWidget.setIconSize(QSize(16, 16))
         self.tableWidget.horizontalHeader().setVisible(False)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
@@ -441,7 +441,7 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.RibbonDesign, "")
         self.Settings = QWidget()
         self.Settings.setObjectName("Settings")
-        self.Settings.setEnabled(False)
+        self.Settings.setEnabled(True)
         self.Settings.setAutoFillBackground(True)
         self.gridLayout_9 = QGridLayout(self.Settings)
         self.gridLayout_9.setObjectName("gridLayout_9")
@@ -530,7 +530,7 @@ class Ui_Form(object):
 
         self.retranslateUi(Form)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(3)
 
         QMetaObject.connectSlotsByName(Form)
 
