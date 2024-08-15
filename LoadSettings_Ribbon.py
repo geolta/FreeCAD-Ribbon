@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide6.QtGui import QIcon, QAction, QPalette, QColor
-from PySide6.QtWidgets import (
+from PySide.QtGui import QIcon, QAction, QPalette, QColor
+from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -36,7 +36,7 @@ from PySide6.QtWidgets import (
     QStyle,
     QComboBox,
 )
-from PySide6.QtCore import Qt, SIGNAL
+from PySide.QtCore import Qt, SIGNAL
 import sys
 import json
 from datetime import datetime
@@ -255,6 +255,9 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.MoveDown_Command,
             SIGNAL("clicked()"),
             self.on_MoveDownCommand_clicked,
+            self.form.MoveDown_Command,
+            SIGNAL("clicked()"),
+            self.on_MoveDownCommand_clicked,
         )
 
         # Connect Add/Remove events to the buttons on the Toolbars Tab
@@ -267,6 +270,9 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.Remove_Workbench,
             SIGNAL("clicked()"),
             self.on_RemoveWorkbench_clicked,
+            self.form.Remove_Workbench,
+            SIGNAL("clicked()"),
+            self.on_RemoveWorkbench_clicked,
         )
 
         # Connect move events to the buttons on the Ribbon design Tab
@@ -274,8 +280,14 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.MoveUp_RibbonCommand,
             SIGNAL("clicked()"),
             self.on_MoveUpTableWidget_clicked,
+            self.form.MoveUp_RibbonCommand,
+            SIGNAL("clicked()"),
+            self.on_MoveUpTableWidget_clicked,
         )
         self.form.MoveDown_RibbonCommand.connect(
+            self.form.MoveDown_RibbonCommand,
+            SIGNAL("clicked()"),
+            self.on_MoveDownTableWidget_clicked,
             self.form.MoveDown_RibbonCommand,
             SIGNAL("clicked()"),
             self.on_MoveDownTableWidget_clicked,
@@ -481,6 +493,14 @@ class LoadDialog(Settings_ui.Ui_Form):
                     "commands",
                     CommandName,
                 ],
+                [
+                    "workbenches",
+                    WorkBenchName,
+                    "toolbars",
+                    Toolbar,
+                    "commands",
+                    CommandName,
+                ],
             )
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
@@ -544,8 +564,16 @@ class LoadDialog(Settings_ui.Ui_Form):
             SourceWidget=self.form.CommandsAvailable,
             DestinationWidget=self.form.CommandsSelected,
         )
+        self.AddItem(
+            SourceWidget=self.form.CommandsAvailable,
+            DestinationWidget=self.form.CommandsSelected,
+        )
 
     def on_RemoveCommand_clicked(self):
+        self.AddItem(
+            SourceWidget=self.form.CommandsSelected,
+            DestinationWidget=self.form.CommandsAvailable,
+        )
         self.AddItem(
             SourceWidget=self.form.CommandsSelected,
             DestinationWidget=self.form.CommandsAvailable,
@@ -562,8 +590,16 @@ class LoadDialog(Settings_ui.Ui_Form):
             SourceWidget=self.form.ToolbarsAvailable,
             DestinationWidget=self.form.ToolbarsSelected,
         )
+        self.AddItem(
+            SourceWidget=self.form.ToolbarsAvailable,
+            DestinationWidget=self.form.ToolbarsSelected,
+        )
 
     def on_RemoveToolbar_clicked(self):
+        self.AddItem(
+            SourceWidget=self.form.ToolbarsSelected,
+            DestinationWidget=self.form.ToolbarsAvailable,
+        )
         self.AddItem(
             SourceWidget=self.form.ToolbarsSelected,
             DestinationWidget=self.form.ToolbarsAvailable,
@@ -574,8 +610,16 @@ class LoadDialog(Settings_ui.Ui_Form):
             SourceWidget=self.form.WorkbenchsAvailable,
             DestinationWidget=self.form.WorkbenchsSelected,
         )
+        self.AddItem(
+            SourceWidget=self.form.WorkbenchsAvailable,
+            DestinationWidget=self.form.WorkbenchsSelected,
+        )
 
     def on_RemoveWorkbench_clicked(self):
+        self.AddItem(
+            SourceWidget=self.form.WorkbenchsSelected,
+            DestinationWidget=self.form.WorkbenchsAvailable,
+        )
         self.AddItem(
             SourceWidget=self.form.WorkbenchsSelected,
             DestinationWidget=self.form.WorkbenchsAvailable,
