@@ -278,3 +278,69 @@ def LightOrDark(rgbColor=[0, 128, 255, 255]):
         return "light"
     else:
         return "dark"
+
+
+def GetFileDialog(files, SaveAs: bool = True) -> str:
+    """
+    files must be like:\n
+    files = [\n
+        ('All Files', '*.*'),\n
+        ('Python Files', '*.py'),\n
+        ('Text Document', '*.txt')\n
+    ]\n
+    \n
+    SaveAs:\n
+    If True,  as SaveAs dialog will open and the file will be overwritten\n
+    If False, an OpenFile dialog will be open and the file will be opened.\n
+    """
+    import tkinter as tk
+    from tkinter.filedialog import asksaveasfile
+    from tkinter.filedialog import askopenfilename
+
+    # Create the window
+    root = tk.Tk()
+    # Hide the window
+    root.withdraw()
+
+    file = ""
+    if SaveAs is True:
+        try:
+            file = asksaveasfile(filetypes=files, defaultextension=files)
+            if file:
+                file = str(file.name)
+            else:
+                file = ""
+        except IOError:
+            Mbox(
+                "Permission error!!\nDo you have the file open?",
+                "Titleblock Workbench",
+                0,
+                IconType="Critical",
+            )
+            file = ""
+            return file
+        except Exception as e:
+            Mbox(
+                "Unknown error!!'nSee the report view for details!",
+                "Titleblock Workbench",
+                0,
+                IconType="Critical",
+            )
+            raise e
+    if SaveAs is False:
+        if file:
+            file = askopenfilename(filetypes=files, defaultextension=files)
+        else:
+            file = ""
+    return file
+
+
+def GetFolder() -> str:
+    from tkinter.filedialog import askopenfilename
+    import os
+
+    Directory = askopenfilename()
+    if os.path.isfile(Directory) is True:
+        Directory = os.path.dirname(Directory)
+
+    return Directory
