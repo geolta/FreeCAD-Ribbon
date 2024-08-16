@@ -102,32 +102,20 @@ STYLESHEET_LOCATION = os.path.dirname(__file__) + "/Resources/stylesheets/"
 UI_LOCATION = os.path.dirname(__file__) + "/Resources/ui/"
 
 # Define the icon sizes
-if (
-    Settings.GetIntSetting("IconSize_Small") is not None
-    or Settings.GetIntSetting("IconSize_Small") > 0
-):
+if Settings.GetIntSetting("IconSize_Small") is not None or Settings.GetIntSetting("IconSize_Small") > 0:
     ICON_SIZE_SMALL = Settings.GetIntSetting("IconSize_Small")
 else:
     ICON_SIZE_SMALL = int(24)
-    Settings.SetIntSetting("IconSize_Small", 24)
 
-if (
-    Settings.GetIntSetting("IconSize_Medium") is not None
-    or Settings.GetIntSetting("IconSize_Medium") > 0
-):
+if Settings.GetIntSetting("IconSize_Medium") is not None or Settings.GetIntSetting("IconSize_Medium") > 0:
     ICON_SIZE_MEDIUM = Settings.GetIntSetting("IconSize_Medium")
-    Settings.SetIntSetting("IconSize_Medium", 44)
 else:
     ICON_SIZE_MEDIUM = int(44)
 
-if (
-    Settings.GetIntSetting("IconSize_Large") is not None
-    or Settings.GetIntSetting("IconSize_Large") > 0
-):
+if Settings.GetIntSetting("IconSize_Large") is not None or Settings.GetIntSetting("IconSize_Large") > 0:
     ICON_SIZE_LARGE = Settings.GetIntSetting("IconSize_Large")
 else:
     ICON_SIZE_LARGE = int(64)
-    Settings.SetIntSetting("IconSize_Large", 64)
 
 
 # Backup parameters
@@ -135,7 +123,6 @@ if Settings.GetBoolSetting("BackupEnabled") is True:
     ENABLE_BACKUP = Settings.GetBoolSetting("BackupEnabled")
 else:
     ENABLE_BACKUP = bool(True)
-
 if Settings.GetStringSetting("BackupFolder") != "":
     BACKUP_LOCATION = Settings.GetStringSetting("BackupFolder")
 else:
@@ -143,12 +130,10 @@ else:
 
 # Additional parameter
 HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
-
 if Settings.GetBoolSetting("AutoHideRibbon") is True:
     AUTOHIDE_RIBBON = Settings.GetBoolSetting("AutoHideRibbon")
 else:
     AUTOHIDE_RIBBON = bool(False)
-
 if Settings.GetStringSetting("Stylesheet") != "":
     STYLESHEET = Settings.GetStringSetting("Stylesheet")
 else:
