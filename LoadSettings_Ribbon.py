@@ -679,8 +679,8 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_AddWorkbench_clicked(self):
         self.AddItem(
-            SourceWidget=self.form.WorkbenchsAvailable,
-            DestinationWidget=self.form.WorkbenchsSelected,
+            SourceWidget=self.form.WorkbenchesAvailable,
+            DestinationWidget=self.form.WorkbenchesSelected,
         )
 
         # Enable the apply button
@@ -690,8 +690,8 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_RemoveWorkbench_clicked(self):
         self.AddItem(
-            SourceWidget=self.form.WorkbenchsSelected,
-            DestinationWidget=self.form.WorkbenchsAvailable,
+            SourceWidget=self.form.WorkbenchesSelected,
+            DestinationWidget=self.form.WorkbenchesAvailable,
         )
 
     def on_MoveUpTableWidget_clicked(self):

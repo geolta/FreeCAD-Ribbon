@@ -421,7 +421,7 @@
                         },
                         "Sketcher_CreatePolyline": {
                             "size": "large",
-                            "text": "Polyline",
+                            "text": "Create polyline",
                             "icon": "Sketcher_CreatePolyline"
                         },
                         "Sketcher_CreateLine": {
