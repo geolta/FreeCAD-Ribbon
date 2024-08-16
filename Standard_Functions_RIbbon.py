@@ -285,18 +285,22 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="") -> str:
     Set filter like:
     "Images (*.png *.xpm .jpg);;Text files (.txt);;XML files (*.xml)"
     """
-    from PySide6.QtWidgets import QFileDialog
+    from PySide.QtWidgets import QFileDialog
 
     file = ""
-    file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
+    file = QFileDialog.getOpenFileName(
+        parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
+    )[0]
 
     return file
 
 
 def GetFolder(parent=None, DefaultPath="") -> str:
-    from PySide6.QtWidgets import QFileDialog
+    from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
+    Directory = QFileDialog.getExistingDirectory(
+        parent=parent, caption="Select Folder", dir=DefaultPath
+    )
 
     return Directory
