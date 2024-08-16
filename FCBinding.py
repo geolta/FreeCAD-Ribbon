@@ -284,7 +284,10 @@ class ModernMenu(RibbonBar):
                         position = None
                         try:
                             # position = positionsList.index(button.defaultAction().data())
-                            position = positionsList.index(button.text())
+                            # position = positionsList.index(button.text())
+                            position = positionsList.index(
+                                button.defaultAction().text()
+                            )
                         except ValueError:
                             position = 999999
 
