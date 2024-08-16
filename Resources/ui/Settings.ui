@@ -948,6 +948,9 @@
               <property name="text">
                <string>...\</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
              </widget>
             </item>
             <item>
@@ -1164,7 +1167,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="Large">
+              <widget class="QSpinBox" name="IconSize_Large">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>20</horstretch>
@@ -1238,7 +1241,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox">
+           <widget class="QGroupBox" name="groupBox_Backup">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -1287,6 +1290,9 @@
                 <property name="text">
                  <string>...\</string>
                 </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
                </widget>
               </item>
               <item>
@@ -1326,16 +1332,16 @@
   <connection>
    <sender>EnableBackup</sender>
    <signal>toggled(bool)</signal>
-   <receiver>groupBox</receiver>
+   <receiver>groupBox_Backup</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>107</x>
-     <y>70</y>
+     <x>288</x>
+     <y>68</y>
     </hint>
     <hint type="destinationlabel">
-     <x>120</x>
-     <y>92</y>
+     <x>288</x>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
