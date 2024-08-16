@@ -650,7 +650,8 @@ class Ui_Form(object):
         self.SearchBar_1.setText("")
         self.SearchBar_1.setPlaceholderText(QCoreApplication.translate("Form", "Type to search..", None))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.QAToolbars), QCoreApplication.translate("Form", "Quick access toolbar", None)
+            self.tabWidget.indexOf(self.QAToolbars),
+            QCoreApplication.translate("Form", "Quick access toolbar", None),
         )
 
         __sortingEnabled2 = self.ToolbarsToExclude.isSortingEnabled()
@@ -680,7 +681,8 @@ class Ui_Form(object):
         self.SearchBar_2.setText("")
         self.SearchBar_2.setPlaceholderText(QCoreApplication.translate("Form", "Type to search..", None))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Toolbars), QCoreApplication.translate("Form", "Toolbars", None)
+            self.tabWidget.indexOf(self.Toolbars),
+            QCoreApplication.translate("Form", "Toolbars", None),
         )
 
         __sortingEnabled4 = self.WorkbenchesAvailable.isSortingEnabled()
@@ -705,7 +707,8 @@ class Ui_Form(object):
             )
         )
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Workbenches), QCoreApplication.translate("Form", "Workbenches", None)
+            self.tabWidget.indexOf(self.Workbenches),
+            QCoreApplication.translate("Form", "Workbenches", None),
         )
         self.label_2.setText(QCoreApplication.translate("Form", "Select toolbar:", None))
         self.label.setText(QCoreApplication.translate("Form", "Select workbench:", None))
@@ -730,7 +733,8 @@ class Ui_Form(object):
         self.MoveUp_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
         self.MoveDown_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.RibbonDesign), QCoreApplication.translate("Form", "Ribbon design", None)
+            self.tabWidget.indexOf(self.RibbonDesign),
+            QCoreApplication.translate("Form", "Ribbon design", None),
         )
         self.groupBox.setTitle(QCoreApplication.translate("Form", "Ribbon settings", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Form", "Select stylesheet", None))
@@ -746,7 +750,8 @@ class Ui_Form(object):
         self.label_4.setText(QCoreApplication.translate("Form", "...\\", None))
         self.BackUpLocation.setText(QCoreApplication.translate("Form", "Browse..", None))
         self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.Settings), QCoreApplication.translate("Form", "Settings", None)
+            self.tabWidget.indexOf(self.Settings),
+            QCoreApplication.translate("Form", "Settings", None),
         )
 
     # retranslateUi
