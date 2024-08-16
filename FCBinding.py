@@ -22,7 +22,7 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction
+from PySide.QtGui import QIcon, QAction, QPixmap
 from PySide.QtWidgets import QToolButton, QToolBar, QPushButton
 from PySide.QtCore import Qt, QTimer, Signal, QObject
 
@@ -37,14 +37,15 @@ import webbrowser
 
 from pyqtribbon import RibbonBar
 import LoadSettings_Ribbon
+import Parameters_Ribbon
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
 
 # Get the resources
-pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
-pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
-pathUI = os.path.dirname(__file__) + "/Resources/ui/"
+pathIcons = Parameters_Ribbon.ICON_LOCATION
+pathStylSheets = Parameters_Ribbon.STYLESHEET_LOCATION
+pathUI = Parameters_Ribbon.UI_LOCATION
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
@@ -90,7 +91,7 @@ class ModernMenu(RibbonBar):
         self.onUserChangedWorkbench()
 
         # Set the custom stylesheet
-        self.setStyleSheet(pathStylSheets + "base.qss")
+        self.setStyleSheet(Parameters_Ribbon.STYLESHEET)
         return
 
     def connectSignals(self):
@@ -169,7 +170,11 @@ class ModernMenu(RibbonBar):
         self.rightToolBar().setMinimumWidth(self.iconSize * 2 * 1.5)
         # Define an action for the help button
         action = QAction()
-        action.setIcon(Gui.getIcon("help"))
+        # action.setIcon(Gui.getIcon("help"))
+        helpIcon = QIcon()
+        pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
+        helpIcon.addPixmap(pixmap)
+        action.setIcon(helpIcon)
         action.triggered.connect(self.onHelpClicked)
         self.helpRibbonButton().setDefaultAction(action)
 
@@ -179,6 +184,9 @@ class ModernMenu(RibbonBar):
         SettingsMenu = self.addFileMenu()
         SettingsButton = SettingsMenu.addAction("Settings")
         SettingsButton.triggered.connect(self.loadSettingsMenu)
+
+        # Set the autohide behavior
+        self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
         return
 
     def loadSettingsMenu(self):
@@ -189,7 +197,7 @@ class ModernMenu(RibbonBar):
         HelpParam = "User parameter:BaseApp/Preferences/Mod/Help"
         HelpAdress = App.ParamGet(HelpParam).GetString("Location")
         if HelpAdress == "":
-            HelpAdress = "https://wiki.freecad.org/Main_Page"
+            HelpAdress = Parameters_Ribbon.HELP_ADRESS
         webbrowser.open(HelpAdress, new=2, autoraise=True)
         return
 
@@ -335,7 +343,7 @@ class ModernMenu(RibbonBar):
                             action.icon(),
                             alignment=Qt.AlignLeft,
                             showText=showText,
-                            fixedHeight=24,
+                            fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
                     elif buttonSize == "medium":
                         btn = panel.addMediumButton(
@@ -343,7 +351,7 @@ class ModernMenu(RibbonBar):
                             action.icon(),
                             alignment=Qt.AlignLeft,
                             showText=showText,
-                            fixedHeight=32,
+                            fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )  # medium will always have text
                     elif buttonSize == "large":
                         btn = panel.addLargeButton(
@@ -351,7 +359,7 @@ class ModernMenu(RibbonBar):
                             action.icon(),
                             alignment=Qt.AlignLeft,
                             showText=showText,
-                            fixedHeight=64,
+                            fixedHeight=Parameters_Ribbon.ICON_SIZE_LARGE,
                         )  # large will always have text and are aligned in center
                     else:
                         raise NotImplementedError(

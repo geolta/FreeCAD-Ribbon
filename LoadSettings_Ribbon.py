@@ -35,19 +35,23 @@ from PySide.QtWidgets import (
     QLayout,
     QStyle,
     QComboBox,
+    QSpinBox,
+    QLabel,
+    QPushButton,
 )
-from PySide.QtCore import Qt, SIGNAL
+from PySide.QtCore import Qt, SIGNAL, QTimer
 import sys
 import json
 from datetime import datetime
 import shutil
 import Standard_Functions_RIbbon as StandardFunctions
+import Parameters_Ribbon
 
 # Get the resources
-pathIcons = os.path.dirname(__file__) + "/Resources/icons/"
-pathStylSheets = os.path.dirname(__file__) + "/Resources/stylesheets/"
-pathUI = os.path.dirname(__file__) + "/Resources/ui/"
-pathBackup = os.path.dirname(__file__) + "/Backups"
+pathIcons = Parameters_Ribbon.ICON_LOCATION
+pathStylSheets = Parameters_Ribbon.STYLESHEET_LOCATION
+pathUI = Parameters_Ribbon.UI_LOCATION
+pathBackup = Parameters_Ribbon.BACKUP_LOCATION
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
@@ -86,9 +90,6 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
-
-        # Set the settingstab hidden for now:
-        self.form.Settings.setHidden(True)
 
         # Get the style from the main window and use it for this form
         mw = Gui.getMainWindow()
@@ -178,6 +179,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Read the jason file and fill the lists
         self.ReadJson()
 
+        # Clear all listWidgets
         self.form.WorkbenchList.clear()
         self.form.WorkbenchesAvailable.clear()
         self.form.WorkbenchesSelected.clear()
@@ -185,6 +187,15 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.ToolbarsExcluded.clear()
         self.form.CommandsAvailable.clear()
         self.form.CommandsSelected.clear()
+
+        # load all settings
+        self.form.EnableBackup.setChecked(Parameters_Ribbon.ENABLE_BACKUP)
+        self.form.label_4.setText(Parameters_Ribbon.BACKUP_LOCATION)
+        self.form.AutoHide.setChecked(Parameters_Ribbon.AUTOHIDE_RIBBON)
+        self.form.IconSize_Small.setValue(Parameters_Ribbon.ICON_SIZE_SMALL)
+        self.form.IconSize_Medium.setValue(Parameters_Ribbon.ICON_SIZE_MEDIUM)
+        self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
+        self.form.label_7.setText(Parameters_Ribbon.STYLESHEET)
 
         # region - Load all controls------------------------------------------------------------------
         #
@@ -242,6 +253,14 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         self.form.GenerateJson.connect(
             self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
+        )
+
+        # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
+        def GenerateJsonExit():
+            self.on_GenerateJsonExit_clicked(self)
+
+        self.form.GenerateJsonExit.connect(
+            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
         )
 
         # Connect a click event on the tablewidgit on the Ribbon design tab
@@ -302,10 +321,19 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.RestoreJson.connect(
             self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
         )
-
         self.form.ResetJson.connect(
             self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
         )
+        self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
+        self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
+        self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
+        self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
+        self.form.IconSize_Medium.textChanged.connect(
+            self.on_IconSize_Medium_TextChanged
+        )
+        self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
+        self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
+
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -558,6 +586,11 @@ class LoadDialog(Settings_ui.Ui_Form):
             if isInList is True:
                 self.List_IconOnlyToolbars.remove(toolbar)
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
         row = Item.row()
@@ -579,6 +612,9 @@ class LoadDialog(Settings_ui.Ui_Form):
                         Qt.CheckState.Unchecked
                     )
         self.UpdateData()
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
         return
 
     def on_AddCommand_clicked(self):
@@ -587,17 +623,37 @@ class LoadDialog(Settings_ui.Ui_Form):
             DestinationWidget=self.form.CommandsSelected,
         )
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_RemoveCommand_clicked(self):
         self.AddItem(
             SourceWidget=self.form.CommandsSelected,
             DestinationWidget=self.form.CommandsAvailable,
         )
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_MoveUpCommand_clicked(self):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=True)
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_MoveDownCommand_clicked(self):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=False)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
 
     def on_AddToolbar_clicked(self):
         self.AddItem(
@@ -605,17 +661,32 @@ class LoadDialog(Settings_ui.Ui_Form):
             DestinationWidget=self.form.ToolbarsSelected,
         )
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_RemoveToolbar_clicked(self):
         self.AddItem(
             SourceWidget=self.form.ToolbarsSelected,
             DestinationWidget=self.form.ToolbarsAvailable,
         )
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_AddWorkbench_clicked(self):
         self.AddItem(
             SourceWidget=self.form.WorkbenchsAvailable,
             DestinationWidget=self.form.WorkbenchsSelected,
         )
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
 
     def on_RemoveWorkbench_clicked(self):
         self.AddItem(
@@ -626,8 +697,18 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_MoveUpTableWidget_clicked(self):
         self.MoveItem_TableWidget(self.form.tableWidget, True)
 
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     def on_MoveDownTableWidget_clicked(self):
         self.MoveItem_TableWidget(self.form.tableWidget, False)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
 
     def on_RestoreJson_clicked(self):
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnBottomHint)
@@ -675,6 +756,15 @@ class LoadDialog(Settings_ui.Ui_Form):
     @staticmethod
     def on_GenerateJson_clicked(self):
         self.WriteJson()
+        # Set the button disabled
+        self.form.GenerateJson.setDisabled(True)
+        return
+
+    @staticmethod
+    def on_GenerateJsonExit_clicked(self):
+        self.WriteJson()
+        # Close the form
+        self.form.close()
         return
 
     def on_ListCategory_1_TextChanged(self):
@@ -684,7 +774,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             WorkbenchTitle = Gui.getWorkbench(ToolbarCommand[3]).MenuText
             if (
                 WorkbenchTitle == self.form.ListCategory_1.currentText()
-                or self.form.ListCategory_1.currentText() == "Any"
+                or self.form.ListCategory_1.currentText() == "All"
             ):
                 Command = Gui.Command.get(ToolbarCommand[0])
 
@@ -717,7 +807,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             WorkbenchTitle = Toolbar[1]
             if (
                 WorkbenchTitle == self.form.ListCategory_2.currentText()
-                or self.form.ListCategory_2.currentText() == "Any"
+                or self.form.ListCategory_2.currentText() == "All"
             ):
 
                 ListWidgetItem = QListWidgetItem()
@@ -769,6 +859,98 @@ class LoadDialog(Settings_ui.Ui_Form):
                 # Add the ListWidgetItem to the correct ListWidget
                 self.form.ToolbarsToExclude.addItem(ListWidgetItem)
 
+    def on_EnableBackup_clicked(self):
+        if self.form.EnableBackup.isChecked() is True:
+            Parameters_Ribbon.ENABLE_BACKUP = True
+            Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", True)
+        if self.form.EnableBackup.isChecked() is False:
+            Parameters_Ribbon.ENABLE_BACKUP = False
+            Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", False)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_BackUpLocation_clicked(self):
+        BackupFolder = ""
+        BackupFolder = StandardFunctions.GetFolder(
+            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
+        )
+        if BackupFolder != "":
+            self.pathBackup = BackupFolder
+            self.form.label_4.setText(BackupFolder)
+            Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
+            Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_AutoHide_clicked(self):
+        if self.form.AutoHide.isChecked() is True:
+            Parameters_Ribbon.AUTOHIDE_RIBBON = True
+            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", True)
+        if self.form.AutoHide.isChecked() is False:
+            Parameters_Ribbon.AUTOHIDE_RIBBON = False
+            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", False)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_IconSize_Small_TextChanged(self):
+        Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Small", int(self.form.IconSize_Small.text())
+        )
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_IconSize_Medium_TextChanged(self):
+        Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Medium", int(self.form.IconSize_Medium.text())
+        )
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_IconSize_Large_TextChanged(self):
+        Parameters_Ribbon.ICON_SIZE_LARGE = int(self.form.IconSize_Large.text())
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Large", int(self.form.IconSize_Large.text())
+        )
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_StyleSheetLocation_clicked(self):
+        StyleSheet = ""
+        StyleSheet = StandardFunctions.GetFileDialog(
+            Filter="Stylesheet (*.qss)",
+            parent=None,
+            DefaultPath=os.path.dirname(Parameters_Ribbon.STYLESHEET),
+        )
+        if StyleSheet != "":
+            self.form.label_7.setText(StyleSheet)
+            Parameters_Ribbon.STYLESHEET = StyleSheet
+            Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
     # endregion---------------------------------------------------------------------------------------
 
     # region - Functions------------------------------------------------------------------------------
@@ -778,8 +960,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.WorkbenchesAvailable.clear()
         self.form.WorkbenchesSelected.clear()
 
-        self.form.ListCategory_1.addItem("Any")
-        self.form.ListCategory_2.addItem("Any")
+        self.form.ListCategory_1.addItem("All")
+        self.form.ListCategory_2.addItem("All")
 
         for workbench in self.List_Workbenches:
             # Default a workbench is selected
@@ -806,8 +988,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.ListCategory_1.addItem(icon, workbench[2])
             self.form.ListCategory_2.addItem(icon, workbench[2])
 
-        self.form.ListCategory_1.setCurrentText("Any")
-        self.form.ListCategory_2.setCurrentText("Any")
+        self.form.ListCategory_1.setCurrentText("All")
+        self.form.ListCategory_2.setCurrentText("All")
 
         # Set the text in the combobox to the name of the active workbench
         self.form.WorkbenchList.setCurrentText(Gui.activeWorkbench().name())
@@ -1052,10 +1234,11 @@ class LoadDialog(Settings_ui.Ui_Form):
         JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
 
         # create a copy and rename it as a backup if enabled
-        Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
-        BackupName = f"RibbonStructure_{Suffix}.json"
-        BackupFile = os.path.join(pathBackup, BackupName)
-        shutil.copy(JsonFile, BackupFile)
+        if Parameters_Ribbon.ENABLE_BACKUP is True:
+            Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
+            BackupName = f"RibbonStructure_{Suffix}.json"
+            BackupFile = os.path.join(pathBackup, BackupName)
+            shutil.copy(JsonFile, BackupFile)
 
         # Writing to sample.json
         with open(JsonFile, "w") as outfile:
@@ -1150,21 +1333,6 @@ class LoadDialog(Settings_ui.Ui_Form):
                 TableWidget.removeRow(row + 1)
 
         self.UpdateData()
-        return
-
-    def Sort_List(self, TableWidget: QTableWidget, Order: list):
-        row = TableWidget.currentRow()
-        column = TableWidget.currentColumn()
-
-        for i in range(1, len(Order)):
-            for j in range(1, TableWidget.rowCount()):
-                if TableWidget.item(j, 0).text().replace("...", "") == Order[i]:
-                    if row < TableWidget.rowCount() - 1:
-                        TableWidget.insertRow(i)
-                        for k in range(TableWidget.columnCount()):
-                            TableWidget.setItem(i, k, TableWidget.takeItem(row, k))
-                            TableWidget.setCurrentCell(i, column)
-                        TableWidget.removeRow(row)
         return
 
     # endregion

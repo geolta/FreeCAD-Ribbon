@@ -176,30 +176,6 @@
                         }
                     }
                 },
-                "Sketcher geometries": {
-                    "order": [
-                        "Sketcher_CreatePolyline"
-                    ],
-                    "commands": {
-                        "Sketcher_CreatePolyline": {
-                            "size": "large",
-                            "text": "Polyline",
-                            "icon": "Sketcher_CreatePolyline.svg"
-                        }
-                    }
-                },
-                "Sketcher constraints": {
-                    "order": [
-                        "Sketcher_CompDimensionTools"
-                    ],
-                    "commands": {
-                        "Sketcher_CompDimensionTools": {
-                            "size": "large",
-                            "text": "Dimension",
-                            "icon": "Constraint_Dimension.svg"
-                        }
-                    }
-                },
                 "Individual views": {
                     "order": [
                         "Isometric",

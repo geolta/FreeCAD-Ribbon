@@ -22,12 +22,13 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 from PySide.QtGui import QColor
+import os
+import sys
 
 # Define the translation
 translate = App.Qt.translate
 
 preferences = App.ParamGet("User parameter:BaseApp/Preferences/Mod/FreeCAD-Ribbon")
-# endregion
 
 
 class Settings:
@@ -80,11 +81,69 @@ class Settings:
         return
 
     def SetBoolSetting(settingName: str, value):
-        if value.lower() == "true":
+        if str(value).lower() == "true":
             Bool = True
-        if str(value).lower() == "none" or value.lower() != "true":
+        if str(value).lower() == "none" or str(value).lower() != "true":
             Bool = False
         preferences.SetBool(settingName, Bool)
         return
 
+    def SetIntSetting(settingName: str, value: int):
+        if str(value).lower() != "":
+            preferences.SetInt(settingName, value)
+        return
+
     # endregion
+
+
+# Define the resources
+ICON_LOCATION = os.path.dirname(__file__) + "/Resources/icons/"
+STYLESHEET_LOCATION = os.path.dirname(__file__) + "/Resources/stylesheets/"
+UI_LOCATION = os.path.dirname(__file__) + "/Resources/ui/"
+
+# Define the icon sizes
+if (
+    Settings.GetIntSetting("IconSize_Small") is not None
+    or Settings.GetIntSetting("IconSize_Small") > 0
+):
+    ICON_SIZE_SMALL = Settings.GetIntSetting("IconSize_Small")
+else:
+    ICON_SIZE_SMALL = int(24)
+
+if (
+    Settings.GetIntSetting("IconSize_Medium") is not None
+    or Settings.GetIntSetting("IconSize_Medium") > 0
+):
+    ICON_SIZE_MEDIUM = Settings.GetIntSetting("IconSize_Medium")
+else:
+    ICON_SIZE_MEDIUM = int(44)
+
+if (
+    Settings.GetIntSetting("IconSize_Large") is not None
+    or Settings.GetIntSetting("IconSize_Large") > 0
+):
+    ICON_SIZE_LARGE = Settings.GetIntSetting("IconSize_Large")
+else:
+    ICON_SIZE_LARGE = int(64)
+
+
+# Backup parameters
+if Settings.GetBoolSetting("BackupEnabled") is True:
+    ENABLE_BACKUP = Settings.GetBoolSetting("BackupEnabled")
+else:
+    ENABLE_BACKUP = bool(True)
+if Settings.GetStringSetting("BackupFolder") != "":
+    BACKUP_LOCATION = Settings.GetStringSetting("BackupFolder")
+else:
+    BACKUP_LOCATION = os.path.dirname(__file__) + "/Backups"
+
+# Additional parameter
+HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
+if Settings.GetBoolSetting("AutoHideRibbon") is True:
+    AUTOHIDE_RIBBON = Settings.GetBoolSetting("AutoHideRibbon")
+else:
+    AUTOHIDE_RIBBON = bool(False)
+if Settings.GetStringSetting("Stylesheet") != "":
+    STYLESHEET = Settings.GetStringSetting("Stylesheet")
+else:
+    STYLESHEET = os.path.join(STYLESHEET_LOCATION, "base.qss")
