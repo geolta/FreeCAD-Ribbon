@@ -1141,7 +1141,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         resultingDict["quickAccessCommands"] = List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
         # Add the show text property to the dict
-        resultingDict["showText"] = False
+        resultingDict["showText"] = self.ShowText
 
         # RibbonTabs
         # Get the Ribbon dictionary
