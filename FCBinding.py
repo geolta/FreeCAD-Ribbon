@@ -19,6 +19,7 @@
 # * USA                                                                 *
 # *                                                                     *
 # ***********************************************************************
+import pyqtribbon.toolbutton
 import FreeCAD as App
 import FreeCADGui as Gui
 
@@ -172,6 +173,7 @@ class ModernMenu(RibbonBar):
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
+
         return
 
     def loadSettingsMenu(self):
@@ -272,6 +274,7 @@ class ModernMenu(RibbonBar):
 
             # add buttons to panel
             for button in allButtons:
+                QToolButton(button)
                 if button.text() == "":
                     continue
                 try:
@@ -346,7 +349,6 @@ class ModernMenu(RibbonBar):
                     # add dropdown menu if necessary
                     if button.menu() is not None:
                         menu = button.menu()
-                        btn.setIconSize(menu.height * 0.9)
                         btn.setMenu(menu)
                         btn.setPopupMode(QToolButton.InstantPopup)
                 except Exception:
