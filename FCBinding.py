@@ -23,8 +23,15 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide.QtGui import QIcon, QAction, QPixmap
-from PySide.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy
-from PySide.QtCore import Qt, QTimer, Signal, QObject
+from PySide.QtWidgets import (
+    QToolButton,
+    QToolBar,
+    QPushButton,
+    QLayout,
+    QSizePolicy,
+    QMenu,
+)
+from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
@@ -354,22 +361,13 @@ class ModernMenu(RibbonBar):
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                     elif buttonSize == "large":
-                        if showText is False:
-                            btn = panel.addLargeButton(
-                                action.text(),
-                                action.icon(),
-                                alignment=Qt.AlignmentFlag.AlignLeft,
-                                showText=showText,
-                                fixedHeight=Parameters_Ribbon.ICON_SIZE_LARGE,
-                            )
-                        if showText is True:
-                            btn = panel.addMediumButton(
-                                action.text(),
-                                action.icon(),
-                                alignment=Qt.AlignmentFlag.AlignLeft,
-                                showText=showText,
-                                fixedHeight=True | Parameters_Ribbon.ICON_SIZE_LARGE,
-                            )
+                        btn = panel.addLargeButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignmentFlag.AlignLeft,
+                            showText=showText,
+                            fixedHeight=False,
+                        )
                     else:
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."

@@ -1,73 +1,16 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Settings.ui'
+## Form generated from reading UI file 'SettingsZjmMdr.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide.QtCore import (
-    QCoreApplication,
-    QDate,
-    QDateTime,
-    QLocale,
-    QMetaObject,
-    QObject,
-    QPoint,
-    QRect,
-    QSize,
-    QTime,
-    QUrl,
-    Qt,
-)
-from PySide.QtGui import (
-    QBrush,
-    QColor,
-    QConicalGradient,
-    QCursor,
-    QFont,
-    QFontDatabase,
-    QGradient,
-    QIcon,
-    QImage,
-    QKeySequence,
-    QLinearGradient,
-    QPainter,
-    QPalette,
-    QPixmap,
-    QRadialGradient,
-    QTransform,
-)
-from PySide.QtWidgets import (
-    QAbstractItemView,
-    QAbstractScrollArea,
-    QAbstractSpinBox,
-    QApplication,
-    QCheckBox,
-    QComboBox,
-    QFrame,
-    QGridLayout,
-    QGroupBox,
-    QHBoxLayout,
-    QHeaderView,
-    QLabel,
-    QLineEdit,
-    QListView,
-    QListWidget,
-    QListWidgetItem,
-    QPushButton,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QTabWidget,
-    QTableWidget,
-    QTableWidgetItem,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide.QtCore import *
+from PySide.QtGui import *
+from PySide.QtWidgets import *
 
 
 class Ui_Form(object):
@@ -518,6 +461,7 @@ class Ui_Form(object):
         self.groupBox.setMinimumSize(QSize(0, 120))
         font = QFont()
         font.setBold(True)
+        font.setWeight(75)
         self.groupBox.setFont(font)
         self.gridLayout_8 = QGridLayout(self.groupBox)
         self.gridLayout_8.setObjectName("gridLayout_8")
@@ -526,6 +470,7 @@ class Ui_Form(object):
         self.EnableBackup.setObjectName("EnableBackup")
         font1 = QFont()
         font1.setBold(False)
+        font1.setWeight(50)
         self.EnableBackup.setFont(font1)
 
         self.gridLayout_8.addWidget(self.EnableBackup, 0, 0, 1, 1)
@@ -577,16 +522,18 @@ class Ui_Form(object):
 
         self.groupBox1 = QGroupBox(self.Settings)
         self.groupBox1.setObjectName("groupBox1")
-        self.groupBox1.setMinimumSize(QSize(0, 230))
+        self.groupBox1.setMinimumSize(QSize(0, 200))
         self.groupBox1.setFont(font)
         self.groupBox_2 = QGroupBox(self.groupBox1)
         self.groupBox_2.setObjectName("groupBox_2")
-        self.groupBox_2.setGeometry(QRect(10, 160, 521, 60))
+        self.groupBox_2.setGeometry(QRect(7, 130, 521, 60))
+        sizePolicy1.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
+        self.groupBox_2.setSizePolicy(sizePolicy1)
         self.groupBox_2.setMinimumSize(QSize(0, 60))
         self.groupBox_2.setFont(font1)
         self.gridLayout_12 = QGridLayout(self.groupBox_2)
         self.gridLayout_12.setObjectName("gridLayout_12")
-        self.gridLayout_12.setContentsMargins(-1, 6, -1, -1)
+        self.gridLayout_12.setContentsMargins(-1, 9, -1, -1)
         self.label_7 = QLabel(self.groupBox_2)
         self.label_7.setObjectName("label_7")
         self.label_7.setFrameShape(QFrame.Box)
@@ -607,7 +554,7 @@ class Ui_Form(object):
 
         self.layoutWidget4 = QWidget(self.groupBox1)
         self.layoutWidget4.setObjectName("layoutWidget4")
-        self.layoutWidget4.setGeometry(QRect(10, 20, 181, 126))
+        self.layoutWidget4.setGeometry(QRect(10, 20, 181, 101))
         self.verticalLayout_2 = QVBoxLayout(self.layoutWidget4)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -681,33 +628,6 @@ class Ui_Form(object):
         self.horizontalLayout_6.addWidget(self.IconSize_Medium)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_6)
-
-        self.horizontalLayout_7 = QHBoxLayout()
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.label_12 = QLabel(self.layoutWidget4)
-        self.label_12.setObjectName("label_12")
-        sizePolicy.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy)
-        self.label_12.setMinimumSize(QSize(120, 0))
-        self.label_12.setFont(font1)
-
-        self.horizontalLayout_7.addWidget(self.label_12)
-
-        self.IconSize_Large = QSpinBox(self.layoutWidget4)
-        self.IconSize_Large.setObjectName("IconSize_Large")
-        sizePolicy5.setHeightForWidth(
-            self.IconSize_Large.sizePolicy().hasHeightForWidth()
-        )
-        self.IconSize_Large.setSizePolicy(sizePolicy5)
-        self.IconSize_Large.setMinimumSize(QSize(20, 0))
-        self.IconSize_Large.setFont(font1)
-        self.IconSize_Large.setAlignment(Qt.AlignCenter)
-        self.IconSize_Large.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
-        self.IconSize_Large.setValue(64)
-
-        self.horizontalLayout_7.addWidget(self.IconSize_Large)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_7)
 
         self.ShowText = QCheckBox(self.layoutWidget4)
         self.ShowText.setObjectName("ShowText")
@@ -909,9 +829,6 @@ class Ui_Form(object):
         )
         self.label_11.setText(
             QCoreApplication.translate("Form", "Size of medium icons:", None)
-        )
-        self.label_12.setText(
-            QCoreApplication.translate("Form", "Size of large icons:", None)
         )
         self.ShowText.setText(
             QCoreApplication.translate("Form", "Show icon text", None)
