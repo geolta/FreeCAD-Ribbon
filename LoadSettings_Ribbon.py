@@ -22,14 +22,15 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide6.QtGui import QIcon, QAction, QPalette, QColor
+from PySide.QtGui import QIcon, QAction, QPalette, QColor
 from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
     QTableWidget,
+    QSpinBox,
 )
-from PySide6.QtCore import Qt, SIGNAL, QTimer
+from PySide.QtCore import Qt, SIGNAL, QTimer
 import sys
 import json
 from datetime import datetime
@@ -183,7 +184,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.AutoHide.setChecked(False)
         self.form.IconSize_Small.setValue(Parameters_Ribbon.ICON_SIZE_SMALL)
         self.form.IconSize_Medium.setValue(Parameters_Ribbon.ICON_SIZE_MEDIUM)
-        self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
+        # self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
         self.form.label_7.setText(Parameters_Ribbon.STYLESHEET)
         if Parameters_Ribbon.SHOW_ICON_TEXT is True:
             self.form.ShowText.setChecked(True)
@@ -302,7 +303,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
         self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
-        self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
+        # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
         self.form.ShowText.clicked.connect(self.on_ShowText_clicked)
 
@@ -857,14 +858,14 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         return
 
-    def on_IconSize_Large_TextChanged(self):
-        Parameters_Ribbon.ICON_SIZE_LARGE = int(self.form.IconSize_Large.text())
-        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Large", int(self.form.IconSize_Large.text()))
+    # def on_IconSize_Large_TextChanged(self):
+    #     Parameters_Ribbon.ICON_SIZE_LARGE = int(self.form.IconSize_Large.text())
+    #     Parameters_Ribbon.Settings.SetIntSetting("IconSize_Large", int(self.form.IconSize_Large.text()))
 
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+    #     # Enable the apply button
+    #     self.form.GenerateJson.setEnabled(True)
 
-        return
+    #     return
 
     def on_StyleSheetLocation_clicked(self):
         StyleSheet = ""

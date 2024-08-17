@@ -23,8 +23,8 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide6.QtGui import QIcon, QAction, QPixmap
-from PySide6.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy
-from PySide6.QtCore import Qt, QTimer, Signal, QObject
+from PySide6.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy, QMenu
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
@@ -331,22 +331,13 @@ class ModernMenu(RibbonBar):
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                     elif buttonSize == "large":
-                        if showText is False:
-                            btn = panel.addLargeButton(
-                                action.text(),
-                                action.icon(),
-                                alignment=Qt.AlignmentFlag.AlignLeft,
-                                showText=showText,
-                                fixedHeight=Parameters_Ribbon.ICON_SIZE_LARGE,
-                            )
-                        if showText is True:
-                            btn = panel.addMediumButton(
-                                action.text(),
-                                action.icon(),
-                                alignment=Qt.AlignmentFlag.AlignLeft,
-                                showText=showText,
-                                fixedHeight=True | Parameters_Ribbon.ICON_SIZE_LARGE,
-                            )
+                        btn = panel.addLargeButton(
+                            action.text(),
+                            action.icon(),
+                            alignment=Qt.AlignmentFlag.AlignLeft,
+                            showText=showText,
+                            fixedHeight=False,
+                        )
                     else:
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."
@@ -354,7 +345,9 @@ class ModernMenu(RibbonBar):
                     btn.setDefaultAction(action)
                     # add dropdown menu if necessary
                     if button.menu() is not None:
-                        btn.setMenu(button.menu())
+                        menu = button.menu()
+                        btn.setIconSize(menu.height * 0.9)
+                        btn.setMenu(menu)
                         btn.setPopupMode(QToolButton.InstantPopup)
                 except Exception:
                     continue
