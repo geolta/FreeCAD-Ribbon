@@ -139,6 +139,7 @@ else:
 
 # Additional parameter
 HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
+
 if Settings.GetBoolSetting("AutoHideRibbon") is True:
     AUTOHIDE_RIBBON = Settings.GetBoolSetting("AutoHideRibbon")
 else:
@@ -147,3 +148,8 @@ if Settings.GetStringSetting("Stylesheet") != "":
     STYLESHEET = Settings.GetStringSetting("Stylesheet")
 else:
     STYLESHEET = os.path.join(STYLESHEET_LOCATION, "base.qss")
+
+if Settings.GetBoolSetting("ShowIconText") is True:
+    SHOW_ICON_TEXT = Settings.GetBoolSetting("ShowIconText")
+else:
+    SHOW_ICON_TEXT = bool(False)

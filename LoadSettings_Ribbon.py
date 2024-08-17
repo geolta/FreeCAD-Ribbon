@@ -27,17 +27,7 @@ from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
-    QWidget,
-    QCheckBox,
-    QHBoxLayout,
     QTableWidget,
-    QToolButton,
-    QLayout,
-    QStyle,
-    QComboBox,
-    QSpinBox,
-    QLabel,
-    QPushButton,
 )
 from PySide.QtCore import Qt, SIGNAL, QTimer
 import sys
@@ -191,11 +181,18 @@ class LoadDialog(Settings_ui.Ui_Form):
         # load all settings
         self.form.EnableBackup.setChecked(Parameters_Ribbon.ENABLE_BACKUP)
         self.form.label_4.setText(Parameters_Ribbon.BACKUP_LOCATION)
-        self.form.AutoHide.setChecked(Parameters_Ribbon.AUTOHIDE_RIBBON)
+        if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
+            self.form.AutoHide.setChecked(True)
+        else:
+            self.form.AutoHide.setChecked(False)
         self.form.IconSize_Small.setValue(Parameters_Ribbon.ICON_SIZE_SMALL)
         self.form.IconSize_Medium.setValue(Parameters_Ribbon.ICON_SIZE_MEDIUM)
         self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
         self.form.label_7.setText(Parameters_Ribbon.STYLESHEET)
+        if Parameters_Ribbon.SHOW_ICON_TEXT is True:
+            self.form.ShowText.setChecked(True)
+        else:
+            self.form.ShowText.setChecked(False)
 
         # region - Load all controls------------------------------------------------------------------
         #
@@ -333,6 +330,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         )
         self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
+        self.form.ShowText.clicked.connect(self.on_ShowText_clicked)
 
         # endregion
 
@@ -940,11 +938,27 @@ class LoadDialog(Settings_ui.Ui_Form):
             Filter="Stylesheet (*.qss)",
             parent=None,
             DefaultPath=os.path.dirname(Parameters_Ribbon.STYLESHEET),
+            SaveAs=False,
         )
         if StyleSheet != "":
             self.form.label_7.setText(StyleSheet)
             Parameters_Ribbon.STYLESHEET = StyleSheet
             Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
+
+        # Enable the apply button
+        self.form.GenerateJson.setEnabled(True)
+
+        return
+
+    def on_ShowText_clicked(self):
+        if self.form.ShowText.isChecked() is True:
+            Parameters_Ribbon.SHOW_ICON_TEXT = True
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", True)
+            self.ShowText = True
+        if self.form.ShowText.isChecked() is False:
+            Parameters_Ribbon.SHOW_ICON_TEXT = False
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", False)
+            self.ShowText = False
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -1223,7 +1237,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         resultingDict["quickAccessCommands"] = List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
         # Add the show text property to the dict
-        resultingDict["showText"] = False
+        resultingDict["showText"] = self.ShowText
 
         # RibbonTabs
         # Get the Ribbon dictionary

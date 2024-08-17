@@ -23,10 +23,8 @@ import FreeCAD as App
 import FreeCADGui as Gui
 
 from PySide.QtGui import QIcon, QAction, QPixmap
-from PySide.QtWidgets import QToolButton, QToolBar, QPushButton
+from PySide.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy
 from PySide.QtCore import Qt, QTimer, Signal, QObject
-
-from pyqtribbon import RibbonBar
 
 import json
 import os
@@ -35,6 +33,7 @@ import traceback
 import logging
 import webbrowser
 
+import pyqtribbon
 from pyqtribbon import RibbonBar
 import LoadSettings_Ribbon
 import Parameters_Ribbon
@@ -283,8 +282,6 @@ class ModernMenu(RibbonBar):
 
                         position = None
                         try:
-                            # position = positionsList.index(button.defaultAction().data())
-                            # position = positionsList.index(button.text())
                             position = positionsList.index(
                                 button.defaultAction().text()
                             )
@@ -344,7 +341,7 @@ class ModernMenu(RibbonBar):
                         btn = panel.addSmallButton(
                             action.text(),
                             action.icon(),
-                            alignment=Qt.AlignLeft,
+                            alignment=Qt.AlignmentFlag.AlignLeft,
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
@@ -352,23 +349,31 @@ class ModernMenu(RibbonBar):
                         btn = panel.addMediumButton(
                             action.text(),
                             action.icon(),
-                            alignment=Qt.AlignLeft,
+                            alignment=Qt.AlignmentFlag.AlignLeft,
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
-                        )  # medium will always have text
+                        )
                     elif buttonSize == "large":
-                        btn = panel.addLargeButton(
-                            action.text(),
-                            action.icon(),
-                            alignment=Qt.AlignLeft,
-                            showText=showText,
-                            fixedHeight=Parameters_Ribbon.ICON_SIZE_LARGE,
-                        )  # large will always have text and are aligned in center
+                        if showText is False:
+                            btn = panel.addLargeButton(
+                                action.text(),
+                                action.icon(),
+                                alignment=Qt.AlignmentFlag.AlignLeft,
+                                showText=showText,
+                                fixedHeight=Parameters_Ribbon.ICON_SIZE_LARGE,
+                            )
+                        if showText is True:
+                            btn = panel.addMediumButton(
+                                action.text(),
+                                action.icon(),
+                                alignment=Qt.AlignmentFlag.AlignLeft,
+                                showText=showText,
+                                fixedHeight=True | Parameters_Ribbon.ICON_SIZE_LARGE,
+                            )
                     else:
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."
                         )
-
                     btn.setDefaultAction(action)
                     # add dropdown menu if necessary
                     if button.menu() is not None:
