@@ -307,6 +307,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
         self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
+        self.form.ShowText.clicked.connect(self.on_ShowText_clicked)
 
         # endregion
 
@@ -506,7 +507,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                     CommandName,
                 ],
             )
-            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = OrdeCr
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
                 "size": Size,
                 "text": MenuName,
@@ -874,6 +875,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             Filter="Stylesheet (*.qss)",
             parent=None,
             DefaultPath=os.path.dirname(Parameters_Ribbon.STYLESHEET),
+            SaveAs=False,
         )
         if StyleSheet != "":
             self.form.label_7.setText(StyleSheet)
@@ -884,6 +886,14 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.GenerateJson.setEnabled(True)
 
         return
+
+    def on_ShowText_clicked(self):
+        if self.form.ShowText.isChecked() is True:
+            Parameters_Ribbon.SHOW_ICON_TEXT = True
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", True)
+        if self.form.ShowText.isChecked() is False:
+            Parameters_Ribbon.SHOW_ICON_TEXT = False
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", False)
 
     # endregion---------------------------------------------------------------------------------------
 
