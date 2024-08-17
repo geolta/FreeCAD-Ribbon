@@ -69,7 +69,7 @@ class LoadDialog(Settings_ui.Ui_Form):
     Dict_RibbonCommandPanel = {}
     List_SortedCommands = []
 
-    ShowText = False
+    ShowText = Parameters_Ribbon.SHOW_ICON_TEXT
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
