@@ -144,10 +144,12 @@ def main():
                                 ],
                             )
 
-                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
-                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                CommandName
-                            ] = {
+                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                "toolbars"
+                            ][Toolbar]["order"] = Order
+                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                "toolbars"
+                            ][Toolbar]["commands"][CommandName] = {
                                 "size": Size,
                                 "text": MenuName,
                                 "icon": IconName,
