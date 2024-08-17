@@ -22,9 +22,9 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide6.QtGui import QIcon, QAction, QPixmap
-from PySide6.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy, QMenu
-from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide.QtGui import QIcon, QAction, QPixmap
+from PySide.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy
+from PySide.QtCore import Qt, QTimer, Signal, QObject
 
 import json
 import os

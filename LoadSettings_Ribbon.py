@@ -23,7 +23,7 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 from PySide.QtGui import QIcon, QAction, QPalette, QColor
-from PySide6.QtWidgets import (
+from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
