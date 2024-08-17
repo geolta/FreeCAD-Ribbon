@@ -497,7 +497,7 @@ class LoadDialog(Settings_ui.Ui_Form):
                     CommandName,
                 ],
             )
-            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = OrdeCr
+            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
             self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][CommandName] = {
                 "size": Size,
                 "text": MenuName,
