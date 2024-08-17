@@ -27,17 +27,7 @@ from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
-    QWidget,
-    QCheckBox,
-    QHBoxLayout,
     QTableWidget,
-    QToolButton,
-    QLayout,
-    QStyle,
-    QComboBox,
-    QSpinBox,
-    QLabel,
-    QPushButton,
 )
 from PySide.QtCore import Qt, SIGNAL, QTimer
 import sys
