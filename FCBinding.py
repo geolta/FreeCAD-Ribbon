@@ -44,6 +44,7 @@ import pyqtribbon
 from pyqtribbon import RibbonBar
 import LoadDesign_Ribbon
 import Parameters_Ribbon
+import LoadSettings_Ribbon
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -178,7 +179,7 @@ class ModernMenu(RibbonBar):
         DesignButton.triggered.connect(self.loadDesignMenu)
         SettingsMenu = self.addFileMenu()
         SettingsButton = SettingsMenu.addAction("Settings")
-        SettingsButton.triggered.connect(self.loadDesignMenu)
+        SettingsButton.triggered.connect(self.loadSettingsMenu)
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
