@@ -337,7 +337,9 @@ def CreateJson():
                             for i3 in range(len(value)):
                                 CommandOrder = Gui.Command.get(value[i3])
                                 if CommandOrder is not None:
-                                    MenuNameOrder = CommandOrder.getInfo()["menuText"].replace("&", "")
+                                    MenuNameOrder = CommandOrder.getInfo()[
+                                        "menuText"
+                                    ].replace("&", "")
                                     Order.append(MenuNameOrder)
 
                             # Set the first command to large
@@ -366,12 +368,12 @@ def CreateJson():
                                     ],
                                 )
 
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                                    "order"
-                                ] = Order
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                    CommandName
-                                ] = {
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["order"] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["commands"][CommandName] = {
                                     "size": Size,
                                     "text": MenuName,
                                     "icon": IconName,
