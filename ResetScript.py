@@ -91,21 +91,41 @@ CustomJson = {
                         "Create datum",
                     ],
                     "commands": {
-                        "PartDesign_CompSketches": {"size": "large", "text": "Create datum", "icon": ""},
-                        "PartDesign_Body": {"size": "small", "text": "Create body", "icon": "PartDesign_Body"},
+                        "PartDesign_CompSketches": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": "",
+                        },
+                        "PartDesign_Body": {
+                            "size": "small",
+                            "text": "Create body",
+                            "icon": "PartDesign_Body",
+                        },
                         "Sketcher_ValidateSketch": {
                             "size": "small",
                             "text": "Validate sketch...",
                             "icon": "Sketcher_ValidateSketch",
                         },
-                        "Part_CheckGeometry": {"size": "small", "text": "Check Geometry", "icon": "Part_CheckGeometry"},
+                        "Part_CheckGeometry": {
+                            "size": "small",
+                            "text": "Check Geometry",
+                            "icon": "Part_CheckGeometry",
+                        },
                         "PartDesign_SubShapeBinder": {
                             "size": "small",
                             "text": "Create a sub-object(s) shape binder",
                             "icon": "PartDesign_SubShapeBinder",
                         },
-                        "PartDesign_Clone": {"size": "small", "text": "Create a clone", "icon": "PartDesign_Clone"},
-                        "PartDesign_CompDatums": {"size": "large", "text": "Create datum", "icon": ""},
+                        "PartDesign_Clone": {
+                            "size": "small",
+                            "text": "Create a clone",
+                            "icon": "PartDesign_Clone",
+                        },
+                        "PartDesign_CompDatums": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": "",
+                        },
                     },
                 },
                 "Part Design Modeling": {
@@ -126,7 +146,11 @@ CustomJson = {
                         "Boolean operation",
                     ],
                     "commands": {
-                        "PartDesign_Pad": {"size": "large", "text": "Pad", "icon": "PartDesign_Pad"},
+                        "PartDesign_Pad": {
+                            "size": "large",
+                            "text": "Pad",
+                            "icon": "PartDesign_Pad",
+                        },
                         "PartDesign_Revolution": {
                             "size": "small",
                             "text": "Revolution",
@@ -152,9 +176,21 @@ CustomJson = {
                             "text": "Create an additive primitive",
                             "icon": "",
                         },
-                        "PartDesign_Pocket": {"size": "small", "text": "Pocket", "icon": "PartDesign_Pocket"},
-                        "PartDesign_Hole": {"size": "small", "text": "Hole", "icon": "PartDesign_Hole"},
-                        "PartDesign_Groove": {"size": "small", "text": "Groove", "icon": "PartDesign_Groove"},
+                        "PartDesign_Pocket": {
+                            "size": "small",
+                            "text": "Pocket",
+                            "icon": "PartDesign_Pocket",
+                        },
+                        "PartDesign_Hole": {
+                            "size": "small",
+                            "text": "Hole",
+                            "icon": "PartDesign_Hole",
+                        },
+                        "PartDesign_Groove": {
+                            "size": "small",
+                            "text": "Groove",
+                            "icon": "PartDesign_Groove",
+                        },
                         "PartDesign_SubtractiveLoft": {
                             "size": "small",
                             "text": "Subtractive loft",
@@ -183,15 +219,51 @@ CustomJson = {
                     },
                 },
                 "Individual views": {
-                    "order": ["Isometric", "Front", "Top", "Right", "Rear", "Bottom", "Left"],
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left",
+                    ],
                     "commands": {
-                        "Std_ViewIsometric": {"size": "small", "text": "Isometric", "icon": "view-axonometric"},
-                        "Std_ViewFront": {"size": "small", "text": "Front", "icon": "view-front"},
-                        "Std_ViewTop": {"size": "small", "text": "Top", "icon": "view-top"},
-                        "Std_ViewRight": {"size": "small", "text": "Right", "icon": "view-right"},
-                        "Std_ViewRear": {"size": "small", "text": "Rear", "icon": "view-rear"},
-                        "Std_ViewBottom": {"size": "small", "text": "Bottom", "icon": "view-bottom"},
-                        "Std_ViewLeft": {"size": "small", "text": "Left", "icon": "view-left"},
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric",
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front",
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top",
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right",
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear",
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom",
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left",
+                        },
                     },
                 },
             }
