@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPixmap
+from PySide6.QtWidgets import (
     QToolButton,
     QToolBar,
     QPushButton,
@@ -31,7 +31,7 @@ from PySide.QtWidgets import (
     QSizePolicy,
     QMenu,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
@@ -179,6 +179,8 @@ class ModernMenu(RibbonBar):
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
+
+        self.setAcceptDrops(True)
         return
 
     def loadSettingsMenu(self):
@@ -278,9 +280,16 @@ class ModernMenu(RibbonBar):
                     allButtons.sort(key=sortButtons)
 
             # add buttons to panel
+            shadowList = (
+                []
+            )  # if buttons are used in multiple workbenches, they can show up double. (Sketcher_NewSketch)
             for button in allButtons:
                 if button.text() == "":
                     continue
+                # If the command is already there, skipp it.
+                if shadowList.__contains__(button.text()) is True:
+                    continue
+
                 try:
                     action = button.defaultAction()
 
@@ -354,8 +363,12 @@ class ModernMenu(RibbonBar):
                     if button.menu() is not None:
                         btn.setMenu(button.menu())
                         btn.setPopupMode(QToolButton.InstantPopup)
+
                 except Exception:
                     continue
+
+                # add the button text to the shadowList for checking if buttons are already there.
+                shadowList.append(button.text())
 
         self.isWbLoaded[tabName] = True
 
