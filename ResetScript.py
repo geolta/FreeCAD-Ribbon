@@ -25,6 +25,10 @@ import os
 
 import json
 
+# Set the path where you want to save this new Json file
+# JsonPath = os.path.dirname(__file__)
+JsonPath = "D:\\OneDrive\\Desktop\\"
+
 
 # Define list of the workbenches, toolbars and commands on class level
 List_Workbenches = []
@@ -41,9 +45,7 @@ List_IgnoredToolbars = [
     "View",
     "Workbench",
 ]
-List_IconOnlyToolbars = [
-    "Structure",
-]
+List_IconOnlyToolbars = ["Structure", "Individual views"]
 List_QuickAccessCommands = [
     "Std_New",
     "Std_Save",
@@ -70,10 +72,220 @@ showText = False
 skipWorkbenchList = []
 # skipWorkbenchList = ["PartDesignWorkbench", "AssemblyWorkbench", "SketcherWorkbench"]
 
+# Add toolbars which must have only small icons:
+smallOnlyToolbars = ["Structure", "Individual views"]
+
+# Add here your customized workbenches to include.
+CustomJson = {
+    "workbenches": {
+        "PartDesignWorkbench": {
+            "toolbars": {
+                "Part Design Helper": {
+                    "order": [
+                        "Create sketch",
+                        "Create body",
+                        "Validate sketch",
+                        "Check Geometry",
+                        "Create a sub-object(s) shape binder",
+                        "Create a clone",
+                        "Create datum",
+                    ],
+                    "commands": {
+                        "PartDesign_CompSketches": {
+                            "size": "large",
+                            "text": "Create sketch",
+                            "icon": "",
+                        },
+                        "PartDesign_Body": {
+                            "size": "small",
+                            "text": "Create body",
+                            "icon": "PartDesign_Body",
+                        },
+                        "Sketcher_ValidateSketch": {
+                            "size": "small",
+                            "text": "Validate sketch...",
+                            "icon": "Sketcher_ValidateSketch",
+                        },
+                        "Part_CheckGeometry": {
+                            "size": "small",
+                            "text": "Check Geometry",
+                            "icon": "Part_CheckGeometry",
+                        },
+                        "PartDesign_SubShapeBinder": {
+                            "size": "small",
+                            "text": "Create a sub-object(s) shape binder",
+                            "icon": "PartDesign_SubShapeBinder",
+                        },
+                        "PartDesign_Clone": {
+                            "size": "small",
+                            "text": "Create a clone",
+                            "icon": "PartDesign_Clone",
+                        },
+                        "PartDesign_CompDatums": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": "",
+                        },
+                    },
+                },
+                "Part Design Modeling": {
+                    "order": [
+                        "Pad",
+                        "Create an additive primitive",
+                        "Create a subtractive primitive",
+                        "Revolution",
+                        "Additive loft",
+                        "Additive pipe",
+                        "Additive helix",
+                        "Pocket",
+                        "Hole",
+                        "Groove",
+                        "Subtractive loft",
+                        "Subtractive pipe",
+                        "Subtractive helix",
+                        "Boolean operation",
+                    ],
+                    "commands": {
+                        "PartDesign_Pad": {
+                            "size": "large",
+                            "text": "Pad",
+                            "icon": "PartDesign_Pad",
+                        },
+                        "PartDesign_Revolution": {
+                            "size": "small",
+                            "text": "Revolution",
+                            "icon": "PartDesign_Revolution",
+                        },
+                        "PartDesign_AdditiveLoft": {
+                            "size": "small",
+                            "text": "Additive loft",
+                            "icon": "PartDesign_AdditiveLoft",
+                        },
+                        "PartDesign_AdditivePipe": {
+                            "size": "small",
+                            "text": "Additive pipe",
+                            "icon": "PartDesign_AdditivePipe",
+                        },
+                        "PartDesign_AdditiveHelix": {
+                            "size": "small",
+                            "text": "Additive helix",
+                            "icon": "PartDesign_AdditiveHelix",
+                        },
+                        "PartDesign_CompPrimitiveAdditive": {
+                            "size": "large",
+                            "text": "Create an additive primitive",
+                            "icon": "",
+                        },
+                        "PartDesign_Pocket": {
+                            "size": "small",
+                            "text": "Pocket",
+                            "icon": "PartDesign_Pocket",
+                        },
+                        "PartDesign_Hole": {
+                            "size": "small",
+                            "text": "Hole",
+                            "icon": "PartDesign_Hole",
+                        },
+                        "PartDesign_Groove": {
+                            "size": "small",
+                            "text": "Groove",
+                            "icon": "PartDesign_Groove",
+                        },
+                        "PartDesign_SubtractiveLoft": {
+                            "size": "small",
+                            "text": "Subtractive loft",
+                            "icon": "PartDesign_SubtractiveLoft",
+                        },
+                        "PartDesign_SubtractivePipe": {
+                            "size": "small",
+                            "text": "Subtractive pipe",
+                            "icon": "PartDesign_SubtractivePipe",
+                        },
+                        "PartDesign_SubtractiveHelix": {
+                            "size": "small",
+                            "text": "Subtractive helix",
+                            "icon": "PartDesign_SubtractiveHelix",
+                        },
+                        "PartDesign_CompPrimitiveSubtractive": {
+                            "size": "large",
+                            "text": "Create a subtractive primitive",
+                            "icon": "",
+                        },
+                        "PartDesign_Boolean": {
+                            "size": "small",
+                            "text": "Boolean operation",
+                            "icon": "PartDesign_Boolean",
+                        },
+                    },
+                },
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left",
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric",
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front",
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top",
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right",
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear",
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom",
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left",
+                        },
+                    },
+                },
+            }
+        },
+    }
+}
+
 
 def main():
     CreateLists()
+    CreateJson()
+    WriteJson()
 
+
+def CreateJson():
+    # Add your custom workbenches
+    if CustomJson != "" or CustomJson is not None:
+        for Workbench in CustomJson["workbenches"]:
+            skipWorkbenchList.append(Workbench)
+        Dict_RibbonCommandPanel.update(CustomJson)
+
+    # Go throug the workbenches
     for WorkbenchItem in List_Workbenches:
         WorkBenchName = WorkbenchItem[0]
 
@@ -91,13 +303,19 @@ def main():
             # Activate the workbench. Otherwise, .listToolbars() returns empty
             Gui.activateWorkbench(WorkBenchName)
             # Get the toolbars of this workbench
-            wbToolbars = Gui.getWorkbench(WorkBenchName).listToolbars()
+            wbToolbars = Gui.getWorkbench(WorkBenchName).getToolbarItems()
             # Go through the toolbars
-            for Toolbar in wbToolbars:
+            for key, value in wbToolbars.items():
+                Toolbar = key
+
                 # Exclude the toolbars that will be ignored in the RibbonBar
                 ToolbarToBeSkipped = False
-                for Toolbar in List_IgnoredToolbars:
-                    if Toolbar == WorkBenchName:
+                for ignoredToolbar in List_IgnoredToolbars:
+                    if ignoredToolbar == key:
+                        ToolbarToBeSkipped = True
+                # Exclude the toolbars that must have only small icons
+                for ToolbarToSkip in smallOnlyToolbars:
+                    if ToolbarToSkip == key:
                         ToolbarToBeSkipped = True
 
                 if ToolbarToBeSkipped is False:
@@ -107,66 +325,73 @@ def main():
                     CommandName = ""
                     IconName = ""
 
-                    # Go through the list with all available commands.
-                    # If the commandText is in this list, get the command name.
-                    for i2 in range(len(List_Commands)):
-                        CommandName = List_Commands[i2][0]
+                    for i2 in range(len(value)):
+                        CommandName = value[i2]
                         Command = Gui.Command.get(CommandName)
-                        IconName = Command.getInfo()["pixmap"]
-                        MenuName = List_Commands[i2][2]
-
-                        # Set the first command to large
-                        if i2 == 0:
-                            Size = "Large"
+                        if Command is not None:
+                            IconName = Command.getInfo()["pixmap"]
+                            MenuName = Command.getInfo()["menuText"].replace("&", "")
 
                             # Create an empty list for orders
                             Order = []
+                            for i3 in range(len(value)):
+                                CommandOrder = Gui.Command.get(value[i3])
+                                if CommandOrder is not None:
+                                    MenuNameOrder = CommandOrder.getInfo()[
+                                        "menuText"
+                                    ].replace("&", "")
+                                    Order.append(MenuNameOrder)
 
-                            add_keys_nested_dict(
-                                Dict_RibbonCommandPanel,
-                                [
-                                    "workbenches",
-                                    WorkBenchName,
-                                    "toolbars",
-                                    Toolbar,
-                                    "order",
-                                ],
-                            )
-                            add_keys_nested_dict(
-                                Dict_RibbonCommandPanel,
-                                [
-                                    "workbenches",
-                                    WorkBenchName,
-                                    "toolbars",
-                                    Toolbar,
-                                    "commands",
-                                    CommandName,
-                                ],
-                            )
+                            # Set the first command to large
+                            if i2 == 0:
+                                Size = "large"
 
-                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                "toolbars"
-                            ][Toolbar]["order"] = Order
-                            Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                "toolbars"
-                            ][Toolbar]["commands"][CommandName] = {
-                                "size": Size,
-                                "text": MenuName,
-                                "icon": IconName,
-                            }
-                        if i2 > 0:
-                            Size = "small"
+                                add_keys_nested_dict(
+                                    Dict_RibbonCommandPanel,
+                                    [
+                                        "workbenches",
+                                        WorkBenchName,
+                                        "toolbars",
+                                        Toolbar,
+                                        "order",
+                                    ],
+                                )
+                                add_keys_nested_dict(
+                                    Dict_RibbonCommandPanel,
+                                    [
+                                        "workbenches",
+                                        WorkBenchName,
+                                        "toolbars",
+                                        Toolbar,
+                                        "commands",
+                                        CommandName,
+                                    ],
+                                )
 
-    WriteJson()
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["order"] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["commands"][CommandName] = {
+                                    "size": Size,
+                                    "text": MenuName,
+                                    "icon": IconName,
+                                }
+                            if i2 > 0:
+                                Size = "small"
+
+                            i2 = i2 + 1
     return
 
 
 def CreateLists():
     # Create a list of all workbenches with their icon
-    Workbenches = Gui.listWorkbenches().copy()
+    List_Workbenches.clear()
+    Workbenches = Gui.listWorkbenches()
     for WorkBenchName in Workbenches:
-        if str(WorkBenchName) != "" or WorkBenchName is not None:
-            if str(WorkBenchName) != "NoneWorkbench":
+        if str(WorkBenchName) != "":
+            if str(WorkBenchName) != "NoneWorkbench" or WorkBenchName is not None:
                 Icon = None
                 IconName = str(Gui.getWorkbench(WorkBenchName).Icon)
                 if IconName != "":
@@ -250,8 +475,6 @@ def WriteJson():
     resultingDict.update(Dict_RibbonCommandPanel)
 
     # get the path for the Json file
-    # JsonPath = os.path.dirname(__file__)
-    JsonPath = "D:\\OneDrive\\Desktop\\"
     JsonFile = os.path.join(JsonPath, "RibbonStructure_test.json")
 
     # Writing to sample.json

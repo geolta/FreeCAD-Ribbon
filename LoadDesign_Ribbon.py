@@ -70,12 +70,6 @@ class LoadDialog(Design_ui.Ui_Form):
     Dict_RibbonCommandPanel = {}
     List_SortedCommands = []
 
-    # a list for commands that need a corrected menu title.
-    # For example the command "PartDesign_CompSketches" has a menu title "Create datum", which is the same for the command "PartDesign_CompDatums". This needs corrected or the ordering removes and/or misplaces the command.
-    CommandCorrection = [
-        ["PartDesign_CompSketches", "Create sketch"],
-    ]
-
     ShowText = False
 
     def __init__(self):
@@ -456,11 +450,6 @@ class LoadDialog(Design_ui.Ui_Form):
                                 Icon = Gui.getIcon(Icon_Json_Name)
                 except Exception:
                     continue
-
-            # There are a few dropdown buttons that need to be corrected
-            for i5 in range(len(self.CommandCorrection)):
-                if CommandName == self.CommandCorrection[i5][0]:
-                    MenuName = self.CommandCorrection[i5][1]
 
             # Create the row in the table
             # add a row to the table widget
@@ -984,9 +973,8 @@ class LoadDialog(Design_ui.Ui_Form):
                                 IconName = Command.getInfo()["pixmap"]
 
                                 # There are a few dropdown buttons that need to be corrected
-                                for i5 in range(len(self.CommandCorrection)):
-                                    if CommandName == self.CommandCorrection[i5][0]:
-                                        MenuName = self.CommandCorrection[i5][1]
+                                if CommandName == "PartDesign_CompSketches":
+                                    MenuName = "Create sketch"
 
                                 # Get the checkedstate from the clicked cell
                                 # CheckState = self.form.tableWidget.item(row, column).checkState()

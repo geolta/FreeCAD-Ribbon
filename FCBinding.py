@@ -42,8 +42,9 @@ import webbrowser
 
 import pyqtribbon
 from pyqtribbon import RibbonBar
-import LoadSettings_Ribbon
+import LoadDesign_Ribbon
 import Parameters_Ribbon
+import LoadSettings_Ribbon
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -187,12 +188,20 @@ class ModernMenu(RibbonBar):
         # Set the application button
         self.applicationOptionButton().setFixedHeight(self.iconSize)
         self.setApplicationIcon(Gui.getIcon("freecad"))
-        SettingsMenu = self.addFileMenu()
-        SettingsButton = SettingsMenu.addAction("Settings")
+        Menu = self.addFileMenu()
+        DesignButton = Menu.addAction("Ribbon design")
+        DesignButton.triggered.connect(self.loadDesignMenu)
+        SettingsButton = Menu.addAction("Preferences")
         SettingsButton.triggered.connect(self.loadSettingsMenu)
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
+
+        self.setAcceptDrops(True)
+        return
+
+    def loadDesignMenu(self):
+        LoadDesign_Ribbon.main()
         return
 
     def loadSettingsMenu(self):
@@ -300,9 +309,16 @@ class ModernMenu(RibbonBar):
                     allButtons.sort(key=sortButtons)
 
             # add buttons to panel
+            shadowList = (
+                []
+            )  # if buttons are used in multiple workbenches, they can show up double. (Sketcher_NewSketch)
             for button in allButtons:
                 if button.text() == "":
                     continue
+                # If the command is already there, skipp it.
+                if shadowList.__contains__(button.text()) is True:
+                    continue
+
                 try:
                     action = button.defaultAction()
 
@@ -377,8 +393,12 @@ class ModernMenu(RibbonBar):
                     if button.menu() is not None:
                         btn.setMenu(button.menu())
                         btn.setPopupMode(QToolButton.InstantPopup)
+
                 except Exception:
                     continue
+
+                # add the button text to the shadowList for checking if buttons are already there.
+                shadowList.append(button.text())
 
         self.isWbLoaded[tabName] = True
 
