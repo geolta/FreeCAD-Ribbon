@@ -909,6 +909,10 @@ class LoadDialog(Design_ui.Ui_Form):
                                 Command = Gui.Command.get(CommandName)
                                 IconName = Command.getInfo()["pixmap"]
 
+                                # There are a few dropdown buttons that need to be corrected
+                                if CommandName == "PartDesign_CompSketches":
+                                    MenuName = "Create sketch"
+
                                 # Get the checkedstate from the clicked cell
                                 # CheckState = self.form.tableWidget.item(row, column).checkState()
                                 # Go through the cells in the row. If checkstate is checkd, uncheck the other cells in the row
