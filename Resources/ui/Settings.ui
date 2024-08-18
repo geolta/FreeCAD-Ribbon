@@ -104,7 +104,7 @@
      <property name="elideMode">
       <enum>Qt::ElideRight</enum>
      </property>
-     <widget class="QWidget" name="Settings">
+     <widget class="QWidget" name="General">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -112,7 +112,7 @@
        <bool>true</bool>
       </property>
       <attribute name="title">
-       <string>Settings</string>
+       <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="0" column="0" rowspan="2">

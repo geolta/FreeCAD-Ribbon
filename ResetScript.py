@@ -82,7 +82,7 @@ CustomJson = {
             "toolbars": {
                 "Part Design Helper": {
                     "order": [
-                        "Create datum",
+                        "Create sketch",
                         "Create body",
                         "Validate sketch",
                         "Check Geometry",
@@ -93,7 +93,7 @@ CustomJson = {
                     "commands": {
                         "PartDesign_CompSketches": {
                             "size": "large",
-                            "text": "Create datum",
+                            "text": "Create sketch",
                             "icon": "",
                         },
                         "PartDesign_Body": {

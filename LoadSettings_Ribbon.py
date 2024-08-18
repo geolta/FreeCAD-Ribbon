@@ -82,91 +82,15 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
 
+        # Set the window title
+        self.form.setWindowTitle("Preferences")
+
         # Get the style from the main window and use it for this form
         mw = Gui.getMainWindow()
         palette = mw.palette()
         self.form.setPalette(palette)
         Style = mw.style()
         self.form.setStyle(Style)
-
-        # region - create the lists ------------------------------------------------------------------
-        #
-        # Create a list of all workbenches with their icon
-        self.List_Workbenches.clear()
-        List_Workbenches = Gui.listWorkbenches().copy()
-        for WorkBenchName in List_Workbenches:
-            if str(WorkBenchName) != "" or WorkBenchName is not None:
-                if str(WorkBenchName) != "NoneWorkbench":
-                    Icon = None
-                    IconName = str(Gui.getWorkbench(WorkBenchName).Icon)
-                    if IconName != "":
-                        Icon = Gui.getIcon(IconName)
-                    WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
-                    self.List_Workbenches.append(
-                        [str(WorkBenchName), Icon, WorkbenchTitle]
-                    )
-
-        # Create a list of all toolbars
-        self.StringList_Toolbars.clear()
-        # Store the current active workbench
-        ActiveWB = Gui.activeWorkbench().name()
-        # Go through the list of workbenches
-        for workbench in self.List_Workbenches:
-            # Activate the workbench. Otherwise, .listToolbars() returns empty
-            Gui.activateWorkbench(workbench[0])
-            # Get the toolbars of this workbench
-            wbToolbars = Gui.getWorkbench(workbench[0]).listToolbars()
-            # Go through the toolbars
-            for Toolbar in wbToolbars:
-                # Go through the list of toolbars. If already present, skip it.
-                # Otherwise add it the the list.
-                IsInList = False
-                for i in range(len(self.StringList_Toolbars)):
-                    if Toolbar == self.StringList_Toolbars[i][0]:
-                        IsInList = True
-
-                if IsInList is False:
-                    self.StringList_Toolbars.append([Toolbar, workbench[2]])
-        # re-activate the workbench that was stored.
-        Gui.activateWorkbench(ActiveWB)
-
-        # Create a list of all commands with their icon
-        self.List_Commands.clear()
-        # Create a list of command names
-        CommandNames = []
-        for i in range(len(self.List_Workbenches)):
-            WorkBench = Gui.getWorkbench(self.List_Workbenches[i][0])
-            ToolbarItems = WorkBench.getToolbarItems()
-            for key, value in ToolbarItems.items():
-                for j in range(len(value)):
-                    Item = [value[j], self.List_Workbenches[i][0]]
-                    # if CommandNames.__contains__(Item) is False:
-                    IsInList = False
-                    for k in range(len(CommandNames)):
-                        if CommandNames[k][0] == value[j]:
-                            IsInList = True
-                    if IsInList is False:
-                        CommandNames.append(Item)
-
-        # Go through the list
-        for CommandName in CommandNames:
-            # get the command with this name
-            command = Gui.Command.get(CommandName[0])
-            WorkBenchName = CommandName[1]
-            if command is not None:
-                # get the icon for this command
-                if command.getInfo()["pixmap"] != "":
-                    Icon = Gui.getIcon(command.getInfo()["pixmap"])
-                else:
-                    Icon = None
-                MenuName = command.getInfo()["menuText"].replace("&", "")
-                self.List_Commands.append(
-                    [CommandName[0], Icon, MenuName, WorkBenchName]
-                )
-
-        #
-        # endregion ----------------------------------------------------------------------
-
         # Read the jason file and fill the lists
         self.ReadJson()
 
@@ -192,31 +116,21 @@ class LoadDialog(Settings_ui.Ui_Form):
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
 
-        self.form.GenerateJson.connect(
-            self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
-        )
+        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
             self.on_GenerateJsonExit_clicked(self)
 
-        self.form.GenerateJsonExit.connect(
-            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
-        )
+        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
 
-        self.form.RestoreJson.connect(
-            self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
-        )
-        self.form.ResetJson.connect(
-            self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
-        )
+        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
+        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
         self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
-        self.form.IconSize_Medium.textChanged.connect(
-            self.on_IconSize_Medium_TextChanged
-        )
+        self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
         # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
         self.form.ShowText.clicked.connect(self.on_ShowText_clicked)
@@ -242,14 +156,10 @@ class LoadDialog(Settings_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox(
-                "Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles
-            )
+            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
             BackupFile = os.path.join(pathBackup, SelectedDile)
             result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(
-                f"Ribbonbar set back to settings from: {result}!", "Warning"
-            )
+            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
             StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
 
         self.form.close()
@@ -299,9 +209,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_BackUpLocation_clicked(self):
         BackupFolder = ""
-        BackupFolder = StandardFunctions.GetFolder(
-            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
-        )
+        BackupFolder = StandardFunctions.GetFolder(parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION)
         if BackupFolder != "":
             self.pathBackup = BackupFolder
             self.form.label_4.setText(BackupFolder)
@@ -328,9 +236,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Small", int(self.form.IconSize_Small.text())
-        )
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -339,9 +245,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Medium", int(self.form.IconSize_Medium.text())
-        )
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -422,52 +326,21 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
 
         for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-            for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                "toolbars"
-            ]:
-                for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                    "toolbars"
-                ][toolbar]["order"]:
+            for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
+                for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"][toolbar]["order"]:
                     self.List_SortedCommands.append(orderItem)
 
         JsonFile.close()
         return
 
     def WriteJson(self):
-        # Create the internal lists
-        List_IgnoredToolbars = []
-        List_IconOnlyToolbars = []
-        List_QuickAccessCommands = []
-        List_IgnoredWorkbenches = []
-
-        # IgnoredToolbars
-        ExcludedToolbars = self.ListWidgetItems(self.form.ToolbarsExcluded)
-        for i1 in range(len(ExcludedToolbars)):
-            IgnoredToolbar = QListWidgetItem(ExcludedToolbars[i1]).text()
-            List_IgnoredToolbars.append(IgnoredToolbar)
-
-        # IconOnlyToolbars
-        List_IconOnlyToolbars = self.List_IconOnlyToolbars
-
-        # QuickAccessCommands
-        SelectedCommands = self.ListWidgetItems(self.form.CommandsSelected)
-        for i2 in range(len(SelectedCommands)):
-            QuickAccessCommand = QListWidgetItem(SelectedCommands[i2]).toolTip()
-            List_QuickAccessCommands.append(QuickAccessCommand)
-
-        # IgnoredWorkbences
-        AvailableWorkbenches = self.ListWidgetItems(self.form.WorkbenchesAvailable)
-        for i3 in range(len(AvailableWorkbenches)):
-            IgnoredWorkbench = QListWidgetItem(AvailableWorkbenches[i3]).text()
-            List_IgnoredWorkbenches.append(IgnoredWorkbench)
-
         # Create a resulting dict
         resultingDict = {}
         # add the various lists to the resulting dict.
-        resultingDict["ignoredToolbars"] = List_IgnoredToolbars
-        resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
-        resultingDict["quickAccessCommands"] = List_QuickAccessCommands
-        resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
+        resultingDict["ignoredToolbars"] = self.List_IgnoredToolbars
+        resultingDict["iconOnlyToolbars"] = self.List_IconOnlyToolbars
+        resultingDict["quickAccessCommands"] = self.List_QuickAccessCommands
+        resultingDict["ignoredWorkbenches"] = self.List_IgnoredWorkbenches
         # Add the show text property to the dict
         resultingDict["showText"] = self.ShowText
 

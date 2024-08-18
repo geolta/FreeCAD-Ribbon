@@ -36,7 +36,7 @@
             "toolbars": {
                 "Part Design Helper": {
                     "order": [
-                        "Create datum",
+                        "Create sketch",
                         "Create datum",
                         "Create body",
                         "Check Geometry",
@@ -47,7 +47,7 @@
                     "commands": {
                         "PartDesign_CompSketches": {
                             "size": "large",
-                            "text": "Create datum",
+                            "text": "Create sketch",
                             "icon": ""
                         },
                         "PartDesign_Body": {
@@ -261,54 +261,6 @@
                             "size": "large",
                             "text": "Toggle grounded",
                             "icon": "Assembly_ToggleGrounded"
-                        }
-                    }
-                },
-                "Individual views": {
-                    "order": [
-                        "Isometric",
-                        "Front",
-                        "Top",
-                        "Right",
-                        "Rear",
-                        "Bottom",
-                        "Left"
-                    ],
-                    "commands": {
-                        "Std_ViewIsometric": {
-                            "size": "small",
-                            "text": "Isometric",
-                            "icon": "view-axonometric"
-                        },
-                        "Std_ViewFront": {
-                            "size": "small",
-                            "text": "Front",
-                            "icon": "view-front"
-                        },
-                        "Std_ViewTop": {
-                            "size": "small",
-                            "text": "Top",
-                            "icon": "view-top"
-                        },
-                        "Std_ViewRight": {
-                            "size": "small",
-                            "text": "Right",
-                            "icon": "view-right"
-                        },
-                        "Std_ViewRear": {
-                            "size": "small",
-                            "text": "Rear",
-                            "icon": "view-rear"
-                        },
-                        "Std_ViewBottom": {
-                            "size": "small",
-                            "text": "Bottom",
-                            "icon": "view-bottom"
-                        },
-                        "Std_ViewLeft": {
-                            "size": "small",
-                            "text": "Left",
-                            "icon": "view-left"
                         }
                     }
                 }
