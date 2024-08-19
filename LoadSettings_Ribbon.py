@@ -89,80 +89,6 @@ class LoadDialog(Settings_ui.Ui_Form):
         Style = mw.style()
         self.form.setStyle(Style)
 
-        # region - create the lists ------------------------------------------------------------------
-        #
-        # Create a list of all workbenches with their icon
-        self.List_Workbenches.clear()
-        List_Workbenches = Gui.listWorkbenches().copy()
-        for WorkBenchName in List_Workbenches:
-            if str(WorkBenchName) != "" or WorkBenchName is not None:
-                if str(WorkBenchName) != "NoneWorkbench":
-                    Icon = None
-                    IconName = str(Gui.getWorkbench(WorkBenchName).Icon)
-                    if IconName != "":
-                        Icon = Gui.getIcon(IconName)
-                    WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
-                    self.List_Workbenches.append([str(WorkBenchName), Icon, WorkbenchTitle])
-
-        # Create a list of all toolbars
-        self.StringList_Toolbars.clear()
-        # Store the current active workbench
-        ActiveWB = Gui.activeWorkbench().name()
-        # Go through the list of workbenches
-        for workbench in self.List_Workbenches:
-            # Activate the workbench. Otherwise, .listToolbars() returns empty
-            Gui.activateWorkbench(workbench[0])
-            # Get the toolbars of this workbench
-            wbToolbars = Gui.getWorkbench(workbench[0]).listToolbars()
-            # Go through the toolbars
-            for Toolbar in wbToolbars:
-                # Go through the list of toolbars. If already present, skip it.
-                # Otherwise add it the the list.
-                IsInList = False
-                for i in range(len(self.StringList_Toolbars)):
-                    if Toolbar == self.StringList_Toolbars[i][0]:
-                        IsInList = True
-
-                if IsInList is False:
-                    self.StringList_Toolbars.append([Toolbar, workbench[2]])
-        # re-activate the workbench that was stored.
-        Gui.activateWorkbench(ActiveWB)
-
-        # Create a list of all commands with their icon
-        self.List_Commands.clear()
-        # Create a list of command names
-        CommandNames = []
-        for i in range(len(self.List_Workbenches)):
-            WorkBench = Gui.getWorkbench(self.List_Workbenches[i][0])
-            ToolbarItems = WorkBench.getToolbarItems()
-            for key, value in ToolbarItems.items():
-                for j in range(len(value)):
-                    Item = [value[j], self.List_Workbenches[i][0]]
-                    # if CommandNames.__contains__(Item) is False:
-                    IsInList = False
-                    for k in range(len(CommandNames)):
-                        if CommandNames[k][0] == value[j]:
-                            IsInList = True
-                    if IsInList is False:
-                        CommandNames.append(Item)
-
-        # Go through the list
-        for CommandName in CommandNames:
-            # get the command with this name
-            command = Gui.Command.get(CommandName[0])
-            WorkBenchName = CommandName[1]
-            if command is not None:
-                # get the icon for this command
-                if command.getInfo()["pixmap"] != "":
-                    Icon = Gui.getIcon(command.getInfo()["pixmap"])
-                else:
-                    Icon = None
-                MenuName = command.getInfo()["menuText"].replace("&", "")
-                self.List_Commands.append([CommandName[0], Icon, MenuName, WorkBenchName])
-
-        #
-        # endregion ----------------------------------------------------------------------
-
         # Read the jason file and fill the lists
         self.ReadJson()
 
@@ -406,40 +332,13 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     def WriteJson(self):
-        # Create the internal lists
-        List_IgnoredToolbars = []
-        List_IconOnlyToolbars = []
-        List_QuickAccessCommands = []
-        List_IgnoredWorkbenches = []
-
-        # IgnoredToolbars
-        ExcludedToolbars = self.ListWidgetItems(self.form.ToolbarsExcluded)
-        for i1 in range(len(ExcludedToolbars)):
-            IgnoredToolbar = QListWidgetItem(ExcludedToolbars[i1]).text()
-            List_IgnoredToolbars.append(IgnoredToolbar)
-
-        # IconOnlyToolbars
-        List_IconOnlyToolbars = self.List_IconOnlyToolbars
-
-        # QuickAccessCommands
-        SelectedCommands = self.ListWidgetItems(self.form.CommandsSelected)
-        for i2 in range(len(SelectedCommands)):
-            QuickAccessCommand = QListWidgetItem(SelectedCommands[i2]).toolTip()
-            List_QuickAccessCommands.append(QuickAccessCommand)
-
-        # IgnoredWorkbences
-        AvailableWorkbenches = self.ListWidgetItems(self.form.WorkbenchesAvailable)
-        for i3 in range(len(AvailableWorkbenches)):
-            IgnoredWorkbench = QListWidgetItem(AvailableWorkbenches[i3]).text()
-            List_IgnoredWorkbenches.append(IgnoredWorkbench)
-
         # Create a resulting dict
         resultingDict = {}
         # add the various lists to the resulting dict.
-        resultingDict["ignoredToolbars"] = List_IgnoredToolbars
-        resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
-        resultingDict["quickAccessCommands"] = List_QuickAccessCommands
-        resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
+        resultingDict["ignoredToolbars"] = self.List_IgnoredToolbars
+        resultingDict["iconOnlyToolbars"] = self.List_IconOnlyToolbars
+        resultingDict["quickAccessCommands"] = self.List_QuickAccessCommands
+        resultingDict["ignoredWorkbenches"] = self.List_IgnoredWorkbenches
         # Add the show text property to the dict
         resultingDict["showText"] = self.ShowText
 
