@@ -9,7 +9,8 @@
         "Workbench"
     ],
     "iconOnlyToolbars": [
-        "Structure"
+        "Structure",
+        "Individual views"
     ],
     "quickAccessCommands": [
         "Std_New",
@@ -36,12 +37,12 @@
                 "Part Design Helper": {
                     "order": [
                         "Create sketch",
+                        "Create datum",
                         "Create body",
-                        "Validate sketch",
                         "Check Geometry",
                         "Create a sub-object(s) shape binder",
                         "Create a clone",
-                        "Create datum"
+                        "Validate sketch"
                     ],
                     "commands": {
                         "PartDesign_CompSketches": {
@@ -223,6 +224,66 @@
                             "icon": "view-left"
                         }
                     }
+                },
+                "Part Design Dressup": {
+                    "order": [
+                        "Fillet",
+                        "Chamfer",
+                        "Draft",
+                        "Thickness"
+                    ],
+                    "commands": {
+                        "PartDesign_Fillet": {
+                            "size": "small",
+                            "text": "Fillet",
+                            "icon": "PartDesign_Fillet"
+                        },
+                        "PartDesign_Chamfer": {
+                            "size": "small",
+                            "text": "Chamfer",
+                            "icon": "PartDesign_Chamfer"
+                        },
+                        "PartDesign_Draft": {
+                            "size": "small",
+                            "text": "Draft",
+                            "icon": "PartDesign_Draft"
+                        },
+                        "PartDesign_Thickness": {
+                            "size": "small",
+                            "text": "Thickness",
+                            "icon": "PartDesign_Thickness"
+                        }
+                    }
+                },
+                "Part Design Patterns": {
+                    "order": [
+                        "Mirrored",
+                        "LinearPattern",
+                        "PolarPattern",
+                        "Create MultiTransform"
+                    ],
+                    "commands": {
+                        "PartDesign_Mirrored": {
+                            "size": "small",
+                            "text": "Mirrored",
+                            "icon": "PartDesign_Mirrored"
+                        },
+                        "PartDesign_LinearPattern": {
+                            "size": "small",
+                            "text": "LinearPattern",
+                            "icon": "PartDesign_LinearPattern"
+                        },
+                        "PartDesign_PolarPattern": {
+                            "size": "small",
+                            "text": "PolarPattern",
+                            "icon": "PartDesign_PolarPattern"
+                        },
+                        "PartDesign_MultiTransform": {
+                            "size": "small",
+                            "text": "Create MultiTransform",
+                            "icon": "PartDesign_MultiTransform"
+                        }
+                    }
                 }
             }
         },
@@ -265,6 +326,84 @@
                             "size": "large",
                             "text": "Toggle grounded",
                             "icon": "Assembly_ToggleGrounded"
+                        }
+                    }
+                },
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
+                },
+                "Structure": {
+                    "order": [
+                        "Create part",
+                        "Create group",
+                        "Link actions",
+                        "Create a variable set"
+                    ],
+                    "commands": {
+                        "Std_Part": {
+                            "size": "small",
+                            "text": "Create part",
+                            "icon": "Geofeaturegroup"
+                        },
+                        "Std_Group": {
+                            "size": "small",
+                            "text": "Create group",
+                            "icon": "folder"
+                        },
+                        "Std_LinkActions": {
+                            "size": "small",
+                            "text": "Link actions",
+                            "icon": ""
+                        },
+                        "Std_VarSet": {
+                            "size": "small",
+                            "text": "Create a variable set",
+                            "icon": "VarSet"
                         }
                     }
                 }
