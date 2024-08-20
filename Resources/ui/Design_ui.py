@@ -336,7 +336,7 @@ class Ui_Form(object):
         self.ToolbarName.setSizePolicy(sizePolicy1)
         self.ToolbarName.setMinimumSize(QSize(120, 0))
 
-        self.gridLayout_8.addWidget(self.ToolbarName, 4, 1, 2, 2)
+        self.gridLayout_8.addWidget(self.ToolbarName, 3, 1, 2, 2)
 
         self.CustomToolbarSelector = QComboBox(self.layoutWidget_2)
         self.CustomToolbarSelector.setObjectName(u"CustomToolbarSelector")
@@ -351,14 +351,29 @@ class Ui_Form(object):
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_8.addWidget(self.line, 2, 0, 1, 4)
+        self.gridLayout_8.addWidget(self.line, 1, 0, 1, 4)
 
         self.label_10 = QLabel(self.layoutWidget_2)
         self.label_10.setObjectName(u"label_10")
         sizePolicy.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
         self.label_10.setSizePolicy(sizePolicy)
 
-        self.gridLayout_8.addWidget(self.label_10, 4, 0, 2, 1)
+        self.gridLayout_8.addWidget(self.label_10, 3, 0, 2, 1)
+
+        self.WorkbenchList_2 = QComboBox(self.layoutWidget_2)
+        self.WorkbenchList_2.setObjectName(u"WorkbenchList_2")
+        sizePolicy1.setHeightForWidth(self.WorkbenchList_2.sizePolicy().hasHeightForWidth())
+        self.WorkbenchList_2.setSizePolicy(sizePolicy1)
+        self.WorkbenchList_2.setMinimumSize(QSize(0, 0))
+
+        self.gridLayout_8.addWidget(self.WorkbenchList_2, 2, 1, 1, 2)
+
+        self.label_7 = QLabel(self.layoutWidget_2)
+        self.label_7.setObjectName(u"label_7")
+        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy)
+
+        self.gridLayout_8.addWidget(self.label_7, 2, 0, 1, 1)
 
         self.AddCustomToolbar = QPushButton(self.layoutWidget_2)
         self.AddCustomToolbar.setObjectName(u"AddCustomToolbar")
@@ -370,7 +385,7 @@ class Ui_Form(object):
         self.AddCustomToolbar.setMinimumSize(QSize(10, 0))
         self.AddCustomToolbar.setBaseSize(QSize(15, 0))
 
-        self.gridLayout_8.addWidget(self.AddCustomToolbar, 4, 3, 2, 1)
+        self.gridLayout_8.addWidget(self.AddCustomToolbar, 3, 3, 2, 1)
 
         self.label_9 = QLabel(self.layoutWidget_2)
         self.label_9.setObjectName(u"label_9")
@@ -378,21 +393,6 @@ class Ui_Form(object):
         self.label_9.setSizePolicy(sizePolicy)
 
         self.gridLayout_8.addWidget(self.label_9, 0, 0, 1, 1)
-
-        self.label_7 = QLabel(self.layoutWidget_2)
-        self.label_7.setObjectName(u"label_7")
-        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
-        self.label_7.setSizePolicy(sizePolicy)
-
-        self.gridLayout_8.addWidget(self.label_7, 3, 0, 1, 1)
-
-        self.WorkbenchList_2 = QComboBox(self.layoutWidget_2)
-        self.WorkbenchList_2.setObjectName(u"WorkbenchList_2")
-        sizePolicy1.setHeightForWidth(self.WorkbenchList_2.sizePolicy().hasHeightForWidth())
-        self.WorkbenchList_2.setSizePolicy(sizePolicy1)
-        self.WorkbenchList_2.setMinimumSize(QSize(0, 0))
-
-        self.gridLayout_8.addWidget(self.WorkbenchList_2, 3, 1, 1, 2)
 
         self.layoutWidget_3 = QWidget(self.CombineToolbars)
         self.layoutWidget_3.setObjectName(u"layoutWidget_3")
@@ -407,11 +407,11 @@ class Ui_Form(object):
 
         self.gridLayout_12 = QGridLayout()
         self.gridLayout_12.setObjectName(u"gridLayout_12")
-        self.MoveDown_Command_2 = QToolButton(self.layoutWidget_3)
-        self.MoveDown_Command_2.setObjectName(u"MoveDown_Command_2")
-        self.MoveDown_Command_2.setArrowType(Qt.DownArrow)
+        self.MoveDown_PanelCommand = QToolButton(self.layoutWidget_3)
+        self.MoveDown_PanelCommand.setObjectName(u"MoveDown_PanelCommand")
+        self.MoveDown_PanelCommand.setArrowType(Qt.DownArrow)
 
-        self.gridLayout_12.addWidget(self.MoveDown_Command_2, 4, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.MoveDown_PanelCommand, 4, 0, 1, 1)
 
         self.verticalSpacer_10 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
@@ -421,17 +421,17 @@ class Ui_Form(object):
 
         self.gridLayout_12.addItem(self.verticalSpacer_6, 0, 0, 1, 1)
 
-        self.MoveUp_Command_2 = QToolButton(self.layoutWidget_3)
-        self.MoveUp_Command_2.setObjectName(u"MoveUp_Command_2")
-        self.MoveUp_Command_2.setArrowType(Qt.UpArrow)
+        self.MoveUp_PanelCommand = QToolButton(self.layoutWidget_3)
+        self.MoveUp_PanelCommand.setObjectName(u"MoveUp_PanelCommand")
+        self.MoveUp_PanelCommand.setArrowType(Qt.UpArrow)
 
-        self.gridLayout_12.addWidget(self.MoveUp_Command_2, 3, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.MoveUp_PanelCommand, 3, 0, 1, 1)
 
-        self.Add_Toolbar_2 = QToolButton(self.layoutWidget_3)
-        self.Add_Toolbar_2.setObjectName(u"Add_Toolbar_2")
-        self.Add_Toolbar_2.setArrowType(Qt.RightArrow)
+        self.Add_Panel = QToolButton(self.layoutWidget_3)
+        self.Add_Panel.setObjectName(u"Add_Panel")
+        self.Add_Panel.setArrowType(Qt.RightArrow)
 
-        self.gridLayout_12.addWidget(self.Add_Toolbar_2, 1, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.Add_Panel, 1, 0, 1, 1)
 
         self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -671,13 +671,13 @@ class Ui_Form(object):
         self.RemovePanel.setText(QCoreApplication.translate("Form", u"Remove", None))
         self.ToolbarName.setPlaceholderText(QCoreApplication.translate("Form", u"Enter the name of your custom panel...", None))
         self.label_10.setText(QCoreApplication.translate("Form", u"Toolbar name", None))
+        self.label_7.setText(QCoreApplication.translate("Form", u"Select workbench:", None))
         self.AddCustomToolbar.setText(QCoreApplication.translate("Form", u"Add", None))
         self.label_9.setText(QCoreApplication.translate("Form", u"select custom toolbar: ", None))
-        self.label_7.setText(QCoreApplication.translate("Form", u"Select workbench:", None))
         self.label_11.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select toolbars to combine into one panel.</p></body></html>", None))
-        self.MoveDown_Command_2.setText(QCoreApplication.translate("Form", u"...", None))
-        self.MoveUp_Command_2.setText(QCoreApplication.translate("Form", u"...", None))
-        self.Add_Toolbar_2.setText(QCoreApplication.translate("Form", u"...", None))
+        self.MoveDown_PanelCommand.setText(QCoreApplication.translate("Form", u"...", None))
+        self.MoveUp_PanelCommand.setText(QCoreApplication.translate("Form", u"...", None))
+        self.Add_Panel.setText(QCoreApplication.translate("Form", u"...", None))
 
         __sortingEnabled6 = self.ToolbarsAvailable_2.isSortingEnabled()
         self.ToolbarsAvailable_2.setSortingEnabled(False)
