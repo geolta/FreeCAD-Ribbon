@@ -22,39 +22,6 @@
   <layout class="QGridLayout" name="gridLayout_7">
    <item row="1" column="0">
     <layout class="QGridLayout" name="gridLayout_6">
-     <item row="0" column="3">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="5">
-      <widget class="QPushButton" name="GenerateJsonExit">
-       <property name="text">
-        <string>Close</string>
-       </property>
-       <property name="shortcut">
-        <string>Esc</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="RestoreJson">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>Restore</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -71,6 +38,29 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="3">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="RestoreJson">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Restore</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="4">
       <widget class="QPushButton" name="GenerateJson">
        <property name="text">
@@ -85,6 +75,16 @@
        </property>
        <property name="text">
         <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QPushButton" name="GenerateJsonExit">
+       <property name="text">
+        <string>Close</string>
+       </property>
+       <property name="shortcut">
+        <string>Esc</string>
        </property>
       </widget>
      </item>
@@ -600,7 +600,7 @@
          <x>10</x>
          <y>10</y>
          <width>541</width>
-         <height>90</height>
+         <height>101</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_8">
@@ -619,37 +619,8 @@
         <property name="bottomMargin">
          <number>6</number>
         </property>
-        <item row="3" column="1" rowspan="2" colspan="2">
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" rowspan="2">
-         <widget class="QLabel" name="label_9">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>select custom toolbar: </string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3" rowspan="2">
-         <widget class="QPushButton" name="RemoveToolbar">
+        <item row="0" column="3">
+         <widget class="QPushButton" name="RemovePanel">
           <property name="minimumSize">
            <size>
             <width>10</width>
@@ -667,8 +638,27 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" rowspan="2" colspan="2">
-         <widget class="QComboBox" name="comboBox">
+        <item row="4" column="1" rowspan="2" colspan="2">
+         <widget class="QLineEdit" name="ToolbarName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>Enter the name of your custom panel...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="CustomToolbarSelector">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -683,7 +673,14 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0" rowspan="2">
+        <item row="2" column="0" colspan="4">
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" rowspan="2">
          <widget class="QLabel" name="label_10">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -696,8 +693,8 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="3" rowspan="2">
-         <widget class="QPushButton" name="AddToolbar">
+        <item row="4" column="3" rowspan="2">
+         <widget class="QPushButton" name="AddCustomToolbar">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -722,6 +719,19 @@
          </widget>
         </item>
         <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>select custom toolbar: </string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
          <widget class="QLabel" name="label_7">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -734,7 +744,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
+        <item row="3" column="1" colspan="2">
          <widget class="QComboBox" name="WorkbenchList_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -756,9 +766,9 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>110</y>
+         <y>120</y>
          <width>541</width>
-         <height>541</height>
+         <height>531</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_9">
