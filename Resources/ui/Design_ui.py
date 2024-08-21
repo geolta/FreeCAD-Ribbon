@@ -207,6 +207,7 @@ class Ui_Form(object):
 
         self.Add_Toolbar = QToolButton(self.layoutWidget_6)
         self.Add_Toolbar.setObjectName(u"Add_Toolbar")
+        self.Add_Toolbar.setAutoRaise(False)
         self.Add_Toolbar.setArrowType(Qt.RightArrow)
 
         self.gridLayout_18.addWidget(self.Add_Toolbar, 1, 0, 1, 1)
@@ -315,7 +316,7 @@ class Ui_Form(object):
         self.CombineToolbars.setObjectName(u"CombineToolbars")
         self.layoutWidget_2 = QWidget(self.CombineToolbars)
         self.layoutWidget_2.setObjectName(u"layoutWidget_2")
-        self.layoutWidget_2.setGeometry(QRect(10, 10, 541, 101))
+        self.layoutWidget_2.setGeometry(QRect(10, 10, 541, 116))
         self.gridLayout_8 = QGridLayout(self.layoutWidget_2)
         self.gridLayout_8.setObjectName(u"gridLayout_8")
         self.gridLayout_8.setSizeConstraint(QLayout.SetDefaultConstraint)
@@ -345,13 +346,6 @@ class Ui_Form(object):
         self.CustomToolbarSelector.setMinimumSize(QSize(150, 0))
 
         self.gridLayout_8.addWidget(self.CustomToolbarSelector, 0, 1, 1, 2)
-
-        self.line = QFrame(self.layoutWidget_2)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_8.addWidget(self.line, 1, 0, 1, 4)
 
         self.label_10 = QLabel(self.layoutWidget_2)
         self.label_10.setObjectName(u"label_10")
@@ -394,9 +388,16 @@ class Ui_Form(object):
 
         self.gridLayout_8.addWidget(self.label_9, 0, 0, 1, 1)
 
+        self.line = QFrame(self.layoutWidget_2)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_8.addWidget(self.line, 1, 0, 1, 4)
+
         self.layoutWidget_3 = QWidget(self.CombineToolbars)
         self.layoutWidget_3.setObjectName(u"layoutWidget_3")
-        self.layoutWidget_3.setGeometry(QRect(10, 120, 541, 531))
+        self.layoutWidget_3.setGeometry(QRect(10, 130, 541, 511))
         self.gridLayout_9 = QGridLayout(self.layoutWidget_3)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
         self.gridLayout_9.setContentsMargins(6, 6, 6, 6)
@@ -440,22 +441,23 @@ class Ui_Form(object):
 
         self.gridLayout_9.addLayout(self.gridLayout_12, 1, 1, 1, 1)
 
-        self.ToolbarsAvailable_2 = QListWidget(self.layoutWidget_3)
-        __qlistwidgetitem6 = QListWidgetItem(self.ToolbarsAvailable_2)
+        self.ToolbarsAvailable = QListWidget(self.layoutWidget_3)
+        __qlistwidgetitem6 = QListWidgetItem(self.ToolbarsAvailable)
         __qlistwidgetitem6.setCheckState(Qt.Checked);
-        self.ToolbarsAvailable_2.setObjectName(u"ToolbarsAvailable_2")
-        self.ToolbarsAvailable_2.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.ToolbarsAvailable_2.setSortingEnabled(True)
+        self.ToolbarsAvailable.setObjectName(u"ToolbarsAvailable")
+        self.ToolbarsAvailable.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.ToolbarsAvailable.setSortingEnabled(True)
 
-        self.gridLayout_9.addWidget(self.ToolbarsAvailable_2, 1, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.ToolbarsAvailable, 1, 0, 1, 1)
 
         self.ToolbarsSelected = QListWidget(self.layoutWidget_3)
         __qlistwidgetitem7 = QListWidgetItem(self.ToolbarsSelected)
         __qlistwidgetitem7.setCheckState(Qt.Checked);
         self.ToolbarsSelected.setObjectName(u"ToolbarsSelected")
-        self.ToolbarsSelected.setDefaultDropAction(Qt.MoveAction)
+        self.ToolbarsSelected.setDefaultDropAction(Qt.CopyAction)
         self.ToolbarsSelected.setMovement(QListView.Free)
-        self.ToolbarsSelected.setSortingEnabled(True)
+        self.ToolbarsSelected.setViewMode(QListView.ListMode)
+        self.ToolbarsSelected.setSortingEnabled(False)
 
         self.gridLayout_9.addWidget(self.ToolbarsSelected, 1, 2, 1, 1)
 
@@ -679,11 +681,11 @@ class Ui_Form(object):
         self.MoveUp_PanelCommand.setText(QCoreApplication.translate("Form", u"...", None))
         self.Add_Panel.setText(QCoreApplication.translate("Form", u"...", None))
 
-        __sortingEnabled6 = self.ToolbarsAvailable_2.isSortingEnabled()
-        self.ToolbarsAvailable_2.setSortingEnabled(False)
-        ___qlistwidgetitem6 = self.ToolbarsAvailable_2.item(0)
+        __sortingEnabled6 = self.ToolbarsAvailable.isSortingEnabled()
+        self.ToolbarsAvailable.setSortingEnabled(False)
+        ___qlistwidgetitem6 = self.ToolbarsAvailable.item(0)
         ___qlistwidgetitem6.setText(QCoreApplication.translate("Form", u"New Item", None));
-        self.ToolbarsAvailable_2.setSortingEnabled(__sortingEnabled6)
+        self.ToolbarsAvailable.setSortingEnabled(__sortingEnabled6)
 
 
         __sortingEnabled7 = self.ToolbarsSelected.isSortingEnabled()

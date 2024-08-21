@@ -32,6 +32,8 @@ from PySide6.QtWidgets import (
     QWidget,
     QToolBar,
     QComboBox,
+    QPushButton,
+    QToolButton,
 )
 from PySide6.QtCore import Qt, SIGNAL, QTimer
 import sys
@@ -72,7 +74,7 @@ class LoadDialog(Design_ui.Ui_Form):
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
     List_SortedCommands = []
-    List_CustomToolbars = []
+    Dict_CustomToolbars = {}
 
     ShowText = False
 
@@ -181,7 +183,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.ToolbarsExcluded.clear()
         self.form.CommandsAvailable.clear()
         self.form.CommandsSelected.clear()
-        self.form.ToolbarsAvailable_2.clear()
+        self.form.ToolbarsAvailable.clear()
         self.form.ToolbarsSelected.clear()
 
         # region - Load all controls------------------------------------------------------------------
@@ -306,6 +308,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Connect Add events to the buttons on the Custom Panels Tab for adding commands to the panel
         self.form.Add_Panel.connect(self.form.Add_Panel, SIGNAL("clicked()"), self.on_AddPanel_clicked)
+
         self.form.AddCustomToolbar.connect(
             self.form.AddCustomToolbar, SIGNAL("clicked()"), self.on_AddCustomToolbar_clicked
         )
@@ -519,7 +522,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         wbToolbars = Gui.getWorkbench(WorkBenchName).listToolbars()
         WorkBench = Gui.getWorkbench(WorkBenchName)
-        self.form.ToolbarsAvailable_2.clear()
+        self.form.ToolbarsAvailable.clear()
         for Toolbar in wbToolbars:
             IsIgnored = False
             for IgnoredToolbar in self.List_IgnoredToolbars:
@@ -528,11 +531,11 @@ class LoadDialog(Design_ui.Ui_Form):
             if IsIgnored is False:
                 ListWidgetItem = QListWidgetItem()
                 ListWidgetItem.setText(Toolbar)
-                self.form.ToolbarsAvailable_2.addItem(ListWidgetItem)
+                self.form.ToolbarsAvailable.addItem(ListWidgetItem)
         return
 
     def on_MoveUp_PanelCommand_clicked(self):
-        self.MoveItem(ListWidget=self.form.ToolbarsExcluded, Up=True)
+        self.MoveItem(ListWidget=self.form.ToolbarsSelected, Up=True)
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -540,7 +543,7 @@ class LoadDialog(Design_ui.Ui_Form):
         return
 
     def on_MoveDown_PanelCommand_clicked(self):
-        self.MoveItem(ListWidget=self.form.ToolbarsExcluded, Up=False)
+        self.MoveItem(ListWidget=self.form.ToolbarsSelected, Up=False)
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -548,7 +551,7 @@ class LoadDialog(Design_ui.Ui_Form):
         return
 
     def on_AddPanel_clicked(self):
-        SelectedToolbars = self.form.ToolbarsAvailable_2.selectedItems()
+        SelectedToolbars = self.form.ToolbarsAvailable.selectedItems()
 
         # Go through the list of workbenches
         for WorkBenchItem in self.List_Workbenches:
@@ -560,14 +563,15 @@ class LoadDialog(Design_ui.Ui_Form):
                 ToolbarItems = WorkBench.getToolbarItems()
                 for key, value in ToolbarItems.items():
                     # Go through the selected items, if they mach continue
-                    for Toolbar in SelectedToolbars:
-                        if key == Toolbar:
+                    for i in range(len(SelectedToolbars)):
+                        if key == SelectedToolbars[i].text():
+                            # ShadowList = QListWidget(self.form.ToolbarsSelected).findItems
                             for j in range(len(value)):
                                 # Get the command
                                 Command = Gui.Command.get(value[j])
                                 if Command is None:
                                     continue
-                                CommandName = Command.getInfo()["name"]
+                                MenuName = Command.getInfo()["menuText"]
 
                                 # get the icon for this command if there isn't one, leave it None
                                 Icon = Gui.getIcon(Command.getInfo()["pixmap"])
@@ -580,11 +584,20 @@ class LoadDialog(Design_ui.Ui_Form):
 
                                 # Define a new ListWidgetItem.
                                 ListWidgetItem = QListWidgetItem()
-                                ListWidgetItem.setText(CommandName)
+                                ListWidgetItem.setText(MenuName)
                                 icon = QIcon(Icon)
                                 ListWidgetItem.setIcon(icon)
+                                ListWidgetItem.setData(
+                                    Qt.ItemDataRole.UserRole, key
+                                )  # add here the toolbar name as hidden data
 
-                                self.form.ToolbarsExcluded.addItem(ListWidgetItem)
+                                IsInList = False
+                                for k in range(self.form.ToolbarsSelected.count()):
+                                    if self.form.ToolbarsSelected.item(k).text() == ListWidgetItem.text():
+                                        IsInList = True
+
+                                if IsInList is False:
+                                    self.form.ToolbarsSelected.addItem(ListWidgetItem)
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -606,19 +619,23 @@ class LoadDialog(Design_ui.Ui_Form):
                 WorkBenchName = WorkBenchItem[0]
 
                 # Create item that defines the custom toolbar
-                CustomToolbarItem = []
-                for Item in self.form.ToolbarsExcluded.items():
-                    ListWidgetItem = QListWidgetItem(Item)
+                for i in range(self.form.ToolbarsSelected.count()):
+                    ListWidgetItem = QListWidgetItem(self.form.ToolbarsSelected.item(i))
                     MenuName = ListWidgetItem.text()
 
-                    for CommandItem in self.List_Commands:
-                        if CommandItem[2] == MenuName:
-                            CommandName = CommandItem[0]
+                    OriginalToolbar = ListWidgetItem.data(Qt.ItemDataRole.UserRole)
 
-                            CustomToolbarItem.append(CommandName)
+                    self.add_keys_nested_dict(
+                        self.Dict_CustomToolbars, ["customToolbars", CustomPanelTitle, "commands", MenuName]
+                    )
+                    self.add_keys_nested_dict(
+                        self.Dict_CustomToolbars, ["customToolbars", CustomPanelTitle, "workbench"]
+                    )
 
-                # Add the custom toolbar item to the list of custom toolbars
-                self.List_CustomToolbars.append([CustomPanelTitle, CustomToolbarItem, WorkBenchName])
+                    self.Dict_CustomToolbars["customToolbars"][CustomPanelTitle]["commands"][MenuName] = OriginalToolbar
+                    self.Dict_CustomToolbars["customToolbars"][CustomPanelTitle]["workbench"] = WorkBenchName
+
+        print(self.Dict_CustomToolbars)
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -629,7 +646,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.ToolbarsExcluded.clear()
 
         CustomPanel = self.form.CustomToolbarSelector.currentText()
-        for item in self.List_CustomToolbars:
+        for item in self.Dict_CustomToolbars:
             if item[0] == CustomPanel:
                 self.form.WorkbenchList_2.setCurrentText(item[2])
                 for Command in item[1]:
@@ -651,9 +668,9 @@ class LoadDialog(Design_ui.Ui_Form):
     def on_RemovePanel_clicked(self):
         CustomPanel = self.form.CustomToolbarSelector.currentText()
 
-        for i in range(len(self.List_CustomToolbars)):
-            if self.List_CustomToolbars[i] == CustomPanel:
-                self.List_CustomToolbars.pop[i]
+        for i in range(len(self.Dict_CustomToolbars)):
+            if self.Dict_CustomToolbars[i] == CustomPanel:
+                self.Dict_CustomToolbars.pop[i]
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -1209,6 +1226,7 @@ class LoadDialog(Design_ui.Ui_Form):
         List_IconOnlyToolbars = []
         List_QuickAccessCommands = []
         List_IgnoredWorkbenches = []
+        Dict_CustomToolbars = []
 
         # IgnoredToolbars
         ExcludedToolbars = self.ListWidgetItems(self.form.ToolbarsExcluded)
@@ -1231,6 +1249,9 @@ class LoadDialog(Design_ui.Ui_Form):
             IgnoredWorkbench = QListWidgetItem(AvailableWorkbenches[i3]).text()
             List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
+        # CustomPanels
+        Dict_CustomToolbars = self.Dict_CustomToolbars
+
         # Create a resulting dict
         resultingDict = {}
         # add the various lists to the resulting dict.
@@ -1238,6 +1259,8 @@ class LoadDialog(Design_ui.Ui_Form):
         resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
         resultingDict["quickAccessCommands"] = List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
+        # resultingDict["CustomToolbars"] = Dict_CustomToolbars
+        resultingDict.update(Dict_CustomToolbars)
         # Add the show text property to the dict
         resultingDict["showText"] = self.ShowText
 
