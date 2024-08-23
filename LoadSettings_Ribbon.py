@@ -69,6 +69,8 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
     List_SortedCommands = []
+    List_SortedToolbars = []
+    Dict_CustomToolbars = {}
 
     ShowText = False
 
@@ -323,10 +325,23 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Get the dict with the customized date for the buttons
         self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
 
-        for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-            for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
-                for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"][toolbar]["order"]:
-                    self.List_SortedCommands.append(orderItem)
+        try:
+            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
+                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
+                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]["order"]:
+                        self.List_SortedToolbars.append(orderItem)
+        except Exception:
+            pass
+
+        try:
+            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
+                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
+                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"][toolbar][
+                        "order"
+                    ]:
+                        self.List_SortedCommands.append(orderItem)
+        except Exception:
+            pass
 
         JsonFile.close()
         return

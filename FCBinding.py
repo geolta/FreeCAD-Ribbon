@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPixmap
+from PySide6.QtWidgets import (
     QToolButton,
     QToolBar,
     QPushButton,
@@ -31,7 +31,7 @@ from PySide.QtWidgets import (
     QSizePolicy,
     QMenu,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
@@ -249,6 +249,22 @@ class ModernMenu(RibbonBar):
             return
 
         ListToolbars: list = workbench.listToolbars()
+        CustomToolbars = self.List_ReturnCustomToolbars()
+        for CustomToolbar in CustomToolbars:
+            if CustomToolbar[1] == workbenchName:
+                ListToolbars.append(CustomToolbar[0])
+
+        try:
+            for CustomToolbar in ModernMenu.ribbonStructure["customToolbars"]:
+                if ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["workbench"] == workbenchName:
+                    ListToolbars.append(CustomToolbar)
+
+                    Commands = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["commands"]
+                    for key, value in Commands:
+                        ListToolbars.remove(value)
+        except Exception:
+            pass
+
         try:
             ListToolbars: list = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"]["order"]
         except Exception:
@@ -264,8 +280,14 @@ class ModernMenu(RibbonBar):
             )
 
             # get list of all buttons in toolbar
-            TB = mw.findChildren(QToolBar, toolbar)
-            allButtons: list = TB[0].findChildren(QToolButton)
+            allButtons: list = []
+            try:
+                TB = mw.findChildren(QToolBar, toolbar)
+                allButtons = TB[0].findChildren(QToolButton)
+            except Exception:
+                pass
+            customList = self.List_AddCustomToolbarsToWorkbench(workbenchName, toolbar)
+            allButtons.extend(customList)
 
             if workbenchName in ModernMenu.ribbonStructure["workbenches"]:
                 # order buttons like defined in ribbonStructure
@@ -406,6 +428,55 @@ class ModernMenu(RibbonBar):
             ]:
                 toolbar.hide()
         return
+
+    def List_ReturnCustomToolbars(self):
+        Toolbars = []
+
+        List_Workbenches = Gui.listWorkbenches().copy()
+        for WorkBenchName in List_Workbenches:
+            if str(WorkBenchName) != "" or WorkBenchName is not None:
+                if str(WorkBenchName) != "NoneWorkbench":
+                    CustomToolbars: list = App.ParamGet(
+                        "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar"
+                    ).GetGroups()
+
+                    for Group in CustomToolbars:
+                        Parameter = App.ParamGet(
+                            "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group
+                        )
+                        Name = Parameter.GetString("Name")
+
+                        Toolbars.append([Name, WorkBenchName])
+
+        return Toolbars
+
+    def List_AddCustomToolbarsToWorkbench(self, WorkBenchName, CustomToolbar):
+        ButtonList = []
+
+        try:
+            Commands = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["commands"]
+            Workbench = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["workbench"]
+
+            if Workbench == WorkBenchName:
+                for key, value in Commands.items():
+                    for CommandName in Gui.listCommands():
+                        Command = Gui.Command.get(CommandName)
+                        MenuText = Command.getInfo()["menuText"]
+
+                        if MenuText == key:
+                            action = Command.getAction()[0]
+                            action.setData(CommandName)
+
+                            Button = QToolButton()
+                            Button.setDefaultAction(action)
+                            Button.setText(MenuText)
+                            Button.setObjectName(Command.getInfo()["name"])
+
+                            ButtonList.append(Button)
+        except Exception:
+            pass
+
+        return ButtonList
 
 
 class run:
