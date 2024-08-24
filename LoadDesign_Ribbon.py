@@ -241,70 +241,44 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # region - connect controls with functions----------------------------------------------------
         #
-        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
-        def LoadWorkbenches():
-            self.on_WorkbenchList__TextChanged()
+        #
+        # --- QuickCommandsTab ------------------
+        #
+        # Connect Add/Remove and move events to the buttons on the QuickAccess Tab
+        self.form.Add_Command.connect(self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked)
+        self.form.Remove_Command.connect(self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked)
+        self.form.MoveUp_Command.connect(self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked)
+        self.form.MoveDown_Command.connect(
+            self.form.MoveDown_Command, SIGNAL("clicked()"), self.on_MoveDownCommand_clicked
+        )
 
-        self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
-
-        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
-        def LoadToolbars():
-            self.on_ToolbarList__TextChanged()
-
-        self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
-
-        # Connect the icon only chekcbox
-        self.form.IconOnly.clicked.connect(self.on_IconOnly_clicked)
-
-        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
+        # Connect the filter for the quick commands on the quickcommands tab
         def FilterQuickCommands_1():
             self.on_ListCategory_1_TextChanged()
 
         # Connect the filter for the quick commands on the quickcommands tab
         self.form.ListCategory_1.currentTextChanged.connect(FilterQuickCommands_1)
+        # Connect the searchbar for the quick commands on the quick commands tab
+        self.form.SearchBar_1.textChanged.connect(self.on_SearchBar_1_TextChanged)
 
+        #
+        # --- ExcludePanelsTab ------------------
+        #
         # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
         def FilterQuickCommands_2():
             self.on_ListCategory_2_TextChanged()
 
         # Connect the filter for the toolbars on the toolbar tab
         self.form.ListCategory_2.currentTextChanged.connect(FilterQuickCommands_2)
-
-        # Connect the button GenerateJson with the function on_GenerateJson_clicked
-        def GenerateJson():
-            self.on_GenerateJson_clicked(self)
-
-        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
-
-        # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
-        def GenerateJsonExit():
-            self.on_GenerateJsonExit_clicked(self)
-
-        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
-
-        # Connect a click event on the tablewidgit on the Ribbon design tab
-        self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
-
-        # Connect the searchbar for the quick commands on the quick commands tab
-        self.form.SearchBar_1.textChanged.connect(self.on_SearchBar_1_TextChanged)
-
         # Connect the searchbar for the toolbars on the toolbar tab
         self.form.SearchBar_2.textChanged.connect(self.on_SearchBar_2_TextChanged)
-
-        # Connect Add/Remove and move events to the buttons on the QuickAccess Tab
-        self.form.Add_Command.connect(self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked)
-        self.form.Remove_Command.connect(self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked)
-        self.form.MoveUp_Command.connect(self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked)
-        self.form.MoveDown_Command.connect(
-            self.form.MoveDown_Command,
-            SIGNAL("clicked()"),
-            self.on_MoveDownCommand_clicked,
-        )
-
         # Connect Add/Remove events to the buttons on the Toolbars Tab
         self.form.Add_Toolbar.connect(self.form.Add_Toolbar, SIGNAL("clicked()"), self.on_AddToolbar_clicked)
         self.form.Remove_Toolbar.connect(self.form.Remove_Toolbar, SIGNAL("clicked()"), self.on_RemoveToolbar_clicked)
 
+        #
+        # --- IncludeWorkbenchTab ------------------
+        #
         # Connect Add/Remove events to the buttons on the Workbench Tab
         self.form.Add_Workbench.connect(self.form.Add_Workbench, SIGNAL("clicked()"), self.on_AddWorkbench_clicked)
         self.form.Remove_Workbench.connect(
@@ -313,29 +287,9 @@ class LoadDialog(Design_ui.Ui_Form):
             self.on_RemoveWorkbench_clicked,
         )
 
-        # Connect move events to the buttons on the Ribbon design Tab
-        self.form.MoveUp_RibbonCommand.connect(
-            self.form.MoveUp_RibbonCommand, SIGNAL("clicked()"), self.on_MoveUpTableWidget_clicked
-        )
-        self.form.MoveDown_RibbonCommand.connect(
-            self.form.MoveDown_RibbonCommand, SIGNAL("clicked()"), self.on_MoveDownTableWidget_clicked
-        )
-        self.form.MoveUp_Toolbar.connect(self.form.MoveUp_Toolbar, SIGNAL("clicked()"), self.on_MoveUp_Toolbar_clicked)
-        self.form.MoveDown_Toolbar.connect(
-            self.form.MoveDown_Toolbar, SIGNAL("clicked()"), self.on_MoveDown_Toolbar_clicked
-        )
-
-        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
-        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
-
-        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
-        def LoadWorkbenches_2():
-            self.on_WorkbenchList_2__textChanged()
-
-        self.form.WorkbenchList_2.currentTextChanged.connect(LoadWorkbenches_2)
-
-        self.form.ToolbarsOrder.indexesMoved.connect(self.on_ToolbarsOrder_changed)
-
+        #
+        # --- CustomPanelsTab ------------------
+        #
         # Connect move and events to the buttons on the Custom Panels Tab
         self.form.MoveUp_PanelCommand.connect(
             self.form.MoveUp_PanelCommand, SIGNAL("clicked()"), self.on_MoveUp_PanelCommand_clicked
@@ -359,7 +313,66 @@ class LoadDialog(Design_ui.Ui_Form):
 
         self.form.RemovePanel.connect(self.form.RemovePanel, SIGNAL("clicked()"), self.on_RemovePanel_clicked)
 
+        #
+        # --- RibbonDesignTab ------------------
+        #
+        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
+        def LoadWorkbenches():
+            self.on_WorkbenchList__TextChanged()
+
+        self.form.WorkbenchList.currentTextChanged.connect(LoadWorkbenches)
+
+        # Connect LoadToolbars with the dropdown ToolbarList on the Ribbon design tab
+        def LoadToolbars():
+            self.on_ToolbarList__TextChanged()
+
+        self.form.ToolbarList.currentTextChanged.connect(LoadToolbars)
+
+        # Connect the icon only checkbox
+        self.form.IconOnly.clicked.connect(self.on_IconOnly_clicked)
+        # Connect a click event on the tablewidgit on the Ribbon design tab
+        self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
+
+        # Connect move events to the buttons on the Ribbon design Tab
+        self.form.MoveUp_RibbonCommand.connect(
+            self.form.MoveUp_RibbonCommand, SIGNAL("clicked()"), self.on_MoveUpTableWidget_clicked
+        )
+        self.form.MoveDown_RibbonCommand.connect(
+            self.form.MoveDown_RibbonCommand, SIGNAL("clicked()"), self.on_MoveDownTableWidget_clicked
+        )
+        self.form.MoveUp_Toolbar.connect(self.form.MoveUp_Toolbar, SIGNAL("clicked()"), self.on_MoveUp_Toolbar_clicked)
+        self.form.MoveDown_Toolbar.connect(
+            self.form.MoveDown_Toolbar, SIGNAL("clicked()"), self.on_MoveDown_Toolbar_clicked
+        )
+        self.form.ToolbarsOrder.indexesMoved.connect(self.on_ToolbarsOrder_changed)
+
+        # --- Form controls ------------------
+        #
+        # Connect the button GenerateJson with the function on_GenerateJson_clicked
+        def GenerateJson():
+            self.on_GenerateJson_clicked(self)
+
+        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
+
+        # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
+        def GenerateJsonExit():
+            self.on_GenerateJsonExit_clicked(self)
+
+        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
+
+        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
+        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
+
+        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
+        def LoadWorkbenches_2():
+            self.on_WorkbenchList_2__textChanged()
+
+        self.form.WorkbenchList_2.currentTextChanged.connect(LoadWorkbenches_2)
+
+        # connect the change of the current tab event to a function to set the size per tab
         self.form.tabWidget.currentChanged.connect(self.on_tabBar_currentIndex)
+        # Connect the cancel button
+        self.form.Cancel.clicked.connect(self.on_Cancel_clicked)
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -500,7 +513,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
     # endregion
 
-    # region - Toolbars tab
+    # region - Exclude panels tab
     def on_ListCategory_2_TextChanged(self):
         self.form.ToolbarsToExclude.clear()
 
@@ -552,7 +565,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
     # endregion
 
-    # region - Workbench tab
+    # region - Include workbench tab
     def on_AddWorkbench_clicked(self):
         self.AddItem(
             SourceWidget=self.form.WorkbenchesAvailable,
@@ -1253,6 +1266,12 @@ class LoadDialog(Design_ui.Ui_Form):
     @staticmethod
     def on_GenerateJsonExit_clicked(self):
         self.WriteJson()
+        # Close the form
+        self.form.close()
+        return
+
+    @staticmethod
+    def on_Cancel_clicked(self):
         # Close the form
         self.form.close()
         return

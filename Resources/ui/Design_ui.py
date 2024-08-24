@@ -34,35 +34,40 @@ class Ui_Form(object):
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName(u"gridLayout_6")
+        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 1, 1, 1)
+
+        self.GenerateJson = QPushButton(Form)
+        self.GenerateJson.setObjectName(u"GenerateJson")
+
+        self.gridLayout_6.addWidget(self.GenerateJson, 0, 4, 1, 1)
+
+        self.Cancel = QPushButton(Form)
+        self.Cancel.setObjectName(u"Cancel")
+
+        self.gridLayout_6.addWidget(self.Cancel, 0, 5, 1, 1)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.gridLayout_6.addItem(self.horizontalSpacer_2, 0, 3, 1, 1)
+
         self.ResetJson = QPushButton(Form)
         self.ResetJson.setObjectName(u"ResetJson")
         self.ResetJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.ResetJson, 0, 0, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.GenerateJsonExit = QPushButton(Form)
+        self.GenerateJsonExit.setObjectName(u"GenerateJsonExit")
 
-        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.GenerateJsonExit, 0, 6, 1, 1)
 
         self.RestoreJson = QPushButton(Form)
         self.RestoreJson.setObjectName(u"RestoreJson")
         self.RestoreJson.setEnabled(True)
 
         self.gridLayout_6.addWidget(self.RestoreJson, 0, 2, 1, 1)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_6.addItem(self.horizontalSpacer_2, 0, 3, 1, 1)
-
-        self.GenerateJsonExit = QPushButton(Form)
-        self.GenerateJsonExit.setObjectName(u"GenerateJsonExit")
-
-        self.gridLayout_6.addWidget(self.GenerateJsonExit, 0, 5, 1, 1)
-
-        self.GenerateJson = QPushButton(Form)
-        self.GenerateJson.setObjectName(u"GenerateJson")
-
-        self.gridLayout_6.addWidget(self.GenerateJson, 0, 4, 1, 1)
 
 
         self.gridLayout_7.addLayout(self.gridLayout_6, 1, 0, 1, 1)
@@ -472,7 +477,7 @@ class Ui_Form(object):
         self.RibbonDesign.setAutoFillBackground(True)
         self.layoutWidget = QWidget(self.RibbonDesign)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(10, 10, 391, 58))
+        self.layoutWidget.setGeometry(QRect(0, 10, 391, 58))
         self.gridLayout_5 = QGridLayout(self.layoutWidget)
         self.gridLayout_5.setObjectName(u"gridLayout_5")
         self.gridLayout_5.setContentsMargins(6, 6, 6, 6)
@@ -506,13 +511,13 @@ class Ui_Form(object):
 
         self.gridLayout_5.addWidget(self.IconOnly, 1, 2, 1, 1)
 
-        self.widget = QWidget(self.RibbonDesign)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(0, 70, 551, 571))
-        self.verticalLayout_3 = QVBoxLayout(self.widget)
+        self.layoutWidget1 = QWidget(self.RibbonDesign)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(0, 70, 551, 571))
+        self.verticalLayout_3 = QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.label_12 = QLabel(self.widget)
+        self.label_12 = QLabel(self.layoutWidget1)
         self.label_12.setObjectName(u"label_12")
         font = QFont()
         font.setBold(True)
@@ -520,7 +525,7 @@ class Ui_Form(object):
 
         self.verticalLayout_3.addWidget(self.label_12)
 
-        self.frame2 = QFrame(self.widget)
+        self.frame2 = QFrame(self.layoutWidget1)
         self.frame2.setObjectName(u"frame2")
         self.frame2.setFrameShape(QFrame.StyledPanel)
         self.horizontalLayout_3 = QHBoxLayout(self.frame2)
@@ -606,19 +611,19 @@ class Ui_Form(object):
 
         self.verticalLayout_3.addWidget(self.frame2)
 
-        self.widget1 = QWidget(self.RibbonDesign)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(560, 70, 351, 571))
-        self.verticalLayout_4 = QVBoxLayout(self.widget1)
+        self.layoutWidget2 = QWidget(self.RibbonDesign)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(560, 70, 352, 571))
+        self.verticalLayout_4 = QVBoxLayout(self.layoutWidget2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.label_4 = QLabel(self.widget1)
+        self.label_4 = QLabel(self.layoutWidget2)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setFont(font)
 
         self.verticalLayout_4.addWidget(self.label_4)
 
-        self.frame3 = QFrame(self.widget1)
+        self.frame3 = QFrame(self.layoutWidget2)
         self.frame3.setObjectName(u"frame3")
         sizePolicy.setHeightForWidth(self.frame3.sizePolicy().hasHeightForWidth())
         self.frame3.setSizePolicy(sizePolicy)
@@ -682,13 +687,14 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Ribbon design", None))
-        self.ResetJson.setText(QCoreApplication.translate("Form", u"Reset", None))
-        self.RestoreJson.setText(QCoreApplication.translate("Form", u"Restore", None))
-        self.GenerateJsonExit.setText(QCoreApplication.translate("Form", u"Close", None))
-#if QT_CONFIG(shortcut)
-        self.GenerateJsonExit.setShortcut(QCoreApplication.translate("Form", u"Esc", None))
-#endif // QT_CONFIG(shortcut)
         self.GenerateJson.setText(QCoreApplication.translate("Form", u"Update", None))
+        self.Cancel.setText(QCoreApplication.translate("Form", u"Cancel", None))
+#if QT_CONFIG(shortcut)
+        self.Cancel.setShortcut(QCoreApplication.translate("Form", u"Esc", None))
+#endif // QT_CONFIG(shortcut)
+        self.ResetJson.setText(QCoreApplication.translate("Form", u"Reset", None))
+        self.GenerateJsonExit.setText(QCoreApplication.translate("Form", u"Close", None))
+        self.RestoreJson.setText(QCoreApplication.translate("Form", u"Restore", None))
         self.MoveUp_Command.setText(QCoreApplication.translate("Form", u"...", None))
         self.MoveDown_Command.setText(QCoreApplication.translate("Form", u"...", None))
         self.Remove_Command.setText(QCoreApplication.translate("Form", u"...", None))
@@ -722,7 +728,7 @@ class Ui_Form(object):
 
         self.Remove_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
         self.Add_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
-        self.label_13.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select toolbars to <span style=\" font-weight:600;\">exclude</span> from the ribbon.</p></body></html>", None))
+        self.label_13.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select panels to <span style=\" font-weight:600;\">exclude</span> from the ribbon.</p></body></html>", None))
 
         __sortingEnabled3 = self.ToolbarsExcluded.isSortingEnabled()
         self.ToolbarsExcluded.setSortingEnabled(False)
@@ -734,7 +740,7 @@ class Ui_Form(object):
         self.SearchBar_2.setInputMask("")
         self.SearchBar_2.setText("")
         self.SearchBar_2.setPlaceholderText(QCoreApplication.translate("Form", u"Type to search..", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Toolbars), QCoreApplication.translate("Form", u"Toolbars", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Toolbars), QCoreApplication.translate("Form", u"Exclude panels", None))
 
         __sortingEnabled4 = self.WorkbenchesAvailable.isSortingEnabled()
         self.WorkbenchesAvailable.setSortingEnabled(False)
@@ -752,14 +758,14 @@ class Ui_Form(object):
         self.Remove_Workbench.setText(QCoreApplication.translate("Form", u"...", None))
         self.Add_Workbench.setText(QCoreApplication.translate("Form", u"...", None))
         self.label_6.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select workbenches to<span style=\" font-weight:600;\"> include</span> in the ribbon.</p></body></html>", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Workbenches), QCoreApplication.translate("Form", u"Workbenches", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Workbenches), QCoreApplication.translate("Form", u"Include workbenches", None))
         self.ToolbarName.setPlaceholderText(QCoreApplication.translate("Form", u"Enter the name of your custom panel...", None))
-        self.label_10.setText(QCoreApplication.translate("Form", u"Toolbar name", None))
+        self.label_10.setText(QCoreApplication.translate("Form", u"Panel name", None))
         self.label_7.setText(QCoreApplication.translate("Form", u"Select workbench:", None))
         self.AddCustomToolbar.setText(QCoreApplication.translate("Form", u"Add", None))
-        self.label_9.setText(QCoreApplication.translate("Form", u"select custom toolbar: ", None))
+        self.label_9.setText(QCoreApplication.translate("Form", u"select custom panel: ", None))
         self.RemovePanel.setText(QCoreApplication.translate("Form", u"Remove", None))
-        self.label_11.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select toolbars to combine into one panel.</p></body></html>", None))
+        self.label_11.setText(QCoreApplication.translate("Form", u"<html><head/><body><p>Select panels to add to the custom panell.</p></body></html>", None))
         self.MoveDown_PanelCommand.setText(QCoreApplication.translate("Form", u"...", None))
         self.MoveUp_PanelCommand.setText(QCoreApplication.translate("Form", u"...", None))
         self.Add_Panel.setText(QCoreApplication.translate("Form", u"...", None))
@@ -777,8 +783,8 @@ class Ui_Form(object):
         ___qlistwidgetitem7.setText(QCoreApplication.translate("Form", u"New Item", None));
         self.ToolbarsSelected.setSortingEnabled(__sortingEnabled7)
 
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.CombineToolbars), QCoreApplication.translate("Form", u"Custom panels", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"Select toolbar:", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.CombineToolbars), QCoreApplication.translate("Form", u"Create custom panels", None))
+        self.label_2.setText(QCoreApplication.translate("Form", u"Select panel:", None))
         self.label.setText(QCoreApplication.translate("Form", u"Select workbench:", None))
         self.IconOnly.setText(QCoreApplication.translate("Form", u"Icon only", None))
         self.label_12.setText(QCoreApplication.translate("Form", u" Set the icon size", None))
@@ -801,7 +807,7 @@ class Ui_Form(object):
 
         self.MoveUp_RibbonCommand.setText(QCoreApplication.translate("Form", u"...", None))
         self.MoveDown_RibbonCommand.setText(QCoreApplication.translate("Form", u"...", None))
-        self.label_4.setText(QCoreApplication.translate("Form", u" Set the toolbar order", None))
+        self.label_4.setText(QCoreApplication.translate("Form", u" Set the panel order", None))
         self.MoveUp_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
         self.MoveDown_Toolbar.setText(QCoreApplication.translate("Form", u"...", None))
 
