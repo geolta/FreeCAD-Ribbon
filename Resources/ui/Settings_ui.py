@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'SettingsEpcySg.ui'
+## Form generated from reading UI file 'SettingsSDCsNl.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -157,13 +157,11 @@ class Ui_Form(object):
         self.groupBox_4 = QGroupBox(self.groupBox1)
         self.groupBox_4.setObjectName("groupBox_4")
         self.groupBox_4.setFont(font1)
-        self.widget = QWidget(self.groupBox_4)
-        self.widget.setObjectName("widget")
-        self.widget.setGeometry(QRect(11, 23, 188, 48))
-        self.gridLayout = QGridLayout(self.widget)
+        self.gridLayout_5 = QGridLayout(self.groupBox_4)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_11 = QLabel(self.widget)
+        self.label_11 = QLabel(self.groupBox_4)
         self.label_11.setObjectName("label_11")
         sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
@@ -175,7 +173,7 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.label_11, 1, 0, 1, 1)
 
-        self.label_10 = QLabel(self.widget)
+        self.label_10 = QLabel(self.groupBox_4)
         self.label_10.setObjectName("label_10")
         sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
         self.label_10.setSizePolicy(sizePolicy2)
@@ -184,7 +182,7 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.label_10, 0, 0, 1, 1)
 
-        self.IconSize_Small = QSpinBox(self.widget)
+        self.IconSize_Small = QSpinBox(self.groupBox_4)
         self.IconSize_Small.setObjectName("IconSize_Small")
         sizePolicy2.setHeightForWidth(
             self.IconSize_Small.sizePolicy().hasHeightForWidth()
@@ -203,7 +201,7 @@ class Ui_Form(object):
 
         self.gridLayout.addWidget(self.IconSize_Small, 0, 1, 1, 1)
 
-        self.IconSize_Medium = QSpinBox(self.widget)
+        self.IconSize_Medium = QSpinBox(self.groupBox_4)
         self.IconSize_Medium.setObjectName("IconSize_Medium")
         sizePolicy2.setHeightForWidth(
             self.IconSize_Medium.sizePolicy().hasHeightForWidth()
@@ -217,6 +215,14 @@ class Ui_Form(object):
         self.IconSize_Medium.setValue(44)
 
         self.gridLayout.addWidget(self.IconSize_Medium, 1, 1, 1, 1)
+
+        self.gridLayout_5.addLayout(self.gridLayout, 0, 0, 1, 1)
+
+        self.horizontalSpacer_3 = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
+
+        self.gridLayout_5.addItem(self.horizontalSpacer_3, 0, 1, 1, 1)
 
         self.gridLayout_3.addWidget(self.groupBox_4, 1, 0, 1, 1)
 
