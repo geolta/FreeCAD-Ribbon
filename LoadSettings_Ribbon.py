@@ -126,21 +126,31 @@ class LoadDialog(Settings_ui.Ui_Form):
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
 
-        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
+        self.form.GenerateJson.connect(
+            self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
+        )
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
             self.on_GenerateJsonExit_clicked(self)
 
-        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
+        self.form.GenerateJsonExit.connect(
+            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
+        )
 
-        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
-        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
+        self.form.RestoreJson.connect(
+            self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
+        )
+        self.form.ResetJson.connect(
+            self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
+        )
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
         self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
-        self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
+        self.form.IconSize_Medium.textChanged.connect(
+            self.on_IconSize_Medium_TextChanged
+        )
         # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
 
@@ -172,10 +182,14 @@ class LoadDialog(Settings_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
+            SelectedDile = StandardFunctions.Mbox(
+                "Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles
+            )
             BackupFile = os.path.join(pathBackup, SelectedDile)
             result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
+            StandardFunctions.Print(
+                f"Ribbonbar set back to settings from: {result}!", "Warning"
+            )
             StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
 
         self.form.close()
@@ -225,7 +239,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_BackUpLocation_clicked(self):
         BackupFolder = ""
-        BackupFolder = StandardFunctions.GetFolder(parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION)
+        BackupFolder = StandardFunctions.GetFolder(
+            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
+        )
         if BackupFolder != "":
             self.pathBackup = BackupFolder
             self.form.label_4.setText(BackupFolder)
@@ -252,7 +268,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
-        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Small", int(self.form.IconSize_Small.text())
+        )
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -261,7 +279,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
-        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Medium", int(self.form.IconSize_Medium.text())
+        )
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -342,18 +362,24 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         try:
             for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]["order"]:
+                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
+                    "toolbars"
+                ]:
+                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
+                        Workbench
+                    ]["toolbars"]["order"]:
                         self.List_SortedToolbars.append(orderItem)
         except Exception:
             pass
 
         try:
             for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][Workbench]["toolbars"][toolbar][
-                        "order"
-                    ]:
+                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
+                    "toolbars"
+                ]:
+                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
+                        Workbench
+                    ]["toolbars"][toolbar]["order"]:
                         self.List_SortedCommands.append(orderItem)
         except Exception:
             pass
