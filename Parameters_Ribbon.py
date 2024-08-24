@@ -140,6 +140,7 @@ else:
 # Additional parameter
 HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
 
+# Ribbon settings
 if Settings.GetBoolSetting("AutoHideRibbon") is True:
     AUTOHIDE_RIBBON = Settings.GetBoolSetting("AutoHideRibbon")
 else:
@@ -149,7 +150,17 @@ if Settings.GetStringSetting("Stylesheet") != "":
 else:
     STYLESHEET = os.path.join(STYLESHEET_LOCATION, "base.qss")
 
-if Settings.GetBoolSetting("ShowIconText") is True:
-    SHOW_ICON_TEXT = Settings.GetBoolSetting("ShowIconText")
+if Settings.GetBoolSetting("ShowIconText_Small") is True:
+    SHOW_ICON_TEXT_SMALL = Settings.GetBoolSetting("ShowIconText_Small")
 else:
-    SHOW_ICON_TEXT = bool(False)
+    SHOW_ICON_TEXT_SMALL = bool(False)
+
+if Settings.GetBoolSetting("ShowIconText_Medium") is True:
+    SHOW_ICON_TEXT_MEDIUM = Settings.GetBoolSetting("ShowIconText_Medium")
+else:
+    SHOW_ICON_TEXT_MEDIUM = bool(False)
+
+if Settings.GetBoolSetting("ShowIconText_Large") is True:
+    SHOW_ICON_TEXT_LARGE = Settings.GetBoolSetting("ShowIconText_Large")
+else:
+    SHOW_ICON_TEXT_LARGE = bool(False)
