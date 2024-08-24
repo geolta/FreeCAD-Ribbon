@@ -355,10 +355,22 @@ class ModernMenu(RibbonBar):
                     action = button.defaultAction()
 
                     # whether to show text of the button
-                    showText = (
-                        ModernMenu.ribbonStructure["showText"]
-                        and toolbar not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                    )
+                    showTextSmall, showTextMedium, showTextLarge = False
+                    try:
+                        showTextSmall = (
+                            ModernMenu.ribbonStructure["showTextSmall"]
+                            and toolbar not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
+                        )
+                        showTextMedium = (
+                            ModernMenu.ribbonStructure["showTextMedium"]
+                            and toolbar not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
+                        )
+                        showTextLarge = (
+                            ModernMenu.ribbonStructure["showTextLarge"]
+                            and toolbar not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
+                        )
+                    except Exception:
+                        pass
 
                     # try to get alternative text from ribbonStructure
                     try:
@@ -396,7 +408,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showText,
+                            showText=showTextSmall,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
                     elif buttonSize == "medium":
@@ -404,7 +416,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showText,
+                            showText=showTextMedium,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                     elif buttonSize == "large":
@@ -412,7 +424,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showText,
+                            showText=showTextLarge,
                             fixedHeight=False,
                         )
                     else:

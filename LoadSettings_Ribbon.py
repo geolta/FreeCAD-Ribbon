@@ -72,7 +72,9 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_SortedToolbars = []
     Dict_CustomToolbars = {}
 
-    ShowText = False
+    ShowText_Small = False
+    ShowText_Medium = False
+    ShowText_Large = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -105,10 +107,18 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.IconSize_Medium.setValue(Parameters_Ribbon.ICON_SIZE_MEDIUM)
         # self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
         self.form.label_7.setText(Parameters_Ribbon.STYLESHEET)
-        if Parameters_Ribbon.SHOW_ICON_TEXT is True:
-            self.form.ShowText.setCheckState(Qt.CheckState.Checked)
+        if Parameters_Ribbon.SHOW_ICON_TEXT_SMALL is True:
+            self.form.ShowText_Small.setCheckState(Qt.CheckState.Checked)
         else:
-            self.form.ShowText.setCheckState(Qt.CheckState.Unchecked)
+            self.form.ShowText_Small.setCheckState(Qt.CheckState.Unchecked)
+        if Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM is True:
+            self.form.ShowText_Medium.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.form.ShowText_Medium.setCheckState(Qt.CheckState.Unchecked)
+        if Parameters_Ribbon.SHOW_ICON_TEXT_LARGE is True:
+            self.form.ShowText_Large.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.form.ShowText_Large.setCheckState(Qt.CheckState.Unchecked)
 
         # region - connect controls with functions----------------------------------------------------
         #
@@ -133,8 +143,11 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
         # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
-        self.form.ShowText.clicked.connect(self.on_ShowText_clicked)
 
+        self.form.ShowText_Small.clicked.connect(self.on_ShowTextSmall_clicked)
+
+        # Connect the cancel button
+        self.form.Cancel.clicked.connect(self.on_Cancel_clicked)
         # endregion
 
         return
@@ -252,15 +265,6 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         return
 
-    # def on_IconSize_Large_TextChanged(self):
-    #     Parameters_Ribbon.ICON_SIZE_LARGE = int(self.form.IconSize_Large.text())
-    #     Parameters_Ribbon.Settings.SetIntSetting("IconSize_Large", int(self.form.IconSize_Large.text()))
-
-    #     # Enable the apply button
-    #     self.form.GenerateJson.setEnabled(True)
-
-    #     return
-
     def on_StyleSheetLocation_clicked(self):
         StyleSheet = ""
         StyleSheet = StandardFunctions.GetFileDialog(
@@ -279,19 +283,25 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         return
 
-    def on_ShowText_clicked(self):
-        if self.form.ShowText.isChecked() is True:
-            Parameters_Ribbon.SHOW_ICON_TEXT = True
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", True)
-            self.ShowText = True
-        if self.form.ShowText.isChecked() is False:
-            Parameters_Ribbon.SHOW_ICON_TEXT = False
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText", False)
-            self.ShowText = False
+    def on_ShowTextSmall_clicked(self):
+        if self.form.ShowText_Small.isChecked() is True:
+            Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = True
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", True)
+            self.ShowText_Small = True
+        if self.form.ShowText_Smallt.isChecked() is False:
+            Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = False
+            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", False)
+            self.ShowText_Small = False
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
 
+        return
+
+    @staticmethod
+    def on_Cancel_clicked(self):
+        # Close the form
+        self.form.close()
         return
 
     # endregion---------------------------------------------------------------------------------------
@@ -320,7 +330,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
         # Get the showtext value
-        self.ShowText = bool(data["showText"])
+        self.ShowText_Small = bool(data["showText"])
 
         # Get the dict with the customized date for the buttons
         self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
@@ -355,7 +365,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         resultingDict["quickAccessCommands"] = self.List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = self.List_IgnoredWorkbenches
         # Add the show text property to the dict
-        resultingDict["showText"] = self.ShowText
+        resultingDict["showTextSmall"] = self.ShowText_Small
+        resultingDict["showTextMedium"] = self.ShowText_Medium
+        resultingDict["showTextLarge"] = self.ShowText_Large
 
         # RibbonTabs
         # Get the Ribbon dictionary
