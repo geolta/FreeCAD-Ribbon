@@ -242,40 +242,66 @@ class ModernMenu(RibbonBar):
         return
 
     def buildPanels(self):
+        # Get the active workbench and get tis name
         workbench = Gui.activeWorkbench()
         workbenchName = workbench.name()
+
+        # check if the panel is already loaded. If so exit this function
         tabName = self.tabBar().tabText(self.tabBar().currentIndex()).replace("&", "")
         if self.isWbLoaded[tabName]:
             return
 
+        # Get the list of toolbars from the active workbench
         ListToolbars: list = workbench.listToolbars()
+        # Get custom toolbars that are created in the toolbar enviroment and add them to the list of toolbars
         CustomToolbars = self.List_ReturnCustomToolbars()
         for CustomToolbar in CustomToolbars:
             if CustomToolbar[1] == workbenchName:
                 ListToolbars.append(CustomToolbar[0])
 
+        # Get the custom panels and add them to the list of toolbars
         try:
-            for CustomToolbar in ModernMenu.ribbonStructure["customToolbars"]:
-                if ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["workbench"] == workbenchName:
-                    ListToolbars.append(CustomToolbar)
+            for CustomPanel in ModernMenu.ribbonStructure["customToolbars"]:
+                if ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["workbench"] == workbenchName:
+                    ListToolbars.append(CustomPanel)
 
-                    Commands = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["commands"]
-                    for key, value in Commands:
-                        ListToolbars.remove(value)
-        except Exception:
+                    # remove the original toolbars from the list
+                    Commands = ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["commands"]
+                    for Command in Commands:
+                        OriginalToolbar = ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["commands"][Command]
+                        ListToolbars.remove(OriginalToolbar)
+        except Exception as e:
+            print(e)
             pass
 
         try:
-            ListToolbars: list = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"]["order"]
+            # Get the order of toolbars
+            ToolbarOrder: list = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"]["order"]
+
+            # Sort the list of toolbars according the toolbar order
+            def SortToolbars(toolbar):
+                if toolbar == "":
+                    return -1
+
+                position = None
+                try:
+                    position = ToolbarOrder.index(toolbar)
+                except ValueError:
+                    position = 999999
+                return position
+
+            ListToolbars.sort(key=SortToolbars)
         except Exception:
             pass
 
+        # If the toolbar must be ignored, skip it
         for toolbar in ListToolbars:
             if toolbar in ModernMenu.ribbonStructure["ignoredToolbars"]:
                 continue
 
+            # Create the panel, use the toolbar name as title
             panel = self.currentCategory().addPanel(
-                title=toolbar.replace(tabName + " ", "").capitalize(),
+                title=toolbar,
                 showPanelOptionButton=False,
             )
 
@@ -466,6 +492,7 @@ class ModernMenu(RibbonBar):
                         if MenuText == key:
                             action = Command.getAction()[0]
                             action.setData(CommandName)
+                            action.setText(CommandName)
 
                             Button = QToolButton()
                             Button.setDefaultAction(action)
