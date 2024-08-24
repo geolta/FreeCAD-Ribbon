@@ -234,8 +234,11 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # -- Custom panel tab --
         self.form.CustomToolbarSelector.addItem("New")
-        for key, value in self.Dict_CustomToolbars["customToolbars"].items():
-            self.form.CustomToolbarSelector.addItem(key)
+        try:
+            for key, value in self.Dict_CustomToolbars["customToolbars"].items():
+                self.form.CustomToolbarSelector.addItem(key)
+        except Exception:
+            pass
         #
         # endregion-----------------------------------------------------------------------------------
 
@@ -837,25 +840,27 @@ class LoadDialog(Design_ui.Ui_Form):
 
     def on_RemovePanel_clicked(self):
         CustomPanelTitle = self.form.CustomToolbarSelector.currentText()
+        try:
+            for key, value in self.Dict_CustomToolbars["customToolbars"].items():
+                if key == CustomPanelTitle:
+                    # Get the name of the workbench
+                    WorkbenchName = self.Dict_CustomToolbars["customToolbars"][key]
+                    # remove the custom toolbar from the custom toolbar dict.
+                    del self.Dict_CustomToolbars["customToolbars"][key]["workbench"]
+                    # remove the custom toolbar from the combobox
+                    for i in range(self.form.CustomToolbarSelector.count()):
+                        if self.form.CustomToolbarSelector.itemText(i) == key:
+                            self.form.CustomToolbarSelector.removeItem(i)
 
-        for key, value in self.Dict_CustomToolbars["customToolbars"].items():
-            if key == CustomPanelTitle:
-                # Get the name of the workbench
-                WorkbenchName = self.Dict_CustomToolbars["customToolbars"][key]
-                # remove the custom toolbar from the custom toolbar dict.
-                del self.Dict_CustomToolbars["customToolbars"][key]["workbench"]
-                # remove the custom toolbar from the combobox
-                for i in range(self.form.CustomToolbarSelector.count()):
-                    if self.form.CustomToolbarSelector.itemText(i) == key:
-                        self.form.CustomToolbarSelector.removeItem(i)
+                    # remove the custom toolbar also from the workbenches dict
+                    del self.Dict_RibbonCommandPanel["workbenches"][WorkbenchName]["toolbars"][key]
 
-                # remove the custom toolbar also from the workbenches dict
-                del self.Dict_RibbonCommandPanel["workbenches"][WorkbenchName]["toolbars"][key]
+                    # Enable the apply button
+                    self.form.GenerateJson.setEnabled(True)
 
-                # Enable the apply button
-                self.form.GenerateJson.setEnabled(True)
-
-                return
+                    return
+        except Exception:
+            pass
 
         return
 
@@ -1782,22 +1787,25 @@ class LoadDialog(Design_ui.Ui_Form):
     def Dict_AddCustomToolbarsToWorkbench(self, WorkBenchName):
         Toolbars = {}
 
-        for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
-            ListCommands = []
-            Commands = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
-            Workbench = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["workbench"]
+        try:
+            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
+                ListCommands = []
+                Commands = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
+                Workbench = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["workbench"]
 
-            if Workbench == WorkBenchName:
-                for key, value in Commands.items():
-                    for i in range(len(self.List_Commands)):
-                        if self.List_Commands[i][2] == key:
-                            Command = self.List_Commands[i][0]
-                            ListCommands.append(Command)
+                if Workbench == WorkBenchName:
+                    for key, value in Commands.items():
+                        for i in range(len(self.List_Commands)):
+                            if self.List_Commands[i][2] == key:
+                                Command = self.List_Commands[i][0]
+                                ListCommands.append(Command)
 
-                    if self.List_IgnoredToolbars.__contains__(value) is False:
-                        self.List_IgnoredToolbars.append(value)
+                        if self.List_IgnoredToolbars.__contains__(value) is False:
+                            self.List_IgnoredToolbars.append(value)
 
-                Toolbars[CustomToolbar] = ListCommands
+                    Toolbars[CustomToolbar] = ListCommands
+        except Exception:
+            pass
 
         return Toolbars
 
