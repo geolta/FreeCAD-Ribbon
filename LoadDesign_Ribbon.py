@@ -78,7 +78,9 @@ class LoadDialog(Design_ui.Ui_Form):
     List_SortedToolbars = []
     Dict_CustomToolbars = {}
 
-    ShowText = False
+    ShowText_Small = False
+    ShowText_Medium = False
+    ShowText_Large = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -1712,7 +1714,9 @@ class LoadDialog(Design_ui.Ui_Form):
         # resultingDict["CustomToolbars"] = Dict_CustomToolbars
         resultingDict.update(self.Dict_CustomToolbars)
         # Add the show text property to the dict
-        resultingDict["showText"] = self.ShowText
+        resultingDict["showTextSmall"] = self.ShowText_Small
+        resultingDict["showTextMedium"] = self.ShowText_Medium
+        resultingDict["showTextLarge"] = self.ShowText_Large
 
         # RibbonTabs
         # Get the Ribbon dictionary

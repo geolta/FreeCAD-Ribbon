@@ -289,10 +289,14 @@ class ModernMenu(RibbonBar):
                         CustomPanel
                     ]["commands"]
                     for Command in Commands:
-                        OriginalToolbar = ModernMenu.ribbonStructure["customToolbars"][
-                            CustomPanel
-                        ]["commands"][Command]
-                        ListToolbars.remove(OriginalToolbar)
+                        try:
+                            OriginalToolbar = ModernMenu.ribbonStructure[
+                                "customToolbars"
+                            ][CustomPanel]["commands"][Command]
+                            print(OriginalToolbar)
+                            ListToolbars.remove(OriginalToolbar)
+                        except Exception:
+                            continue
         except Exception as e:
             print(e)
             pass
