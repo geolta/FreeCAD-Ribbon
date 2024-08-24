@@ -30,19 +30,46 @@
         "Robot",
         "Test Framework"
     ],
-    "showText": false,
+    "customToolbars": {
+        "Loads & boundary conditions": {
+            "commands": {
+                "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
+                "Initial flow velocity condition": "Fluid boundary conditions",
+                "Initial pressure condition": "Fluid boundary conditions",
+                "Flow velocity boundary condition": "Fluid boundary conditions",
+                "Fixed boundary condition": "Mechanical boundary conditions and loads",
+                "Rigid body constraint": "Mechanical boundary conditions and loads",
+                "Displacement boundary condition": "Mechanical boundary conditions and loads",
+                "Contact constraint": "Mechanical boundary conditions and loads",
+                "Tie constraint": "Mechanical boundary conditions and loads",
+                "Spring": "Mechanical boundary conditions and loads",
+                "Force load": "Mechanical boundary conditions and loads",
+                "Pressure load": "Mechanical boundary conditions and loads",
+                "Centrifugal load": "Mechanical boundary conditions and loads",
+                "Gravity load": "Mechanical boundary conditions and loads",
+                "Initial temperature": "Thermal boundary conditions and loads",
+                "Heat flux load": "Thermal boundary conditions and loads",
+                "Temperature boundary condition": "Thermal boundary conditions and loads",
+                "Body heat source": "Thermal boundary conditions and loads"
+            },
+            "workbench": "FemWorkbench"
+        }
+    },
+    "showTextSmall": false,
+    "showTextMedium": false,
+    "showTextLarge": false,
     "workbenches": {
         "PartDesignWorkbench": {
             "toolbars": {
                 "Part Design Helper": {
                     "order": [
                         "Create sketch",
-                        "Create datum",
                         "Create body",
+                        "Validate sketch",
                         "Check Geometry",
                         "Create a sub-object(s) shape binder",
                         "Create a clone",
-                        "Validate sketch"
+                        "Create datum"
                     ],
                     "commands": {
                         "PartDesign_CompSketches": {
@@ -169,11 +196,6 @@
                             "size": "small",
                             "text": "Boolean operation",
                             "icon": "PartDesign_Boolean"
-                        },
-                        "asm3AddAttachmentGroup": {
-                            "size": "large",
-                            "text": "Create \"Attachment\" constraint",
-                            "icon": "Assembly_ConstraintAttachment"
                         }
                     }
                 },
@@ -222,66 +244,6 @@
                             "size": "small",
                             "text": "Left",
                             "icon": "view-left"
-                        }
-                    }
-                },
-                "Part Design Dressup": {
-                    "order": [
-                        "Fillet",
-                        "Chamfer",
-                        "Draft",
-                        "Thickness"
-                    ],
-                    "commands": {
-                        "PartDesign_Fillet": {
-                            "size": "small",
-                            "text": "Fillet",
-                            "icon": "PartDesign_Fillet"
-                        },
-                        "PartDesign_Chamfer": {
-                            "size": "small",
-                            "text": "Chamfer",
-                            "icon": "PartDesign_Chamfer"
-                        },
-                        "PartDesign_Draft": {
-                            "size": "small",
-                            "text": "Draft",
-                            "icon": "PartDesign_Draft"
-                        },
-                        "PartDesign_Thickness": {
-                            "size": "small",
-                            "text": "Thickness",
-                            "icon": "PartDesign_Thickness"
-                        }
-                    }
-                },
-                "Part Design Patterns": {
-                    "order": [
-                        "Mirrored",
-                        "LinearPattern",
-                        "PolarPattern",
-                        "Create MultiTransform"
-                    ],
-                    "commands": {
-                        "PartDesign_Mirrored": {
-                            "size": "small",
-                            "text": "Mirrored",
-                            "icon": "PartDesign_Mirrored"
-                        },
-                        "PartDesign_LinearPattern": {
-                            "size": "small",
-                            "text": "LinearPattern",
-                            "icon": "PartDesign_LinearPattern"
-                        },
-                        "PartDesign_PolarPattern": {
-                            "size": "small",
-                            "text": "PolarPattern",
-                            "icon": "PartDesign_PolarPattern"
-                        },
-                        "PartDesign_MultiTransform": {
-                            "size": "small",
-                            "text": "Create MultiTransform",
-                            "icon": "PartDesign_MultiTransform"
                         }
                     }
                 }
@@ -329,81 +291,15 @@
                         }
                     }
                 },
-                "Individual views": {
+                "BoM Toolbar - AssemblyWorkbench": {
                     "order": [
-                        "Isometric",
-                        "Front",
-                        "Top",
-                        "Right",
-                        "Rear",
-                        "Bottom",
-                        "Left"
+                        "Create overall BoM"
                     ],
                     "commands": {
-                        "Std_ViewIsometric": {
-                            "size": "small",
-                            "text": "Isometric",
-                            "icon": "view-axonometric"
-                        },
-                        "Std_ViewFront": {
-                            "size": "small",
-                            "text": "Front",
-                            "icon": "view-front"
-                        },
-                        "Std_ViewTop": {
-                            "size": "small",
-                            "text": "Top",
-                            "icon": "view-top"
-                        },
-                        "Std_ViewRight": {
-                            "size": "small",
-                            "text": "Right",
-                            "icon": "view-right"
-                        },
-                        "Std_ViewRear": {
-                            "size": "small",
-                            "text": "Rear",
-                            "icon": "view-rear"
-                        },
-                        "Std_ViewBottom": {
-                            "size": "small",
-                            "text": "Bottom",
-                            "icon": "view-bottom"
-                        },
-                        "Std_ViewLeft": {
-                            "size": "small",
-                            "text": "Left",
-                            "icon": "view-left"
-                        }
-                    }
-                },
-                "Structure": {
-                    "order": [
-                        "Create part",
-                        "Create group",
-                        "Link actions",
-                        "Create a variable set"
-                    ],
-                    "commands": {
-                        "Std_Part": {
-                            "size": "small",
-                            "text": "Create part",
-                            "icon": "Geofeaturegroup"
-                        },
-                        "Std_Group": {
-                            "size": "small",
-                            "text": "Create group",
-                            "icon": "folder"
-                        },
-                        "Std_LinkActions": {
-                            "size": "small",
-                            "text": "Link actions",
-                            "icon": ""
-                        },
-                        "Std_VarSet": {
-                            "size": "small",
-                            "text": "Create a variable set",
-                            "icon": "VarSet"
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -618,6 +514,18 @@
                             "icon": ":icons/preferences-system.svg"
                         }
                     }
+                },
+                "BoM Toolbar - BIMWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -684,6 +592,18 @@
                             "size": "large",
                             "text": "Copy the operation in the job",
                             "icon": "CAM_OpCopy"
+                        }
+                    }
+                },
+                "BoM Toolbar - CAMWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -804,6 +724,18 @@
                             "size": "large",
                             "text": "Snap lock",
                             "icon": "Draft_Snap_Lock"
+                        }
+                    }
+                },
+                "BoM Toolbar - DraftWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -981,6 +913,34 @@
                             "icon": "FEM_ClippingPlaneAdd"
                         }
                     }
+                },
+                "BoM Toolbar - FemWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
+                }
+            }
+        },
+        "InspectionWorkbench": {
+            "toolbars": {
+                "BoM Toolbar - InspectionWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -995,6 +955,18 @@
                             "size": "large",
                             "text": "Edit...",
                             "icon": "Materials_Edit"
+                        }
+                    }
+                },
+                "BoM Toolbar - MaterialWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1099,6 +1071,18 @@
                             "icon": "Mesh_Evaluation"
                         }
                     }
+                },
+                "BoM Toolbar - MeshWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1136,6 +1120,18 @@
                             "size": "large",
                             "text": "Check Geometry",
                             "icon": "Part_CheckGeometry"
+                        }
+                    }
+                },
+                "BoM Toolbar - OpenSCADWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1209,6 +1205,18 @@
                             "icon": ""
                         }
                     }
+                },
+                "BoM Toolbar - PartWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1230,6 +1238,18 @@
                             "icon": "Points_Import_Point_cloud"
                         }
                     }
+                },
+                "BoM Toolbar - PointsWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1244,6 +1264,18 @@
                             "size": "large",
                             "text": "Approximate B-spline surface...",
                             "icon": "actions/FitSurface"
+                        }
+                    }
+                },
+                "BoM Toolbar - ReverseEngineeringWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1269,6 +1301,18 @@
                             "size": "large",
                             "text": "Place robot...",
                             "icon": "Robot_CreateRobot"
+                        }
+                    }
+                },
+                "BoM Toolbar - RobotWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1425,6 +1469,18 @@
                             "icon": ""
                         }
                     }
+                },
+                "BoM Toolbar - SketcherWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1455,6 +1511,18 @@
                             "icon": "Spreadsheet"
                         }
                     }
+                },
+                "BoM Toolbar - SpreadsheetWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1474,6 +1542,18 @@
                             "size": "large",
                             "text": "Filling...",
                             "icon": "Surface_Filling"
+                        }
+                    }
+                },
+                "BoM Toolbar - SurfaceWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1638,6 +1718,32 @@
                             "icon": "actions/TechDraw_Annotation"
                         }
                     }
+                },
+                "TitleBlock Toolbar": {
+                    "order": [
+                        "Populate titleblock",
+                        "Import data from the FreeCAD source file",
+                        "Import data from titleblock"
+                    ],
+                    "commands": {
+                        "FillTitleBlock": {
+                            "size": "large",
+                            "text": "Populate titleblock",
+                            "icon": "FillTitleBlock.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - TechDrawWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1655,6 +1761,18 @@
                             "size": "large",
                             "text": "Self-test...",
                             "icon": ""
+                        }
+                    }
+                },
+                "BoM Toolbar - TestWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1699,6 +1817,18 @@
                             "size": "large",
                             "text": "Short text",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\3D_Printing_Tools\\Resources\\icons/Inch_mm.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - ScriptXWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1817,6 +1947,18 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\A2plus\\./icons/CD_ConstraintViewer.svg"
                         }
                     }
+                },
+                "BoM Toolbar - A2plusWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1876,6 +2018,18 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\Assembly4\\.\\Resources/icons\\Snap_Vertex.svg"
                         }
                     }
+                },
+                "BoM Toolbar - Assembly4Workbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1887,6 +2041,18 @@
                         "Create a single level BoM",
                         "Add or remove columns",
                         "Create the raw BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - BillOfMaterialsWB": {
+                    "order": [
+                        "Create overall BoM"
                     ],
                     "commands": {
                         "CreateBOM_Overall": {
@@ -1921,6 +2087,18 @@
                             "size": "large",
                             "text": "Analysis container",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\CfdOF\\Gui\\Icons\\cfd_analysis.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - CfdOFWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1973,6 +2151,18 @@
                             "icon": ""
                         }
                     }
+                },
+                "BoM Toolbar - FastenersWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -1995,6 +2185,18 @@
                             "icon": ":/icons/Spreadsheet.svg"
                         }
                     }
+                },
+                "BoM Toolbar - FEMbyGEN": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -2010,6 +2212,18 @@
                             "size": "large",
                             "text": "FrontISTR Solver",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod/FEM_FrontISTR/Resources/FrontISTR_solver.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - FrontISTR": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2034,6 +2248,18 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\NikraDAP\\.\\icons\\Icon2n.png"
                         }
                     }
+                },
+                "BoM Toolbar - DapWorkbenchC": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -2056,6 +2282,18 @@
                             "size": "large",
                             "text": "Projects",
                             "icon": ""
+                        }
+                    }
+                },
+                "BoM Toolbar - RenderWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2086,6 +2324,18 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\sheetmetal\\.\\Resources\\icons\\SheetMetal_AddBase.svg"
                         }
                     }
+                },
+                "BoM Toolbar - SMWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -2107,6 +2357,18 @@
                             "size": "large",
                             "text": "Export data to the excel source file",
                             "icon": "ExportExcel.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - TitleBlockWB": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2171,6 +2433,18 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_threePointsPlane.svg"
                         }
                     }
+                },
+                "BoM Toolbar - WorkFeatureWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -2197,6 +2471,18 @@
                             "size": "large",
                             "text": "Involute Gear",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\freecad.gears\\.\\freecad\\gears\\icons\\involutegear.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - GearWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2233,6 +2519,18 @@
                             "size": "large",
                             "text": "Linked Face",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\frame\\.\\freecad\\frametools\\icons\\linked_face.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - FrameWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2374,6 +2672,18 @@
                             "icon": "Assembly_GotoRelation"
                         }
                     }
+                },
+                "BoM Toolbar - Assembly3Workbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -2394,6 +2704,18 @@
                             "size": "large",
                             "text": "Save plot",
                             "icon": "Plot_Save"
+                        }
+                    }
+                },
+                "BoM Toolbar - PlotWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
