@@ -293,7 +293,6 @@ class ModernMenu(RibbonBar):
                             OriginalToolbar = ModernMenu.ribbonStructure[
                                 "customToolbars"
                             ][CustomPanel]["commands"][Command]
-                            print(OriginalToolbar)
                             ListToolbars.remove(OriginalToolbar)
                         except Exception:
                             continue
@@ -553,7 +552,7 @@ class ModernMenu(RibbonBar):
                         if MenuText == key:
                             action = Command.getAction()[0]
                             action.setData(CommandName)
-                            action.setText(CommandName)
+                            action.setText(MenuText)
 
                             Button = QToolButton()
                             Button.setDefaultAction(action)

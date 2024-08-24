@@ -68,8 +68,6 @@ class LoadDialog(Settings_ui.Ui_Form):
     List_QuickAccessCommands = []
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
-    List_SortedCommands = []
-    List_SortedToolbars = []
     Dict_CustomToolbars = {}
 
     ShowText_Small = False
@@ -379,32 +377,14 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.ShowText_Medium = bool(data["showTextMedium"])
         self.ShowText_Large = bool(data["showTextLarge"])
 
+        # Get all the custom toolbars
+        try:
+            self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
+        except Exception:
+            pass
+
         # Get the dict with the customized date for the buttons
         self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
-
-        try:
-            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                    "toolbars"
-                ]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
-                        Workbench
-                    ]["toolbars"]["order"]:
-                        self.List_SortedToolbars.append(orderItem)
-        except Exception:
-            pass
-
-        try:
-            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                    "toolbars"
-                ]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
-                        Workbench
-                    ]["toolbars"][toolbar]["order"]:
-                        self.List_SortedCommands.append(orderItem)
-        except Exception:
-            pass
 
         JsonFile.close()
         return
@@ -417,6 +397,10 @@ class LoadDialog(Settings_ui.Ui_Form):
         resultingDict["iconOnlyToolbars"] = self.List_IconOnlyToolbars
         resultingDict["quickAccessCommands"] = self.List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = self.List_IgnoredWorkbenches
+
+        # The custom toolbars
+        resultingDict.update(self.Dict_CustomToolbars)
+
         # Add the show text property to the dict
         resultingDict["showTextSmall"] = self.ShowText_Small
         resultingDict["showTextMedium"] = self.ShowText_Medium

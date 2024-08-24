@@ -74,13 +74,13 @@ class LoadDialog(Design_ui.Ui_Form):
     List_QuickAccessCommands = []
     List_IgnoredWorkbenches = []
     Dict_RibbonCommandPanel = {}
-    List_SortedCommands = []
-    List_SortedToolbars = []
     Dict_CustomToolbars = {}
 
     ShowText_Small = False
     ShowText_Medium = False
     ShowText_Large = False
+
+    List_IgnoredToolbars_internal = []
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -896,6 +896,7 @@ class LoadDialog(Design_ui.Ui_Form):
                         ]
                     ):
                         WorkBenchTitle = WorkbenchItem[2]
+                self.form.WorkbenchList_2.setCurrentText(WorkBenchTitle)
                 self.on_WorkbenchList_2__textChanged(False, WorkBenchTitle)
 
         # Enable the apply button
@@ -984,6 +985,9 @@ class LoadDialog(Design_ui.Ui_Form):
             for IgnoredToolbar in self.List_IgnoredToolbars:
                 if Toolbar == IgnoredToolbar:
                     IsIgnored = True
+            for IgnoredToolbar in self.List_IgnoredToolbars_internal:
+                if Toolbar == IgnoredToolbar:
+                    IsIgnored = True
 
             # If the are not to be ignored, add them to the listwidget
             if IsIgnored is False:
@@ -995,16 +999,23 @@ class LoadDialog(Design_ui.Ui_Form):
         # Sort the Toolbars according the sorted list
         def SortToolbars(Toolbar):
             try:
-                position = self.List_SortedToolbars.index(Toolbar)
+                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
+                    WorkBenchName
+                ]["toolbars"]["order"]
+                position = OrderList.index(Toolbar)
             except Exception:
                 position = 999999
 
             return position
 
         wbToolbars.sort(key=SortToolbars)
+
         for Toolbar in wbToolbars:
             IsIgnored = False
             for IgnoredToolbar in self.List_IgnoredToolbars:
+                if Toolbar == IgnoredToolbar:
+                    IsIgnored = True
+            for IgnoredToolbar in self.List_IgnoredToolbars_internal:
                 if Toolbar == IgnoredToolbar:
                     IsIgnored = True
 
@@ -1054,7 +1065,10 @@ class LoadDialog(Design_ui.Ui_Form):
             try:
                 Command = Gui.Command.get(item)
                 MenuName = Command.getInfo()["menuText"].replace("&", "")
-                position = self.List_SortedCommands.index(MenuName)
+                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
+                    WorkBenchName
+                ]["toolbars"][Toolbar]["order"]
+                position = OrderList.index(MenuName)
             except Exception:
                 position = 999999
 
@@ -1649,30 +1663,6 @@ class LoadDialog(Design_ui.Ui_Form):
         except Exception:
             pass
 
-        try:
-            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                    "toolbars"
-                ]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
-                        Workbench
-                    ]["toolbars"]["order"]:
-                        self.List_SortedToolbars.append(orderItem)
-        except Exception:
-            pass
-
-        try:
-            for Workbench in self.Dict_RibbonCommandPanel["workbenches"]:
-                for toolbar in self.Dict_RibbonCommandPanel["workbenches"][Workbench][
-                    "toolbars"
-                ]:
-                    for orderItem in self.Dict_RibbonCommandPanel["workbenches"][
-                        Workbench
-                    ]["toolbars"][toolbar]["order"]:
-                        self.List_SortedCommands.append(orderItem)
-        except Exception:
-            pass
-
         JsonFile.close()
         return
 
@@ -1924,8 +1914,11 @@ class LoadDialog(Design_ui.Ui_Form):
                                 Command = self.List_Commands[i][0]
                                 ListCommands.append(Command)
 
-                        if self.List_IgnoredToolbars.__contains__(value) is False:
-                            self.List_IgnoredToolbars.append(value)
+                        if (
+                            self.List_IgnoredToolbars_internal.__contains__(value)
+                            is False
+                        ):
+                            self.List_IgnoredToolbars_internal.append(value)
 
                     Toolbars[CustomToolbar] = ListCommands
         except Exception:
@@ -1961,10 +1954,12 @@ class LoadDialog(Design_ui.Ui_Form):
                                             ListCommands.append(Command)
 
                                 if (
-                                    self.List_IgnoredToolbars.__contains__(value)
+                                    self.List_IgnoredToolbars_internal.__contains__(
+                                        value
+                                    )
                                     is False
                                 ):
-                                    self.List_IgnoredToolbars.append(value)
+                                    self.List_IgnoredToolbars_internal.append(value)
 
                             Toolbars.append(
                                 [CustomToolbar, WorkbenchTitle, ListCommands]
