@@ -1809,24 +1809,27 @@ class LoadDialog(Design_ui.Ui_Form):
             WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
             if str(WorkBenchName) != "" or WorkBenchName is not None:
                 if str(WorkBenchName) != "NoneWorkbench":
-                    for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
-                        ListCommands = []
-                        Commands = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
-                        Workbench = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["workbench"]
+                    try:
+                        for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
+                            ListCommands = []
+                            Commands = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
+                            Workbench = self.Dict_CustomToolbars["customToolbars"][CustomToolbar]["workbench"]
 
-                        WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+                            WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
 
-                        if Workbench == WorkBenchName:
-                            for key, value in Commands.items():
-                                for i in range(len(self.List_Commands)):
-                                    if self.List_Commands[i][2] == key:
-                                        Command = self.List_Commands[i][0]
-                                        ListCommands.append(Command)
+                            if Workbench == WorkBenchName:
+                                for key, value in Commands.items():
+                                    for i in range(len(self.List_Commands)):
+                                        if self.List_Commands[i][2] == key:
+                                            Command = self.List_Commands[i][0]
+                                            ListCommands.append(Command)
 
-                                if self.List_IgnoredToolbars.__contains__(value) is False:
-                                    self.List_IgnoredToolbars.append(value)
+                                    if self.List_IgnoredToolbars.__contains__(value) is False:
+                                        self.List_IgnoredToolbars.append(value)
 
-                            Toolbars.append([CustomToolbar, WorkbenchTitle, ListCommands])
+                                Toolbars.append([CustomToolbar, WorkbenchTitle, ListCommands])
+                    except Exception:
+                        continue
 
         return Toolbars
 
