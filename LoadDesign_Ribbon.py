@@ -1622,7 +1622,9 @@ class LoadDialog(Design_ui.Ui_Form):
             self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
         # Get the showtext value
-        self.ShowText = bool(data["showText"])
+        self.ShowText_Small = bool(data["showTextSmall"])
+        self.ShowText_Medium = bool(data["showTextMedium"])
+        self.ShowText_Large = bool(data["showTextLarge"])
 
         # Get all the custom toolbars
         self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
