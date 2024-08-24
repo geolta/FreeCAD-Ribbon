@@ -1,62 +1,16 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Settings.ui'
+## Form generated from reading UI file 'SettingsEpcySg.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide.QtCore import (
-    QCoreApplication,
-    QDate,
-    QDateTime,
-    QLocale,
-    QMetaObject,
-    QObject,
-    QPoint,
-    QRect,
-    QSize,
-    QTime,
-    QUrl,
-    Qt,
-)
-from PySide.QtGui import (
-    QBrush,
-    QColor,
-    QConicalGradient,
-    QCursor,
-    QFont,
-    QFontDatabase,
-    QGradient,
-    QIcon,
-    QImage,
-    QKeySequence,
-    QLinearGradient,
-    QPainter,
-    QPalette,
-    QPixmap,
-    QRadialGradient,
-    QTransform,
-)
-from PySide.QtWidgets import (
-    QAbstractSpinBox,
-    QApplication,
-    QCheckBox,
-    QFrame,
-    QGridLayout,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QSizePolicy,
-    QSpacerItem,
-    QSpinBox,
-    QTabWidget,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide.QtCore import *
+from PySide.QtGui import *
+from PySide.QtWidgets import *
 
 
 class Ui_Form(object):
@@ -127,6 +81,7 @@ class Ui_Form(object):
         self.groupBox.setMinimumSize(QSize(0, 120))
         font = QFont()
         font.setBold(True)
+        font.setWeight(75)
         self.groupBox.setFont(font)
         self.gridLayout_8 = QGridLayout(self.groupBox)
         self.gridLayout_8.setObjectName("gridLayout_8")
@@ -135,6 +90,7 @@ class Ui_Form(object):
         self.EnableBackup.setObjectName("EnableBackup")
         font1 = QFont()
         font1.setBold(False)
+        font1.setWeight(50)
         self.EnableBackup.setFont(font1)
 
         self.gridLayout_8.addWidget(self.EnableBackup, 0, 0, 1, 1)
@@ -157,7 +113,7 @@ class Ui_Form(object):
         self.label_4.setObjectName("label_4")
         self.label_4.setFrameShape(QFrame.Box)
         self.label_4.setScaledContents(True)
-        self.label_4.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self.label_4.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
 
         self.gridLayout_13.addWidget(self.label_4, 0, 0, 1, 1)
 
@@ -201,51 +157,34 @@ class Ui_Form(object):
         self.groupBox_4 = QGroupBox(self.groupBox1)
         self.groupBox_4.setObjectName("groupBox_4")
         self.groupBox_4.setFont(font1)
-        self.gridLayout = QGridLayout(self.groupBox_4)
+        self.widget = QWidget(self.groupBox_4)
+        self.widget.setObjectName("widget")
+        self.widget.setGeometry(QRect(11, 23, 188, 48))
+        self.gridLayout = QGridLayout(self.widget)
         self.gridLayout.setObjectName("gridLayout")
-        self.horizontalLayout_6 = QHBoxLayout()
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.label_11 = QLabel(self.groupBox_4)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.label_11 = QLabel(self.widget)
         self.label_11.setObjectName("label_11")
         sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
         self.label_11.setSizePolicy(sizePolicy2)
-        self.label_11.setMinimumSize(QSize(120, 0))
+        self.label_11.setMinimumSize(QSize(130, 0))
         self.label_11.setFont(font1)
 
-        self.horizontalLayout_6.addWidget(self.label_11)
+        self.gridLayout.addWidget(self.label_11, 1, 0, 1, 1)
 
-        self.IconSize_Medium = QSpinBox(self.groupBox_4)
-        self.IconSize_Medium.setObjectName("IconSize_Medium")
-        sizePolicy2.setHeightForWidth(
-            self.IconSize_Medium.sizePolicy().hasHeightForWidth()
-        )
-        self.IconSize_Medium.setSizePolicy(sizePolicy2)
-        self.IconSize_Medium.setMinimumSize(QSize(50, 0))
-        self.IconSize_Medium.setBaseSize(QSize(0, 0))
-        self.IconSize_Medium.setFont(font1)
-        self.IconSize_Medium.setAlignment(Qt.AlignCenter)
-        self.IconSize_Medium.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
-        self.IconSize_Medium.setValue(44)
-
-        self.horizontalLayout_6.addWidget(self.IconSize_Medium)
-
-        self.gridLayout.addLayout(self.horizontalLayout_6, 1, 0, 1, 1)
-
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.label_10 = QLabel(self.groupBox_4)
+        self.label_10 = QLabel(self.widget)
         self.label_10.setObjectName("label_10")
         sizePolicy2.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
         self.label_10.setSizePolicy(sizePolicy2)
-        self.label_10.setMinimumSize(QSize(120, 0))
+        self.label_10.setMinimumSize(QSize(130, 0))
         self.label_10.setFont(font1)
 
-        self.horizontalLayout_5.addWidget(self.label_10)
+        self.gridLayout.addWidget(self.label_10, 0, 0, 1, 1)
 
-        self.IconSize_Small = QSpinBox(self.groupBox_4)
+        self.IconSize_Small = QSpinBox(self.widget)
         self.IconSize_Small.setObjectName("IconSize_Small")
         sizePolicy2.setHeightForWidth(
             self.IconSize_Small.sizePolicy().hasHeightForWidth()
@@ -262,15 +201,22 @@ class Ui_Form(object):
         self.IconSize_Small.setMinimum(0)
         self.IconSize_Small.setValue(24)
 
-        self.horizontalLayout_5.addWidget(self.IconSize_Small)
+        self.gridLayout.addWidget(self.IconSize_Small, 0, 1, 1, 1)
 
-        self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 1)
-
-        self.horizontalSpacer_3 = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        self.IconSize_Medium = QSpinBox(self.widget)
+        self.IconSize_Medium.setObjectName("IconSize_Medium")
+        sizePolicy2.setHeightForWidth(
+            self.IconSize_Medium.sizePolicy().hasHeightForWidth()
         )
+        self.IconSize_Medium.setSizePolicy(sizePolicy2)
+        self.IconSize_Medium.setMinimumSize(QSize(50, 0))
+        self.IconSize_Medium.setBaseSize(QSize(0, 0))
+        self.IconSize_Medium.setFont(font1)
+        self.IconSize_Medium.setAlignment(Qt.AlignCenter)
+        self.IconSize_Medium.setCorrectionMode(QAbstractSpinBox.CorrectToNearestValue)
+        self.IconSize_Medium.setValue(44)
 
-        self.gridLayout.addItem(self.horizontalSpacer_3, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.IconSize_Medium, 1, 1, 1, 1)
 
         self.gridLayout_3.addWidget(self.groupBox_4, 1, 0, 1, 1)
 
@@ -321,7 +267,7 @@ class Ui_Form(object):
         self.label_7.setObjectName("label_7")
         self.label_7.setFrameShape(QFrame.Box)
         self.label_7.setScaledContents(True)
-        self.label_7.setAlignment(Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
+        self.label_7.setAlignment(Qt.AlignLeading | Qt.AlignLeft | Qt.AlignVCenter)
 
         self.gridLayout_12.addWidget(self.label_7, 0, 0, 1, 1)
 

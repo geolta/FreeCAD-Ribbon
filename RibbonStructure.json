@@ -2,13 +2,9 @@
     "ignoredToolbars": [
         "Clipboard",
         "Edit",
-        "Electromagnetic boundary conditions",
         "File",
-        "Fluid boundary conditions",
         "Help",
         "Macro",
-        "Mechanical boundary conditions and loads",
-        "Thermal boundary conditions and loads",
         "View",
         "Workbench"
     ],
@@ -1180,8 +1176,9 @@
                 },
                 "Loads & boundary conditions": {
                     "order": [
-                        "Electromagnetic boundary conditions",
                         "Fixed boundary condition",
+                        "Force load",
+                        "Electromagnetic boundary conditions",
                         "Initial flow velocity condition",
                         "Initial pressure condition",
                         "Flow velocity boundary condition",
@@ -1190,7 +1187,6 @@
                         "Contact constraint",
                         "Tie constraint",
                         "Spring",
-                        "Force load",
                         "Pressure load",
                         "Centrifugal load",
                         "Gravity load",
@@ -1301,7 +1297,8 @@
                     "Mesh",
                     "Solve",
                     "Results",
-                    "Utilities"
+                    "Utilities",
+                    "BoM Toolbar - FemWorkbench"
                 ]
             }
         },

@@ -25,6 +25,20 @@ import os
 
 import json
 
+from PySide.QtWidgets import (
+    QListWidgetItem,
+    QTableWidgetItem,
+    QListWidget,
+    QTableWidget,
+    QSpinBox,
+    QWidget,
+    QToolBar,
+    QComboBox,
+    QPushButton,
+    QToolButton,
+    QTabWidget,
+)
+
 # Set the path where you want to save this new Json file
 # JsonPath = os.path.dirname(__file__)
 JsonPath = "D:\\OneDrive\\Desktop\\"
@@ -65,8 +79,13 @@ List_IgnoredWorkbenches = [
     "Test Framework",
 ]
 Dict_RibbonCommandPanel = {}
-List_SortedCommands = []
-showText = False
+Dict_CustomToolbars = {}
+
+List_IgnoredToolbars_internal = []
+
+ShowText_Small = False
+ShowText_Medium = False
+ShowText_Large = False
 
 # Add workbenches here that you want to exclude from this script.
 skipWorkbenchList = []
@@ -75,8 +94,37 @@ skipWorkbenchList = []
 # Add toolbars which must have only small icons:
 smallOnlyToolbars = ["Structure", "Individual views"]
 
+# Add here your customized panels (toolbars)
+Dict_CustomToolbars = {
+    "customToolbars": {
+        "Loads & boundary conditions": {
+            "commands": {
+                "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
+                "Initial flow velocity condition": "Fluid boundary conditions",
+                "Initial pressure condition": "Fluid boundary conditions",
+                "Flow velocity boundary condition": "Fluid boundary conditions",
+                "Fixed boundary condition": "Mechanical boundary conditions and loads",
+                "Rigid body constraint": "Mechanical boundary conditions and loads",
+                "Displacement boundary condition": "Mechanical boundary conditions and loads",
+                "Contact constraint": "Mechanical boundary conditions and loads",
+                "Tie constraint": "Mechanical boundary conditions and loads",
+                "Spring": "Mechanical boundary conditions and loads",
+                "Force load": "Mechanical boundary conditions and loads",
+                "Pressure load": "Mechanical boundary conditions and loads",
+                "Centrifugal load": "Mechanical boundary conditions and loads",
+                "Gravity load": "Mechanical boundary conditions and loads",
+                "Initial temperature": "Thermal boundary conditions and loads",
+                "Heat flux load": "Thermal boundary conditions and loads",
+                "Temperature boundary condition": "Thermal boundary conditions and loads",
+                "Body heat source": "Thermal boundary conditions and loads",
+            },
+            "workbench": "FemWorkbench",
+        }
+    },
+}
+
 # Add here your customized workbenches to include.
-CustomJson = {
+CustomJson_Workbenches = {
     "workbenches": {
         "PartDesignWorkbench": {
             "toolbars": {
@@ -280,10 +328,10 @@ def main():
 
 def CreateJson():
     # Add your custom workbenches
-    if CustomJson != "" or CustomJson is not None:
-        for Workbench in CustomJson["workbenches"]:
+    if CustomJson_Workbenches != "" or CustomJson_Workbenches is not None:
+        for Workbench in CustomJson_Workbenches["workbenches"]:
             skipWorkbenchList.append(Workbench)
-        Dict_RibbonCommandPanel.update(CustomJson)
+        Dict_RibbonCommandPanel.update(CustomJson_Workbenches)
 
     # Go throug the workbenches
     for WorkbenchItem in List_Workbenches:
@@ -304,6 +352,11 @@ def CreateJson():
             Gui.activateWorkbench(WorkBenchName)
             # Get the toolbars of this workbench
             wbToolbars = Gui.getWorkbench(WorkBenchName).getToolbarItems()
+            CustomCommands = Dict_ReturnCustomToolbars(WorkBenchName)
+            wbToolbars.update(CustomCommands)
+            CustomPanelCommands = Dict_AddCustomToolbarsToWorkbench(WorkBenchName)
+            wbToolbars.update(CustomPanelCommands)
+
             # Go through the toolbars
             for key, value in wbToolbars.items():
                 Toolbar = key
@@ -420,6 +473,9 @@ def CreateLists():
 
             if IsInList is False:
                 StringList_Toolbars.append([Toolbar, workbench[2]])
+    CustomToolbars = List_ReturnCustomToolbars()
+    for Customtoolbar in CustomToolbars:
+        StringList_Toolbars.append(Customtoolbar)
     # re-activate the workbench that was stored.
     Gui.activateWorkbench(ActiveWB)
 
@@ -454,6 +510,21 @@ def CreateLists():
                 Icon = None
             MenuName = command.getInfo()["menuText"].replace("&", "")
             List_Commands.append([CommandName[0], Icon, MenuName, WorkBenchName])
+    # add also custom commands
+    Toolbars = List_ReturnCustomToolbars()
+    for Toolbar in Toolbars:
+        WorkbenchTitle = Toolbar[1]
+        for WorkBench in List_Workbenches:
+            if WorkbenchTitle == WorkBench[2]:
+                WorkBenchName = WorkBench[0]
+                for CustomCommand in Toolbar[2]:
+                    command = Gui.Command.get(CustomCommand)
+                    if command.getInfo()["pixmap"] != "":
+                        Icon = Gui.getIcon(command.getInfo()["pixmap"])
+                    else:
+                        Icon = None
+                    MenuName = command.getInfo()["menuText"].replace("&", "")
+                    List_Commands.append([CustomCommand, Icon, MenuName, WorkBenchName])
     # endregion ----------------------------------------------------------------------
 
     return
@@ -467,8 +538,11 @@ def WriteJson():
     resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
     resultingDict["quickAccessCommands"] = List_QuickAccessCommands
     resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
+    resultingDict.update(Dict_CustomToolbars)
     # Add the show text property to the dict
-    resultingDict["showText"] = False
+    resultingDict["showTextSmall"] = ShowText_Small
+    resultingDict["showTextMedium"] = ShowText_Medium
+    resultingDict["showTextLarge"] = ShowText_Large
 
     # RibbonTabs
     # Get the Ribbon dictionary
@@ -495,6 +569,112 @@ def add_keys_nested_dict(dict, keys):
     except Exception:
         pass
     return
+
+
+def List_ReturnCustomToolbars():
+    # Get the main window of FreeCAD
+    mw = Gui.getMainWindow()
+    Toolbars = []
+
+    List_Workbenches = Gui.listWorkbenches().copy()
+    for WorkBenchName in List_Workbenches:
+        WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+        if str(WorkBenchName) != "" or WorkBenchName is not None:
+            if str(WorkBenchName) != "NoneWorkbench":
+                CustomToolbars: list = App.ParamGet(
+                    "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar"
+                ).GetGroups()
+
+                for Group in CustomToolbars:
+                    Parameter = App.ParamGet(
+                        "User parameter:BaseApp/Workbench/"
+                        + WorkBenchName
+                        + "/Toolbar/"
+                        + Group
+                    )
+                    Name = Parameter.GetString("Name")
+
+                    ListCommands = []
+                    # get list of all buttons in toolbar
+                    TB = mw.findChildren(QToolBar, Name)
+                    allButtons: list = TB[0].findChildren(QToolButton)
+                    for button in allButtons:
+                        if button.text() == "":
+                            continue
+
+                        action = button.defaultAction()
+                        if action is not None:
+                            Command = action.objectName()
+                            ListCommands.append(Command)
+
+                    Toolbars.append([Name, WorkbenchTitle, ListCommands])
+
+    return Toolbars
+
+
+def Dict_ReturnCustomToolbars(WorkBenchName):
+    # Get the main window of FreeCAD
+    mw = Gui.getMainWindow()
+    Toolbars = {}
+
+    if str(WorkBenchName) != "" or WorkBenchName is not None:
+        if str(WorkBenchName) != "NoneWorkbench":
+            CustomToolbars: list = App.ParamGet(
+                "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar"
+            ).GetGroups()
+
+            for Group in CustomToolbars:
+                Parameter = App.ParamGet(
+                    "User parameter:BaseApp/Workbench/"
+                    + WorkBenchName
+                    + "/Toolbar/"
+                    + Group
+                )
+                Name = Parameter.GetString("Name")
+
+                if Name != "":
+                    ListCommands = []
+                    # get list of all buttons in toolbar
+                    TB = mw.findChildren(QToolBar, Name)
+                    allButtons: list = TB[0].findChildren(QToolButton)
+                    for button in allButtons:
+                        if button.text() == "":
+                            continue
+                        action = button.defaultAction()
+                        Command = action.objectName()
+                        ListCommands.append(Command)
+
+                        Toolbars[Name] = ListCommands
+
+    return Toolbars
+
+
+def Dict_AddCustomToolbarsToWorkbench(WorkBenchName):
+    Toolbars = {}
+
+    try:
+        for CustomToolbar in Dict_CustomToolbars["customToolbars"]:
+            ListCommands = []
+            Commands = Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
+            Workbench = Dict_CustomToolbars["customToolbars"][CustomToolbar][
+                "workbench"
+            ]
+
+            if Workbench == WorkBenchName:
+                for key, value in Commands.items():
+                    for i in range(len(self.List_Commands)):
+                        if self.List_Commands[i][2] == key:
+                            Command = self.List_Commands[i][0]
+                            ListCommands.append(Command)
+
+                    if List_IgnoredToolbars_internal.__contains__(value) is False:
+                        List_IgnoredToolbars_internal.append(value)
+
+                Toolbars[CustomToolbar] = ListCommands
+    except Exception:
+        pass
+
+    return Toolbars
 
 
 main()
