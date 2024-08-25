@@ -1,5 +1,31 @@
 {
     "ignoredToolbars": [
+        "BoM Toolbar - CAMWorkbench",
+        "BoM Toolbar - CfdOFWorkbench",
+        "BoM Toolbar - DapWorkbenchC",
+        "BoM Toolbar - DraftWorkbench",
+        "BoM Toolbar - FastenersWorkbench",
+        "BoM Toolbar - FEMbyGEN",
+        "BoM Toolbar - FemWorkbench",
+        "BoM Toolbar - FrameWorkbench",
+        "BoM Toolbar - FrontISTR",
+        "BoM Toolbar - GearWorkbench",
+        "BoM Toolbar - InspectionWorkbench",
+        "BoM Toolbar - MaterialWorkbench",
+        "BoM Toolbar - MeshWorkbench",
+        "BoM Toolbar - OpenSCADWorkbench",
+        "BoM Toolbar - PlotWorkbench",
+        "BoM Toolbar - PointsWorkbench",
+        "BoM Toolbar - RenderWorkbench",
+        "BoM Toolbar - ReverseEngineeringWorkbench",
+        "BoM Toolbar - RobotWorkbench",
+        "BoM Toolbar - ScriptXWorkbench",
+        "BoM Toolbar - SketcherWorkbench",
+        "BoM Toolbar - SMWorkbench",
+        "BoM Toolbar - SpreadsheetWorkbench",
+        "BoM Toolbar - TestWorkbench",
+        "BoM Toolbar - TitleBlockWB",
+        "BoM Toolbar - WorkFeatureWorkbench",
         "Clipboard",
         "Edit",
         "File",
@@ -9,6 +35,12 @@
         "Workbench"
     ],
     "iconOnlyToolbars": [
+        "Structure",
+        "Individual views",
+        "Structure",
+        "Individual views",
+        "Structure",
+        "Individual views",
         "Structure",
         "Individual views"
     ],
@@ -31,45 +63,53 @@
         "Test Framework"
     ],
     "customToolbars": {
-        "Loads & boundary conditions": {
-            "commands": {
-                "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
-                "Initial flow velocity condition": "Fluid boundary conditions",
-                "Initial pressure condition": "Fluid boundary conditions",
-                "Flow velocity boundary condition": "Fluid boundary conditions",
-                "Fixed boundary condition": "Mechanical boundary conditions and loads",
-                "Rigid body constraint": "Mechanical boundary conditions and loads",
-                "Displacement boundary condition": "Mechanical boundary conditions and loads",
-                "Contact constraint": "Mechanical boundary conditions and loads",
-                "Tie constraint": "Mechanical boundary conditions and loads",
-                "Spring": "Mechanical boundary conditions and loads",
-                "Force load": "Mechanical boundary conditions and loads",
-                "Pressure load": "Mechanical boundary conditions and loads",
-                "Centrifugal load": "Mechanical boundary conditions and loads",
-                "Gravity load": "Mechanical boundary conditions and loads",
-                "Initial temperature": "Thermal boundary conditions and loads",
-                "Heat flux load": "Thermal boundary conditions and loads",
-                "Temperature boundary condition": "Thermal boundary conditions and loads",
-                "Body heat source": "Thermal boundary conditions and loads"
-            },
-            "workbench": "FemWorkbench"
+        "FemWorkbench": {
+            "Loads & boundary conditions": {
+                "commands": {
+                    "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
+                    "Initial flow velocity condition": "Fluid boundary conditions",
+                    "Initial pressure condition": "Fluid boundary conditions",
+                    "Flow velocity boundary condition": "Fluid boundary conditions",
+                    "Fixed boundary condition": "Mechanical boundary conditions and loads",
+                    "Rigid body constraint": "Mechanical boundary conditions and loads",
+                    "Displacement boundary condition": "Mechanical boundary conditions and loads",
+                    "Contact constraint": "Mechanical boundary conditions and loads",
+                    "Tie constraint": "Mechanical boundary conditions and loads",
+                    "Spring": "Mechanical boundary conditions and loads",
+                    "Force load": "Mechanical boundary conditions and loads",
+                    "Pressure load": "Mechanical boundary conditions and loads",
+                    "Centrifugal load": "Mechanical boundary conditions and loads",
+                    "Gravity load": "Mechanical boundary conditions and loads",
+                    "Initial temperature": "Thermal boundary conditions and loads",
+                    "Heat flux load": "Thermal boundary conditions and loads",
+                    "Temperature boundary condition": "Thermal boundary conditions and loads",
+                    "Body heat source": "Thermal boundary conditions and loads"
+                }
+            }
+        },
+        "AssemblyWorkbench": {
+            "Create BOM": {
+                "commands": {
+                    "Create overall BoM": "BoM Toolbar - AssemblyWorkbench"
+                }
+            }
         }
     },
     "showTextSmall": false,
     "showTextMedium": false,
-    "showTextLarge": false,
+    "showTextLarge": true,
     "workbenches": {
         "PartDesignWorkbench": {
             "toolbars": {
                 "Part Design Helper": {
                     "order": [
                         "Create sketch",
+                        "Create datum",
                         "Create body",
-                        "Validate sketch",
                         "Check Geometry",
                         "Create a sub-object(s) shape binder",
                         "Create a clone",
-                        "Create datum"
+                        "Validate sketch"
                     ],
                     "commands": {
                         "PartDesign_CompSketches": {
@@ -196,6 +236,11 @@
                             "size": "small",
                             "text": "Boolean operation",
                             "icon": "PartDesign_Boolean"
+                        },
+                        "asm3AddAttachmentGroup": {
+                            "size": "large",
+                            "text": "Create \"Attachment\" constraint",
+                            "icon": "Assembly_ConstraintAttachment"
                         }
                     }
                 },
@@ -246,6 +291,98 @@
                             "icon": "view-left"
                         }
                     }
+                },
+                "Part Design Dressup": {
+                    "order": [
+                        "Fillet",
+                        "Chamfer",
+                        "Draft",
+                        "Thickness"
+                    ],
+                    "commands": {
+                        "PartDesign_Fillet": {
+                            "size": "small",
+                            "text": "Fillet",
+                            "icon": "PartDesign_Fillet"
+                        },
+                        "PartDesign_Chamfer": {
+                            "size": "small",
+                            "text": "Chamfer",
+                            "icon": "PartDesign_Chamfer"
+                        },
+                        "PartDesign_Draft": {
+                            "size": "small",
+                            "text": "Draft",
+                            "icon": "PartDesign_Draft"
+                        },
+                        "PartDesign_Thickness": {
+                            "size": "small",
+                            "text": "Thickness",
+                            "icon": "PartDesign_Thickness"
+                        }
+                    }
+                },
+                "Part Design Patterns": {
+                    "order": [
+                        "Mirrored",
+                        "LinearPattern",
+                        "PolarPattern",
+                        "Create MultiTransform"
+                    ],
+                    "commands": {
+                        "PartDesign_Mirrored": {
+                            "size": "small",
+                            "text": "Mirrored",
+                            "icon": "PartDesign_Mirrored"
+                        },
+                        "PartDesign_LinearPattern": {
+                            "size": "small",
+                            "text": "LinearPattern",
+                            "icon": "PartDesign_LinearPattern"
+                        },
+                        "PartDesign_PolarPattern": {
+                            "size": "small",
+                            "text": "PolarPattern",
+                            "icon": "PartDesign_PolarPattern"
+                        },
+                        "PartDesign_MultiTransform": {
+                            "size": "small",
+                            "text": "Create MultiTransform",
+                            "icon": "PartDesign_MultiTransform"
+                        }
+                    }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Assembly",
+                    "Assembly Joints",
+                    "BoM Toolbar - AssemblyWorkbench",
+                    "Loads & boundary conditions"
+                ],
+                "BoM Toolbar - PartDesignWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
+                },
+                "Create BOM": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
                 }
             }
         },
@@ -288,6 +425,187 @@
                             "size": "large",
                             "text": "Toggle grounded",
                             "icon": "Assembly_ToggleGrounded"
+                        },
+                        "Assembly_CreateJointFixed": {
+                            "size": "small",
+                            "text": "Create a Fixed Joint",
+                            "icon": "Assembly_CreateJointFixed"
+                        },
+                        "Assembly_CreateJointRevolute": {
+                            "size": "small",
+                            "text": "Create Revolute Joint",
+                            "icon": "Assembly_CreateJointRevolute"
+                        },
+                        "Assembly_CreateJointCylindrical": {
+                            "size": "small",
+                            "text": "Create Cylindrical Joint",
+                            "icon": "Assembly_CreateJointCylindrical"
+                        },
+                        "Assembly_CreateJointSlider": {
+                            "size": "small",
+                            "text": "Create Slider Joint",
+                            "icon": "Assembly_CreateJointSlider"
+                        },
+                        "Assembly_CreateJointBall": {
+                            "size": "small",
+                            "text": "Create Ball Joint",
+                            "icon": "Assembly_CreateJointBall"
+                        },
+                        "Assembly_CreateJointDistance": {
+                            "size": "small",
+                            "text": "Create Distance Joint",
+                            "icon": "Assembly_CreateJointDistance"
+                        },
+                        "Assembly_CreateJointParallel": {
+                            "size": "small",
+                            "text": "Create Parallel Joint",
+                            "icon": "Assembly_CreateJointParallel"
+                        },
+                        "Assembly_CreateJointPerpendicular": {
+                            "size": "small",
+                            "text": "Create Perpendicular Joint",
+                            "icon": "Assembly_CreateJointPerpendicular"
+                        },
+                        "Assembly_CreateJointAngle": {
+                            "size": "small",
+                            "text": "Create Angle Joint",
+                            "icon": "Assembly_CreateJointAngle"
+                        },
+                        "Assembly_CreateJointRackPinion": {
+                            "size": "small",
+                            "text": "Create Rack and Pinion Joint",
+                            "icon": "Assembly_CreateJointRackPinion"
+                        },
+                        "Assembly_CreateJointScrew": {
+                            "size": "small",
+                            "text": "Create Screw Joint",
+                            "icon": "Assembly_CreateJointScrew"
+                        },
+                        "Assembly_CreateJointGearBelt": {
+                            "size": "small",
+                            "text": "Create Gear/Belt Joint",
+                            "icon": "Assembly_CreateJointGears"
+                        }
+                    }
+                },
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
+                },
+                "Structure": {
+                    "order": [
+                        "Create part",
+                        "Create group",
+                        "Link actions",
+                        "Create a variable set"
+                    ],
+                    "commands": {
+                        "Std_Part": {
+                            "size": "small",
+                            "text": "Create part",
+                            "icon": "Geofeaturegroup"
+                        },
+                        "Std_Group": {
+                            "size": "small",
+                            "text": "Create group",
+                            "icon": "folder"
+                        },
+                        "Std_LinkActions": {
+                            "size": "small",
+                            "text": "Link actions",
+                            "icon": ""
+                        },
+                        "Std_VarSet": {
+                            "size": "small",
+                            "text": "Create a variable set",
+                            "icon": "VarSet"
+                        }
+                    }
+                },
+                "File": {
+                    "order": [
+                        "New",
+                        "Open",
+                        "Save"
+                    ],
+                    "commands": {
+                        "Std_New": {
+                            "size": "small",
+                            "text": "New",
+                            "icon": "document-new"
+                        },
+                        "Std_Open": {
+                            "size": "small",
+                            "text": "Open...",
+                            "icon": "document-open"
+                        },
+                        "Std_Save": {
+                            "size": "small",
+                            "text": "Save",
+                            "icon": "document-save"
+                        }
+                    }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Assembly",
+                    "Assembly Joints",
+                    "Create BOM"
+                ],
+                "Create BOM": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 },
@@ -297,7 +615,7 @@
                     ],
                     "commands": {
                         "CreateBOM_Overall": {
-                            "size": "large",
+                            "size": "small",
                             "text": "Create overall BoM",
                             "icon": "BoM.svg"
                         }
@@ -514,18 +832,6 @@
                             "icon": ":icons/preferences-system.svg"
                         }
                     }
-                },
-                "BoM Toolbar - BIMWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -592,18 +898,6 @@
                             "size": "large",
                             "text": "Copy the operation in the job",
                             "icon": "CAM_OpCopy"
-                        }
-                    }
-                },
-                "BoM Toolbar - CAMWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -724,18 +1018,6 @@
                             "size": "large",
                             "text": "Snap lock",
                             "icon": "Draft_Snap_Lock"
-                        }
-                    }
-                },
-                "BoM Toolbar - DraftWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -914,34 +1196,180 @@
                         }
                     }
                 },
-                "BoM Toolbar - FemWorkbench": {
+                "Individual views": {
                     "order": [
-                        "Create overall BoM"
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
                     ],
                     "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
                         }
                     }
-                }
-            }
-        },
-        "InspectionWorkbench": {
-            "toolbars": {
-                "BoM Toolbar - InspectionWorkbench": {
+                },
+                "Loads & boundary conditions": {
                     "order": [
-                        "Create overall BoM"
+                        "Fixed boundary condition",
+                        "Force load",
+                        "Electromagnetic boundary conditions",
+                        "Initial flow velocity condition",
+                        "Initial pressure condition",
+                        "Flow velocity boundary condition",
+                        "Rigid body constraint",
+                        "Displacement boundary condition",
+                        "Contact constraint",
+                        "Tie constraint",
+                        "Spring",
+                        "Pressure load",
+                        "Centrifugal load",
+                        "Gravity load",
+                        "Initial temperature",
+                        "Heat flux load",
+                        "Temperature boundary condition",
+                        "Body heat source"
                     ],
                     "commands": {
-                        "CreateBOM_Overall": {
+                        "FEM_CompEmConstraints": {
+                            "size": "small",
+                            "text": "Electromagnetic boundary conditions",
+                            "icon": ""
+                        },
+                        "FEM_ConstraintInitialFlowVelocity": {
+                            "size": "small",
+                            "text": "Initial flow velocity condition",
+                            "icon": "FEM_ConstraintInitialFlowVelocity"
+                        },
+                        "FEM_ConstraintInitialPressure": {
+                            "size": "small",
+                            "text": "Initial pressure condition",
+                            "icon": "FEM_ConstraintInitialPressure"
+                        },
+                        "FEM_ConstraintFlowVelocity": {
+                            "size": "small",
+                            "text": "Flow velocity boundary condition",
+                            "icon": "FEM_ConstraintFlowVelocity"
+                        },
+                        "FEM_ConstraintFixed": {
                             "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
+                            "text": "Fixed boundary condition",
+                            "icon": "FEM_ConstraintFixed"
+                        },
+                        "FEM_ConstraintRigidBody": {
+                            "size": "small",
+                            "text": "Rigid body constraint",
+                            "icon": "FEM_ConstraintRigidBody"
+                        },
+                        "FEM_ConstraintDisplacement": {
+                            "size": "small",
+                            "text": "Displacement boundary condition",
+                            "icon": "FEM_ConstraintDisplacement"
+                        },
+                        "FEM_ConstraintContact": {
+                            "size": "small",
+                            "text": "Contact constraint",
+                            "icon": "FEM_ConstraintContact"
+                        },
+                        "FEM_ConstraintTie": {
+                            "size": "small",
+                            "text": "Tie constraint",
+                            "icon": "FEM_ConstraintTie"
+                        },
+                        "FEM_ConstraintSpring": {
+                            "size": "small",
+                            "text": "Spring",
+                            "icon": "FEM_ConstraintSpring"
+                        },
+                        "FEM_ConstraintForce": {
+                            "size": "large",
+                            "text": "Force load",
+                            "icon": "FEM_ConstraintForce"
+                        },
+                        "FEM_ConstraintPressure": {
+                            "size": "small",
+                            "text": "Pressure load",
+                            "icon": "FEM_ConstraintPressure"
+                        },
+                        "FEM_ConstraintCentrif": {
+                            "size": "small",
+                            "text": "Centrifugal load",
+                            "icon": "FEM_ConstraintCentrif"
+                        },
+                        "FEM_ConstraintSelfWeight": {
+                            "size": "small",
+                            "text": "Gravity load",
+                            "icon": "FEM_ConstraintSelfWeight"
+                        },
+                        "FEM_ConstraintInitialTemperature": {
+                            "size": "small",
+                            "text": "Initial temperature",
+                            "icon": "FEM_ConstraintInitialTemperature"
+                        },
+                        "FEM_ConstraintHeatflux": {
+                            "size": "small",
+                            "text": "Heat flux load",
+                            "icon": "FEM_ConstraintHeatflux"
+                        },
+                        "FEM_ConstraintTemperature": {
+                            "size": "small",
+                            "text": "Temperature boundary condition",
+                            "icon": "FEM_ConstraintTemperature"
+                        },
+                        "FEM_ConstraintBodyHeatSource": {
+                            "size": "small",
+                            "text": "Body heat source",
+                            "icon": "FEM_ConstraintBodyHeatSource"
                         }
                     }
-                }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Model",
+                    "Loads & boundary conditions",
+                    "Geometrical analysis features",
+                    "Mesh",
+                    "Solve",
+                    "Results",
+                    "Utilities",
+                    "BoM Toolbar - FemWorkbench"
+                ]
             }
         },
         "MaterialWorkbench": {
@@ -955,18 +1383,6 @@
                             "size": "large",
                             "text": "Edit...",
                             "icon": "Materials_Edit"
-                        }
-                    }
-                },
-                "BoM Toolbar - MaterialWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1071,18 +1487,6 @@
                             "icon": "Mesh_Evaluation"
                         }
                     }
-                },
-                "BoM Toolbar - MeshWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1120,18 +1524,6 @@
                             "size": "large",
                             "text": "Check Geometry",
                             "icon": "Part_CheckGeometry"
-                        }
-                    }
-                },
-                "BoM Toolbar - OpenSCADWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1205,18 +1597,6 @@
                             "icon": ""
                         }
                     }
-                },
-                "BoM Toolbar - PartWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1238,18 +1618,6 @@
                             "icon": "Points_Import_Point_cloud"
                         }
                     }
-                },
-                "BoM Toolbar - PointsWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1264,18 +1632,6 @@
                             "size": "large",
                             "text": "Approximate B-spline surface...",
                             "icon": "actions/FitSurface"
-                        }
-                    }
-                },
-                "BoM Toolbar - ReverseEngineeringWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1301,18 +1657,6 @@
                             "size": "large",
                             "text": "Place robot...",
                             "icon": "Robot_CreateRobot"
-                        }
-                    }
-                },
-                "BoM Toolbar - RobotWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1469,18 +1813,6 @@
                             "icon": ""
                         }
                     }
-                },
-                "BoM Toolbar - SketcherWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1511,18 +1843,6 @@
                             "icon": "Spreadsheet"
                         }
                     }
-                },
-                "BoM Toolbar - SpreadsheetWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1545,15 +1865,51 @@
                         }
                     }
                 },
-                "BoM Toolbar - SurfaceWorkbench": {
+                "Individual views": {
                     "order": [
-                        "Create overall BoM"
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
                     ],
                     "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
                         }
                     }
                 }
@@ -1718,32 +2074,6 @@
                             "icon": "actions/TechDraw_Annotation"
                         }
                     }
-                },
-                "TitleBlock Toolbar": {
-                    "order": [
-                        "Populate titleblock",
-                        "Import data from the FreeCAD source file",
-                        "Import data from titleblock"
-                    ],
-                    "commands": {
-                        "FillTitleBlock": {
-                            "size": "large",
-                            "text": "Populate titleblock",
-                            "icon": "FillTitleBlock.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - TechDrawWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -1761,18 +2091,6 @@
                             "size": "large",
                             "text": "Self-test...",
                             "icon": ""
-                        }
-                    }
-                },
-                "BoM Toolbar - TestWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1817,18 +2135,6 @@
                             "size": "large",
                             "text": "Short text",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\3D_Printing_Tools\\Resources\\icons/Inch_mm.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - ScriptXWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -1947,18 +2253,6 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\A2plus\\./icons/CD_ConstraintViewer.svg"
                         }
                     }
-                },
-                "BoM Toolbar - A2plusWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2018,18 +2312,6 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\Assembly4\\.\\Resources/icons\\Snap_Vertex.svg"
                         }
                     }
-                },
-                "BoM Toolbar - Assembly4Workbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2041,18 +2323,6 @@
                         "Create a single level BoM",
                         "Add or remove columns",
                         "Create the raw BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - BillOfMaterialsWB": {
-                    "order": [
-                        "Create overall BoM"
                     ],
                     "commands": {
                         "CreateBOM_Overall": {
@@ -2087,18 +2357,6 @@
                             "size": "large",
                             "text": "Analysis container",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\CfdOF\\Gui\\Icons\\cfd_analysis.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - CfdOFWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2151,18 +2409,6 @@
                             "icon": ""
                         }
                     }
-                },
-                "BoM Toolbar - FastenersWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2185,18 +2431,6 @@
                             "icon": ":/icons/Spreadsheet.svg"
                         }
                     }
-                },
-                "BoM Toolbar - FEMbyGEN": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2212,18 +2446,6 @@
                             "size": "large",
                             "text": "FrontISTR Solver",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod/FEM_FrontISTR/Resources/FrontISTR_solver.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - FrontISTR": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2248,18 +2470,6 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\NikraDAP\\.\\icons\\Icon2n.png"
                         }
                     }
-                },
-                "BoM Toolbar - DapWorkbenchC": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2282,18 +2492,6 @@
                             "size": "large",
                             "text": "Projects",
                             "icon": ""
-                        }
-                    }
-                },
-                "BoM Toolbar - RenderWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2324,18 +2522,6 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\sheetmetal\\.\\Resources\\icons\\SheetMetal_AddBase.svg"
                         }
                     }
-                },
-                "BoM Toolbar - SMWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2357,18 +2543,6 @@
                             "size": "large",
                             "text": "Export data to the excel source file",
                             "icon": "ExportExcel.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - TitleBlockWB": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2433,18 +2607,6 @@
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_threePointsPlane.svg"
                         }
                     }
-                },
-                "BoM Toolbar - WorkFeatureWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2471,18 +2633,6 @@
                             "size": "large",
                             "text": "Involute Gear",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\freecad.gears\\.\\freecad\\gears\\icons\\involutegear.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - GearWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2519,18 +2669,6 @@
                             "size": "large",
                             "text": "Linked Face",
                             "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\frame\\.\\freecad\\frametools\\icons\\linked_face.svg"
-                        }
-                    }
-                },
-                "BoM Toolbar - FrameWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }
@@ -2672,18 +2810,6 @@
                             "icon": "Assembly_GotoRelation"
                         }
                     }
-                },
-                "BoM Toolbar - Assembly3Workbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
-                        }
-                    }
                 }
             }
         },
@@ -2704,18 +2830,6 @@
                             "size": "large",
                             "text": "Save plot",
                             "icon": "Plot_Save"
-                        }
-                    }
-                },
-                "BoM Toolbar - PlotWorkbench": {
-                    "order": [
-                        "Create overall BoM"
-                    ],
-                    "commands": {
-                        "CreateBOM_Overall": {
-                            "size": "large",
-                            "text": "Create overall BoM",
-                            "icon": "BoM.svg"
                         }
                     }
                 }

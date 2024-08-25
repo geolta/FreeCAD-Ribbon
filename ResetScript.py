@@ -1,24 +1,33 @@
-# ***********************************************************************
-# *                                                                     *
-# * Copyright (c) 2019 Hakan Seven <hakanseven12@gmail.com>             *
-# *                                                                     *
-# * This program is free software; you can redistribute it and/or modify*
-# * it under the terms of the GNU Lesser General Public License (LGPL)  *
-# * as published by the Free Software Foundation; either version 3 of   *
-# * the License, or (at your option) any later version.                 *
-# * for detail see the LICENCE text file.                               *
-# *                                                                     *
-# * This program is distributed in the hope that it will be useful,     *
-# * but WITHOUT ANY WARRANTY; without even the implied warranty of      *
-# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       *
-# * GNU Library General Public License for more details.                *
-# *                                                                     *
-# * You should have received a copy of the GNU Library General Public   *
-# * License along with this program; if not, write to the Free Software *
-# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307*
-# * USA                                                                 *
-# *                                                                     *
-# ***********************************************************************
+# *************************************************************************************
+# *   MIT License                                                                     *
+# *                                                                                   *
+# *   Copyright (c) 2024 Paul Ebbers                                                  *
+# *                                                                                   *
+# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
+# *   of this software and associated documentation files (the "Software"), to deal   *
+# *   in the Software without restriction, including without limitation the rights    *
+# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
+# *   copies of the Software, and to permit persons to whom the Software is           *
+# *   furnished to do so, subject to the following conditions:                        *
+# *                                                                                   *
+# *   The above copyright notice and this permission notice shall be included in all  *
+# *   copies or substantial portions of the Software.                                 *
+# *                                                                                   *
+# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
+# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
+# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
+# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
+# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
+# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
+# *   SOFTWARE.                                                                       *
+# *                                                                                   *
+# *************************************************************************************/
+
+# This script can be used to generate a default json file.
+# You can add any customization that you have in this file.
+# For workbenches and toolbars that don't have a customization, for each toolbar, the first command is set to large.
+# The goal of this script is to provide a starting point for your own customization.
+
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
@@ -43,6 +52,9 @@ from PySide.QtWidgets import (
 # JsonPath = os.path.dirname(__file__)
 JsonPath = "D:\\OneDrive\\Desktop\\"
 
+# Set the file name. Default is "RibbonStructure_default.json".
+# This is the file used to reset the ribbon.
+JsonName = "RibbonStructure_default.json"
 
 # Define list of the workbenches, toolbars and commands on class level
 List_Workbenches = []
@@ -78,11 +90,11 @@ List_IgnoredWorkbenches = [
     "Robot",
     "Test Framework",
 ]
+# Empty definitions of the Dicts for the ribbon and custom panels
 Dict_RibbonCommandPanel = {}
-Dict_CustomToolbars = {}
+Dict_CustomPanels = {}
 
-List_IgnoredToolbars_internal = []
-
+# Set the text under/next to button on or off.
 ShowText_Small = False
 ShowText_Medium = False
 ShowText_Large = False
@@ -95,30 +107,31 @@ skipWorkbenchList = []
 smallOnlyToolbars = ["Structure", "Individual views"]
 
 # Add here your customized panels (toolbars)
-Dict_CustomToolbars = {
+Dict_CustomPanels = {
     "customToolbars": {
-        "Loads & boundary conditions": {
-            "commands": {
-                "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
-                "Initial flow velocity condition": "Fluid boundary conditions",
-                "Initial pressure condition": "Fluid boundary conditions",
-                "Flow velocity boundary condition": "Fluid boundary conditions",
-                "Fixed boundary condition": "Mechanical boundary conditions and loads",
-                "Rigid body constraint": "Mechanical boundary conditions and loads",
-                "Displacement boundary condition": "Mechanical boundary conditions and loads",
-                "Contact constraint": "Mechanical boundary conditions and loads",
-                "Tie constraint": "Mechanical boundary conditions and loads",
-                "Spring": "Mechanical boundary conditions and loads",
-                "Force load": "Mechanical boundary conditions and loads",
-                "Pressure load": "Mechanical boundary conditions and loads",
-                "Centrifugal load": "Mechanical boundary conditions and loads",
-                "Gravity load": "Mechanical boundary conditions and loads",
-                "Initial temperature": "Thermal boundary conditions and loads",
-                "Heat flux load": "Thermal boundary conditions and loads",
-                "Temperature boundary condition": "Thermal boundary conditions and loads",
-                "Body heat source": "Thermal boundary conditions and loads",
-            },
-            "workbench": "FemWorkbench",
+        "FemWorkbench": {
+            "Loads & boundary conditions": {
+                "commands": {
+                    "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
+                    "Initial flow velocity condition": "Fluid boundary conditions",
+                    "Initial pressure condition": "Fluid boundary conditions",
+                    "Flow velocity boundary condition": "Fluid boundary conditions",
+                    "Fixed boundary condition": "Mechanical boundary conditions and loads",
+                    "Rigid body constraint": "Mechanical boundary conditions and loads",
+                    "Displacement boundary condition": "Mechanical boundary conditions and loads",
+                    "Contact constraint": "Mechanical boundary conditions and loads",
+                    "Tie constraint": "Mechanical boundary conditions and loads",
+                    "Spring": "Mechanical boundary conditions and loads",
+                    "Force load": "Mechanical boundary conditions and loads",
+                    "Pressure load": "Mechanical boundary conditions and loads",
+                    "Centrifugal load": "Mechanical boundary conditions and loads",
+                    "Gravity load": "Mechanical boundary conditions and loads",
+                    "Initial temperature": "Thermal boundary conditions and loads",
+                    "Heat flux load": "Thermal boundary conditions and loads",
+                    "Temperature boundary condition": "Thermal boundary conditions and loads",
+                    "Body heat source": "Thermal boundary conditions and loads",
+                }
+            }
         }
     },
 }
@@ -319,6 +332,9 @@ CustomJson_Workbenches = {
     }
 }
 
+# a list to store replaced toolbars
+List_IgnoredToolbars_internal = []
+
 
 def main():
     CreateLists()
@@ -390,9 +406,7 @@ def CreateJson():
                             for i3 in range(len(value)):
                                 CommandOrder = Gui.Command.get(value[i3])
                                 if CommandOrder is not None:
-                                    MenuNameOrder = CommandOrder.getInfo()[
-                                        "menuText"
-                                    ].replace("&", "")
+                                    MenuNameOrder = CommandOrder.getInfo()["menuText"].replace("&", "")
                                     Order.append(MenuNameOrder)
 
                             # Set the first command to large
@@ -421,12 +435,12 @@ def CreateJson():
                                     ],
                                 )
 
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                    "toolbars"
-                                ][Toolbar]["order"] = Order
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                    "toolbars"
-                                ][Toolbar]["commands"][CommandName] = {
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "order"
+                                ] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
+                                    CommandName
+                                ] = {
                                     "size": Size,
                                     "text": MenuName,
                                     "icon": IconName,
@@ -538,7 +552,7 @@ def WriteJson():
     resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
     resultingDict["quickAccessCommands"] = List_QuickAccessCommands
     resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
-    resultingDict.update(Dict_CustomToolbars)
+    resultingDict.update(Dict_CustomPanels)
     # Add the show text property to the dict
     resultingDict["showTextSmall"] = ShowText_Small
     resultingDict["showTextMedium"] = ShowText_Medium
@@ -549,7 +563,7 @@ def WriteJson():
     resultingDict.update(Dict_RibbonCommandPanel)
 
     # get the path for the Json file
-    JsonFile = os.path.join(JsonPath, "RibbonStructure_test.json")
+    JsonFile = os.path.join(JsonPath, JsonFile)
 
     # Writing to sample.json
     with open(JsonFile, "w") as outfile:
@@ -586,12 +600,7 @@ def List_ReturnCustomToolbars():
                 ).GetGroups()
 
                 for Group in CustomToolbars:
-                    Parameter = App.ParamGet(
-                        "User parameter:BaseApp/Workbench/"
-                        + WorkBenchName
-                        + "/Toolbar/"
-                        + Group
-                    )
+                    Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
                     Name = Parameter.GetString("Name")
 
                     ListCommands = []
@@ -624,12 +633,7 @@ def Dict_ReturnCustomToolbars(WorkBenchName):
             ).GetGroups()
 
             for Group in CustomToolbars:
-                Parameter = App.ParamGet(
-                    "User parameter:BaseApp/Workbench/"
-                    + WorkBenchName
-                    + "/Toolbar/"
-                    + Group
-                )
+                Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
                 Name = Parameter.GetString("Name")
 
                 if Name != "":
@@ -653,24 +657,20 @@ def Dict_AddCustomToolbarsToWorkbench(WorkBenchName):
     Toolbars = {}
 
     try:
-        for CustomToolbar in Dict_CustomToolbars["customToolbars"]:
+        for CustomToolbar in Dict_CustomPanels["customToolbars"][WorkBenchName]:
             ListCommands = []
-            Commands = Dict_CustomToolbars["customToolbars"][CustomToolbar]["commands"]
-            Workbench = Dict_CustomToolbars["customToolbars"][CustomToolbar][
-                "workbench"
-            ]
+            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
-            if Workbench == WorkBenchName:
-                for key, value in Commands.items():
-                    for i in range(len(self.List_Commands)):
-                        if self.List_Commands[i][2] == key:
-                            Command = self.List_Commands[i][0]
-                            ListCommands.append(Command)
+            for key, value in Commands.items():
+                for i in range(len(List_Commands)):
+                    if List_Commands[i][2] == key:
+                        Command = List_Commands[i][0]
+                        ListCommands.append(Command)
 
-                    if List_IgnoredToolbars_internal.__contains__(value) is False:
-                        List_IgnoredToolbars_internal.append(value)
+                if List_IgnoredToolbars_internal.__contains__(value) is False:
+                    List_IgnoredToolbars_internal.append(value)
 
-                Toolbars[CustomToolbar] = ListCommands
+            Toolbars[CustomToolbar] = ListCommands
     except Exception:
         pass
 

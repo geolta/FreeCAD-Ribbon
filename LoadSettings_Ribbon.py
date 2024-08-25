@@ -1,24 +1,27 @@
-# ***********************************************************************
-# *                                                                     *
-# * Copyright (c) 2019 Hakan Seven <hakanseven12@gmail.com>             *
-# *                                                                     *
-# * This program is free software; you can redistribute it and/or modify*
-# * it under the terms of the GNU Lesser General Public License (LGPL)  *
-# * as published by the Free Software Foundation; either version 3 of   *
-# * the License, or (at your option) any later version.                 *
-# * for detail see the LICENCE text file.                               *
-# *                                                                     *
-# * This program is distributed in the hope that it will be useful,     *
-# * but WITHOUT ANY WARRANTY; without even the implied warranty of      *
-# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       *
-# * GNU Library General Public License for more details.                *
-# *                                                                     *
-# * You should have received a copy of the GNU Library General Public   *
-# * License along with this program; if not, write to the Free Software *
-# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307*
-# * USA                                                                 *
-# *                                                                     *
-# ***********************************************************************
+# *************************************************************************************
+# *   MIT License                                                                     *
+# *                                                                                   *
+# *   Copyright (c) 2024 Paul Ebbers                                                  *
+# *                                                                                   *
+# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
+# *   of this software and associated documentation files (the "Software"), to deal   *
+# *   in the Software without restriction, including without limitation the rights    *
+# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
+# *   copies of the Software, and to permit persons to whom the Software is           *
+# *   furnished to do so, subject to the following conditions:                        *
+# *                                                                                   *
+# *   The above copyright notice and this permission notice shall be included in all  *
+# *   copies or substantial portions of the Software.                                 *
+# *                                                                                   *
+# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
+# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
+# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
+# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
+# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
+# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
+# *   SOFTWARE.                                                                       *
+# *                                                                                   *
+# *************************************************************************************/
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
@@ -124,31 +127,21 @@ class LoadDialog(Settings_ui.Ui_Form):
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
 
-        self.form.GenerateJson.connect(
-            self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
-        )
+        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
             self.on_GenerateJsonExit_clicked(self)
 
-        self.form.GenerateJsonExit.connect(
-            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
-        )
+        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
 
-        self.form.RestoreJson.connect(
-            self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
-        )
-        self.form.ResetJson.connect(
-            self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
-        )
+        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
+        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
         self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
-        self.form.IconSize_Medium.textChanged.connect(
-            self.on_IconSize_Medium_TextChanged
-        )
+        self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
         # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
 
@@ -182,14 +175,10 @@ class LoadDialog(Settings_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox(
-                "Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles
-            )
+            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
             BackupFile = os.path.join(pathBackup, SelectedDile)
             result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(
-                f"Ribbonbar set back to settings from: {result}!", "Warning"
-            )
+            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
             StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
 
         self.form.close()
@@ -239,9 +228,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_BackUpLocation_clicked(self):
         BackupFolder = ""
-        BackupFolder = StandardFunctions.GetFolder(
-            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
-        )
+        BackupFolder = StandardFunctions.GetFolder(parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION)
         if BackupFolder != "":
             self.pathBackup = BackupFolder
             self.form.label_4.setText(BackupFolder)
@@ -268,9 +255,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Small", int(self.form.IconSize_Small.text())
-        )
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -279,9 +264,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Medium", int(self.form.IconSize_Medium.text())
-        )
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)

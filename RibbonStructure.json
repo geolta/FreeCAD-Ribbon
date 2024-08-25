@@ -1,5 +1,31 @@
 {
     "ignoredToolbars": [
+        "BoM Toolbar - CAMWorkbench",
+        "BoM Toolbar - CfdOFWorkbench",
+        "BoM Toolbar - DapWorkbenchC",
+        "BoM Toolbar - DraftWorkbench",
+        "BoM Toolbar - FastenersWorkbench",
+        "BoM Toolbar - FEMbyGEN",
+        "BoM Toolbar - FemWorkbench",
+        "BoM Toolbar - FrameWorkbench",
+        "BoM Toolbar - FrontISTR",
+        "BoM Toolbar - GearWorkbench",
+        "BoM Toolbar - InspectionWorkbench",
+        "BoM Toolbar - MaterialWorkbench",
+        "BoM Toolbar - MeshWorkbench",
+        "BoM Toolbar - OpenSCADWorkbench",
+        "BoM Toolbar - PlotWorkbench",
+        "BoM Toolbar - PointsWorkbench",
+        "BoM Toolbar - RenderWorkbench",
+        "BoM Toolbar - ReverseEngineeringWorkbench",
+        "BoM Toolbar - RobotWorkbench",
+        "BoM Toolbar - ScriptXWorkbench",
+        "BoM Toolbar - SketcherWorkbench",
+        "BoM Toolbar - SMWorkbench",
+        "BoM Toolbar - SpreadsheetWorkbench",
+        "BoM Toolbar - TestWorkbench",
+        "BoM Toolbar - TitleBlockWB",
+        "BoM Toolbar - WorkFeatureWorkbench",
         "Clipboard",
         "Edit",
         "File",
@@ -9,6 +35,12 @@
         "Workbench"
     ],
     "iconOnlyToolbars": [
+        "Structure",
+        "Individual views",
+        "Structure",
+        "Individual views",
+        "Structure",
+        "Individual views",
         "Structure",
         "Individual views"
     ],
@@ -31,28 +63,36 @@
         "Test Framework"
     ],
     "customToolbars": {
-        "Loads & boundary conditions": {
-            "commands": {
-                "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
-                "Initial flow velocity condition": "Fluid boundary conditions",
-                "Initial pressure condition": "Fluid boundary conditions",
-                "Flow velocity boundary condition": "Fluid boundary conditions",
-                "Fixed boundary condition": "Mechanical boundary conditions and loads",
-                "Rigid body constraint": "Mechanical boundary conditions and loads",
-                "Displacement boundary condition": "Mechanical boundary conditions and loads",
-                "Contact constraint": "Mechanical boundary conditions and loads",
-                "Tie constraint": "Mechanical boundary conditions and loads",
-                "Spring": "Mechanical boundary conditions and loads",
-                "Force load": "Mechanical boundary conditions and loads",
-                "Pressure load": "Mechanical boundary conditions and loads",
-                "Centrifugal load": "Mechanical boundary conditions and loads",
-                "Gravity load": "Mechanical boundary conditions and loads",
-                "Initial temperature": "Thermal boundary conditions and loads",
-                "Heat flux load": "Thermal boundary conditions and loads",
-                "Temperature boundary condition": "Thermal boundary conditions and loads",
-                "Body heat source": "Thermal boundary conditions and loads"
-            },
-            "workbench": "FemWorkbench"
+        "FemWorkbench": {
+            "Loads & boundary conditions": {
+                "commands": {
+                    "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
+                    "Initial flow velocity condition": "Fluid boundary conditions",
+                    "Initial pressure condition": "Fluid boundary conditions",
+                    "Flow velocity boundary condition": "Fluid boundary conditions",
+                    "Fixed boundary condition": "Mechanical boundary conditions and loads",
+                    "Rigid body constraint": "Mechanical boundary conditions and loads",
+                    "Displacement boundary condition": "Mechanical boundary conditions and loads",
+                    "Contact constraint": "Mechanical boundary conditions and loads",
+                    "Tie constraint": "Mechanical boundary conditions and loads",
+                    "Spring": "Mechanical boundary conditions and loads",
+                    "Force load": "Mechanical boundary conditions and loads",
+                    "Pressure load": "Mechanical boundary conditions and loads",
+                    "Centrifugal load": "Mechanical boundary conditions and loads",
+                    "Gravity load": "Mechanical boundary conditions and loads",
+                    "Initial temperature": "Thermal boundary conditions and loads",
+                    "Heat flux load": "Thermal boundary conditions and loads",
+                    "Temperature boundary condition": "Thermal boundary conditions and loads",
+                    "Body heat source": "Thermal boundary conditions and loads"
+                }
+            }
+        },
+        "AssemblyWorkbench": {
+            "Create BOM": {
+                "commands": {
+                    "Create overall BoM": "BoM Toolbar - AssemblyWorkbench"
+                }
+            }
         }
     },
     "showTextSmall": false,
@@ -315,11 +355,10 @@
                 "order": [
                     "Individual views",
                     "Structure",
-                    "Part Design Helper",
-                    "Part Design Modeling",
-                    "Part Design Dressup",
-                    "Part Design Patterns",
-                    "Create BOM"
+                    "Assembly",
+                    "Assembly Joints",
+                    "BoM Toolbar - AssemblyWorkbench",
+                    "Loads & boundary conditions"
                 ],
                 "BoM Toolbar - PartDesignWorkbench": {
                     "order": [
@@ -548,6 +587,37 @@
                             "size": "small",
                             "text": "Save",
                             "icon": "document-save"
+                        }
+                    }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Assembly",
+                    "Assembly Joints",
+                    "Create BOM"
+                ],
+                "Create BOM": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "large",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
+                        }
+                    }
+                },
+                "BoM Toolbar - AssemblyWorkbench": {
+                    "order": [
+                        "Create overall BoM"
+                    ],
+                    "commands": {
+                        "CreateBOM_Overall": {
+                            "size": "small",
+                            "text": "Create overall BoM",
+                            "icon": "BoM.svg"
                         }
                     }
                 }
