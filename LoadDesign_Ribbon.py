@@ -1,24 +1,27 @@
-# ***********************************************************************
-# *                                                                     *
-# * Copyright (c) 2019 Hakan Seven <hakanseven12@gmail.com>             *
-# *                                                                     *
-# * This program is free software; you can redistribute it and/or modify*
-# * it under the terms of the GNU Lesser General Public License (LGPL)  *
-# * as published by the Free Software Foundation; either version 3 of   *
-# * the License, or (at your option) any later version.                 *
-# * for detail see the LICENCE text file.                               *
-# *                                                                     *
-# * This program is distributed in the hope that it will be useful,     *
-# * but WITHOUT ANY WARRANTY; without even the implied warranty of      *
-# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the       *
-# * GNU Library General Public License for more details.                *
-# *                                                                     *
-# * You should have received a copy of the GNU Library General Public   *
-# * License along with this program; if not, write to the Free Software *
-# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307*
-# * USA                                                                 *
-# *                                                                     *
-# ***********************************************************************
+# *************************************************************************************
+# *   MIT License                                                                     *
+# *                                                                                   *
+# *   Copyright (c) 2024 Paul Ebbers                                                  *
+# *                                                                                   *
+# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
+# *   of this software and associated documentation files (the "Software"), to deal   *
+# *   in the Software without restriction, including without limitation the rights    *
+# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
+# *   copies of the Software, and to permit persons to whom the Software is           *
+# *   furnished to do so, subject to the following conditions:                        *
+# *                                                                                   *
+# *   The above copyright notice and this permission notice shall be included in all  *
+# *   copies or substantial portions of the Software.                                 *
+# *                                                                                   *
+# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
+# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
+# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
+# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
+# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
+# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
+# *   SOFTWARE.                                                                       *
+# *                                                                                   *
+# *************************************************************************************/
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
@@ -242,11 +245,14 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # -- Custom panel tab --
         self.form.CustomToolbarSelector.addItem("New")
-        try:
-            for key, value in self.Dict_CustomToolbars["customToolbars"].items():
-                self.form.CustomToolbarSelector.addItem(key)
-        except Exception:
-            pass
+        # try:
+        for WorkBenchName in self.Dict_CustomToolbars["customToolbars"]:
+            for CustomPanel in self.Dict_CustomToolbars["customToolbars"][
+                WorkBenchName
+            ]:
+                self.form.CustomToolbarSelector.addItem(CustomPanel)
+        # except Exception:
+        #     pass
         #
         # endregion-----------------------------------------------------------------------------------
 
@@ -803,22 +809,23 @@ class LoadDialog(Design_ui.Ui_Form):
 
                     self.add_keys_nested_dict(
                         self.Dict_CustomToolbars,
-                        ["customToolbars", CustomPanelTitle, "commands", MenuName],
-                    )
-                    self.add_keys_nested_dict(
-                        self.Dict_CustomToolbars,
-                        ["customToolbars", CustomPanelTitle, "workbench"],
+                        [
+                            "customToolbars",
+                            WorkBenchName,
+                            CustomPanelTitle,
+                            "commands",
+                            MenuName,
+                        ],
                     )
 
-                    self.Dict_CustomToolbars["customToolbars"][CustomPanelTitle][
-                        "commands"
-                    ][MenuName] = OriginalToolbar
-                    self.Dict_CustomToolbars["customToolbars"][CustomPanelTitle][
-                        "workbench"
-                    ] = WorkBenchName
+                    self.Dict_CustomToolbars["customToolbars"][WorkBenchName][
+                        CustomPanelTitle
+                    ]["commands"][MenuName] = OriginalToolbar
 
                 IsInList = False
-                for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
+                for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
+                    WorkBenchName
+                ]:
                     if CustomToolbar == CustomPanelTitle:
                         IsInList = True
 
@@ -851,53 +858,54 @@ class LoadDialog(Design_ui.Ui_Form):
             self.form.ToolbarName.clear()
             return
 
-        # Get the current custom toolbar and load the commands
+        # Get the current custom toolbar name
         CustomPanelTitle = self.form.CustomToolbarSelector.currentText()
-        for item in self.Dict_CustomToolbars["customToolbars"].keys():
-            if item == CustomPanelTitle:
-                for key, value in self.Dict_CustomToolbars["customToolbars"][
-                    CustomPanelTitle
-                ]["commands"].items():
-                    ShadowList = (
-                        []
-                    )  # Create a shadow list. To check if items are already existing.
-                    for CommandListItem in self.List_Commands:
-                        # Check if the items is already there
-                        IsInList = ShadowList.__contains__(CommandListItem[0])
-                        # if not, continue
-                        if IsInList is False:
-                            if CommandListItem[2] == key:
-                                Command = Gui.Command.get(CommandListItem[0])
-                                # Define a new ListWidgetItem.
-                                ListWidgetItem = QListWidgetItem()
-                                ListWidgetItem.setText(CommandListItem[2])
-                                Icon = QIcon(CommandListItem[1])
-                                action = Command.getAction()
-                                try:
-                                    if len(action) > 1:
-                                        Icon = action[0].icon()
-                                except Exception:
-                                    pass
-                                ListWidgetItem.setIcon(Icon)
 
-                                if ListWidgetItem.text() != "":
-                                    self.form.ToolbarsSelected.addItem(ListWidgetItem)
+        WorkBenchTitle = ""
+        WorkBenchName = ""
+        for WorkBench in self.Dict_CustomToolbars["customToolbars"]:
+            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][WorkBench]:
+                if CustomToolbar == CustomPanelTitle:
+                    WorkBenchName = WorkBench
+                    WorkBenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
 
-                        # Add the command to the shadow list
-                        ShadowList.append(CommandListItem[0])
+                    # Set the workbench selector to the workbench to which this custom toolbar belongs
+                    self.form.WorkbenchList_2.setCurrentText(WorkBenchTitle)
+                    self.on_WorkbenchList_2__textChanged(False, WorkBenchTitle)
 
-                # Set the workbench selector to the workbench to which this custom toolbar belongs
-                WorkBenchTitle = ""
-                for WorkbenchItem in self.List_Workbenches:
-                    if (
-                        WorkbenchItem[0]
-                        == self.Dict_CustomToolbars["customToolbars"][CustomPanelTitle][
-                            "workbench"
-                        ]
-                    ):
-                        WorkBenchTitle = WorkbenchItem[2]
-                self.form.WorkbenchList_2.setCurrentText(WorkBenchTitle)
-                self.on_WorkbenchList_2__textChanged(False, WorkBenchTitle)
+                    # Get the commands and their original toolbar
+                    for key, value in self.Dict_CustomToolbars["customToolbars"][
+                        WorkBenchName
+                    ][CustomPanelTitle]["commands"].items():
+                        ShadowList = (
+                            []
+                        )  # Create a shadow list. To check if items are already existing.
+                        for CommandListItem in self.List_Commands:
+                            # Check if the items is already there
+                            IsInList = ShadowList.__contains__(CommandListItem[0])
+                            # if not, continue
+                            if IsInList is False:
+                                if CommandListItem[2] == key:
+                                    Command = Gui.Command.get(CommandListItem[0])
+                                    # Define a new ListWidgetItem.
+                                    ListWidgetItem = QListWidgetItem()
+                                    ListWidgetItem.setText(CommandListItem[2])
+                                    Icon = QIcon(CommandListItem[1])
+                                    action = Command.getAction()
+                                    try:
+                                        if len(action) > 1:
+                                            Icon = action[0].icon()
+                                    except Exception:
+                                        pass
+                                    ListWidgetItem.setIcon(Icon)
+
+                                    if ListWidgetItem.text() != "":
+                                        self.form.ToolbarsSelected.addItem(
+                                            ListWidgetItem
+                                        )
+
+                            # Add the command to the shadow list
+                            ShadowList.append(CommandListItem[0])
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -906,13 +914,16 @@ class LoadDialog(Design_ui.Ui_Form):
 
     def on_RemovePanel_clicked(self):
         CustomPanelTitle = self.form.CustomToolbarSelector.currentText()
+        WorkbenchName = self.form.WorkbenchList_2.currentText()
         try:
-            for key, value in self.Dict_CustomToolbars["customToolbars"].items():
+            for key, value in self.Dict_CustomToolbars["customToolbars"][
+                WorkbenchName
+            ].items():
                 if key == CustomPanelTitle:
-                    # Get the name of the workbench
-                    WorkbenchName = self.Dict_CustomToolbars["customToolbars"][key]
                     # remove the custom toolbar from the custom toolbar dict.
-                    del self.Dict_CustomToolbars["customToolbars"][key]["workbench"]
+                    del self.Dict_CustomToolbars["customToolbars"][WorkbenchName][key][
+                        "workbench"
+                    ]
                     # remove the custom toolbar from the combobox
                     for i in range(self.form.CustomToolbarSelector.count()):
                         if self.form.CustomToolbarSelector.itemText(i) == key:
@@ -971,7 +982,9 @@ class LoadDialog(Design_ui.Ui_Form):
         for CustomToolbar in CustomToolbars:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
-        CustomPanel = self.List_AddCustomToolbarsToWorkbench()
+        CustomPanel = self.List_AddCustomToolbarsToWorkbench(
+            WorkBenchName=WorkBenchName
+        )
         for CustomToolbar in CustomPanel:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
@@ -1900,21 +1913,19 @@ class LoadDialog(Design_ui.Ui_Form):
         Toolbars = {}
 
         try:
-            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
+            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
+                WorkBenchName
+            ]:
                 ListCommands = []
-                Commands = self.Dict_CustomToolbars["customToolbars"][CustomToolbar][
-                    "commands"
-                ]
-                Workbench = self.Dict_CustomToolbars["customToolbars"][CustomToolbar][
-                    "workbench"
-                ]
+                Commands = self.Dict_CustomToolbars["customToolbars"][WorkBenchName][
+                    CustomToolbar
+                ]["commands"]
 
-                if Workbench == WorkBenchName:
-                    for key, value in Commands.items():
-                        for i in range(len(self.List_Commands)):
-                            if self.List_Commands[i][2] == key:
-                                Command = self.List_Commands[i][0]
-                                ListCommands.append(Command)
+                for key, value in Commands.items():
+                    for i in range(len(self.List_Commands)):
+                        if self.List_Commands[i][2] == key:
+                            Command = self.List_Commands[i][0]
+                            ListCommands.append(Command)
 
                         if (
                             self.List_IgnoredToolbars_internal.__contains__(value)
@@ -1928,46 +1939,38 @@ class LoadDialog(Design_ui.Ui_Form):
 
         return Toolbars
 
-    def List_AddCustomToolbarsToWorkbench(self):
+    def List_AddCustomToolbarsToWorkbench(self, WorkBenchName):
         Toolbars = []
 
-        List_Workbenches = Gui.listWorkbenches().copy()
-        for WorkBenchName in List_Workbenches:
-            WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
-            if str(WorkBenchName) != "" or WorkBenchName is not None:
-                if str(WorkBenchName) != "NoneWorkbench":
-                    try:
-                        for CustomToolbar in self.Dict_CustomToolbars["customToolbars"]:
-                            ListCommands = []
-                            Commands = self.Dict_CustomToolbars["customToolbars"][
-                                CustomToolbar
-                            ]["commands"]
-                            Workbench = self.Dict_CustomToolbars["customToolbars"][
-                                CustomToolbar
-                            ]["workbench"]
+        WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+        if str(WorkBenchName) != "" or WorkBenchName is not None:
+            if str(WorkBenchName) != "NoneWorkbench":
+                try:
+                    for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
+                        WorkBenchName
+                    ]:
+                        ListCommands = []
+                        Commands = self.Dict_CustomToolbars["customToolbars"][
+                            WorkBenchName
+                        ][CustomToolbar]["commands"]
 
-                            WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+                        WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
 
-                            if Workbench == WorkBenchName:
-                                for key, value in Commands.items():
-                                    for i in range(len(self.List_Commands)):
-                                        if self.List_Commands[i][2] == key:
-                                            Command = self.List_Commands[i][0]
-                                            ListCommands.append(Command)
+                        for key, value in Commands.items():
+                            for i in range(len(self.List_Commands)):
+                                if self.List_Commands[i][2] == key:
+                                    Command = self.List_Commands[i][0]
+                                    ListCommands.append(Command)
 
-                                if (
-                                    self.List_IgnoredToolbars_internal.__contains__(
-                                        value
-                                    )
-                                    is False
-                                ):
-                                    self.List_IgnoredToolbars_internal.append(value)
+                            if (
+                                self.List_IgnoredToolbars_internal.__contains__(value)
+                                is False
+                            ):
+                                self.List_IgnoredToolbars_internal.append(value)
 
-                            Toolbars.append(
-                                [CustomToolbar, WorkbenchTitle, ListCommands]
-                            )
-                    except Exception:
-                        continue
+                        Toolbars.append([CustomToolbar, WorkbenchTitle, ListCommands])
+                except Exception:
+                    pass
 
         return Toolbars
 
