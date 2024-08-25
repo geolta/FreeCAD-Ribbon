@@ -264,20 +264,19 @@ class ModernMenu(RibbonBar):
 
         # Get the custom panels and add them to the list of toolbars
         try:
-            for CustomPanel in ModernMenu.ribbonStructure["customToolbars"]:
-                if ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["workbench"] == workbenchName:
-                    ListToolbars.append(CustomPanel)
+            for CustomPanel in ModernMenu.ribbonStructure["customToolbars"][workbenchName]:
+                ListToolbars.append(CustomPanel)
 
-                    # remove the original toolbars from the list
-                    Commands = ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["commands"]
-                    for Command in Commands:
-                        try:
-                            OriginalToolbar = ModernMenu.ribbonStructure["customToolbars"][CustomPanel]["commands"][
-                                Command
-                            ]
-                            ListToolbars.remove(OriginalToolbar)
-                        except Exception:
-                            continue
+                # remove the original toolbars from the list
+                Commands = ModernMenu.ribbonStructure["customToolbars"][workbenchName][CustomPanel]["commands"]
+                for Command in Commands:
+                    try:
+                        OriginalToolbar = ModernMenu.ribbonStructure["customToolbars"][workbenchName][CustomPanel][
+                            "commands"
+                        ][Command]
+                        ListToolbars.remove(OriginalToolbar)
+                    except Exception:
+                        continue
         except Exception as e:
             print(e)
             pass
@@ -502,26 +501,24 @@ class ModernMenu(RibbonBar):
         ButtonList = []
 
         try:
-            Commands = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["commands"]
-            Workbench = ModernMenu.ribbonStructure["customToolbars"][CustomToolbar]["workbench"]
+            Commands = ModernMenu.ribbonStructure["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
-            if Workbench == WorkBenchName:
-                for key, value in Commands.items():
-                    for CommandName in Gui.listCommands():
-                        Command = Gui.Command.get(CommandName)
-                        MenuText = Command.getInfo()["menuText"]
+            for key, value in Commands.items():
+                for CommandName in Gui.listCommands():
+                    Command = Gui.Command.get(CommandName)
+                    MenuText = Command.getInfo()["menuText"]
 
-                        if MenuText == key:
-                            action = Command.getAction()[0]
-                            action.setData(CommandName)
-                            action.setText(MenuText)
+                    if MenuText == key:
+                        action = Command.getAction()[0]
+                        action.setData(CommandName)
+                        action.setText(MenuText)
 
-                            Button = QToolButton()
-                            Button.setDefaultAction(action)
-                            Button.setText(MenuText)
-                            Button.setObjectName(Command.getInfo()["name"])
+                        Button = QToolButton()
+                        Button.setDefaultAction(action)
+                        Button.setText(MenuText)
+                        Button.setObjectName(Command.getInfo()["name"])
 
-                            ButtonList.append(Button)
+                        ButtonList.append(Button)
         except Exception:
             pass
 
