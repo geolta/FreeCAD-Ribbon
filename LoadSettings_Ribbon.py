@@ -418,6 +418,8 @@ class LoadDialog(Settings_ui.Ui_Form):
         if Parameters_Ribbon.ENABLE_BACKUP is True:
             Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
             BackupName = f"RibbonStructure_{Suffix}.json"
+            if os.path.exists(pathBackup) is False:
+                os.makedirs(pathBackup)
             BackupFile = os.path.join(pathBackup, BackupName)
             shutil.copy(JsonFile, BackupFile)
 
