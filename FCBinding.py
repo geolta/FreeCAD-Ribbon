@@ -25,8 +25,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPixmap
+from PySide6.QtWidgets import (
     QToolButton,
     QToolBar,
     QPushButton,
@@ -34,7 +34,7 @@ from PySide.QtWidgets import (
     QSizePolicy,
     QMenu,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
@@ -98,6 +98,7 @@ class ModernMenu(RibbonBar):
 
         # Set the custom stylesheet
         self.setStyleSheet(Parameters_Ribbon.STYLESHEET)
+
         return
 
     def connectSignals(self):
@@ -393,6 +394,13 @@ class ModernMenu(RibbonBar):
                     except KeyError:
                         text = action.text()
 
+                    if action.icon() is None:
+                        commandName = icon_Json = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"][
+                            toolbar
+                        ]["commands"][action.data()]
+                        command = Gui.Command.get(commandName)
+                        action.setIcon(Gui.getIcon(command.getInfo()["pixmap"]))
+
                     # try to get alternative icon from ribbonStructure
                     try:
                         icon_Json = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"][toolbar][
@@ -501,24 +509,29 @@ class ModernMenu(RibbonBar):
         ButtonList = []
 
         try:
+            # Get the commands from the custom panel
             Commands = ModernMenu.ribbonStructure["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
+            # Get the command and its original toolbar
             for key, value in Commands.items():
+                # get the menu text from the command list
                 for CommandName in Gui.listCommands():
                     Command = Gui.Command.get(CommandName)
                     MenuText = Command.getInfo()["menuText"]
 
                     if MenuText == key:
-                        action = Command.getAction()[0]
-                        action.setData(CommandName)
-                        action.setText(MenuText)
-
-                        Button = QToolButton()
-                        Button.setDefaultAction(action)
-                        Button.setText(MenuText)
-                        Button.setObjectName(Command.getInfo()["name"])
-
-                        ButtonList.append(Button)
+                        try:
+                            # Get the original toolbar as QToolbar
+                            OriginalToolBar = mw.findChild(QToolBar, value)
+                            # Go through all it's QtoolButtons
+                            for Child in OriginalToolBar.findChildren(QToolButton):
+                                # If the text of the QToolButton matches the menu text
+                                # Add it to the button list.
+                                if Child.text() == MenuText:
+                                    ButtonList.append(Child)
+                        except Exception as e:
+                            print(e)
+                            continue
         except Exception:
             pass
 
