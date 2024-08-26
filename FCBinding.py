@@ -460,6 +460,9 @@ class ModernMenu(RibbonBar):
                 # add the button text to the shadowList for checking if buttons are already there.
                 shadowList.append(button.text())
 
+            if panel.title().endswith("_custom"):
+                panel.setTitle(panel.title().replace("_custom", ""))
+
         self.isWbLoaded[tabName] = True
 
         return
