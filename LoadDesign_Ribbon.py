@@ -225,7 +225,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.addWorkbenches()
         # Add all toolbars of the selected workbench to the toolbar list(dropdown)
         self.on_WorkbenchList__TextChanged()
-        self.on_WorkbenchList_2__textChanged(False)
+        self.on_WorkbenchList_2__activated(False)
 
         # load the commands in the table.
         self.on_ToolbarList__TextChanged()
@@ -326,11 +326,17 @@ class LoadDialog(Design_ui.Ui_Form):
             self.on_AddCustomToolbar_clicked,
         )
 
+        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
+        def LoadWorkbenches_2():
+            self.on_WorkbenchList_2__activated()
+
+        self.form.WorkbenchList_2.activated.connect(LoadWorkbenches_2)
+
         # Connect custom toolbar selector on the Custom Panels Tab
         def CustomToolbarSelect():
-            self.on_CustomToolbarSelector_clicked()
+            self.on_CustomToolbarSelector_activated()
 
-        self.form.CustomToolbarSelector.currentTextChanged.connect(CustomToolbarSelect)
+        self.form.CustomToolbarSelector.activated.connect(CustomToolbarSelect)
 
         self.form.RemovePanel.connect(self.form.RemovePanel, SIGNAL("clicked()"), self.on_RemovePanel_clicked)
 
@@ -393,12 +399,6 @@ class LoadDialog(Design_ui.Ui_Form):
 
         self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
         self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
-
-        # Connect LoadWorkbenches with the dropdown WorkbenchList on the Ribbon design tab
-        def LoadWorkbenches_2():
-            self.on_WorkbenchList_2__textChanged()
-
-        self.form.WorkbenchList_2.currentTextChanged.connect(LoadWorkbenches_2)
 
         # connect the change of the current tab event to a function to set the size per tab
         self.form.tabWidget.currentChanged.connect(self.on_tabBar_currentIndex)
@@ -621,7 +621,7 @@ class LoadDialog(Design_ui.Ui_Form):
     # endregion
 
     # region - Custom panels tab
-    def on_WorkbenchList_2__textChanged(self, setCustomToolbarSelector: bool = False, CurrentText=""):
+    def on_WorkbenchList_2__activated(self, setCustomToolbarSelector: bool = False, CurrentText=""):
         # Set the workbench name.
         WorkBenchName = ""
         WorkBenchTitle = ""
@@ -632,8 +632,14 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Get the toolbars of the workbench
         wbToolbars = Gui.getWorkbench(WorkBenchName).listToolbars()
+        # Get all the custom toolbars from the toolbar layout
         CustomToolbars = self.List_ReturnCustomToolbars()
         for CustomToolbar in CustomToolbars:
+            if CustomToolbar[1] == WorkBenchTitle:
+                wbToolbars.append(CustomToolbar[0])
+        # Get the custom panels
+        CustomPanel = self.List_AddCustomToolbarsToWorkbench(WorkBenchName=WorkBenchName)
+        for CustomToolbar in CustomPanel:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
 
@@ -651,7 +657,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     IsIgnored = True
 
             # If the are not to be ignored, add them to the listwidget
-            if IsIgnored is False:
+            if IsIgnored is False and Toolbar != "":
                 ListWidgetItem = QListWidgetItem()
                 ListWidgetItem.setText(Toolbar)
                 self.form.ToolbarsAvailable.addItem(ListWidgetItem)
@@ -812,7 +818,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         return
 
-    def on_CustomToolbarSelector_clicked(self):
+    def on_CustomToolbarSelector_activated(self):
         self.form.ToolbarsSelected.clear()
 
         # If the selected item is "new", clear the list widgets and exit
@@ -822,12 +828,17 @@ class LoadDialog(Design_ui.Ui_Form):
             return
 
         # Get the current custom toolbar name
-        CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
+        CustomPanelTitle = ""
+        WorkBenchTitle = ""
+        if self.form.CustomToolbarSelector.currentText() != "":
+            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
+            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
+        else:
+            return
 
-        WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
         # Set the workbench selector to the workbench to which this custom toolbar belongs
         self.form.WorkbenchList_2.setCurrentText(WorkBenchTitle)
-        self.on_WorkbenchList_2__textChanged(False, WorkBenchTitle)
+        self.on_WorkbenchList_2__activated(False, WorkBenchTitle)
 
         ShadowList = []  # Create a shadow list. To check if items are already existing.
         WorkBenchName = ""
@@ -871,13 +882,18 @@ class LoadDialog(Design_ui.Ui_Form):
         return
 
     def on_RemovePanel_clicked(self):
-        # Get the titles of the custom panel and the selected workbench
-        CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
-        WorkbenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
+        # Get the current custom toolbar name
+        CustomPanelTitle = ""
+        WorkBenchTitle = ""
+        if self.form.CustomToolbarSelector.currentText() != "":
+            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
+            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
+        else:
+            return
 
         WorkBenchName = ""
         for WorkBench in self.List_Workbenches:
-            if WorkBench[2] == WorkbenchTitle:
+            if WorkBench[2] == WorkBenchTitle:
                 WorkBenchName = WorkBench[0]
                 try:
                     for key, value in self.Dict_CustomToolbars["customToolbars"][WorkBenchName].items():
@@ -937,10 +953,12 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Get the toolbars of the workbench
         wbToolbars: list = Gui.getWorkbench(WorkBenchName).listToolbars()
+        # Get all the custom toolbars from the toolbar layout
         CustomToolbars = self.List_ReturnCustomToolbars()
         for CustomToolbar in CustomToolbars:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
+        # Get the custom panels
         CustomPanel = self.List_AddCustomToolbarsToWorkbench(WorkBenchName=WorkBenchName)
         for CustomToolbar in CustomPanel:
             if CustomToolbar[1] == WorkBenchTitle:
@@ -1772,6 +1790,7 @@ class LoadDialog(Design_ui.Ui_Form):
             WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
             if str(WorkBenchName) != "" or WorkBenchName is not None:
                 if str(WorkBenchName) != "NoneWorkbench":
+                    # Get the custom toolbars for this workbench
                     CustomToolbars: list = App.ParamGet(
                         "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar"
                     ).GetGroups()
@@ -1806,6 +1825,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         if str(WorkBenchName) != "" or WorkBenchName is not None:
             if str(WorkBenchName) != "NoneWorkbench":
+                # Get the custom toolbars for this workbench
                 CustomToolbars: list = App.ParamGet(
                     "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar"
                 ).GetGroups()
@@ -1840,7 +1860,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 for key, value in Commands.items():
                     for i in range(len(self.List_Commands)):
-                        if self.List_Commands[i][2] == key:
+                        if self.List_Commands[i][2] == key and self.List_Commands[i][3] == WorkBenchName:
                             Command = self.List_Commands[i][0]
                             ListCommands.append(Command)
 
@@ -1868,7 +1888,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                         for key, value in Commands.items():
                             for i in range(len(self.List_Commands)):
-                                if self.List_Commands[i][2] == key:
+                                if self.List_Commands[i][2] == key and self.List_Commands[i][3] == WorkBenchName:
                                     Command = self.List_Commands[i][0]
                                     ListCommands.append(Command)
 
