@@ -25,8 +25,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide6.QtGui import QIcon, QAction, QPalette, QColor
-from PySide6.QtWidgets import (
+from PySide.QtGui import QIcon, QAction, QPalette, QColor
+from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -39,7 +39,7 @@ from PySide6.QtWidgets import (
     QToolButton,
     QTabWidget,
 )
-from PySide6.QtCore import Qt, SIGNAL, QTimer, QRect
+from PySide.QtCore import Qt, SIGNAL, QTimer, QRect
 import sys
 import json
 from datetime import datetime
