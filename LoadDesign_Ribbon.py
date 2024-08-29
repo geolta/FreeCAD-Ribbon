@@ -25,7 +25,7 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QAction, QPalette, QColor
+from PySide.QtGui import QIcon, QAction, QPalette, QColor, QPixmap
 from PySide.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
@@ -46,6 +46,7 @@ from datetime import datetime
 import shutil
 import Standard_Functions_RIbbon as StandardFunctions
 import Parameters_Ribbon
+import webbrowser
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -94,6 +95,10 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+        self.form.label_4.hide()
+        self.form.MoveDown_Toolbar.hide()
+        self.form.MoveUp_Toolbar.hide()
+        self.form.ToolbarsOrder.hide()
 
         # Set the window title
         self.form.setWindowTitle("Ribbon design")
@@ -385,6 +390,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.IconOnly.clicked.connect(self.on_IconOnly_clicked)
         # Connect a click event on the tablewidgit on the Ribbon design tab
         self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
+        # Connect a change event on the tablewidgit on the Ribbon design tab to change the button text.
+        self.form.tableWidget.itemChanged.connect(self.on_tableCell_changed)
 
         # Connect move events to the buttons on the Ribbon design Tab
         self.form.MoveUp_RibbonCommand.connect(
@@ -442,6 +449,13 @@ class LoadDialog(Design_ui.Ui_Form):
             self.on_Cancel_clicked(self)
 
         self.form.Cancel.connect(self.form.Cancel, SIGNAL("clicked()"), Cancel)
+
+        # Connect the help buttons
+        def Help():
+            self.on_Helpbutton_clicked()
+
+        self.form.HelpButton.connect(self.form.HelpButton, SIGNAL("clicked()"), Help)
+
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -462,6 +476,12 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.MoveDown_Toolbar.hide()
         self.form.MoveUp_Toolbar.hide()
         self.form.ToolbarsOrder.hide()
+
+        # -- Form buttons --
+        helpIcon = QIcon()
+        pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
+        helpIcon.addPixmap(pixmap)
+        self.form.HelpButton.setIcon(helpIcon)
         # endregion
 
         return
@@ -1011,6 +1031,8 @@ class LoadDialog(Design_ui.Ui_Form):
             self.form.MoveDown_Toolbar.show()
             self.form.MoveUp_Toolbar.show()
             self.form.ToolbarsOrder.show()
+            self.form.setMinimumWidth(940)
+            self.form.setMaximumWidth(940)
         else:
             self.form.label_4.hide()
             self.form.MoveDown_Toolbar.hide()
@@ -1020,6 +1042,8 @@ class LoadDialog(Design_ui.Ui_Form):
             Geometry = self.form.geometry()
             Geometry.setWidth(580)
             self.form.setGeometry(Geometry)
+            self.form.setMinimumWidth(580)
+            self.form.setMaximumWidth(580)
 
     def on_WorkbenchList__TextChanged(self):
         # Set the workbench name.
@@ -1220,6 +1244,13 @@ class LoadDialog(Design_ui.Ui_Form):
                 # Define a table widget item
                 TableWidgetItem = QTableWidgetItem()
                 TableWidgetItem.setText(MenuName + textAddition)
+                TableWidgetItem.setData(
+                    Qt.ItemDataRole.UserRole,
+                    Command.getInfo()["menuText"].replace("&", ""),
+                )
+                TableWidgetItem.setFlags(
+                    TableWidgetItem.flags() | Qt.ItemFlag.ItemIsEditable
+                )
                 if (
                     Icon is not None
                 ):  # At the moment, settings icon size for most dropdowns do not work properly
@@ -1259,9 +1290,9 @@ class LoadDialog(Design_ui.Ui_Form):
                 Order = []
                 for i in range(self.form.tableWidget.rowCount()):
                     Order.append(
-                        QTableWidgetItem(self.form.tableWidget.item(i, 0))
-                        .text()
-                        .replace("...", "")
+                        QTableWidgetItem(self.form.tableWidget.item(i, 0)).data(
+                            Qt.ItemDataRole.UserRole
+                        )
                     )
 
                 # Add or update the dict for the Ribbon command panel
@@ -1330,6 +1361,16 @@ class LoadDialog(Design_ui.Ui_Form):
 
         return
 
+    def on_tableCell_changed(self, Item):
+        text = Item.text()
+        if text == "":
+            Item.setText(Item.data(Qt.ItemDataRole.UserRole))
+
+        # Update the data with the (text)chanche
+        self.UpdateData()
+        # Update the order of the commands
+        self.on_ToolbarsOrder_changed()
+
     def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
         row = Item.row()
@@ -1350,7 +1391,9 @@ class LoadDialog(Design_ui.Ui_Form):
                     self.form.tableWidget.item(row, i3).setCheckState(
                         Qt.CheckState.Unchecked
                     )
+        # Update the data
         self.UpdateData()
+        # Update the order of the commands
         self.on_ToolbarsOrder_changed()
 
         # Enable the apply button
@@ -1478,6 +1521,12 @@ class LoadDialog(Design_ui.Ui_Form):
     def on_Cancel_clicked(self):
         # Close the form
         self.form.close()
+        return
+
+    @staticmethod
+    def on_Helpbutton_clicked():
+        HelpAdress = "https://github.com/FreeCAD/FreeCAD-addons/wiki"
+        webbrowser.open(HelpAdress, new=2, autoraise=True)
         return
 
     # endregion
@@ -1615,8 +1664,11 @@ class LoadDialog(Design_ui.Ui_Form):
                         CommandName = ""
                         IconName = ""
                         # Get the command text from the first cell in the row
-                        MenuName = (
+                        MenuNameCustom = (
                             self.form.tableWidget.item(row, 0).text().replace("...", "")
+                        )
+                        MenuName = self.form.tableWidget.item(row, 0).data(
+                            Qt.ItemDataRole.UserRole
                         )
 
                         # Go through the list with all available commands.
@@ -1652,9 +1704,9 @@ class LoadDialog(Design_ui.Ui_Form):
                                 Order = []
                                 for i5 in range(self.form.tableWidget.rowCount()):
                                     Order.append(
-                                        self.form.tableWidget.item(i5, 0)
-                                        .text()
-                                        .replace("...", "")
+                                        QTableWidgetItem(
+                                            self.form.tableWidget.item(i5, 0)
+                                        ).data(Qt.ItemDataRole.UserRole)
                                     )
 
                                 self.add_keys_nested_dict(
@@ -1686,7 +1738,7 @@ class LoadDialog(Design_ui.Ui_Form):
                                     WorkBenchName
                                 ]["toolbars"][Toolbar]["commands"][CommandName] = {
                                     "size": Size,
-                                    "text": MenuName,
+                                    "text": MenuNameCustom,
                                     "icon": IconName,
                                 }
             except Exception:

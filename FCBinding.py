@@ -326,6 +326,8 @@ class ModernMenu(RibbonBar):
         for toolbar in ListToolbars:
             if toolbar in ModernMenu.ribbonStructure["ignoredToolbars"]:
                 continue
+            if toolbar == "":
+                continue
 
             # Create the panel, use the toolbar name as title
             panel = self.currentCategory().addPanel(
