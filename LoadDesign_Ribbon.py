@@ -25,8 +25,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QAction, QPalette, QColor
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPalette, QColor, QPixmap
+from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -39,13 +39,14 @@ from PySide.QtWidgets import (
     QToolButton,
     QTabWidget,
 )
-from PySide.QtCore import Qt, SIGNAL, QTimer, QRect
+from PySide6.QtCore import Qt, SIGNAL, QTimer, QRect
 import sys
 import json
 from datetime import datetime
 import shutil
 import Standard_Functions_RIbbon as StandardFunctions
 import Parameters_Ribbon
+import webbrowser
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -94,6 +95,10 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+        self.form.label_4.hide()
+        self.form.MoveDown_Toolbar.hide()
+        self.form.MoveUp_Toolbar.hide()
+        self.form.ToolbarsOrder.hide()
 
         # Set the window title
         self.form.setWindowTitle("Ribbon design")
@@ -123,9 +128,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     if IconName != "":
                         Icon = Gui.getIcon(IconName)
                     WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
-                    self.List_Workbenches.append(
-                        [str(WorkBenchName), Icon, WorkbenchTitle]
-                    )
+                    self.List_Workbenches.append([str(WorkBenchName), Icon, WorkbenchTitle])
 
         # Create a list of all toolbars
         self.StringList_Toolbars.clear()
@@ -185,9 +188,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 else:
                     Icon = None
                 MenuName = command.getInfo()["menuText"].replace("&", "")
-                self.List_Commands.append(
-                    [CommandName[0], Icon, MenuName, WorkBenchName]
-                )
+                self.List_Commands.append([CommandName[0], Icon, MenuName, WorkBenchName])
         # add also custom commands
         Toolbars = self.List_ReturnCustomToolbars()
         for Toolbar in Toolbars:
@@ -202,9 +203,7 @@ class LoadDialog(Design_ui.Ui_Form):
                         else:
                             Icon = None
                         MenuName = command.getInfo()["menuText"].replace("&", "")
-                        self.List_Commands.append(
-                            [CustomCommand, Icon, MenuName, WorkBenchName]
-                        )
+                        self.List_Commands.append([CustomCommand, Icon, MenuName, WorkBenchName])
 
         #
         # endregion ----------------------------------------------------------------------
@@ -251,12 +250,8 @@ class LoadDialog(Design_ui.Ui_Form):
             for WorkBenchItem in self.List_Workbenches:
                 if WorkBenchItem[0] == WorkBenchName:
                     WorkBenchTitle = WorkBenchItem[2]
-            for CustomPanelTitle in self.Dict_CustomToolbars["customToolbars"][
-                WorkBenchName
-            ]:
-                self.form.CustomToolbarSelector.addItem(
-                    f"{CustomPanelTitle}, {WorkBenchTitle}"
-                )
+            for CustomPanelTitle in self.Dict_CustomToolbars["customToolbars"][WorkBenchName]:
+                self.form.CustomToolbarSelector.addItem(f"{CustomPanelTitle}, {WorkBenchTitle}")
         # except Exception:
         #     pass
         #
@@ -268,15 +263,9 @@ class LoadDialog(Design_ui.Ui_Form):
         # --- QuickCommandsTab ------------------
         #
         # Connect Add/Remove and move events to the buttons on the QuickAccess Tab
-        self.form.Add_Command.connect(
-            self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked
-        )
-        self.form.Remove_Command.connect(
-            self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked
-        )
-        self.form.MoveUp_Command.connect(
-            self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked
-        )
+        self.form.Add_Command.connect(self.form.Add_Command, SIGNAL("clicked()"), self.on_AddCommand_clicked)
+        self.form.Remove_Command.connect(self.form.Remove_Command, SIGNAL("clicked()"), self.on_RemoveCommand_clicked)
+        self.form.MoveUp_Command.connect(self.form.MoveUp_Command, SIGNAL("clicked()"), self.on_MoveUpCommand_clicked)
         self.form.MoveDown_Command.connect(
             self.form.MoveDown_Command,
             SIGNAL("clicked()"),
@@ -304,20 +293,14 @@ class LoadDialog(Design_ui.Ui_Form):
         # Connect the searchbar for the toolbars on the toolbar tab
         self.form.SearchBar_2.textChanged.connect(self.on_SearchBar_2_TextChanged)
         # Connect Add/Remove events to the buttons on the Toolbars Tab
-        self.form.Add_Toolbar.connect(
-            self.form.Add_Toolbar, SIGNAL("clicked()"), self.on_AddToolbar_clicked
-        )
-        self.form.Remove_Toolbar.connect(
-            self.form.Remove_Toolbar, SIGNAL("clicked()"), self.on_RemoveToolbar_clicked
-        )
+        self.form.Add_Toolbar.connect(self.form.Add_Toolbar, SIGNAL("clicked()"), self.on_AddToolbar_clicked)
+        self.form.Remove_Toolbar.connect(self.form.Remove_Toolbar, SIGNAL("clicked()"), self.on_RemoveToolbar_clicked)
 
         #
         # --- IncludeWorkbenchTab ------------------
         #
         # Connect Add/Remove events to the buttons on the Workbench Tab
-        self.form.Add_Workbench.connect(
-            self.form.Add_Workbench, SIGNAL("clicked()"), self.on_AddWorkbench_clicked
-        )
+        self.form.Add_Workbench.connect(self.form.Add_Workbench, SIGNAL("clicked()"), self.on_AddWorkbench_clicked)
         self.form.Remove_Workbench.connect(
             self.form.Remove_Workbench,
             SIGNAL("clicked()"),
@@ -340,9 +323,7 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Connect Add events to the buttons on the Custom Panels Tab for adding commands to the panel
-        self.form.Add_Panel.connect(
-            self.form.Add_Panel, SIGNAL("clicked()"), self.on_AddPanel_clicked
-        )
+        self.form.Add_Panel.connect(self.form.Add_Panel, SIGNAL("clicked()"), self.on_AddPanel_clicked)
 
         self.form.AddCustomToolbar.connect(
             self.form.AddCustomToolbar,
@@ -362,9 +343,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         self.form.CustomToolbarSelector.activated.connect(CustomToolbarSelect)
 
-        self.form.RemovePanel.connect(
-            self.form.RemovePanel, SIGNAL("clicked()"), self.on_RemovePanel_clicked
-        )
+        self.form.RemovePanel.connect(self.form.RemovePanel, SIGNAL("clicked()"), self.on_RemovePanel_clicked)
 
         #
         # --- RibbonDesignTab ------------------
@@ -385,6 +364,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.IconOnly.clicked.connect(self.on_IconOnly_clicked)
         # Connect a click event on the tablewidgit on the Ribbon design tab
         self.form.tableWidget.itemClicked.connect(self.on_tableCell_clicked)
+        # Connect a change event on the tablewidgit on the Ribbon design tab to change the button text.
+        self.form.tableWidget.itemChanged.connect(self.on_tableCell_changed)
 
         # Connect move events to the buttons on the Ribbon design Tab
         self.form.MoveUp_RibbonCommand.connect(
@@ -415,24 +396,16 @@ class LoadDialog(Design_ui.Ui_Form):
         def GenerateJson():
             self.on_GenerateJson_clicked(self)
 
-        self.form.GenerateJson.connect(
-            self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
-        )
+        self.form.GenerateJson.connect(self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson)
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
             self.on_GenerateJsonExit_clicked(self)
 
-        self.form.GenerateJsonExit.connect(
-            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
-        )
+        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
 
-        self.form.RestoreJson.connect(
-            self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
-        )
-        self.form.ResetJson.connect(
-            self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
-        )
+        self.form.RestoreJson.connect(self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked)
+        self.form.ResetJson.connect(self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked)
 
         # connect the change of the current tab event to a function to set the size per tab
         self.form.tabWidget.currentChanged.connect(self.on_tabBar_currentIndex)
@@ -442,6 +415,13 @@ class LoadDialog(Design_ui.Ui_Form):
             self.on_Cancel_clicked(self)
 
         self.form.Cancel.connect(self.form.Cancel, SIGNAL("clicked()"), Cancel)
+
+        # Connect the help buttons
+        def Help():
+            self.on_Helpbutton_clicked()
+
+        self.form.HelpButton.connect(self.form.HelpButton, SIGNAL("clicked()"), Help)
+
         # endregion
 
         # region - Modifiy controls-------------------------------------------------------------------
@@ -462,6 +442,12 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.MoveDown_Toolbar.hide()
         self.form.MoveUp_Toolbar.hide()
         self.form.ToolbarsOrder.hide()
+
+        # -- Form buttons --
+        helpIcon = QIcon()
+        pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
+        helpIcon.addPixmap(pixmap)
+        self.form.HelpButton.setIcon(helpIcon)
         # endregion
 
         return
@@ -500,9 +486,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     ListWidgetItem = QListWidgetItem()
                     ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
                     ListWidgetItem.setIcon(Icon)
-                    ListWidgetItem.setToolTip(
-                        ToolbarCommand[0]
-                    )  # Use the tooltip to store the actual command.
+                    ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
 
                     # Add the ListWidgetItem to the correct ListWidget
                     if Icon is not None:
@@ -520,11 +504,7 @@ class LoadDialog(Design_ui.Ui_Form):
             IsInList = ShadowList.__contains__(ToolbarCommand[0])
 
             if IsInList is False:
-                if (
-                    ToolbarCommand[2]
-                    .lower()
-                    .startswith(self.form.SearchBar_1.text().lower())
-                ):
+                if ToolbarCommand[2].lower().startswith(self.form.SearchBar_1.text().lower()):
                     Command = Gui.Command.get(ToolbarCommand[0])
 
                     # Define a new ListWidgetItem.
@@ -540,9 +520,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     ListWidgetItem = QListWidgetItem()
                     ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
                     ListWidgetItem.setIcon(Icon)
-                    ListWidgetItem.setToolTip(
-                        ToolbarCommand[0]
-                    )  # Use the tooltip to store the actual command.
+                    ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
 
                     # Add the ListWidgetItem to the correct ListWidget
                     if Icon is not None:
@@ -663,9 +641,7 @@ class LoadDialog(Design_ui.Ui_Form):
     # endregion
 
     # region - Custom panels tab
-    def on_WorkbenchList_2__activated(
-        self, setCustomToolbarSelector: bool = False, CurrentText=""
-    ):
+    def on_WorkbenchList_2__activated(self, setCustomToolbarSelector: bool = False, CurrentText=""):
         # Set the workbench name.
         WorkBenchName = ""
         WorkBenchTitle = ""
@@ -682,9 +658,7 @@ class LoadDialog(Design_ui.Ui_Form):
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
         # Get the custom panels
-        CustomPanel = self.List_AddCustomToolbarsToWorkbench(
-            WorkBenchName=WorkBenchName
-        )
+        CustomPanel = self.List_AddCustomToolbarsToWorkbench(WorkBenchName=WorkBenchName)
         for CustomToolbar in CustomPanel:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
@@ -777,10 +751,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                                 IsInList = False
                                 for k in range(self.form.ToolbarsSelected.count()):
-                                    if (
-                                        self.form.ToolbarsSelected.item(k).text()
-                                        == ListWidgetItem.text()
-                                    ):
+                                    if self.form.ToolbarsSelected.item(k).text() == ListWidgetItem.text():
                                         IsInList = True
 
                                 if IsInList is False:
@@ -796,9 +767,7 @@ class LoadDialog(Design_ui.Ui_Form):
         if self.form.ToolbarName.text() != "":
             CustomPanelTitle = self.form.ToolbarName.text()
         if self.form.ToolbarName.text() == "":
-            StandardFunctions.Mbox(
-                "Enter a name for your custom panel first!", "", 0, "Warning"
-            )
+            StandardFunctions.Mbox("Enter a name for your custom panel first!", "", 0, "Warning")
             return
 
         # Go through the list of workbenches
@@ -815,10 +784,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     MenuName = ListWidgetItem.text()
 
                     for j in range(len(self.List_Commands)):
-                        if (
-                            self.List_Commands[j][2] == MenuName
-                            and self.List_Commands[j][3] == WorkBenchName
-                        ):
+                        if self.List_Commands[j][2] == MenuName and self.List_Commands[j][3] == WorkBenchName:
                             Command = self.List_Commands[j][0]
                             Commands.append(Command)
 
@@ -840,9 +806,9 @@ class LoadDialog(Design_ui.Ui_Form):
                     )
 
                     # Update the dict
-                    self.Dict_CustomToolbars["customToolbars"][WorkBenchName][
-                        CustomPanelTitle + Suffix
-                    ]["commands"][MenuName] = OriginalToolbar
+                    self.Dict_CustomToolbars["customToolbars"][WorkBenchName][CustomPanelTitle + Suffix]["commands"][
+                        MenuName
+                    ] = OriginalToolbar
 
                 # Check if the custom panel is selected in the Json file
                 IsInList = False
@@ -853,13 +819,9 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 # If the custom panel is not in the jason file, add it to the QComboBox
                 if IsInList is False:
-                    self.form.CustomToolbarSelector.addItem(
-                        f"{CustomPanelTitle}, {WorkBenchTitle}"
-                    )
+                    self.form.CustomToolbarSelector.addItem(f"{CustomPanelTitle}, {WorkBenchTitle}")
                 # Set the Custom panel as current text for the QComboBox
-                self.form.CustomToolbarSelector.setCurrentText(
-                    f"{CustomPanelTitle}, {WorkBenchTitle}"
-                )
+                self.form.CustomToolbarSelector.setCurrentText(f"{CustomPanelTitle}, {WorkBenchTitle}")
 
                 # Add the order of panels to the Json file
                 ToolbarOrder = []
@@ -869,9 +831,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     self.Dict_RibbonCommandPanel,
                     ["workbenches", WorkBenchName, "toolbars", "order"],
                 )
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-                    "order"
-                ] = ToolbarOrder
+                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]["order"] = ToolbarOrder
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -891,12 +851,8 @@ class LoadDialog(Design_ui.Ui_Form):
         CustomPanelTitle = ""
         WorkBenchTitle = ""
         if self.form.CustomToolbarSelector.currentText() != "":
-            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(
-                ", "
-            )[0]
-            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[
-                1
-            ]
+            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
+            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
         else:
             return
 
@@ -912,18 +868,15 @@ class LoadDialog(Design_ui.Ui_Form):
                     WorkBenchName = WorkBench
 
                     # Get the commands and their original toolbar
-                    for key, value in self.Dict_CustomToolbars["customToolbars"][
-                        WorkBenchName
-                    ][CustomPanelTitle]["commands"].items():
+                    for key, value in self.Dict_CustomToolbars["customToolbars"][WorkBenchName][CustomPanelTitle][
+                        "commands"
+                    ].items():
                         for CommandListItem in self.List_Commands:
                             # Check if the items is already there
                             IsInList = ShadowList.__contains__(CommandListItem[0])
                             # if not, continue
                             if IsInList is False:
-                                if (
-                                    CommandListItem[2] == key
-                                    and CommandListItem[3] == WorkBenchName
-                                ):
+                                if CommandListItem[2] == key and CommandListItem[3] == WorkBenchName:
                                     Command = Gui.Command.get(CommandListItem[0])
                                     # Define a new ListWidgetItem.
                                     ListWidgetItem = QListWidgetItem()
@@ -938,9 +891,7 @@ class LoadDialog(Design_ui.Ui_Form):
                                     ListWidgetItem.setIcon(Icon)
 
                                     if ListWidgetItem.text() != "":
-                                        self.form.ToolbarsSelected.addItem(
-                                            ListWidgetItem
-                                        )
+                                        self.form.ToolbarsSelected.addItem(ListWidgetItem)
 
                                     # Add the command to the shadow list
                                     ShadowList.append(CommandListItem[0])
@@ -955,12 +906,8 @@ class LoadDialog(Design_ui.Ui_Form):
         CustomPanelTitle = ""
         WorkBenchTitle = ""
         if self.form.CustomToolbarSelector.currentText() != "":
-            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(
-                ", "
-            )[0]
-            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[
-                1
-            ]
+            CustomPanelTitle = self.form.CustomToolbarSelector.currentText().split(", ")[0]
+            WorkBenchTitle = self.form.CustomToolbarSelector.currentText().split(", ")[1]
         else:
             return
 
@@ -969,23 +916,17 @@ class LoadDialog(Design_ui.Ui_Form):
             if WorkBench[2] == WorkBenchTitle:
                 WorkBenchName = WorkBench[0]
                 try:
-                    for key, value in self.Dict_CustomToolbars["customToolbars"][
-                        WorkBenchName
-                    ].items():
+                    for key, value in self.Dict_CustomToolbars["customToolbars"][WorkBenchName].items():
                         if key == CustomPanelTitle:
                             # remove the custom toolbar from the custom toolbar dict.
-                            del self.Dict_CustomToolbars["customToolbars"][
-                                WorkBenchName
-                            ][key]
+                            del self.Dict_CustomToolbars["customToolbars"][WorkBenchName][key]
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
                                 if self.form.CustomToolbarSelector.itemText(i) == key:
                                     self.form.CustomToolbarSelector.removeItem(i)
 
                             # remove the custom toolbar also from the workbenches dict
-                            del self.Dict_RibbonCommandPanel["workbenches"][
-                                WorkBenchName
-                            ]["toolbars"][key]
+                            del self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][key]
 
                             # Enable the apply button
                             self.form.GenerateJson.setEnabled(True)
@@ -1011,6 +952,8 @@ class LoadDialog(Design_ui.Ui_Form):
             self.form.MoveDown_Toolbar.show()
             self.form.MoveUp_Toolbar.show()
             self.form.ToolbarsOrder.show()
+            self.form.setMinimumWidth(940)
+            self.form.setMaximumWidth(940)
         else:
             self.form.label_4.hide()
             self.form.MoveDown_Toolbar.hide()
@@ -1020,6 +963,8 @@ class LoadDialog(Design_ui.Ui_Form):
             Geometry = self.form.geometry()
             Geometry.setWidth(580)
             self.form.setGeometry(Geometry)
+            self.form.setMinimumWidth(580)
+            self.form.setMaximumWidth(580)
 
     def on_WorkbenchList__TextChanged(self):
         # Set the workbench name.
@@ -1038,9 +983,7 @@ class LoadDialog(Design_ui.Ui_Form):
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
         # Get the custom panels
-        CustomPanel = self.List_AddCustomToolbarsToWorkbench(
-            WorkBenchName=WorkBenchName
-        )
+        CustomPanel = self.List_AddCustomToolbarsToWorkbench(WorkBenchName=WorkBenchName)
         for CustomToolbar in CustomPanel:
             if CustomToolbar[1] == WorkBenchTitle:
                 wbToolbars.append(CustomToolbar[0])
@@ -1068,9 +1011,7 @@ class LoadDialog(Design_ui.Ui_Form):
         # Sort the Toolbars according the sorted list
         def SortToolbars(Toolbar):
             try:
-                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
-                    WorkBenchName
-                ]["toolbars"]["order"]
+                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]["order"]
                 position = OrderList.index(Toolbar)
             except Exception:
                 position = 999999
@@ -1134,9 +1075,9 @@ class LoadDialog(Design_ui.Ui_Form):
             try:
                 Command = Gui.Command.get(item)
                 MenuName = Command.getInfo()["menuText"].replace("&", "")
-                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
-                    WorkBenchName
-                ]["toolbars"][Toolbar]["order"]
+                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                    "order"
+                ]
                 position = OrderList.index(MenuName)
             except Exception:
                 position = 999999
@@ -1184,12 +1125,12 @@ class LoadDialog(Design_ui.Ui_Form):
                     try:
                         for i in range(len(self.List_Workbenches)):
                             if self.List_Workbenches[i][0] == WorkBenchName:
-                                MenuName = self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["commands"][CommandName]["text"]
-                                Size = self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["commands"][CommandName]["size"]
+                                MenuName = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
+                                    Toolbar
+                                ]["commands"][CommandName]["text"]
+                                Size = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "commands"
+                                ][CommandName]["size"]
 
                                 if Size == "medium":
                                     checked_small = Qt.CheckState.Unchecked
@@ -1199,13 +1140,9 @@ class LoadDialog(Design_ui.Ui_Form):
                                     checked_small = Qt.CheckState.Unchecked
                                     checked_medium = Qt.CheckState.Unchecked
                                     checked_large = Qt.CheckState.Checked
-                                Icon_Json_Name = self.Dict_RibbonCommandPanel[
-                                    "workbenches"
-                                ][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                    CommandName
-                                ][
-                                    "icon"
-                                ]
+                                Icon_Json_Name = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
+                                    Toolbar
+                                ]["commands"][CommandName]["icon"]
                                 if Icon_Json_Name != "":
                                     Icon = Gui.getIcon(Icon_Json_Name)
                     except Exception:
@@ -1220,14 +1157,12 @@ class LoadDialog(Design_ui.Ui_Form):
                 # Define a table widget item
                 TableWidgetItem = QTableWidgetItem()
                 TableWidgetItem.setText(MenuName + textAddition)
-                if (
-                    Icon is not None
-                ):  # At the moment, settings icon size for most dropdowns do not work properly
+                TableWidgetItem.setData(Qt.ItemDataRole.UserRole, Command.getInfo()["menuText"].replace("&", ""))
+                TableWidgetItem.setFlags(TableWidgetItem.flags() | Qt.ItemFlag.ItemIsEditable)
+                if Icon is not None:  # At the moment, settings icon size for most dropdowns do not work properly
                     TableWidgetItem.setIcon(Icon)
                 if Icon is None:
-                    TableWidgetItem.setFlags(
-                        TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled
-                    )
+                    TableWidgetItem.setFlags(TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled)
                 # Get the last rownumber and set this row with the TableWidgetItem
                 RowNumber = self.form.tableWidget.rowCount() - 1
 
@@ -1258,11 +1193,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 # Define the order based on the order in this table widget
                 Order = []
                 for i in range(self.form.tableWidget.rowCount()):
-                    Order.append(
-                        QTableWidgetItem(self.form.tableWidget.item(i, 0))
-                        .text()
-                        .replace("...", "")
-                    )
+                    Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).data(Qt.ItemDataRole.UserRole))
 
                 # Add or update the dict for the Ribbon command panel
                 self.add_keys_nested_dict(
@@ -1280,12 +1211,10 @@ class LoadDialog(Design_ui.Ui_Form):
                         CommandName,
                     ],
                 )
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-                    Toolbar
-                ]["order"] = Order
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-                    Toolbar
-                ]["commands"][CommandName] = {
+                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
+                    CommandName
+                ] = {
                     "size": Size,
                     "text": MenuName,
                     "icon": IconName,
@@ -1330,6 +1259,16 @@ class LoadDialog(Design_ui.Ui_Form):
 
         return
 
+    def on_tableCell_changed(self, Item):
+        text = Item.text()
+        if text == "":
+            Item.setText(Item.data(Qt.ItemDataRole.UserRole))
+
+        # Update the data with the (text)chanche
+        self.UpdateData()
+        # Update the order of the commands
+        self.on_ToolbarsOrder_changed()
+
     def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
         row = Item.row()
@@ -1343,14 +1282,12 @@ class LoadDialog(Design_ui.Ui_Form):
         for i3 in range(1, self.form.tableWidget.columnCount()):
             if CheckState == Qt.CheckState.Checked:
                 if i3 == column:
-                    self.form.tableWidget.item(row, i3).setCheckState(
-                        Qt.CheckState.Checked
-                    )
+                    self.form.tableWidget.item(row, i3).setCheckState(Qt.CheckState.Checked)
                 else:
-                    self.form.tableWidget.item(row, i3).setCheckState(
-                        Qt.CheckState.Unchecked
-                    )
+                    self.form.tableWidget.item(row, i3).setCheckState(Qt.CheckState.Unchecked)
+        # Update the data
         self.UpdateData()
+        # Update the order of the commands
         self.on_ToolbarsOrder_changed()
 
         # Enable the apply button
@@ -1410,9 +1347,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 "order",
             ],
         )
-        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-            "order"
-        ] = ToolbarOrder
+        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]["order"] = ToolbarOrder
 
     # endregion
 
@@ -1432,14 +1367,10 @@ class LoadDialog(Design_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox(
-                "Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles
-            )
+            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
             BackupFile = os.path.join(pathBackup, SelectedDile)
             result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(
-                f"Ribbonbar set back to settings from: {result}!", "Warning"
-            )
+            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
             StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
 
         self.form.close()
@@ -1478,6 +1409,12 @@ class LoadDialog(Design_ui.Ui_Form):
     def on_Cancel_clicked(self):
         # Close the form
         self.form.close()
+        return
+
+    @staticmethod
+    def on_Helpbutton_clicked():
+        HelpAdress = "https://github.com/FreeCAD/FreeCAD-addons/wiki"
+        webbrowser.open(HelpAdress, new=2, autoraise=True)
         return
 
     # endregion
@@ -1583,9 +1520,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 ListWidgetItem = QListWidgetItem()
                 ListWidgetItem.setText(ToolbarCommand[2] + textAddition)
                 ListWidgetItem.setIcon(Icon)
-                ListWidgetItem.setToolTip(
-                    ToolbarCommand[0]
-                )  # Use the tooltip to store the actual command.
+                ListWidgetItem.setToolTip(ToolbarCommand[0])  # Use the tooltip to store the actual command.
 
                 # Add the ListWidgetItem to the correct ListWidget
                 if Icon is not None:
@@ -1615,17 +1550,13 @@ class LoadDialog(Design_ui.Ui_Form):
                         CommandName = ""
                         IconName = ""
                         # Get the command text from the first cell in the row
-                        MenuName = (
-                            self.form.tableWidget.item(row, 0).text().replace("...", "")
-                        )
+                        MenuNameCustom = self.form.tableWidget.item(row, 0).text().replace("...", "")
+                        MenuName = self.form.tableWidget.item(row, 0).data(Qt.ItemDataRole.UserRole)
 
                         # Go through the list with all available commands.
                         # If the commandText is in this list, get the command name.
                         for i3 in range(len(self.List_Commands)):
-                            if (
-                                MenuName == self.List_Commands[i3][2]
-                                and WorkBenchName == self.List_Commands[i3][3]
-                            ):
+                            if MenuName == self.List_Commands[i3][2] and WorkBenchName == self.List_Commands[i3][3]:
                                 CommandName = self.List_Commands[i3][0]
                                 Command = Gui.Command.get(CommandName)
                                 IconName = Command.getInfo()["pixmap"]
@@ -1638,9 +1569,7 @@ class LoadDialog(Design_ui.Ui_Form):
                                 # CheckState = self.form.tableWidget.item(row, column).checkState()
                                 # Go through the cells in the row. If checkstate is checkd, uncheck the other cells in the row
                                 for i4 in range(1, self.form.tableWidget.columnCount()):
-                                    CheckState = self.form.tableWidget.item(
-                                        row, i4
-                                    ).checkState()
+                                    CheckState = self.form.tableWidget.item(row, i4).checkState()
                                     if CheckState == Qt.CheckState.Checked:
                                         if i4 == 1:
                                             Size = "small"
@@ -1652,9 +1581,9 @@ class LoadDialog(Design_ui.Ui_Form):
                                 Order = []
                                 for i5 in range(self.form.tableWidget.rowCount()):
                                     Order.append(
-                                        self.form.tableWidget.item(i5, 0)
-                                        .text()
-                                        .replace("...", "")
+                                        QTableWidgetItem(self.form.tableWidget.item(i5, 0)).data(
+                                            Qt.ItemDataRole.UserRole
+                                        )
                                     )
 
                                 self.add_keys_nested_dict(
@@ -1679,14 +1608,14 @@ class LoadDialog(Design_ui.Ui_Form):
                                     ],
                                 )
 
-                                self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["order"] = Order
-                                self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["commands"][CommandName] = {
+                                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "order"
+                                ] = Order
+                                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "commands"
+                                ][CommandName] = {
                                     "size": Size,
-                                    "text": MenuName,
+                                    "text": MenuNameCustom,
                                     "icon": IconName,
                                 }
             except Exception:
@@ -1917,10 +1846,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                     for Group in CustomToolbars:
                         Parameter = App.ParamGet(
-                            "User parameter:BaseApp/Workbench/"
-                            + WorkBenchName
-                            + "/Toolbar/"
-                            + Group
+                            "User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group
                         )
                         Name = Parameter.GetString("Name")
 
@@ -1954,12 +1880,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 ).GetGroups()
 
                 for Group in CustomToolbars:
-                    Parameter = App.ParamGet(
-                        "User parameter:BaseApp/Workbench/"
-                        + WorkBenchName
-                        + "/Toolbar/"
-                        + Group
-                    )
+                    Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
                     Name = Parameter.GetString("Name")
 
                     if Name != "":
@@ -1982,27 +1903,17 @@ class LoadDialog(Design_ui.Ui_Form):
         Toolbars = {}
 
         try:
-            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
-                WorkBenchName
-            ]:
+            for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][WorkBenchName]:
                 ListCommands = []
-                Commands = self.Dict_CustomToolbars["customToolbars"][WorkBenchName][
-                    CustomToolbar
-                ]["commands"]
+                Commands = self.Dict_CustomToolbars["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
                 for key, value in Commands.items():
                     for i in range(len(self.List_Commands)):
-                        if (
-                            self.List_Commands[i][2] == key
-                            and self.List_Commands[i][3] == WorkBenchName
-                        ):
+                        if self.List_Commands[i][2] == key and self.List_Commands[i][3] == WorkBenchName:
                             Command = self.List_Commands[i][0]
                             ListCommands.append(Command)
 
-                        if (
-                            self.List_IgnoredToolbars_internal.__contains__(value)
-                            is False
-                        ):
+                        if self.List_IgnoredToolbars_internal.__contains__(value) is False:
                             self.List_IgnoredToolbars_internal.append(f"{value}")
 
                     Toolbars[CustomToolbar] = ListCommands
@@ -2018,29 +1929,19 @@ class LoadDialog(Design_ui.Ui_Form):
         if str(WorkBenchName) != "" or WorkBenchName is not None:
             if str(WorkBenchName) != "NoneWorkbench":
                 try:
-                    for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
-                        WorkBenchName
-                    ]:
+                    for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][WorkBenchName]:
                         ListCommands = []
-                        Commands = self.Dict_CustomToolbars["customToolbars"][
-                            WorkBenchName
-                        ][CustomToolbar]["commands"]
+                        Commands = self.Dict_CustomToolbars["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
                         WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
 
                         for key, value in Commands.items():
                             for i in range(len(self.List_Commands)):
-                                if (
-                                    self.List_Commands[i][2] == key
-                                    and self.List_Commands[i][3] == WorkBenchName
-                                ):
+                                if self.List_Commands[i][2] == key and self.List_Commands[i][3] == WorkBenchName:
                                     Command = self.List_Commands[i][0]
                                     ListCommands.append(Command)
 
-                            if (
-                                self.List_IgnoredToolbars_internal.__contains__(value)
-                                is False
-                            ):
+                            if self.List_IgnoredToolbars_internal.__contains__(value) is False:
                                 self.List_IgnoredToolbars_internal.append(f"{value}")
 
                         Toolbars.append([CustomToolbar, WorkbenchTitle, ListCommands])
