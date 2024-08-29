@@ -922,7 +922,7 @@ class LoadDialog(Design_ui.Ui_Form):
                             del self.Dict_CustomToolbars["customToolbars"][WorkBenchName][key]
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
-                                if self.form.CustomToolbarSelector.itemText(i) == key:
+                                if self.form.CustomToolbarSelector.itemText(i).split(", ")[0] == key:
                                     self.form.CustomToolbarSelector.removeItem(i)
 
                             # remove the custom toolbar also from the workbenches dict
