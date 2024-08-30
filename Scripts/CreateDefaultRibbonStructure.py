@@ -168,21 +168,41 @@ CustomJson_Workbenches = {
                         "Validate sketch...",
                     ],
                     "commands": {
-                        "PartDesign_CompSketches": {"size": "large", "text": "Create datum", "icon": ""},
-                        "PartDesign_Body": {"size": "small", "text": "Create body", "icon": "PartDesign_Body"},
+                        "PartDesign_CompSketches": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": "",
+                        },
+                        "PartDesign_Body": {
+                            "size": "small",
+                            "text": "Create body",
+                            "icon": "PartDesign_Body",
+                        },
                         "Sketcher_ValidateSketch": {
                             "size": "small",
                             "text": "Validate sketch",
                             "icon": "Sketcher_ValidateSketch",
                         },
-                        "Part_CheckGeometry": {"size": "small", "text": "Check Geometry", "icon": "Part_CheckGeometry"},
+                        "Part_CheckGeometry": {
+                            "size": "small",
+                            "text": "Check Geometry",
+                            "icon": "Part_CheckGeometry",
+                        },
                         "PartDesign_SubShapeBinder": {
                             "size": "small",
                             "text": "Create a sub-object(s) shape binder",
                             "icon": "PartDesign_SubShapeBinder",
                         },
-                        "PartDesign_Clone": {"size": "small", "text": "Create a clone", "icon": "PartDesign_Clone"},
-                        "PartDesign_CompDatums": {"size": "large", "text": "Create datum", "icon": ""},
+                        "PartDesign_Clone": {
+                            "size": "small",
+                            "text": "Create a clone",
+                            "icon": "PartDesign_Clone",
+                        },
+                        "PartDesign_CompDatums": {
+                            "size": "large",
+                            "text": "Create datum",
+                            "icon": "",
+                        },
                     },
                 },
                 "Part Design Modeling": {
@@ -203,7 +223,11 @@ CustomJson_Workbenches = {
                         "Boolean operation",
                     ],
                     "commands": {
-                        "PartDesign_Pad": {"size": "large", "text": "Pad", "icon": "PartDesign_Pad"},
+                        "PartDesign_Pad": {
+                            "size": "large",
+                            "text": "Pad",
+                            "icon": "PartDesign_Pad",
+                        },
                         "PartDesign_Revolution": {
                             "size": "large",
                             "text": "Revolution",
@@ -224,10 +248,26 @@ CustomJson_Workbenches = {
                             "text": "Additive helix",
                             "icon": "PartDesign_AdditiveHelix",
                         },
-                        "PartDesign_CompPrimitiveAdditive": {"size": "small", "text": "Add a primitive", "icon": ""},
-                        "PartDesign_Pocket": {"size": "large", "text": "Pocket", "icon": "PartDesign_Pocket"},
-                        "PartDesign_Hole": {"size": "large", "text": "Hole", "icon": "PartDesign_Hole"},
-                        "PartDesign_Groove": {"size": "large", "text": "Groove", "icon": "PartDesign_Groove"},
+                        "PartDesign_CompPrimitiveAdditive": {
+                            "size": "small",
+                            "text": "Add a primitive",
+                            "icon": "",
+                        },
+                        "PartDesign_Pocket": {
+                            "size": "large",
+                            "text": "Pocket",
+                            "icon": "PartDesign_Pocket",
+                        },
+                        "PartDesign_Hole": {
+                            "size": "large",
+                            "text": "Hole",
+                            "icon": "PartDesign_Hole",
+                        },
+                        "PartDesign_Groove": {
+                            "size": "large",
+                            "text": "Groove",
+                            "icon": "PartDesign_Groove",
+                        },
                         "PartDesign_SubtractiveLoft": {
                             "size": "small",
                             "text": "Subtractive loft",
@@ -256,15 +296,51 @@ CustomJson_Workbenches = {
                     },
                 },
                 "Individual views": {
-                    "order": ["Isometric", "Front", "Top", "Right", "Rear", "Bottom", "Left"],
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left",
+                    ],
                     "commands": {
-                        "Std_ViewIsometric": {"size": "small", "text": "Isometric", "icon": "view-axonometric"},
-                        "Std_ViewFront": {"size": "small", "text": "Front", "icon": "view-front"},
-                        "Std_ViewTop": {"size": "small", "text": "Top", "icon": "view-top"},
-                        "Std_ViewRight": {"size": "small", "text": "Right", "icon": "view-right"},
-                        "Std_ViewRear": {"size": "small", "text": "Rear", "icon": "view-rear"},
-                        "Std_ViewBottom": {"size": "small", "text": "Bottom", "icon": "view-bottom"},
-                        "Std_ViewLeft": {"size": "small", "text": "Left", "icon": "view-left"},
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric",
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front",
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top",
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right",
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear",
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom",
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left",
+                        },
                     },
                 },
                 "order": [
@@ -277,27 +353,73 @@ CustomJson_Workbenches = {
                     "Create BOM_custom",
                 ],
                 "Structure": {
-                    "order": ["Create part", "Create group", "Link actions", "Create a variable set"],
+                    "order": [
+                        "Create part",
+                        "Create group",
+                        "Link actions",
+                        "Create a variable set",
+                    ],
                     "commands": {
-                        "Std_Part": {"size": "small", "text": "Create part", "icon": "Geofeaturegroup"},
-                        "Std_Group": {"size": "small", "text": "Create group", "icon": "folder"},
-                        "Std_LinkActions": {"size": "small", "text": "Link actions", "icon": ""},
-                        "Std_VarSet": {"size": "small", "text": "Create a variable set", "icon": "VarSet"},
+                        "Std_Part": {
+                            "size": "small",
+                            "text": "Create part",
+                            "icon": "Geofeaturegroup",
+                        },
+                        "Std_Group": {
+                            "size": "small",
+                            "text": "Create group",
+                            "icon": "folder",
+                        },
+                        "Std_LinkActions": {
+                            "size": "small",
+                            "text": "Link actions",
+                            "icon": "",
+                        },
+                        "Std_VarSet": {
+                            "size": "small",
+                            "text": "Create a variable set",
+                            "icon": "VarSet",
+                        },
                     },
                 },
                 "Part Design Dressup": {
                     "order": ["Fillet", "Chamfer", "Draft", "Thickness"],
                     "commands": {
-                        "PartDesign_Fillet": {"size": "large", "text": "Fillet", "icon": "PartDesign_Fillet"},
-                        "PartDesign_Chamfer": {"size": "large", "text": "Chamfer", "icon": "PartDesign_Chamfer"},
-                        "PartDesign_Draft": {"size": "small", "text": "Draft", "icon": "PartDesign_Draft"},
-                        "PartDesign_Thickness": {"size": "small", "text": "Thickness", "icon": "PartDesign_Thickness"},
+                        "PartDesign_Fillet": {
+                            "size": "large",
+                            "text": "Fillet",
+                            "icon": "PartDesign_Fillet",
+                        },
+                        "PartDesign_Chamfer": {
+                            "size": "large",
+                            "text": "Chamfer",
+                            "icon": "PartDesign_Chamfer",
+                        },
+                        "PartDesign_Draft": {
+                            "size": "small",
+                            "text": "Draft",
+                            "icon": "PartDesign_Draft",
+                        },
+                        "PartDesign_Thickness": {
+                            "size": "small",
+                            "text": "Thickness",
+                            "icon": "PartDesign_Thickness",
+                        },
                     },
                 },
                 "Part Design Patterns": {
-                    "order": ["LinearPattern", "Mirrored", "PolarPattern", "Create MultiTransform"],
+                    "order": [
+                        "LinearPattern",
+                        "Mirrored",
+                        "PolarPattern",
+                        "Create MultiTransform",
+                    ],
                     "commands": {
-                        "PartDesign_Mirrored": {"size": "large", "text": "Mirrored", "icon": "PartDesign_Mirrored"},
+                        "PartDesign_Mirrored": {
+                            "size": "large",
+                            "text": "Mirrored",
+                            "icon": "PartDesign_Mirrored",
+                        },
                         "PartDesign_LinearPattern": {
                             "size": "large",
                             "text": "LinearPattern",
@@ -333,7 +455,11 @@ CustomJson_Workbenches = {
                         "Fluid section for 1D flow",
                     ],
                     "commands": {
-                        "FEM_Analysis": {"size": "large", "text": "Analysis container", "icon": "FEM_Analysis"}
+                        "FEM_Analysis": {
+                            "size": "large",
+                            "text": "Analysis container",
+                            "icon": "FEM_Analysis",
+                        }
                     },
                 },
                 "Electromagnetic boundary conditions": {
@@ -361,7 +487,11 @@ CustomJson_Workbenches = {
                     },
                 },
                 "Geometrical analysis features": {
-                    "order": ["Plane multi-point constraint", "Section print feature", "Local coordinate system"],
+                    "order": [
+                        "Plane multi-point constraint",
+                        "Section print feature",
+                        "Local coordinate system",
+                    ],
                     "commands": {
                         "FEM_ConstraintPlaneRotation": {
                             "size": "large",
@@ -474,11 +604,19 @@ CustomJson_Workbenches = {
                         "Filter functions",
                     ],
                     "commands": {
-                        "FEM_ResultsPurge": {"size": "large", "text": "Purge results", "icon": "FEM_ResultsPurge"}
+                        "FEM_ResultsPurge": {
+                            "size": "large",
+                            "text": "Purge results",
+                            "icon": "FEM_ResultsPurge",
+                        }
                     },
                 },
                 "Utilities": {
-                    "order": ["Clipping plane on face", "Remove all clipping planes", "Open FEM examples"],
+                    "order": [
+                        "Clipping plane on face",
+                        "Remove all clipping planes",
+                        "Open FEM examples",
+                    ],
                     "commands": {
                         "FEM_ClippingPlaneAdd": {
                             "size": "large",
@@ -499,15 +637,51 @@ CustomJson_Workbenches = {
                     "Utilities",
                 ],
                 "Individual views": {
-                    "order": ["Isometric", "Front", "Top", "Right", "Rear", "Bottom", "Left"],
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left",
+                    ],
                     "commands": {
-                        "Std_ViewIsometric": {"size": "small", "text": "Isometric", "icon": "view-axonometric"},
-                        "Std_ViewFront": {"size": "small", "text": "Front", "icon": "view-front"},
-                        "Std_ViewTop": {"size": "small", "text": "Top", "icon": "view-top"},
-                        "Std_ViewRight": {"size": "small", "text": "Right", "icon": "view-right"},
-                        "Std_ViewRear": {"size": "small", "text": "Rear", "icon": "view-rear"},
-                        "Std_ViewBottom": {"size": "small", "text": "Bottom", "icon": "view-bottom"},
-                        "Std_ViewLeft": {"size": "small", "text": "Left", "icon": "view-left"},
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric",
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front",
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top",
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right",
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear",
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom",
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left",
+                        },
                     },
                 },
                 "Boundaty conditions & loads_custom": {
@@ -572,9 +746,21 @@ CustomJson_Workbenches = {
                             "text": "Contact constraint",
                             "icon": "FEM_ConstraintContact",
                         },
-                        "FEM_ConstraintTie": {"size": "small", "text": "Tie constraint", "icon": "FEM_ConstraintTie"},
-                        "FEM_ConstraintSpring": {"size": "small", "text": "Spring", "icon": "FEM_ConstraintSpring"},
-                        "FEM_ConstraintForce": {"size": "large", "text": "Force load", "icon": "FEM_ConstraintForce"},
+                        "FEM_ConstraintTie": {
+                            "size": "small",
+                            "text": "Tie constraint",
+                            "icon": "FEM_ConstraintTie",
+                        },
+                        "FEM_ConstraintSpring": {
+                            "size": "small",
+                            "text": "Spring",
+                            "icon": "FEM_ConstraintSpring",
+                        },
+                        "FEM_ConstraintForce": {
+                            "size": "large",
+                            "text": "Force load",
+                            "icon": "FEM_ConstraintForce",
+                        },
                         "FEM_ConstraintPressure": {
                             "size": "small",
                             "text": "Pressure load",
@@ -613,12 +799,33 @@ CustomJson_Workbenches = {
                     },
                 },
                 "Structure": {
-                    "order": ["Create part", "Create group", "Link actions", "Create a variable set"],
+                    "order": [
+                        "Create part",
+                        "Create group",
+                        "Link actions",
+                        "Create a variable set",
+                    ],
                     "commands": {
-                        "Std_Part": {"size": "small", "text": "Create part", "icon": "Geofeaturegroup"},
-                        "Std_Group": {"size": "small", "text": "Create group", "icon": "folder"},
-                        "Std_LinkActions": {"size": "small", "text": "Link actions", "icon": ""},
-                        "Std_VarSet": {"size": "small", "text": "Create a variable set", "icon": "VarSet"},
+                        "Std_Part": {
+                            "size": "small",
+                            "text": "Create part",
+                            "icon": "Geofeaturegroup",
+                        },
+                        "Std_Group": {
+                            "size": "small",
+                            "text": "Create group",
+                            "icon": "folder",
+                        },
+                        "Std_LinkActions": {
+                            "size": "small",
+                            "text": "Link actions",
+                            "icon": "",
+                        },
+                        "Std_VarSet": {
+                            "size": "small",
+                            "text": "Create a variable set",
+                            "icon": "VarSet",
+                        },
                     },
                 },
             }
@@ -652,13 +859,21 @@ CustomJson_Workbenches = {
                         "Insert Clip Group",
                     ],
                     "commands": {
-                        "TechDraw_View": {"size": "large", "text": "Insert View", "icon": "actions/TechDraw_View"}
+                        "TechDraw_View": {
+                            "size": "large",
+                            "text": "Insert View",
+                            "icon": "actions/TechDraw_View",
+                        }
                     },
                 },
                 "TechDraw Stacking": {
                     "order": ["Adjust stacking order of views"],
                     "commands": {
-                        "TechDraw_StackGroup": {"size": "large", "text": "Adjust stacking order of views", "icon": ""}
+                        "TechDraw_StackGroup": {
+                            "size": "large",
+                            "text": "Adjust stacking order of views",
+                            "icon": "",
+                        }
                     },
                 },
                 "TechDraw Dimensions": {
@@ -669,7 +884,13 @@ CustomJson_Workbenches = {
                         "Insert Landmark Dimension - EXPERIMENTAL",
                         "Repair Dimension References",
                     ],
-                    "commands": {"TechDraw_CompDimensionTools": {"size": "large", "text": "Dimension", "icon": ""}},
+                    "commands": {
+                        "TechDraw_CompDimensionTools": {
+                            "size": "large",
+                            "text": "Dimension",
+                            "icon": "",
+                        }
+                    },
                 },
                 "TechDraw Attributes": {
                     "order": [
@@ -768,7 +989,11 @@ CustomJson_Workbenches = {
                         "Import data from titleblock",
                     ],
                     "commands": {
-                        "FillTitleBlock": {"size": "large", "text": "Populate titleblock", "icon": "FillTitleBlock.svg"}
+                        "FillTitleBlock": {
+                            "size": "large",
+                            "text": "Populate titleblock",
+                            "icon": "FillTitleBlock.svg",
+                        }
                     },
                 },
                 "order": [
@@ -787,15 +1012,51 @@ CustomJson_Workbenches = {
                     "Create BOM_custom",
                 ],
                 "Individual views": {
-                    "order": ["Isometric", "Front", "Top", "Right", "Rear", "Bottom", "Left"],
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left",
+                    ],
                     "commands": {
-                        "Std_ViewIsometric": {"size": "small", "text": "Isometric", "icon": "view-axonometric"},
-                        "Std_ViewFront": {"size": "small", "text": "Front", "icon": "view-front"},
-                        "Std_ViewTop": {"size": "small", "text": "Top", "icon": "view-top"},
-                        "Std_ViewRight": {"size": "small", "text": "Right", "icon": "view-right"},
-                        "Std_ViewRear": {"size": "small", "text": "Rear", "icon": "view-rear"},
-                        "Std_ViewBottom": {"size": "small", "text": "Bottom", "icon": "view-bottom"},
-                        "Std_ViewLeft": {"size": "small", "text": "Left", "icon": "view-left"},
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric",
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front",
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top",
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right",
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear",
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom",
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left",
+                        },
                     },
                 },
             }
@@ -877,7 +1138,9 @@ def CreateJson():
                             for i3 in range(len(value)):
                                 CommandOrder = Gui.Command.get(value[i3])
                                 if CommandOrder is not None:
-                                    MenuNameOrder = CommandOrder.getInfo()["menuText"].replace("&", "")
+                                    MenuNameOrder = CommandOrder.getInfo()[
+                                        "menuText"
+                                    ].replace("&", "")
                                     Order.append(MenuNameOrder)
 
                             # Set the first command to large
@@ -906,12 +1169,12 @@ def CreateJson():
                                     ],
                                 )
 
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                                    "order"
-                                ] = Order
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                    CommandName
-                                ] = {
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["order"] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["commands"][CommandName] = {
                                     "size": Size,
                                     "text": MenuName,
                                     "icon": IconName,
@@ -1071,7 +1334,12 @@ def List_ReturnCustomToolbars():
                 ).GetGroups()
 
                 for Group in CustomToolbars:
-                    Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
+                    Parameter = App.ParamGet(
+                        "User parameter:BaseApp/Workbench/"
+                        + WorkBenchName
+                        + "/Toolbar/"
+                        + Group
+                    )
                     Name = Parameter.GetString("Name")
 
                     ListCommands = []
@@ -1104,7 +1372,12 @@ def Dict_ReturnCustomToolbars(WorkBenchName):
             ).GetGroups()
 
             for Group in CustomToolbars:
-                Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
+                Parameter = App.ParamGet(
+                    "User parameter:BaseApp/Workbench/"
+                    + WorkBenchName
+                    + "/Toolbar/"
+                    + Group
+                )
                 Name = Parameter.GetString("Name")
 
                 if Name != "":
@@ -1130,7 +1403,9 @@ def Dict_AddCustomToolbarsToWorkbench(WorkBenchName):
     try:
         for CustomToolbar in Dict_CustomPanels["customToolbars"][WorkBenchName]:
             ListCommands = []
-            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
+            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][
+                CustomToolbar
+            ]["commands"]
 
             for key, value in Commands.items():
                 for i in range(len(List_Commands)):
