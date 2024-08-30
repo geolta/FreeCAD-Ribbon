@@ -100,34 +100,25 @@ class Settings:
 
 
 # Define the resources
-ICON_LOCATION = os.path.dirname(__file__) + "/Resources/icons/"
-STYLESHEET_LOCATION = os.path.dirname(__file__) + "/Resources/stylesheets/"
-UI_LOCATION = os.path.dirname(__file__) + "/Resources/ui/"
+ICON_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "icons")
+STYLESHEET_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "stylesheets")
+UI_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "ui")
 
 # Define the icon sizes
-if (
-    Settings.GetIntSetting("IconSize_Small") is not None
-    or Settings.GetIntSetting("IconSize_Small") > 0
-):
+if Settings.GetIntSetting("IconSize_Small") is not None or Settings.GetIntSetting("IconSize_Small") > 0:
     ICON_SIZE_SMALL = Settings.GetIntSetting("IconSize_Small")
 else:
-    ICON_SIZE_SMALL = int(24)
+    ICON_SIZE_SMALL = int(30)
 
-if (
-    Settings.GetIntSetting("IconSize_Medium") is not None
-    or Settings.GetIntSetting("IconSize_Medium") > 0
-):
+if Settings.GetIntSetting("IconSize_Medium") is not None or Settings.GetIntSetting("IconSize_Medium") > 0:
     ICON_SIZE_MEDIUM = Settings.GetIntSetting("IconSize_Medium")
 else:
-    ICON_SIZE_MEDIUM = int(44)
+    ICON_SIZE_MEDIUM = int(40)
 
-if (
-    Settings.GetIntSetting("IconSize_Large") is not None
-    or Settings.GetIntSetting("IconSize_Large") > 0
-):
+if Settings.GetIntSetting("IconSize_Large") is not None or Settings.GetIntSetting("IconSize_Large") > 0:
     ICON_SIZE_LARGE = Settings.GetIntSetting("IconSize_Large")
 else:
-    ICON_SIZE_LARGE = int(64)
+    ICON_SIZE_LARGE = int(50)
 
 
 # Backup parameters
