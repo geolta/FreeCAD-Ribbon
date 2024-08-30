@@ -193,14 +193,13 @@ class ModernMenu(RibbonBar):
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
         if os.path.exists(ScriptDir) is True:
             ListScripts = os.listdir(ScriptDir)
+            print(ListScripts)
             if len(ListScripts) > 0:
-                ScriptButtonMenu = QMenu()
-                ScriptButtonMenu.setTitle("Scripts")
+                ScriptButtonMenu = Menu.addMenu("Scripts")
                 for i in range(len(ListScripts)):
-                    Script = ScriptButtonMenu.addAction(ListScripts[i])
-                    Script.setToolTip(os.path.join(ScriptDir, Script.text()))
-                    ScriptButtonMenu.triggered.connect(lambda chk, item=ListScripts[i]: self.LoadMarcoFreeCAD(Script))
-                Menu.addMenu(ScriptButtonMenu)
+                    ScriptButtonMenu.addAction(
+                        ListScripts[i], lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1])
+                    )
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
@@ -560,10 +559,9 @@ class ModernMenu(RibbonBar):
 
         return ButtonList
 
-    def LoadMarcoFreeCAD(self, action: QAction):
-        print("got here")
+    def LoadMarcoFreeCAD(self, scriptName):
         if self.MainWindowLoaded is True:
-            script = os.path.join(pathScripts, action.text())
+            script = os.path.join(pathScripts, scriptName)
             if script.endswith(".py"):
                 App.loadFile(script)
 
