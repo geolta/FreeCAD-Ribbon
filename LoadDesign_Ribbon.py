@@ -38,6 +38,7 @@ from PySide.QtWidgets import (
     QPushButton,
     QToolButton,
     QTabWidget,
+    QCheckBox,
 )
 from PySide.QtCore import Qt, SIGNAL, QTimer, QRect
 import sys
@@ -109,11 +110,6 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.setPalette(palette)
         Style = mw.style()
         self.form.setStyle(Style)
-
-        # # Set the default size of the form
-        # Geometry = self.form.geometry()
-        # Geometry.setWidth(580)
-        # self.form.setGeometry(Geometry)
 
         # region - create the lists ------------------------------------------------------------------
         #
@@ -577,7 +573,8 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -588,7 +585,8 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -596,7 +594,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=True)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -604,7 +603,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.MoveItem(ListWidget=self.form.CommandsSelected, Up=False)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -645,7 +645,8 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -656,7 +657,8 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -670,7 +672,8 @@ class LoadDialog(Design_ui.Ui_Form):
         )
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -741,7 +744,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.MoveItem(ListWidget=self.form.ToolbarsSelected, Up=True)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -749,7 +753,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.MoveItem(ListWidget=self.form.ToolbarsSelected, Up=False)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -807,7 +812,8 @@ class LoadDialog(Design_ui.Ui_Form):
                                     self.form.ToolbarsSelected.addItem(ListWidgetItem)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -867,7 +873,9 @@ class LoadDialog(Design_ui.Ui_Form):
                 # Check if the custom panel is selected in the Json file
                 IsInList = False
                 for j in range(self.form.CustomToolbarSelector.count()):
-                    CustomToolbar = self.form.CustomToolbarSelector.itemText(i)
+                    CustomToolbar = self.form.CustomToolbarSelector.itemText(i).split(
+                        ", "
+                    )[0]
                     if CustomToolbar == f"{CustomPanelTitle}, {WorkBenchTitle}":
                         IsInList = True
 
@@ -894,7 +902,8 @@ class LoadDialog(Design_ui.Ui_Form):
                 ] = ToolbarOrder
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -966,7 +975,8 @@ class LoadDialog(Design_ui.Ui_Form):
                                     ShadowList.append(CommandListItem[0])
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -999,7 +1009,12 @@ class LoadDialog(Design_ui.Ui_Form):
                             ][key]
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
-                                if self.form.CustomToolbarSelector.itemText(i) == key:
+                                if (
+                                    self.form.CustomToolbarSelector.itemText(i).split(
+                                        ", "
+                                    )[0]
+                                    == key
+                                ):
                                     self.form.CustomToolbarSelector.removeItem(i)
 
                             # remove the custom toolbar also from the workbenches dict
@@ -1008,7 +1023,8 @@ class LoadDialog(Design_ui.Ui_Form):
                             ]["toolbars"][key]
 
                             # Enable the apply button
-                            self.form.GenerateJson.setEnabled(True)
+                            if self.CheckChanges() is True:
+                                self.form.GenerateJson.setEnabled(True)
 
                             return
                 except Exception as e:
@@ -1204,36 +1220,35 @@ class LoadDialog(Design_ui.Ui_Form):
                 Size = "small"
 
                 # Go through the toolbars in the Json Ribbon list
-                for WorkBenchName in self.Dict_RibbonCommandPanel["workbenches"]:
-                    try:
-                        for i in range(len(self.List_Workbenches)):
-                            if self.List_Workbenches[i][0] == WorkBenchName:
-                                MenuName = self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["commands"][CommandName]["text"]
-                                Size = self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["commands"][CommandName]["size"]
+                for i in range(len(self.List_Workbenches)):
+                    if self.List_Workbenches[i][0] == WorkBenchName:
+                        try:
+                            MenuName = self.Dict_RibbonCommandPanel["workbenches"][
+                                WorkBenchName
+                            ]["toolbars"][Toolbar]["commands"][CommandName]["text"]
+                            Size = self.Dict_RibbonCommandPanel["workbenches"][
+                                WorkBenchName
+                            ]["toolbars"][Toolbar]["commands"][CommandName]["size"]
 
-                                if Size == "medium":
-                                    checked_small = Qt.CheckState.Unchecked
-                                    checked_medium = Qt.CheckState.Checked
-                                    checked_large = Qt.CheckState.Unchecked
-                                if Size == "large":
-                                    checked_small = Qt.CheckState.Unchecked
-                                    checked_medium = Qt.CheckState.Unchecked
-                                    checked_large = Qt.CheckState.Checked
-                                Icon_Json_Name = self.Dict_RibbonCommandPanel[
-                                    "workbenches"
-                                ][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                    CommandName
-                                ][
-                                    "icon"
-                                ]
-                                if Icon_Json_Name != "":
-                                    Icon = Gui.getIcon(Icon_Json_Name)
-                    except Exception:
-                        continue
+                            if Size == "medium":
+                                checked_small = Qt.CheckState.Unchecked
+                                checked_medium = Qt.CheckState.Checked
+                                checked_large = Qt.CheckState.Unchecked
+                            if Size == "large":
+                                checked_small = Qt.CheckState.Unchecked
+                                checked_medium = Qt.CheckState.Unchecked
+                                checked_large = Qt.CheckState.Checked
+                            Icon_Json_Name = self.Dict_RibbonCommandPanel[
+                                "workbenches"
+                            ][WorkBenchName]["toolbars"][Toolbar]["commands"][
+                                CommandName
+                            ][
+                                "icon"
+                            ]
+                            if Icon_Json_Name != "":
+                                Icon = Gui.getIcon(Icon_Json_Name)
+                        except Exception:
+                            continue
 
                 # Create the row in the table
                 # add a row to the table widget
@@ -1251,9 +1266,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 TableWidgetItem.setFlags(
                     TableWidgetItem.flags() | Qt.ItemFlag.ItemIsEditable
                 )
-                if (
-                    Icon is not None
-                ):  # At the moment, settings icon size for most dropdowns do not work properly
+                if Icon is not None:
                     TableWidgetItem.setIcon(Icon)
                 if Icon is None:
                     TableWidgetItem.setFlags(
@@ -1324,10 +1337,14 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 # Set the IconOnlyToolbars control
                 Toolbar = self.form.ToolbarList.currentText()
-
+                IsInList = False
                 for item in self.List_IconOnlyToolbars:
                     if item == Toolbar:
-                        self.form.IconOnly.setChecked(True)
+                        IsInList = True
+                if IsInList is True:
+                    self.form.IconOnly.setCheckState(Qt.CheckState.Checked)
+                else:
+                    self.form.IconOnly.setCheckState(Qt.CheckState.Unchecked)
 
                 # Add the command to the shadow list
                 ShadowList.append(CommandName)
@@ -1357,7 +1374,8 @@ class LoadDialog(Design_ui.Ui_Form):
                 self.List_IconOnlyToolbars.remove(toolbar)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1397,14 +1415,17 @@ class LoadDialog(Design_ui.Ui_Form):
         self.on_ToolbarsOrder_changed()
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
+
         return
 
     def on_MoveUpTableWidget_clicked(self):
         self.MoveItem_TableWidget(self.form.tableWidget, True)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1412,7 +1433,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.MoveItem_TableWidget(self.form.tableWidget, False)
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1421,7 +1443,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.on_ToolbarsOrder_changed()
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1430,7 +1453,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.on_ToolbarsOrder_changed()
 
         # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1456,6 +1480,8 @@ class LoadDialog(Design_ui.Ui_Form):
         self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
             "order"
         ] = ToolbarOrder
+
+        return
 
     # endregion
 
@@ -1747,7 +1773,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
     def ReadJson(self):
         """Read the Json file and fill the lists and set settings"""
-        # OPen the JsonFile and load the data
+        # Open the JsonFile and load the data
         JsonFile = open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"))
         data = json.load(JsonFile)
 
@@ -2100,6 +2126,35 @@ class LoadDialog(Design_ui.Ui_Form):
                     pass
 
         return Toolbars
+
+    def CheckChanges(self):
+        # Open the JsonFile and load the data
+        JsonFile = open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"))
+        data = json.load(JsonFile)
+
+        IsChanged = False
+
+        if data["ignoredToolbars"].sort() == self.List_IgnoredToolbars.sort():
+            IsChanged = True
+        if data["iconOnlyToolbars"].sort() == self.List_IconOnlyToolbars.sort():
+            IsChanged = True
+        if data["quickAccessCommands"].sort() == self.List_QuickAccessCommands.sort():
+            IsChanged = True
+        if data["ignoredWorkbenches"].sort() == self.List_IgnoredWorkbenches.sort():
+            IsChanged = True
+        if data["showTextSmall"] == self.ShowText_Small:
+            IsChanged = True
+        if data["showTextMedium"] == self.ShowText_Medium:
+            IsChanged = True
+        if data["showTextLarge"] == self.ShowText_Large:
+            IsChanged = True
+        if data["customToolbars"] == self.Dict_CustomToolbars:
+            IsChanged = True
+        if data["workbenches"] == self.Dict_RibbonCommandPanel:
+            IsChanged = True
+
+        JsonFile.close()
+        return IsChanged
 
     # endregion
 

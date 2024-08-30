@@ -56,6 +56,7 @@ mw = Gui.getMainWindow()
 pathIcons = Parameters_Ribbon.ICON_LOCATION
 pathStylSheets = Parameters_Ribbon.STYLESHEET_LOCATION
 pathUI = Parameters_Ribbon.UI_LOCATION
+pathScripts = os.path.join(os.path.dirname(__file__), "Scripts")
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
@@ -76,6 +77,8 @@ class ModernMenu(RibbonBar):
 
     wbNameMapping = {}
     isWbLoaded = {}
+
+    MainWindowLoaded = False
 
     # use icon size from FreeCAD preferences
     iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt(
@@ -103,6 +106,7 @@ class ModernMenu(RibbonBar):
         # Set the custom stylesheet
         self.setStyleSheet(Parameters_Ribbon.STYLESHEET)
 
+        self.MainWindowLoaded = True
         return
 
     def connectSignals(self):
@@ -193,10 +197,24 @@ class ModernMenu(RibbonBar):
         self.applicationOptionButton().setFixedHeight(self.iconSize)
         self.setApplicationIcon(Gui.getIcon("freecad"))
         Menu = self.addFileMenu()
+        # Add the ribbon design button
         DesignButton = Menu.addAction("Ribbon design")
         DesignButton.triggered.connect(self.loadDesignMenu)
+        # Add the preference button
         SettingsButton = Menu.addAction("Preferences")
         SettingsButton.triggered.connect(self.loadSettingsMenu)
+        # Add the script submenu
+        ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
+        if os.path.exists(ScriptDir) is True:
+            ListScripts = os.listdir(ScriptDir)
+            print(ListScripts)
+            if len(ListScripts) > 0:
+                ScriptButtonMenu = Menu.addMenu("Scripts")
+                for i in range(len(ListScripts)):
+                    ScriptButtonMenu.addAction(
+                        ListScripts[i],
+                        lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1]),
+                    )
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
@@ -577,6 +595,12 @@ class ModernMenu(RibbonBar):
             pass
 
         return ButtonList
+
+    def LoadMarcoFreeCAD(self, scriptName):
+        if self.MainWindowLoaded is True:
+            script = os.path.join(pathScripts, scriptName)
+            if script.endswith(".py"):
+                App.loadFile(script)
 
 
 class run:
