@@ -49,7 +49,7 @@ from PySide.QtWidgets import (
     QTabWidget,
 )
 
-ParentPath = os.path(os.path.dirname(__file__))[0]
+ParentPath = os.path.dirname(os.path.dirname(__file__))
 
 # Set the path where you want to save this new Json file
 # JsonPath = os.path.dirname(__file__)

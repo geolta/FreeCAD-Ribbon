@@ -48,6 +48,7 @@ from pyqtribbon import RibbonBar
 import LoadDesign_Ribbon
 import Parameters_Ribbon
 import LoadSettings_Ribbon
+import AccessoriesMenu
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
