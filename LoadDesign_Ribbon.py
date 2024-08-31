@@ -671,6 +671,8 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Clear the listwidget before filling it
         self.form.ToolbarsAvailable.clear()
+        # Sort the toolbar list
+        wbToolbars = self.SortedToolbarList(wbToolbars, WorkBenchName)
 
         # Go through the toolbars and check if they must be ignored.
         for Toolbar in wbToolbars:
@@ -1262,6 +1264,12 @@ class LoadDialog(Design_ui.Ui_Form):
         self.UpdateData()
         # Update the order of the commands
         self.on_ToolbarsOrder_changed()
+
+        # Enable the apply button
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
+
+        return
 
     def on_tableCell_clicked(self, Item):
         # Get the row and column of the clicked item (cell)
