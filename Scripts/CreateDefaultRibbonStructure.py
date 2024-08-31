@@ -1138,7 +1138,9 @@ def CreateJson():
                             for i3 in range(len(value)):
                                 CommandOrder = Gui.Command.get(value[i3])
                                 if CommandOrder is not None:
-                                    MenuNameOrder = CommandOrder.getInfo()["menuText"].replace("&", "")
+                                    MenuNameOrder = CommandOrder.getInfo()[
+                                        "menuText"
+                                    ].replace("&", "")
                                     Order.append(MenuNameOrder)
 
                             # Set the first command to large
@@ -1167,12 +1169,12 @@ def CreateJson():
                                     ],
                                 )
 
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                                    "order"
-                                ] = Order
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                                    CommandName
-                                ] = {
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["order"] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                    "toolbars"
+                                ][Toolbar]["commands"][CommandName] = {
                                     "size": Size,
                                     "text": MenuName,
                                     "icon": IconName,
@@ -1332,7 +1334,12 @@ def List_ReturnCustomToolbars():
                 ).GetGroups()
 
                 for Group in CustomToolbars:
-                    Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
+                    Parameter = App.ParamGet(
+                        "User parameter:BaseApp/Workbench/"
+                        + WorkBenchName
+                        + "/Toolbar/"
+                        + Group
+                    )
                     Name = Parameter.GetString("Name")
 
                     ListCommands = []
@@ -1365,7 +1372,12 @@ def Dict_ReturnCustomToolbars(WorkBenchName):
             ).GetGroups()
 
             for Group in CustomToolbars:
-                Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
+                Parameter = App.ParamGet(
+                    "User parameter:BaseApp/Workbench/"
+                    + WorkBenchName
+                    + "/Toolbar/"
+                    + Group
+                )
                 Name = Parameter.GetString("Name")
 
                 if Name != "":
@@ -1391,7 +1403,9 @@ def Dict_AddCustomToolbarsToWorkbench(WorkBenchName):
     try:
         for CustomToolbar in Dict_CustomPanels["customToolbars"][WorkBenchName]:
             ListCommands = []
-            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
+            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][
+                CustomToolbar
+            ]["commands"]
 
             for key, value in Commands.items():
                 for i in range(len(List_Commands)):
