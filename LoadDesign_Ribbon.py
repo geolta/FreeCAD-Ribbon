@@ -1064,11 +1064,12 @@ class LoadDialog(Design_ui.Ui_Form):
     def on_WorkbenchList__TextChanged(self):
         # Set the workbench name.
         WorkBenchName = ""
-        WorkBenchTitle = ""
+        WorkBenchTitle = self.form.WorkbenchList.currentText()
         for WorkBench in self.List_Workbenches:
             if WorkBench[2] == self.form.WorkbenchList.currentText():
                 WorkBenchName = WorkBench[0]
-                WorkBenchTitle = WorkBench[2]
+                # WorkBenchTitle = WorkBench[2]
+                break
 
         # Get the toolbars of the workbench
         wbToolbars: list = Gui.getWorkbench(WorkBenchName).listToolbars()
@@ -1087,6 +1088,16 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Clear the listwidget before filling it
         self.form.ToolbarList.clear()
+        self.form.ToolbarsOrder.clear()
+
+        # Get the order from the json file
+        if (
+            "order"
+            in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]
+        ):
+            wbToolbars = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                "toolbars"
+            ]["order"]
 
         # Go through the toolbars and check if they must be ignored.
         for Toolbar in wbToolbars:
@@ -1103,34 +1114,6 @@ class LoadDialog(Design_ui.Ui_Form):
                 if Toolbar != "":
                     self.form.ToolbarList.addItem(Toolbar, "")
 
-        self.form.ToolbarsOrder.clear()
-
-        # Sort the Toolbars according the sorted list
-        def SortToolbars(Toolbar):
-            try:
-                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
-                    WorkBenchName
-                ]["toolbars"]["order"]
-                position = OrderList.index(Toolbar)
-            except Exception:
-                position = 999999
-
-            return position
-
-        wbToolbars.sort(key=SortToolbars)
-
-        for Toolbar in wbToolbars:
-            IsIgnored = False
-            for IgnoredToolbar in self.List_IgnoredToolbars:
-                if Toolbar == IgnoredToolbar:
-                    IsIgnored = True
-            for IgnoredToolbar in self.List_IgnoredToolbars_internal:
-                if Toolbar == IgnoredToolbar:
-                    IsIgnored = True
-
-            # If the are not to be ignored, add them to the listwidget
-            if IsIgnored is False:
-                if Toolbar != "":
                     # Define a new ListWidgetItem.
                     ListWidgetItem = QListWidgetItem()
                     ListWidgetItem.setText(Toolbar)
@@ -1778,37 +1761,46 @@ class LoadDialog(Design_ui.Ui_Form):
         data = json.load(JsonFile)
 
         # Get all the ignored toolbars
-        for IgnoredToolbar in data["ignoredToolbars"]:
-            self.List_IgnoredToolbars.append(IgnoredToolbar)
+        if len(self.List_IgnoredToolbars) == 0:
+            for IgnoredToolbar in data["ignoredToolbars"]:
+                self.List_IgnoredToolbars.append(IgnoredToolbar)
 
         # Get all the icon only toolbars
-        for IconOnlyToolbar in data["iconOnlyToolbars"]:
-            self.List_IconOnlyToolbars.append(IconOnlyToolbar)
+        if len(self.List_IconOnlyToolbars) == 0:
+            for IconOnlyToolbar in data["iconOnlyToolbars"]:
+                self.List_IconOnlyToolbars.append(IconOnlyToolbar)
 
         # Get all the quick access command
-        for QuickAccessCommand in data["quickAccessCommands"]:
-            self.List_QuickAccessCommands.append(QuickAccessCommand)
+        if len(self.List_QuickAccessCommands) == 0:
+            for QuickAccessCommand in data["quickAccessCommands"]:
+                self.List_QuickAccessCommands.append(QuickAccessCommand)
 
         # Get all the ignored workbenches
-        for IgnoredWorkbench in data["ignoredWorkbenches"]:
-            self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
+        if len(self.List_IgnoredWorkbenches) == 0:
+            for IgnoredWorkbench in data["ignoredWorkbenches"]:
+                self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
         # Get the showtext value
-        self.ShowText_Small = bool(data["showTextSmall"])
-        self.ShowText_Medium = bool(data["showTextMedium"])
-        self.ShowText_Large = bool(data["showTextLarge"])
+        if self.ShowText_Small is False:
+            self.ShowText_Small = bool(data["showTextSmall"])
+        if self.ShowText_Medium is False:
+            self.ShowText_Medium = bool(data["showTextMedium"])
+        if self.ShowText_Large is False:
+            self.ShowText_Large = bool(data["showTextLarge"])
 
         # Get all the custom toolbars
-        try:
-            self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
-        except Exception:
-            pass
+        if bool(self.Dict_CustomToolbars) is False:
+            try:
+                self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
+            except Exception:
+                pass
 
         # Get the dict with the customized date for the buttons
-        try:
-            self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
-        except Exception:
-            pass
+        if bool(self.Dict_RibbonCommandPanel) is False:
+            try:
+                self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
+            except Exception:
+                pass
 
         JsonFile.close()
         return
