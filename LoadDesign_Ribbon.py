@@ -1087,6 +1087,10 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Clear the listwidget before filling it
         self.form.ToolbarList.clear()
+        self.form.ToolbarsOrder.clear()
+
+        # Get the order from the json file
+        wbToolbars = self.SortedToolbarList(wbToolbars, WorkBenchName)
 
         # Go through the toolbars and check if they must be ignored.
         for Toolbar in wbToolbars:
@@ -2155,6 +2159,39 @@ class LoadDialog(Design_ui.Ui_Form):
 
         JsonFile.close()
         return IsChanged
+
+    def SortedToolbarList(self, ToolbarList, WorkBenchName):
+        SortedList = []
+        if (
+            "order"
+            in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]
+        ):
+            if (
+                len(
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                        "toolbars"
+                    ]["order"]
+                )
+                > 0
+            ):
+                SortedList = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                    "toolbars"
+                ]["order"]
+
+                IsInList = False
+                for ToolBar in ToolbarList:
+                    for SortedToolBar in SortedList:
+                        if ToolBar == SortedToolBar:
+                            IsInList = True
+
+                    if IsInList is False:
+                        SortedList.append(ToolBar)
+            else:
+                SortedList = ToolbarList
+        else:
+            SortedList = ToolbarList
+
+        return SortedList
 
     # endregion
 
