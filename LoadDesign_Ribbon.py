@@ -246,20 +246,20 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # -- Custom panel tab --
         self.form.CustomToolbarSelector.addItem("New")
-        # try:
-        for WorkBenchName in self.Dict_CustomToolbars["customToolbars"]:
-            WorkBenchTitle = ""
-            for WorkBenchItem in self.List_Workbenches:
-                if WorkBenchItem[0] == WorkBenchName:
-                    WorkBenchTitle = WorkBenchItem[2]
-            for CustomPanelTitle in self.Dict_CustomToolbars["customToolbars"][
-                WorkBenchName
-            ]:
-                self.form.CustomToolbarSelector.addItem(
-                    f"{CustomPanelTitle}, {WorkBenchTitle}"
-                )
-        # except Exception:
-        #     pass
+        try:
+            for WorkBenchName in self.Dict_CustomToolbars["customToolbars"]:
+                WorkBenchTitle = ""
+                for WorkBenchItem in self.List_Workbenches:
+                    if WorkBenchItem[0] == WorkBenchName:
+                        WorkBenchTitle = WorkBenchItem[2]
+                for CustomPanelTitle in self.Dict_CustomToolbars["customToolbars"][
+                    WorkBenchName
+                ]:
+                    self.form.CustomToolbarSelector.addItem(
+                        f"{CustomPanelTitle}, {WorkBenchTitle}"
+                    )
+        except Exception:
+            pass
         #
         # endregion-----------------------------------------------------------------------------------
 
@@ -1107,34 +1107,6 @@ class LoadDialog(Design_ui.Ui_Form):
                 if Toolbar != "":
                     self.form.ToolbarList.addItem(Toolbar, "")
 
-        self.form.ToolbarsOrder.clear()
-
-        # Sort the Toolbars according the sorted list
-        def SortToolbars(Toolbar):
-            try:
-                OrderList: list = self.Dict_RibbonCommandPanel["workbenches"][
-                    WorkBenchName
-                ]["toolbars"]["order"]
-                position = OrderList.index(Toolbar)
-            except Exception:
-                position = 999999
-
-            return position
-
-        wbToolbars.sort(key=SortToolbars)
-
-        for Toolbar in wbToolbars:
-            IsIgnored = False
-            for IgnoredToolbar in self.List_IgnoredToolbars:
-                if Toolbar == IgnoredToolbar:
-                    IsIgnored = True
-            for IgnoredToolbar in self.List_IgnoredToolbars_internal:
-                if Toolbar == IgnoredToolbar:
-                    IsIgnored = True
-
-            # If the are not to be ignored, add them to the listwidget
-            if IsIgnored is False:
-                if Toolbar != "":
                     # Define a new ListWidgetItem.
                     ListWidgetItem = QListWidgetItem()
                     ListWidgetItem.setText(Toolbar)
