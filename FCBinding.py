@@ -22,6 +22,7 @@
 # *   SOFTWARE.                                                                       *
 # *                                                                                   *
 # *************************************************************************************/
+import pyqtribbon.menu
 import FreeCAD as App
 import FreeCADGui as Gui
 
@@ -48,7 +49,7 @@ from pyqtribbon import RibbonBar
 import LoadDesign_Ribbon
 import Parameters_Ribbon
 import LoadSettings_Ribbon
-import AccessoriesMenu
+import Standard_Functions_RIbbon as Standard_Functions
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -110,6 +111,12 @@ class ModernMenu(RibbonBar):
         self.MainWindowLoaded = True
         return
 
+    def addAction(self, action: QAction):
+        menu = self.findChild(pyqtribbon.menu.RibbonMenu, "")
+        if menu is None:
+            menu = self.addFileMenu()
+        menu.addAction(action)
+
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
         mw.workbenchActivated.connect(self.onWbActivated)
@@ -130,23 +137,21 @@ class ModernMenu(RibbonBar):
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
             i = i + 1
             button = QToolButton()
-            action = Gui.Command.get(commandName).getAction()
+            helpAction = Gui.Command.get(commandName).getAction()
             # XXX for debugging purposes
-            if len(action) == 0:
+            if len(helpAction) == 0:
                 print(f"{commandName} has no action")
-            elif len(action) > 1:
+            elif len(helpAction) > 1:
                 print(f"{commandName} has more than one action")
 
-            button.setDefaultAction(action[0])
+            button.setDefaultAction(helpAction[0])
             self.addQuickAccessButton(button)
 
         # Set the height of the quickaccess toolbar
-        self.quickAccessToolBar().setFixedHeight(self.iconSize * 1.5)
-        # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(
-            self.iconSize * i * 3.7795275591 * 0.5
+        self.quickAccessToolBar().setMaximumHeight(self.iconSize * 1.5)
+        self.quickAccessToolBar().setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
         )
-
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
         WorkbenchOrderedList = (
@@ -182,17 +187,35 @@ class ModernMenu(RibbonBar):
         # Set the helpbutton
         self.helpRibbonButton().setEnabled(True)
         self.helpRibbonButton().setFixedHeight(24)
-        # Set the widht of the right toolbar
-        self.rightToolBar().setMinimumWidth(self.iconSize * 2 * 1.5)
         # Define an action for the help button
-        action = QAction()
+        helpAction = QAction()
         # action.setIcon(Gui.getIcon("help"))
         helpIcon = QIcon()
         pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
         helpIcon.addPixmap(pixmap)
-        action.setIcon(helpIcon)
-        action.triggered.connect(self.onHelpClicked)
-        self.helpRibbonButton().setDefaultAction(action)
+        helpAction.setIcon(helpIcon)
+        helpAction.triggered.connect(self.onHelpClicked)
+        self.helpRibbonButton().setDefaultAction(helpAction)
+
+        # Add a button the enable or disable AutoHide
+        pixmap = QPixmap(os.path.join(pathIcons, "pin-icon-open.svg"))
+        # Standard_Functions.LightOrDark()
+        pinIcon = QIcon()
+        pinIcon.addPixmap(pixmap)
+        pinButton = QToolButton()
+        pinButton.setCheckable(True)
+        pinButton.setIcon(pinIcon)
+        pinButton.setText("Pin Ribbon")
+        if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
+            pinButton.setChecked(False)
+        if Parameters_Ribbon.AUTOHIDE_RIBBON is False:
+            pinButton.setChecked(True)
+        pinButton.clicked.connect(self.onPinClicked)
+        self.rightToolBar().addWidget(pinButton)
+
+        # Set the widht of the right toolbar
+        i = len(self.rightToolBar().actions()) + 1
+        self.rightToolBar().setMinimumWidth(self.iconSize * i)
 
         # Set the application button
         self.applicationOptionButton().setFixedHeight(self.iconSize)
@@ -204,11 +227,10 @@ class ModernMenu(RibbonBar):
         # Add the preference button
         SettingsButton = Menu.addAction("Preferences")
         SettingsButton.triggered.connect(self.loadSettingsMenu)
-        # Add the script submenu
+        # Add the script submenu with items
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
         if os.path.exists(ScriptDir) is True:
             ListScripts = os.listdir(ScriptDir)
-            print(ListScripts)
             if len(ListScripts) > 0:
                 ScriptButtonMenu = Menu.addMenu("Scripts")
                 for i in range(len(ListScripts)):
@@ -229,6 +251,21 @@ class ModernMenu(RibbonBar):
 
     def loadSettingsMenu(self):
         LoadSettings_Ribbon.main()
+        return
+
+    def onPinClicked(self):
+        btn = QToolButton(self.rightToolBar().findChild(QToolButton, "Pin Ribbon"))
+        if self._autoHideRibbon is True:
+            self.setAutoHideRibbon(False)
+            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", False)
+            btn.setChecked(True)
+            return
+        if self._autoHideRibbon is False:
+            self.setAutoHideRibbon(True)
+            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", True)
+            btn.setChecked(False)
+            return
+
         return
 
     def onHelpClicked(self):
@@ -411,29 +448,6 @@ class ModernMenu(RibbonBar):
                 try:
                     action = button.defaultAction()
 
-                    # whether to show text of the button
-                    showTextSmall = False
-                    showTextMedium = False
-                    showTextLarge = False
-                    try:
-                        showTextSmall = (
-                            ModernMenu.ribbonStructure["showTextSmall"]
-                            and toolbar
-                            not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                        )
-                        showTextMedium = (
-                            ModernMenu.ribbonStructure["showTextMedium"]
-                            and toolbar
-                            not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                        )
-                        showTextLarge = (
-                            ModernMenu.ribbonStructure["showTextLarge"]
-                            and toolbar
-                            not in ModernMenu.ribbonStructure["iconOnlyToolbars"]
-                        )
-                    except Exception:
-                        pass
-
                     # try to get alternative text from ribbonStructure
                     try:
                         text = ModernMenu.ribbonStructure["workbenches"][workbenchName][
@@ -477,7 +491,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showTextSmall,
+                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_SMALL,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
                     elif buttonSize == "medium":
@@ -485,7 +499,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showTextMedium,
+                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                     elif buttonSize == "large":
@@ -493,7 +507,7 @@ class ModernMenu(RibbonBar):
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=showTextLarge,
+                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_LARGE,
                             fixedHeight=False,
                         )
                     else:

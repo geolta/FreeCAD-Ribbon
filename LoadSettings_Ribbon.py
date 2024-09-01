@@ -59,20 +59,6 @@ translate = App.Qt.translate
 
 
 class LoadDialog(Settings_ui.Ui_Form):
-
-    # Define list of the workbenches, toolbars and commands on class level
-    List_Workbenches = []
-    StringList_Toolbars = []
-    List_Commands = []
-
-    # Create lists for the several list in the json file.
-    List_IgnoredToolbars = []
-    List_IconOnlyToolbars = []
-    List_QuickAccessCommands = []
-    List_IgnoredWorkbenches = []
-    Dict_RibbonCommandPanel = {}
-    Dict_CustomToolbars = {}
-
     ShowText_Small = False
     ShowText_Medium = False
     ShowText_Large = False
@@ -94,65 +80,34 @@ class LoadDialog(Settings_ui.Ui_Form):
         Style = mw.style()
         self.form.setStyle(Style)
 
-        # Read the jason file and fill the lists
-        self.ReadJson()
-
         # load all settings
         self.form.EnableBackup.setChecked(Parameters_Ribbon.ENABLE_BACKUP)
         self.form.label_4.setText(Parameters_Ribbon.BACKUP_LOCATION)
-        if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
-            self.form.AutoHide.setCheckState(Qt.CheckState.Checked)
-        else:
-            self.form.AutoHide.setCheckState(Qt.CheckState.Unchecked)
         self.form.IconSize_Small.setValue(Parameters_Ribbon.ICON_SIZE_SMALL)
         self.form.IconSize_Medium.setValue(Parameters_Ribbon.ICON_SIZE_MEDIUM)
         # self.form.IconSize_Large.setValue(Parameters_Ribbon.ICON_SIZE_LARGE)
         self.form.label_7.setText(Parameters_Ribbon.STYLESHEET)
-        if self.ShowText_Small is True:
+        if Parameters_Ribbon.SHOW_ICON_TEXT_SMALL is True:
             self.form.ShowText_Small.setCheckState(Qt.CheckState.Checked)
         else:
             self.form.ShowText_Small.setCheckState(Qt.CheckState.Unchecked)
-        if self.ShowText_Medium is True:
+        if Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM is True:
             self.form.ShowText_Medium.setCheckState(Qt.CheckState.Checked)
         else:
             self.form.ShowText_Medium.setCheckState(Qt.CheckState.Unchecked)
-        if self.ShowText_Large is True:
+        if Parameters_Ribbon.SHOW_ICON_TEXT_LARGE is True:
             self.form.ShowText_Large.setCheckState(Qt.CheckState.Checked)
         else:
             self.form.ShowText_Large.setCheckState(Qt.CheckState.Unchecked)
 
         # region - connect controls with functions----------------------------------------------------
         #
-        # Connect the button GenerateJson with the function on_GenerateJson_clicked
-        def GenerateJson():
-            self.on_GenerateJson_clicked(self)
-
-        self.form.GenerateJson.connect(
-            self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
-        )
-
-        # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
-        def GenerateJsonExit():
-            self.on_GenerateJsonExit_clicked(self)
-
-        self.form.GenerateJsonExit.connect(
-            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
-        )
-
-        self.form.RestoreJson.connect(
-            self.form.RestoreJson, SIGNAL("clicked()"), self.on_RestoreJson_clicked
-        )
-        self.form.ResetJson.connect(
-            self.form.ResetJson, SIGNAL("clicked()"), self.on_ResetJson_clicked
-        )
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
-        self.form.AutoHide.clicked.connect(self.on_AutoHide_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
         self.form.IconSize_Medium.textChanged.connect(
             self.on_IconSize_Medium_TextChanged
         )
-        # self.form.IconSize_Large.textChanged.connect(self.on_IconSize_Large_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
 
         self.form.ShowText_Small.clicked.connect(self.on_ShowTextSmall_clicked)
@@ -169,63 +124,6 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     # region - Control functions----------------------------------------------------------------------
-
-    def on_RestoreJson_clicked(self):
-        self.form.setWindowFlags(Qt.WindowType.WindowStaysOnBottomHint)
-        # get the path for the Json file
-        JsonPath = os.path.dirname(__file__)
-        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
-
-        BackupFiles = []
-        # returns a list of names (with extension, without full path) of all files
-        # in backup path
-        for name in os.listdir(pathBackup):
-            if os.path.isfile(os.path.join(pathBackup, name)):
-                if name.lower().endswith("json"):
-                    BackupFiles.append(name)
-
-        if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox(
-                "Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles
-            )
-            BackupFile = os.path.join(pathBackup, SelectedDile)
-            result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(
-                f"Ribbonbar set back to settings from: {result}!", "Warning"
-            )
-            StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
-
-        self.form.close()
-        return
-
-    def on_ResetJson_clicked(self):
-        self.form.setWindowFlags(Qt.WindowType.WindowStaysOnBottomHint)
-        # get the path for the Json file
-        JsonPath = os.path.dirname(__file__)
-        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
-
-        BackupFile = [os.path.join(JsonPath, "RibbonStructure_default.json")]
-
-        result = shutil.copy(BackupFile, JsonFile)
-        StandardFunctions.Print(f"Ribbonbar reset from {result}!", "Warning")
-        StandardFunctions.Mbox("Settings reset to default!")
-
-        self.form.close()
-        return
-
-    @staticmethod
-    def on_GenerateJson_clicked(self):
-        self.WriteJson()
-        # Set the button disabled
-        self.form.GenerateJson.setDisabled(True)
-        return
-
-    @staticmethod
-    def on_GenerateJsonExit_clicked(self):
-        self.WriteJson()
-        # Close the form
-        self.form.close()
-        return
 
     def on_EnableBackup_clicked(self):
         if self.form.EnableBackup.isChecked() is True:
@@ -250,19 +148,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_4.setText(BackupFolder)
             Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
             Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
-
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
-
-        return
-
-    def on_AutoHide_clicked(self):
-        if self.form.AutoHide.isChecked() is True:
-            Parameters_Ribbon.AUTOHIDE_RIBBON = True
-            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", True)
-        if self.form.AutoHide.isChecked() is False:
-            Parameters_Ribbon.AUTOHIDE_RIBBON = False
-            Parameters_Ribbon.Settings.SetBoolSetting("AutoHideRibbon", False)
 
         # Enable the apply button
         self.form.GenerateJson.setEnabled(True)
@@ -351,100 +236,6 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     # endregion---------------------------------------------------------------------------------------
-
-    # region - Functions------------------------------------------------------------------------------
-    def ReadJson(self):
-        """Read the Json file and fill the lists and set settings"""
-        # OPen the JsonFile and load the data
-        JsonFile = open(os.path.join(os.path.dirname(__file__), "RibbonStructure.json"))
-        data = json.load(JsonFile)
-
-        # Get all the ignored toolbars
-        for IgnoredToolbar in data["ignoredToolbars"]:
-            self.List_IgnoredToolbars.append(IgnoredToolbar)
-
-        # Get all the icon only toolbars
-        for IconOnlyToolbar in data["iconOnlyToolbars"]:
-            self.List_IconOnlyToolbars.append(IconOnlyToolbar)
-
-        # Get all the quick access command
-        for QuickAccessCommand in data["quickAccessCommands"]:
-            self.List_QuickAccessCommands.append(QuickAccessCommand)
-
-        # Get all the ignored workbenches
-        for IgnoredWorkbench in data["ignoredWorkbenches"]:
-            self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
-
-        # Get the showtext value
-        self.ShowText_Small = bool(data["showTextSmall"])
-        self.ShowText_Medium = bool(data["showTextMedium"])
-        self.ShowText_Large = bool(data["showTextLarge"])
-
-        # Get all the custom toolbars
-        try:
-            self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
-        except Exception:
-            pass
-
-        # Get the dict with the customized date for the buttons
-        self.Dict_RibbonCommandPanel["workbenches"] = data["workbenches"]
-
-        JsonFile.close()
-        return
-
-    def WriteJson(self):
-        # Create a resulting dict
-        resultingDict = {}
-        # add the various lists to the resulting dict.
-        resultingDict["ignoredToolbars"] = self.List_IgnoredToolbars
-        resultingDict["iconOnlyToolbars"] = self.List_IconOnlyToolbars
-        resultingDict["quickAccessCommands"] = self.List_QuickAccessCommands
-        resultingDict["ignoredWorkbenches"] = self.List_IgnoredWorkbenches
-
-        # The custom toolbars
-        resultingDict.update(self.Dict_CustomToolbars)
-
-        # Add the show text property to the dict
-        resultingDict["showTextSmall"] = self.ShowText_Small
-        resultingDict["showTextMedium"] = self.ShowText_Medium
-        resultingDict["showTextLarge"] = self.ShowText_Large
-
-        # RibbonTabs
-        # Get the Ribbon dictionary
-        resultingDict.update(self.Dict_RibbonCommandPanel)
-
-        # get the path for the Json file
-        JsonPath = os.path.dirname(__file__)
-        JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
-
-        # create a copy and rename it as a backup if enabled
-        if Parameters_Ribbon.ENABLE_BACKUP is True:
-            Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
-            BackupName = f"RibbonStructure_{Suffix}.json"
-            if os.path.exists(pathBackup) is False:
-                os.makedirs(pathBackup)
-            BackupFile = os.path.join(pathBackup, BackupName)
-            shutil.copy(JsonFile, BackupFile)
-
-        # Writing to sample.json
-        with open(JsonFile, "w") as outfile:
-            json.dump(resultingDict, outfile, indent=4)
-
-        outfile.close()
-        return
-
-    def add_keys_nested_dict(self, dict, keys):
-        for key in keys:
-            if key not in dict:
-                dict[key] = {}
-            dict = dict[key]
-        try:
-            dict.setdefault(keys[-1], 1)
-        except Exception:
-            pass
-        return
-
-    # endregion
 
 
 def main():

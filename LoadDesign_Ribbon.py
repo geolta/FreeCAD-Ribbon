@@ -1777,11 +1777,6 @@ class LoadDialog(Design_ui.Ui_Form):
         for IgnoredWorkbench in data["ignoredWorkbenches"]:
             self.List_IgnoredWorkbenches.append(IgnoredWorkbench)
 
-        # Get the showtext value
-        self.ShowText_Small = bool(data["showTextSmall"])
-        self.ShowText_Medium = bool(data["showTextMedium"])
-        self.ShowText_Large = bool(data["showTextLarge"])
-
         # Get all the custom toolbars
         try:
             self.Dict_CustomToolbars["customToolbars"] = data["customToolbars"]
@@ -1832,12 +1827,7 @@ class LoadDialog(Design_ui.Ui_Form):
         resultingDict["iconOnlyToolbars"] = List_IconOnlyToolbars
         resultingDict["quickAccessCommands"] = List_QuickAccessCommands
         resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
-        # resultingDict["CustomToolbars"] = Dict_CustomToolbars
         resultingDict.update(self.Dict_CustomToolbars)
-        # Add the show text property to the dict
-        resultingDict["showTextSmall"] = self.ShowText_Small
-        resultingDict["showTextMedium"] = self.ShowText_Medium
-        resultingDict["showTextLarge"] = self.ShowText_Large
 
         # RibbonTabs
         # Get the Ribbon dictionary

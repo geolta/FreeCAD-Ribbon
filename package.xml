@@ -9,19 +9,17 @@
 
   <date>2024-07-28</date>
 
-  <maintainer>geolta</maintainer>
+  <maintainer>Paul Ebbers</maintainer>
 
   <license file="LICENSE">MIT License</license>
 
   <pythonmin>3.8.0</pythonmin>
 
-  <url type="website">https://github.com/geolta/FreeCAD-Ribbon/wiki</url>
+  <url type="website">https://github.com/APEbbers/FreeCAD-Ribbon/wiki</url>
 
-  <url branch="main" type="repository">https://github.com/geolta/FreeCAD-Ribbon</url>
+  <url branch="main" type="repository">https://github.com/APEbbers/FreeCAD-Ribbon</url>
 
-  <url type="readme">https://github.com/geolta/FreeCAD-Ribbon/blob/main/README.md</url>
-
-  <icon></icon>
+  <url type="readme">https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/README.md</url>
 
   <content>
     <workbench>
@@ -29,10 +27,6 @@
       <icon>Resources/Icons/FreecadNew.svg</icon>
       <depend optional="False" type="python">pyqtribbon</depend>
       <depend optional="False" type="python">qtpy</depend>
-       <!-- If this package is installed, the Addon Manager may warn the user to remove it -->
-      <replace>CommandPanel</replace>
-      <replace>ToolbarStyle</replace>
-      <replace>PieMenu</replace>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>

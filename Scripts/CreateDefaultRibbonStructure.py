@@ -97,11 +97,6 @@ List_IgnoredWorkbenches = [
 Dict_RibbonCommandPanel = {}
 Dict_CustomPanels = {}
 
-# Set the text under/next to button on or off.
-ShowText_Small = False
-ShowText_Medium = False
-ShowText_Large = False
-
 # Add workbenches here that you want to exclude from this script.
 skipWorkbenchList = []
 # skipWorkbenchList = ["PartDesignWorkbench", "AssemblyWorkbench", "SketcherWorkbench"]
@@ -1287,10 +1282,6 @@ def WriteJson():
     resultingDict["quickAccessCommands"] = List_QuickAccessCommands
     resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
     resultingDict.update(Dict_CustomPanels)
-    # Add the show text property to the dict
-    resultingDict["showTextSmall"] = ShowText_Small
-    resultingDict["showTextMedium"] = ShowText_Medium
-    resultingDict["showTextLarge"] = ShowText_Large
 
     # RibbonTabs
     # Get the Ribbon dictionary

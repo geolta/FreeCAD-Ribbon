@@ -69,44 +69,21 @@ class Ui_Form(object):
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.gridLayout_6 = QGridLayout()
         self.gridLayout_6.setObjectName("gridLayout_6")
-        self.RestoreJson = QPushButton(Form)
-        self.RestoreJson.setObjectName("RestoreJson")
-        self.RestoreJson.setEnabled(True)
-
-        self.gridLayout_6.addWidget(self.RestoreJson, 0, 2, 1, 1)
-
         self.horizontalSpacer_2 = QSpacerItem(
             40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
 
-        self.gridLayout_6.addItem(self.horizontalSpacer_2, 0, 3, 1, 1)
-
-        self.ResetJson = QPushButton(Form)
-        self.ResetJson.setObjectName("ResetJson")
-        self.ResetJson.setEnabled(True)
-
-        self.gridLayout_6.addWidget(self.ResetJson, 0, 0, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(
-            10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum
-        )
-
-        self.gridLayout_6.addItem(self.horizontalSpacer, 0, 1, 1, 1)
-
-        self.GenerateJson = QPushButton(Form)
-        self.GenerateJson.setObjectName("GenerateJson")
-
-        self.gridLayout_6.addWidget(self.GenerateJson, 0, 4, 1, 1)
-
-        self.GenerateJsonExit = QPushButton(Form)
-        self.GenerateJsonExit.setObjectName("GenerateJsonExit")
-
-        self.gridLayout_6.addWidget(self.GenerateJsonExit, 0, 6, 1, 1)
+        self.gridLayout_6.addItem(self.horizontalSpacer_2, 0, 0, 1, 1)
 
         self.Cancel = QPushButton(Form)
         self.Cancel.setObjectName("Cancel")
 
-        self.gridLayout_6.addWidget(self.Cancel, 0, 5, 1, 1)
+        self.gridLayout_6.addWidget(self.Cancel, 0, 1, 1, 1)
+
+        self.GenerateJsonExit = QPushButton(Form)
+        self.GenerateJsonExit.setObjectName("GenerateJsonExit")
+
+        self.gridLayout_6.addWidget(self.GenerateJsonExit, 0, 2, 1, 1)
 
         self.gridLayout_7.addLayout(self.gridLayout_6, 1, 0, 1, 1)
 
@@ -191,12 +168,6 @@ class Ui_Form(object):
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
-        self.AutoHide = QCheckBox(self.groupBox1)
-        self.AutoHide.setObjectName("AutoHide")
-        self.AutoHide.setFont(font1)
-
-        self.gridLayout_3.addWidget(self.AutoHide, 0, 0, 1, 1)
-
         self.groupBox_4 = QGroupBox(self.groupBox1)
         self.groupBox_4.setObjectName("groupBox_4")
         self.groupBox_4.setFont(font1)
@@ -267,7 +238,7 @@ class Ui_Form(object):
 
         self.gridLayout_5.addItem(self.horizontalSpacer_3, 0, 1, 1, 1)
 
-        self.gridLayout_3.addWidget(self.groupBox_4, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.groupBox_4, 0, 0, 1, 1)
 
         self.groupBox_3 = QGroupBox(self.groupBox1)
         self.groupBox_3.setObjectName("groupBox_3")
@@ -296,7 +267,7 @@ class Ui_Form(object):
 
         self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
-        self.gridLayout_3.addWidget(self.groupBox_3, 2, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.groupBox_3, 1, 0, 1, 1)
 
         self.gridLayout_4.addLayout(self.gridLayout_3, 0, 0, 1, 1)
 
@@ -349,16 +320,13 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", "Form", None))
-        self.RestoreJson.setText(QCoreApplication.translate("Form", "Restore", None))
-        self.ResetJson.setText(QCoreApplication.translate("Form", "Reset", None))
-        self.GenerateJson.setText(QCoreApplication.translate("Form", "Update", None))
-        self.GenerateJsonExit.setText(QCoreApplication.translate("Form", "Close", None))
-        # if QT_CONFIG(shortcut)
-        self.GenerateJsonExit.setShortcut("")
-        # endif // QT_CONFIG(shortcut)
         self.Cancel.setText(QCoreApplication.translate("Form", "Cancel", None))
         # if QT_CONFIG(shortcut)
         self.Cancel.setShortcut(QCoreApplication.translate("Form", "Esc", None))
+        # endif // QT_CONFIG(shortcut)
+        self.GenerateJsonExit.setText(QCoreApplication.translate("Form", "Close", None))
+        # if QT_CONFIG(shortcut)
+        self.GenerateJsonExit.setShortcut("")
         # endif // QT_CONFIG(shortcut)
         self.groupBox.setTitle(
             QCoreApplication.translate("Form", "Backup settings", None)
@@ -375,9 +343,6 @@ class Ui_Form(object):
         )
         self.groupBox1.setTitle(
             QCoreApplication.translate("Form", "Ribbon settings", None)
-        )
-        self.AutoHide.setText(
-            QCoreApplication.translate("Form", "Autohide the ribbon", None)
         )
         self.groupBox_4.setTitle(
             QCoreApplication.translate("Form", "Button size", None)
