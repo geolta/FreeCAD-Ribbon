@@ -26,46 +26,12 @@
 import os
 import FreeCAD as App
 import FreeCADGui as Gui
+import FCBinding
 
 __title__ = "FreeCAD-Ribbon"
 __author__ = "A.P. Ebbers"
 __url__ = "https://github.com/APEbbers/FreeCAD-Ribbon"
 
-
-class FreeCADRibbon(Gui.Workbench):
-    MenuText = "FreeCAD-Ribbon"
-    ToolTip = "A workbench for creating a Bill of Materials"
-
-    def GetClassName(self):
-        # This function is mandatory if this is a full Python workbench
-        # This is not a template, the returned string should be exactly "Gui::PythonWorkbench"
-        return "Gui::PythonWorkbench"
-
-    def Initialize(self):
-        """This function is executed when the workbench is first activated.
-        It is executed once in a FreeCAD session followed by the Activated function.
-        """
-        import FCBinding
-
-        print("Activating Ribbon Bar...")
-        FCBinding.run
-        return
-
-    def Activated(self):
-        """This function is executed whenever the workbench is activated"""
-        return
-
-    def Deactivated(self):
-        """This function is executed whenever the workbench is deactivated"""
-        return
-
-    def ContextMenu(self, recipient):
-        """This function is executed whenever the user right-clicks on screen"""
-        return
-
-
-Gui.addWorkbench(FreeCADRibbon())
-# # When WB activated run Modern UI
-# print("Activating Ribbon Bar...")
-# mw = FreeCADGui.getMainWindow()
-# mw.workbenchActivated.connect(FCBinding.run)
+print("Activating Ribbon Bar...")
+mw = Gui.getMainWindow()
+mw.workbenchActivated.connect(FCBinding.run)
