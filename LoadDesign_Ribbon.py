@@ -2116,12 +2116,6 @@ class LoadDialog(Design_ui.Ui_Form):
             IsChanged = True
         if data["ignoredWorkbenches"].sort() == self.List_IgnoredWorkbenches.sort():
             IsChanged = True
-        if data["showTextSmall"] == self.ShowText_Small:
-            IsChanged = True
-        if data["showTextMedium"] == self.ShowText_Medium:
-            IsChanged = True
-        if data["showTextLarge"] == self.ShowText_Large:
-            IsChanged = True
         if data["customToolbars"] == self.Dict_CustomToolbars:
             IsChanged = True
         if data["workbenches"] == self.Dict_RibbonCommandPanel:
