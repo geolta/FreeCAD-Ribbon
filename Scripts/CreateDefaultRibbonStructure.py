@@ -97,11 +97,6 @@ List_IgnoredWorkbenches = [
 Dict_RibbonCommandPanel = {}
 Dict_CustomPanels = {}
 
-# Set the text under/next to button on or off.
-ShowText_Small = False
-ShowText_Medium = False
-ShowText_Large = False
-
 # Add workbenches here that you want to exclude from this script.
 skipWorkbenchList = []
 # skipWorkbenchList = ["PartDesignWorkbench", "AssemblyWorkbench", "SketcherWorkbench"]
@@ -1138,9 +1133,7 @@ def CreateJson():
                             for i3 in range(len(value)):
                                 CommandOrder = Gui.Command.get(value[i3])
                                 if CommandOrder is not None:
-                                    MenuNameOrder = CommandOrder.getInfo()[
-                                        "menuText"
-                                    ].replace("&", "")
+                                    MenuNameOrder = CommandOrder.getInfo()["menuText"].replace("&", "")
                                     Order.append(MenuNameOrder)
 
                             # Set the first command to large
@@ -1169,12 +1162,12 @@ def CreateJson():
                                     ],
                                 )
 
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                    "toolbars"
-                                ][Toolbar]["order"] = Order
-                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                    "toolbars"
-                                ][Toolbar]["commands"][CommandName] = {
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "order"
+                                ] = Order
+                                Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
+                                    CommandName
+                                ] = {
                                     "size": Size,
                                     "text": MenuName,
                                     "icon": IconName,
@@ -1287,10 +1280,6 @@ def WriteJson():
     resultingDict["quickAccessCommands"] = List_QuickAccessCommands
     resultingDict["ignoredWorkbenches"] = List_IgnoredWorkbenches
     resultingDict.update(Dict_CustomPanels)
-    # Add the show text property to the dict
-    resultingDict["showTextSmall"] = ShowText_Small
-    resultingDict["showTextMedium"] = ShowText_Medium
-    resultingDict["showTextLarge"] = ShowText_Large
 
     # RibbonTabs
     # Get the Ribbon dictionary
@@ -1334,12 +1323,7 @@ def List_ReturnCustomToolbars():
                 ).GetGroups()
 
                 for Group in CustomToolbars:
-                    Parameter = App.ParamGet(
-                        "User parameter:BaseApp/Workbench/"
-                        + WorkBenchName
-                        + "/Toolbar/"
-                        + Group
-                    )
+                    Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
                     Name = Parameter.GetString("Name")
 
                     ListCommands = []
@@ -1372,12 +1356,7 @@ def Dict_ReturnCustomToolbars(WorkBenchName):
             ).GetGroups()
 
             for Group in CustomToolbars:
-                Parameter = App.ParamGet(
-                    "User parameter:BaseApp/Workbench/"
-                    + WorkBenchName
-                    + "/Toolbar/"
-                    + Group
-                )
+                Parameter = App.ParamGet("User parameter:BaseApp/Workbench/" + WorkBenchName + "/Toolbar/" + Group)
                 Name = Parameter.GetString("Name")
 
                 if Name != "":
@@ -1403,9 +1382,7 @@ def Dict_AddCustomToolbarsToWorkbench(WorkBenchName):
     try:
         for CustomToolbar in Dict_CustomPanels["customToolbars"][WorkBenchName]:
             ListCommands = []
-            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][
-                CustomToolbar
-            ]["commands"]
+            Commands = Dict_CustomPanels["customToolbars"][WorkBenchName][CustomToolbar]["commands"]
 
             for key, value in Commands.items():
                 for i in range(len(List_Commands)):
