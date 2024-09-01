@@ -386,14 +386,14 @@ class LoadDialog(Design_ui.Ui_Form):
         )
         self.form.ToolbarsOrder.indexesMoved.connect(self.on_ToolbarsOrder_changed)
 
-        self.form.AddSeperator.connect(
-            self.form.AddSeperator,
+        self.form.AddSeparator.connect(
+            self.form.AddSeparator,
             SIGNAL("clicked()"),
             self.on_AddSeparator_clicked,
         )
 
-        self.form.RemoveSeperator.connect(
-            self.form.RemoveSeperator,
+        self.form.RemoveSeparator.connect(
+            self.form.RemoveSeparator,
             SIGNAL("clicked()"),
             self.on_RemoveSeparator_clicked,
         )
@@ -1087,85 +1087,31 @@ class LoadDialog(Design_ui.Ui_Form):
 
         ToolbarCommands.sort(key=SortCommands)
 
+        # add separators to the command list.
+        index = 0
+        if Toolbar != "":
+            for j in range(
+                len(self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"])
+            ):
+                if (
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"][j].lower()
+                    == "separator"
+                ):
+                    ToolbarCommands.insert(j + index, "separator")
+                    index = index + 1
+
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
-            # Get the command
-            Command = Gui.Command.get(ToolbarCommand)
-            if Command is None:
-                continue
-            CommandName = Command.getInfo()["name"]
-
-            # Check if the items is already there
-            IsInList = ShadowList.__contains__(CommandName)
-            # if not, continue
-            if IsInList is False:
-                # Get the text
-                MenuName = Command.getInfo()["menuText"].replace("&", "")
-                textAddition = ""
-                IconName = ""
-                # get the icon for this command if there isn't one, leave it None
-                Icon = Gui.getIcon(Command.getInfo()["pixmap"])
-                IconName = Command.getInfo()["pixmap"]
-                action = Command.getAction()
-                try:
-                    if len(action) > 1:
-                        Icon = action[0].icon()
-                        textAddition = "..."
-                except Exception:
-                    pass
-
-                # Set the default check states
-                checked_small = Qt.CheckState.Checked
-                checked_medium = Qt.CheckState.Unchecked
-                checked_large = Qt.CheckState.Unchecked
-                # set the default size
-                Size = "small"
-
-                # Go through the toolbars in the Json Ribbon list
-                for i in range(len(self.List_Workbenches)):
-                    if self.List_Workbenches[i][0] == WorkBenchName:
-                        try:
-                            MenuName = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                                "commands"
-                            ][CommandName]["text"]
-                            Size = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
-                                "commands"
-                            ][CommandName]["size"]
-
-                            if Size == "medium":
-                                checked_small = Qt.CheckState.Unchecked
-                                checked_medium = Qt.CheckState.Checked
-                                checked_large = Qt.CheckState.Unchecked
-                            if Size == "large":
-                                checked_small = Qt.CheckState.Unchecked
-                                checked_medium = Qt.CheckState.Unchecked
-                                checked_large = Qt.CheckState.Checked
-                            Icon_Json_Name = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
-                                Toolbar
-                            ]["commands"][CommandName]["icon"]
-                            if Icon_Json_Name != "":
-                                Icon = Gui.getIcon(Icon_Json_Name)
-                        except Exception:
-                            continue
-
+            if ToolbarCommand == "separator":
                 # Create the row in the table
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
 
-                # Fill the table widget ----------------------------------------------------------------------------------
-                #
                 # Define a table widget item
                 TableWidgetItem = QTableWidgetItem()
-                TableWidgetItem.setText(MenuName + textAddition)
-                TableWidgetItem.setData(
-                    Qt.ItemDataRole.UserRole,
-                    Command.getInfo()["menuText"].replace("&", ""),
-                )
-                TableWidgetItem.setFlags(TableWidgetItem.flags() | Qt.ItemFlag.ItemIsEditable)
-                if Icon is not None:
-                    TableWidgetItem.setIcon(Icon)
-                if Icon is None:
-                    TableWidgetItem.setFlags(TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled)
+                TableWidgetItem.setText("Separator")
+                TableWidgetItem.setData(Qt.ItemDataRole.UserRole, "separator")
+
                 # Get the last rownumber and set this row with the TableWidgetItem
                 RowNumber = self.form.tableWidget.rowCount() - 1
 
@@ -1174,68 +1120,179 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 # Create the second cell and set the checkstate according the checkstate as defined ealier
                 Icon_small = QTableWidgetItem()
-                Icon_small.setCheckState(checked_small)
+                Icon_small.setText("")
                 self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
 
                 # Create the third cell and set the checkstate according the checkstate as defined ealier
                 Icon_medium = QTableWidgetItem()
-                Icon_medium.setCheckState(checked_medium)
+                Icon_medium.setText("")
                 self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
 
                 # Create the last cell and set the checkstate according the checkstate as defined ealier
                 Icon_large = QTableWidgetItem()
-                Icon_large.setCheckState(checked_large)
+                Icon_large.setText("")
                 self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
-
-                # Double check the workbench name
-                WorkbenchTitle = self.form.WorkbenchList.currentText()
-                for item in self.List_Workbenches:
-                    if item[2] == WorkbenchTitle:
-                        WorkBenchName = item[0]
 
                 # Define the order based on the order in this table widget
                 Order = []
-                for i in range(self.form.tableWidget.rowCount()):
-                    Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).data(Qt.ItemDataRole.UserRole))
+                for j in range(self.form.tableWidget.rowCount()):
+                    Order.append(QTableWidgetItem(self.form.tableWidget.item(j, 0)).data(Qt.ItemDataRole.UserRole))
 
                 # Add or update the dict for the Ribbon command panel
                 self.add_keys_nested_dict(
                     self.Dict_RibbonCommandPanel,
                     ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
                 )
-                self.add_keys_nested_dict(
-                    self.Dict_RibbonCommandPanel,
-                    [
-                        "workbenches",
-                        WorkBenchName,
-                        "toolbars",
-                        Toolbar,
-                        "commands",
-                        CommandName,
-                    ],
-                )
                 self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
-                self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
-                    CommandName
-                ] = {
-                    "size": Size,
-                    "text": MenuName,
-                    "icon": IconName,
-                }
 
-                # Set the IconOnlyToolbars control
-                Toolbar = self.form.ToolbarList.currentText()
-                IsInList = False
-                for item in self.List_IconOnlyToolbars:
-                    if item == Toolbar:
-                        IsInList = True
-                if IsInList is True:
-                    self.form.IconOnly.setCheckState(Qt.CheckState.Checked)
-                else:
-                    self.form.IconOnly.setCheckState(Qt.CheckState.Unchecked)
+            if ToolbarCommand != "separator":
+                # Get the command
+                Command = Gui.Command.get(ToolbarCommand)
+                if Command is None:
+                    continue
+                CommandName = Command.getInfo()["name"]
 
-                # Add the command to the shadow list
-                ShadowList.append(CommandName)
+                # Check if the items is already there
+                IsInList = ShadowList.__contains__(CommandName)
+                # if not, continue
+                if IsInList is False:
+                    # Get the text
+                    MenuName = Command.getInfo()["menuText"].replace("&", "")
+                    textAddition = ""
+                    IconName = ""
+                    # get the icon for this command if there isn't one, leave it None
+                    Icon = Gui.getIcon(Command.getInfo()["pixmap"])
+                    IconName = Command.getInfo()["pixmap"]
+                    action = Command.getAction()
+                    try:
+                        if len(action) > 1:
+                            Icon = action[0].icon()
+                            textAddition = "..."
+                    except Exception:
+                        pass
+
+                    # Set the default check states
+                    checked_small = Qt.CheckState.Checked
+                    checked_medium = Qt.CheckState.Unchecked
+                    checked_large = Qt.CheckState.Unchecked
+                    # set the default size
+                    Size = "small"
+
+                    # Go through the toolbars in the Json Ribbon list
+                    for j in range(len(self.List_Workbenches)):
+                        if self.List_Workbenches[j][0] == WorkBenchName:
+                            try:
+                                MenuName = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
+                                    Toolbar
+                                ]["commands"][CommandName]["text"]
+                                Size = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar][
+                                    "commands"
+                                ][CommandName]["size"]
+
+                                if Size == "medium":
+                                    checked_small = Qt.CheckState.Unchecked
+                                    checked_medium = Qt.CheckState.Checked
+                                    checked_large = Qt.CheckState.Unchecked
+                                if Size == "large":
+                                    checked_small = Qt.CheckState.Unchecked
+                                    checked_medium = Qt.CheckState.Unchecked
+                                    checked_large = Qt.CheckState.Checked
+                                Icon_Json_Name = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][
+                                    Toolbar
+                                ]["commands"][CommandName]["icon"]
+                                if Icon_Json_Name != "":
+                                    Icon = Gui.getIcon(Icon_Json_Name)
+                            except Exception:
+                                continue
+
+                    # Create the row in the table
+                    # add a row to the table widget
+                    self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
+
+                    # Fill the table widget ----------------------------------------------------------------------------------
+                    #
+                    # Define a table widget item
+                    TableWidgetItem = QTableWidgetItem()
+                    TableWidgetItem.setText(MenuName + textAddition)
+                    TableWidgetItem.setData(
+                        Qt.ItemDataRole.UserRole,
+                        Command.getInfo()["menuText"].replace("&", ""),
+                    )
+                    TableWidgetItem.setFlags(TableWidgetItem.flags() | Qt.ItemFlag.ItemIsEditable)
+                    if Icon is not None:
+                        TableWidgetItem.setIcon(Icon)
+                    if Icon is None:
+                        TableWidgetItem.setFlags(TableWidgetItem.flags() & ~Qt.ItemFlag.ItemIsEnabled)
+                    # Get the last rownumber and set this row with the TableWidgetItem
+                    RowNumber = self.form.tableWidget.rowCount() - 1
+
+                    # Add the first cell with the table widget
+                    self.form.tableWidget.setItem(RowNumber, 0, TableWidgetItem)
+
+                    # Create the second cell and set the checkstate according the checkstate as defined ealier
+                    Icon_small = QTableWidgetItem()
+                    Icon_small.setCheckState(checked_small)
+                    self.form.tableWidget.setItem(RowNumber, 1, Icon_small)
+
+                    # Create the third cell and set the checkstate according the checkstate as defined ealier
+                    Icon_medium = QTableWidgetItem()
+                    Icon_medium.setCheckState(checked_medium)
+                    self.form.tableWidget.setItem(RowNumber, 2, Icon_medium)
+
+                    # Create the last cell and set the checkstate according the checkstate as defined ealier
+                    Icon_large = QTableWidgetItem()
+                    Icon_large.setCheckState(checked_large)
+                    self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
+
+                    # Double check the workbench name
+                    WorkbenchTitle = self.form.WorkbenchList.currentText()
+                    for item in self.List_Workbenches:
+                        if item[2] == WorkbenchTitle:
+                            WorkBenchName = item[0]
+
+                    # Define the order based on the order in this table widget
+                    Order = []
+                    for j in range(self.form.tableWidget.rowCount()):
+                        Order.append(QTableWidgetItem(self.form.tableWidget.item(j, 0)).data(Qt.ItemDataRole.UserRole))
+
+                    # Add or update the dict for the Ribbon command panel
+                    self.add_keys_nested_dict(
+                        self.Dict_RibbonCommandPanel,
+                        ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
+                    )
+                    self.add_keys_nested_dict(
+                        self.Dict_RibbonCommandPanel,
+                        [
+                            "workbenches",
+                            WorkBenchName,
+                            "toolbars",
+                            Toolbar,
+                            "commands",
+                            CommandName,
+                        ],
+                    )
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["commands"][
+                        CommandName
+                    ] = {
+                        "size": Size,
+                        "text": MenuName,
+                        "icon": IconName,
+                    }
+
+                    # Set the IconOnlyToolbars control
+                    Toolbar = self.form.ToolbarList.currentText()
+                    IsInList = False
+                    for item in self.List_IconOnlyToolbars:
+                        if item == Toolbar:
+                            IsInList = True
+                    if IsInList is True:
+                        self.form.IconOnly.setCheckState(Qt.CheckState.Checked)
+                    else:
+                        self.form.IconOnly.setCheckState(Qt.CheckState.Unchecked)
+
+                    # Add the command to the shadow list
+                    ShadowList.append(CommandName)
         return
 
     def on_AddSeparator_clicked(self):
@@ -1251,6 +1308,7 @@ class LoadDialog(Design_ui.Ui_Form):
         # Define a table widget item
         TableWidgetItem = QTableWidgetItem()
         TableWidgetItem.setText("Separator")
+        TableWidgetItem.setData(Qt.ItemDataRole.UserRole, "separator")
 
         # Get the last rownumber and set this row with the TableWidgetItem
         RowNumber = self.form.tableWidget.rowCount() - 1
