@@ -104,13 +104,15 @@ def UpdateCommands():
     for WorkBench in Dict_RibbonCommandPanel["workbenches"]:
         for ToolBar in Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"]:
             if ToolBar != "order":
-                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"]:
+                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench][
+                    "toolbars"
+                ][ToolBar]["commands"]:
                     for key, value in Dict_Commands.items():
                         if Command == key:
                             if value[2] != "" and value[2] != "...":
-                                Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"][
-                                    Command
-                                ]["text"] = value[2]
+                                Dict_RibbonCommandPanel["workbenches"][WorkBench][
+                                    "toolbars"
+                                ][ToolBar]["commands"][Command]["text"] = value[2]
 
 
 def WriteJson():
