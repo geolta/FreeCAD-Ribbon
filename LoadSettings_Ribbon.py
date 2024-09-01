@@ -119,6 +119,14 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.on_Cancel_clicked(self)
 
         self.form.Cancel.connect(self.form.Cancel, SIGNAL("clicked()"), Cancel)
+
+        # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
+        def GenerateJsonExit():
+            self.on_GenerateJsonExit_clicked(self)
+
+        self.form.GenerateJsonExit.connect(
+            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
+        )
         # endregion
 
         return
@@ -231,6 +239,12 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     @staticmethod
     def on_Cancel_clicked(self):
+        # Close the form
+        self.form.close()
+        return
+
+    @staticmethod
+    def on_GenerateJsonExit_clicked(self):
         # Close the form
         self.form.close()
         return

@@ -221,23 +221,26 @@ class ModernMenu(RibbonBar):
         self.applicationOptionButton().setFixedHeight(self.iconSize)
         self.setApplicationIcon(Gui.getIcon("freecad"))
         Menu = self.addFileMenu()
+
         # Add the ribbon design button
-        DesignButton = Menu.addAction("Ribbon design")
+        DesignMenu = Menu.addMenu("Ribbon design")
+        DesignButton = DesignMenu.addAction("Design")
         DesignButton.triggered.connect(self.loadDesignMenu)
-        # Add the preference button
-        SettingsButton = Menu.addAction("Preferences")
-        SettingsButton.triggered.connect(self.loadSettingsMenu)
         # Add the script submenu with items
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
         if os.path.exists(ScriptDir) is True:
             ListScripts = os.listdir(ScriptDir)
             if len(ListScripts) > 0:
-                ScriptButtonMenu = Menu.addMenu("Scripts")
+                ScriptButtonMenu = DesignMenu.addMenu("Scripts")
                 for i in range(len(ListScripts)):
                     ScriptButtonMenu.addAction(
                         ListScripts[i],
                         lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1]),
                     )
+
+        # Add the preference button
+        SettingsButton = Menu.addAction("Preferences")
+        SettingsButton.triggered.connect(self.loadSettingsMenu)
 
         # Set the autohide behavior
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
