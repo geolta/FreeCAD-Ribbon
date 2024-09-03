@@ -40,7 +40,7 @@ from PySide6.QtWidgets import (
     QTabWidget,
     QCheckBox,
 )
-from PySide6.QtCore import Qt, SIGNAL, QTimer, QRect
+from PySide6.QtCore import Qt, SIGNAL, QTimer, QRect, QItemSelectionModel
 import sys
 import json
 from datetime import datetime
@@ -1311,9 +1311,10 @@ class LoadDialog(Design_ui.Ui_Form):
         TableWidgetItem.setData(Qt.ItemDataRole.UserRole, "separator")
 
         # Get the last rownumber and set this row with the TableWidgetItem
-        RowNumber = self.form.tableWidget.rowCount() - 1
-        if len(QTableWidget(self.form.tableWidget).selectedItems()) > 0:
-            RowNumber = QTableWidget(self.form.tableWidget).selectedItems[0].row()
+        RowNumber = self.form.tableWidget.rowCount()
+        if len(self.form.tableWidget.selectedItems()) > 0:
+            RowNumber = self.form.tableWidget.currentRow()
+        self.form.tableWidget.insertRow(RowNumber)
 
         # Add the first cell with the table widget
         self.form.tableWidget.setItem(RowNumber, 0, TableWidgetItem)
@@ -1333,6 +1334,8 @@ class LoadDialog(Design_ui.Ui_Form):
         Icon_large.setText("")
         self.form.tableWidget.setItem(RowNumber, 3, Icon_large)
 
+        self.form.tableWidget.selectRow(RowNumber)
+
         # Double check the workbench name
         WorkbenchTitle = self.form.WorkbenchList.currentText()
         for item in self.List_Workbenches:
@@ -1350,37 +1353,14 @@ class LoadDialog(Design_ui.Ui_Form):
             ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
         )
         self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
-
         return
 
     def on_RemoveSeparator_clicked(self):
-        TableWidget = QTableWidget(self.form.tableWidget)
-        row = TableWidget.currentRow()
+        self.remove_TableWidget(self.form.tableWidget, "separator")
 
-        FirstCell = TableWidget.takeItem(row, 0)
-        if FirstCell.text() == "separator":
-            TableWidget.removeRow(row)
-
-        # Get the correct workbench name
-        WorkBenchName = ""
-        for WorkBench in self.List_Workbenches:
-            if WorkBench[2] == self.form.WorkbenchList.currentText():
-                WorkBenchName = WorkBench[0]
-
-        # Get the toolbar name
-        Toolbar = self.form.ToolbarList.currentText()
-
-        # Define the order based on the order in this table widget
-        Order = []
-        for i in range(self.form.tableWidget.rowCount()):
-            Order.append(QTableWidgetItem(self.form.tableWidget.item(i, 0)).data(Qt.ItemDataRole.UserRole))
-
-        # Add or update the dict for the Ribbon command panel
-        self.add_keys_nested_dict(
-            self.Dict_RibbonCommandPanel,
-            ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
-        )
-        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+        # Enable the apply button
+        if self.CheckChanges() is True:
+            self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -1985,6 +1965,37 @@ class LoadDialog(Design_ui.Ui_Form):
                 TableWidget.removeRow(row + 1)
 
         self.UpdateData()
+        return
+
+    def remove_TableWidget(self, TableWidget: QTableWidget, filter: str = ""):
+        row = TableWidget.currentRow()
+        if filter != "":
+            if TableWidget.item(row, 0).text().lower() == "separator":
+                TableWidget.removeRow(row)
+        else:
+            TableWidget.removeRow(row)
+
+        # Get the correct workbench name
+        WorkBenchName = ""
+        for WorkBench in self.List_Workbenches:
+            if WorkBench[2] == self.form.WorkbenchList.currentText():
+                WorkBenchName = WorkBench[0]
+
+        # Get the toolbar name
+        Toolbar = self.form.ToolbarList.currentText()
+
+        # Define the order based on the order in this table widget
+        Order = []
+        for i in range(TableWidget.rowCount()):
+            Order.append(QTableWidgetItem(TableWidget.item(i, 0)).data(Qt.ItemDataRole.UserRole))
+
+        # Add or update the dict for the Ribbon command panel
+        self.add_keys_nested_dict(
+            self.Dict_RibbonCommandPanel,
+            ["workbenches", WorkBenchName, "toolbars", Toolbar, "order"],
+        )
+        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
+
         return
 
     def List_ReturnCustomToolbars(self):

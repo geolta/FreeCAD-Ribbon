@@ -8,7 +8,7 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide.QtCore import (
+from PySide6.QtCore import (
     QCoreApplication,
     QDate,
     QDateTime,
@@ -22,7 +22,7 @@ from PySide.QtCore import (
     QUrl,
     Qt,
 )
-from PySide.QtGui import (
+from PySide6.QtGui import (
     QBrush,
     QColor,
     QConicalGradient,
@@ -40,7 +40,7 @@ from PySide.QtGui import (
     QRadialGradient,
     QTransform,
 )
-from PySide.QtWidgets import (
+from PySide6.QtWidgets import (
     QAbstractItemView,
     QAbstractScrollArea,
     QApplication,
@@ -586,9 +586,33 @@ class Ui_Form(object):
         self.frame2 = QFrame(self.layoutWidget1)
         self.frame2.setObjectName("frame2")
         self.frame2.setFrameShape(QFrame.StyledPanel)
-        self.horizontalLayout_3 = QHBoxLayout(self.frame2)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(6, 6, 6, 6)
+        self.gridLayout_14 = QGridLayout(self.frame2)
+        self.gridLayout_14.setObjectName("gridLayout_14")
+        self.gridLayout_14.setContentsMargins(6, 6, 6, 10)
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer_9)
+
+        self.MoveUp_RibbonCommand = QToolButton(self.frame2)
+        self.MoveUp_RibbonCommand.setObjectName("MoveUp_RibbonCommand")
+        self.MoveUp_RibbonCommand.setArrowType(Qt.UpArrow)
+
+        self.verticalLayout.addWidget(self.MoveUp_RibbonCommand)
+
+        self.MoveDown_RibbonCommand = QToolButton(self.frame2)
+        self.MoveDown_RibbonCommand.setObjectName("MoveDown_RibbonCommand")
+        self.MoveDown_RibbonCommand.setArrowType(Qt.DownArrow)
+
+        self.verticalLayout.addWidget(self.MoveDown_RibbonCommand)
+
+        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout.addItem(self.verticalSpacer_8)
+
+        self.gridLayout_14.addLayout(self.verticalLayout, 0, 1, 1, 1)
+
         self.tableWidget = QTableWidget(self.frame2)
         if self.tableWidget.columnCount() < 4:
             self.tableWidget.setColumnCount(4)
@@ -639,47 +663,33 @@ class Ui_Form(object):
         self.tableWidget.horizontalHeader().setProperty("showSortIndicator", False)
         self.tableWidget.verticalHeader().setVisible(False)
 
-        self.horizontalLayout_3.addWidget(self.tableWidget)
+        self.gridLayout_14.addWidget(self.tableWidget, 0, 0, 1, 1)
 
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.verticalLayout.addItem(self.verticalSpacer_9)
-
-        self.MoveUp_RibbonCommand = QToolButton(self.frame2)
-        self.MoveUp_RibbonCommand.setObjectName("MoveUp_RibbonCommand")
-        self.MoveUp_RibbonCommand.setArrowType(Qt.UpArrow)
-
-        self.verticalLayout.addWidget(self.MoveUp_RibbonCommand)
-
-        self.MoveDown_RibbonCommand = QToolButton(self.frame2)
-        self.MoveDown_RibbonCommand.setObjectName("MoveDown_RibbonCommand")
-        self.MoveDown_RibbonCommand.setArrowType(Qt.DownArrow)
-
-        self.verticalLayout.addWidget(self.MoveDown_RibbonCommand)
+        self.horizontalLayout.addItem(self.horizontalSpacer_4)
 
         self.AddSeparator = QToolButton(self.frame2)
         self.AddSeparator.setObjectName("AddSeparator")
-        icon = QIcon()
-        icon.addFile("../icons/+ sign.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.AddSeparator.setIcon(icon)
+        font1 = QFont()
+        font1.setBold(False)
+        self.AddSeparator.setFont(font1)
 
-        self.verticalLayout.addWidget(self.AddSeparator)
+        self.horizontalLayout.addWidget(self.AddSeparator)
 
         self.RemoveSeparator = QToolButton(self.frame2)
         self.RemoveSeparator.setObjectName("RemoveSeparator")
-        icon1 = QIcon()
-        icon1.addFile("../icons/- sign.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.RemoveSeparator.setIcon(icon1)
+        self.RemoveSeparator.setFont(font1)
 
-        self.verticalLayout.addWidget(self.RemoveSeparator)
+        self.horizontalLayout.addWidget(self.RemoveSeparator)
 
-        self.verticalSpacer_8 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.horizontalSpacer_5 = QSpacerItem(30, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.verticalLayout.addItem(self.verticalSpacer_8)
+        self.horizontalLayout.addItem(self.horizontalSpacer_5)
 
-        self.horizontalLayout_3.addLayout(self.verticalLayout)
+        self.gridLayout_14.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.verticalLayout_3.addWidget(self.frame2)
 
@@ -884,6 +894,8 @@ class Ui_Form(object):
         self.label.setText(QCoreApplication.translate("Form", "Select workbench:", None))
         self.IconOnly.setText(QCoreApplication.translate("Form", "Icon only", None))
         self.label_12.setText(QCoreApplication.translate("Form", " Set the icon size", None))
+        self.MoveUp_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
+        self.MoveDown_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("Form", "Command", None))
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
@@ -901,10 +913,8 @@ class Ui_Form(object):
         ___qtablewidgetitem5.setText(QCoreApplication.translate("Form", "Command 1", None))
         self.tableWidget.setSortingEnabled(__sortingEnabled8)
 
-        self.MoveUp_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
-        self.MoveDown_RibbonCommand.setText(QCoreApplication.translate("Form", "...", None))
-        self.AddSeparator.setText(QCoreApplication.translate("Form", "...", None))
-        self.RemoveSeparator.setText(QCoreApplication.translate("Form", "...", None))
+        self.AddSeparator.setText(QCoreApplication.translate("Form", "Add separator", None))
+        self.RemoveSeparator.setText(QCoreApplication.translate("Form", "remove separator", None))
         self.label_4.setText(QCoreApplication.translate("Form", " Set the panel order", None))
         self.MoveUp_Toolbar.setText(QCoreApplication.translate("Form", "...", None))
         self.MoveDown_Toolbar.setText(QCoreApplication.translate("Form", "...", None))
