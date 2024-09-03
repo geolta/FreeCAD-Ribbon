@@ -145,7 +145,12 @@ class ModernMenu(RibbonBar):
 
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * 1.5)
-        self.quickAccessToolBar().setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        # Set the width of the quickaccess toolbar.
+        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 3.7795275591 * 0.5)
+        self.quickAccessToolBar().setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
+
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
         WorkbenchOrderedList = App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
