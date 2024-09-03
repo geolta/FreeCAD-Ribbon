@@ -150,10 +150,13 @@ class ModernMenu(RibbonBar):
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * 1.5)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 3.7795275591 * 0.5)
+        self.quickAccessToolBar().setMinimumWidth(
+            self.iconSize * i * 3.7795275591 * 0.5
+        )
         self.quickAccessToolBar().setSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
         )
+
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
         WorkbenchOrderedList = (
@@ -439,13 +442,49 @@ class ModernMenu(RibbonBar):
 
                     allButtons.sort(key=sortButtons)
 
+            # allButtons = self.AddSeparators(allButtons, workbenchName, toolbar)
+
             # add buttons to panel
             shadowList = (
                 []
             )  # if buttons are used in multiple workbenches, they can show up double. (Sketcher_NewSketch)
             for button in allButtons:
+                # if the button has not text, skipp it.
                 if button.text() == "":
                     continue
+                # add a separator instead of a button if the text is "separator"
+                if (
+                    workbenchName in ModernMenu.ribbonStructure["workbenches"]
+                    and toolbar
+                    in ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                        "toolbars"
+                    ]
+                    and "order"
+                    in ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                        "toolbars"
+                    ][toolbar]
+                ):
+                    for i in range(
+                        1,
+                        len(
+                            ModernMenu.ribbonStructure["workbenches"][workbenchName][
+                                "toolbars"
+                            ][toolbar]["order"]
+                        ),
+                    ):
+                        command = ModernMenu.ribbonStructure["workbenches"][
+                            workbenchName
+                        ]["toolbars"][toolbar]["order"][i]
+                        commandPrevious = ModernMenu.ribbonStructure["workbenches"][
+                            workbenchName
+                        ]["toolbars"][toolbar]["order"][i - 1]
+
+                        if (
+                            command == button.text()
+                            and commandPrevious.lower() == "separator"
+                        ):
+                            panel.addSeparator()
+                            continue
                 # If the command is already there, skipp it.
                 if shadowList.__contains__(button.text()) is True:
                     continue

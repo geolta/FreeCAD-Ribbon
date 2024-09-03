@@ -141,9 +141,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.ENABLE_BACKUP = False
             Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", False)
 
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
-
         return
 
     def on_BackUpLocation_clicked(self):
@@ -157,9 +154,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
             Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
 
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
-
         return
 
     def on_IconSize_Small_TextChanged(self):
@@ -168,9 +162,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             "IconSize_Small", int(self.form.IconSize_Small.text())
         )
 
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
-
         return
 
     def on_IconSize_Medium_TextChanged(self):
@@ -178,9 +169,6 @@ class LoadDialog(Settings_ui.Ui_Form):
         Parameters_Ribbon.Settings.SetIntSetting(
             "IconSize_Medium", int(self.form.IconSize_Medium.text())
         )
-
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -196,9 +184,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_7.setText(StyleSheet)
             Parameters_Ribbon.STYLESHEET = StyleSheet
             Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
-
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
 
         return
 
@@ -231,9 +216,6 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_LARGE = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", False)
             self.ShowText_Large = False
-
-        # Enable the apply button
-        self.form.GenerateJson.setEnabled(True)
 
         return
 
