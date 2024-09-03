@@ -1292,7 +1292,13 @@
               </spacer>
              </item>
              <item>
-              <widget class="QToolButton" name="AddSeparator">
+              <widget class="QPushButton" name="AddSeparator">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
                  <weight>50</weight>
@@ -1305,7 +1311,13 @@
               </widget>
              </item>
              <item>
-              <widget class="QToolButton" name="RemoveSeparator">
+              <widget class="QPushButton" name="RemoveSeparator">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
                  <weight>50</weight>
@@ -1313,7 +1325,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>remove separator</string>
+                <string>Remove separator</string>
                </property>
               </widget>
              </item>

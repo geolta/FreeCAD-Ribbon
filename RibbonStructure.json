@@ -114,17 +114,19 @@
                     "order": [
                         "Pad",
                         "Revolution",
+                        "Additive helix",
+                        "Additive loft",
+                        "Additive pipe",
+                        "Create an additive primitive",
+                        "separator",
                         "Pocket",
                         "Hole",
                         "Groove",
-                        "Create an additive primitive",
-                        "Create a subtractive primitive",
-                        "Additive loft",
-                        "Additive pipe",
-                        "Additive helix",
                         "Subtractive loft",
                         "Subtractive pipe",
                         "Subtractive helix",
+                        "Create a subtractive primitive",
+                        "separator",
                         "Boolean operation"
                     ],
                     "commands": {
@@ -1363,18 +1365,20 @@
                         "Contact constraint",
                         "Tie constraint",
                         "Spring",
+                        "Separator",
                         "Force load",
                         "Pressure load",
                         "Centrifugal load",
                         "Gravity load",
+                        "Separator",
                         "Electromagnetic boundary conditions",
                         "Initial flow velocity condition",
                         "Initial pressure condition",
                         "Flow velocity boundary condition",
+                        "Separator",
                         "Initial temperature",
                         "Heat flux load",
-                        "Temperature boundary condition",
-                        "Body heat source"
+                        "Temperature boundary condition"
                     ],
                     "commands": {
                         "FEM_CompEmConstraints": {
