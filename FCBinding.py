@@ -23,6 +23,7 @@
 # *                                                                                   *
 # *************************************************************************************/
 import pyqtribbon.menu
+import pyqtribbon.toolbutton
 import FreeCAD as App
 import FreeCADGui as Gui
 
@@ -133,28 +134,30 @@ class ModernMenu(RibbonBar):
         """
 
         # add quick access buttons
-        i = 0  # Start value for button count. Used for width of quixkaccess toolbar
+        i = 2  # Start value for button count. Used for width of quixkaccess toolbar
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
             i = i + 1
             button = QToolButton()
-            helpAction = Gui.Command.get(commandName).getAction()
+            QuickAction = Gui.Command.get(commandName).getAction()
             # XXX for debugging purposes
-            if len(helpAction) == 0:
+            if len(QuickAction) == 0:
                 print(f"{commandName} has no action")
-            elif len(helpAction) > 1:
+            elif len(QuickAction) > 1:
                 print(f"{commandName} has more than one action")
 
-            button.setDefaultAction(helpAction[0])
+            button.setDefaultAction(QuickAction[0])
+            button.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            )
+            button.setMaximumWidth(self.iconSize * 1.5)
             self.addQuickAccessButton(button)
 
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * 1.5)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(
-            self.iconSize * i * 3.7795275591 * 0.5
-        )
+        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 1.5)
         self.quickAccessToolBar().setSizePolicy(
-            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
 
         # Get the order of workbenches from Parameters
@@ -185,16 +188,19 @@ class ModernMenu(RibbonBar):
 
         # Set the font size of the ribbon tab titles
         self.tabBar().font().setPointSizeF(10)
+        self.tabBar().setFixedHeight(self.iconSize * 1.5)
 
         # Set the size of the collpseRibbonButton
-        self.collapseRibbonButton().setFixedSize(16, 16)
+        self.collapseRibbonButton().setFixedSize(self.iconSize, self.iconSize)
 
         # Set the helpbutton
         self.helpRibbonButton().setEnabled(True)
-        self.helpRibbonButton().setFixedHeight(24)
+        self.helpRibbonButton().setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        self.helpRibbonButton().setMaximumWidth(self.iconSize * 1.5)
         # Define an action for the help button
         helpAction = QAction()
-        # action.setIcon(Gui.getIcon("help"))
         helpIcon = QIcon()
         pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
         helpIcon.addPixmap(pixmap)
@@ -204,13 +210,16 @@ class ModernMenu(RibbonBar):
 
         # Add a button the enable or disable AutoHide
         pixmap = QPixmap(os.path.join(pathIcons, "pin-icon-open.svg"))
-        # Standard_Functions.LightOrDark()
         pinIcon = QIcon()
         pinIcon.addPixmap(pixmap)
         pinButton = QToolButton()
         pinButton.setCheckable(True)
         pinButton.setIcon(pinIcon)
         pinButton.setText("Pin Ribbon")
+        pinButton.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
+        pinButton.setMaximumWidth(self.iconSize * 1.5)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
             pinButton.setChecked(False)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is False:
@@ -219,11 +228,17 @@ class ModernMenu(RibbonBar):
         self.rightToolBar().addWidget(pinButton)
 
         # Set the widht of the right toolbar
-        i = len(self.rightToolBar().actions()) + 1
-        self.rightToolBar().setMinimumWidth(self.iconSize * i)
+        i = len(self.rightToolBar().actions())
+        self.rightToolBar().setMinimumWidth(self.iconSize * 1.5 * i)
+        self.rightToolBar().setMaximumHeight(self.iconSize * 1.5)
+        self.rightToolBar().setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
 
         # Set the application button
-        self.applicationOptionButton().setFixedHeight(self.iconSize)
+        self.applicationOptionButton().setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
         self.setApplicationIcon(Gui.getIcon("freecad"))
         Menu = self.addFileMenu()
 
@@ -562,7 +577,7 @@ class ModernMenu(RibbonBar):
                     # add dropdown menu if necessary
                     if button.menu() is not None:
                         btn.setMenu(button.menu())
-                        btn.setPopupMode(QToolButton.InstantPopup)
+                        btn.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
                 except Exception:
                     continue
