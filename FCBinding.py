@@ -27,8 +27,8 @@ import pyqtribbon.toolbutton
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide6.QtGui import QIcon, QAction, QPixmap
-from PySide6.QtWidgets import (
+from PySide.QtGui import QIcon, QAction, QPixmap
+from PySide.QtWidgets import (
     QToolButton,
     QToolBar,
     QPushButton,
@@ -36,7 +36,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QMenu,
 )
-from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
 
 import json
 import os
