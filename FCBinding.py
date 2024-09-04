@@ -419,8 +419,6 @@ class ModernMenu(RibbonBar):
 
                     allButtons.sort(key=sortButtons)
 
-            # allButtons = self.AddSeparators(allButtons, workbenchName, toolbar)
-
             # add buttons to panel
             shadowList = (
                 []
@@ -480,7 +478,6 @@ class ModernMenu(RibbonBar):
                         icon_Json = ModernMenu.ribbonStructure["workbenches"][workbenchName]["toolbars"][toolbar][
                             "commands"
                         ][action.data()]["icon"]
-                        # action.setIcon(QIcon(os.path.join(pathIcons, icon)))
                         if icon_Json != "":
                             action.setIcon(Gui.getIcon(icon_Json))
                     except KeyError:
@@ -494,28 +491,46 @@ class ModernMenu(RibbonBar):
                     except KeyError:
                         buttonSize = "small"  # small as default
 
+                    # Check if this is an icon only toolbar
+                    IconOnly = False
+                    for iconToolbar in ModernMenu.ribbonStructure["iconOnlyToolbars"]:
+                        if iconToolbar == toolbar:
+                            IconOnly = True
+
                     if buttonSize == "small":
+                        showText = Parameters_Ribbon.SHOW_ICON_TEXT_SMALL
+                        if IconOnly is True:
+                            showText = False
+
                         btn = panel.addSmallButton(
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_SMALL,
+                            showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
                     elif buttonSize == "medium":
+                        showText = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
+                        if IconOnly is True:
+                            showText = False
+
                         btn = panel.addMediumButton(
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM,
+                            showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                     elif buttonSize == "large":
+                        showText = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
+                        if IconOnly is True:
+                            showText = False
+
                         btn = panel.addLargeButton(
                             action.text(),
                             action.icon(),
                             alignment=Qt.AlignmentFlag.AlignLeft,
-                            showText=Parameters_Ribbon.SHOW_ICON_TEXT_LARGE,
+                            showText=showText,
                             fixedHeight=False,
                         )
                     else:
