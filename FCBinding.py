@@ -27,9 +27,17 @@ import pyqtribbon.toolbutton
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide6.QtGui import QIcon, QAction, QPixmap
-from PySide6.QtWidgets import QToolButton, QToolBar, QPushButton, QLayout, QSizePolicy, QMenu, QGraphicsEffect
-from PySide6.QtCore import Qt, QTimer, Signal, QObject, QSize, QMargins, QRect
+from PySide.QtGui import QIcon, QAction, QPixmap
+from PySide.QtWidgets import (
+    QToolButton,
+    QToolBar,
+    QPushButton,
+    QLayout,
+    QSizePolicy,
+    QMenu,
+    QGraphicsEffect,
+)
+from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize, QMargins, QRect
 
 import json
 import os
@@ -552,7 +560,9 @@ class ModernMenu(RibbonBar):
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
-                        btn.setMinimumWidth(Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize + 5)
+                        btn.setMinimumWidth(
+                            Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize + 5
+                        )
                     elif buttonSize == "medium":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
                         if IconOnly is True:
@@ -565,7 +575,9 @@ class ModernMenu(RibbonBar):
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
-                        btn.setMinimumWidth(Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize + 5)
+                        btn.setMinimumWidth(
+                            Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize + 5
+                        )
                     elif buttonSize == "large":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
                         if IconOnly is True:
@@ -586,7 +598,9 @@ class ModernMenu(RibbonBar):
                     # add dropdown menu if necessary
                     if button.menu() is not None:
                         btn.setMenu(button.menu())
-                        btn.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+                        btn.setPopupMode(
+                            QToolButton.ToolButtonPopupMode.MenuButtonPopup
+                        )
                         # btn.setStyleSheet("QToolButton::menu-button {width: 16px")
                     btn.setDefaultAction(action)
 
