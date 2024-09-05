@@ -35,8 +35,9 @@ from PySide.QtWidgets import (
     QLayout,
     QSizePolicy,
     QMenu,
+    QGraphicsEffect,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize
+from PySide.QtCore import Qt, QTimer, Signal, QObject, QSize, QMargins, QRect
 
 import json
 import os
@@ -132,7 +133,6 @@ class ModernMenu(RibbonBar):
         """
         Create menu tabs.
         """
-
         # add quick access buttons
         i = 2  # Start value for button count. Used for width of quixkaccess toolbar
         for commandName in ModernMenu.ribbonStructure["quickAccessCommands"]:
@@ -560,6 +560,9 @@ class ModernMenu(RibbonBar):
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
+                        btn.setMinimumWidth(
+                            Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize + 5
+                        )
                     elif buttonSize == "medium":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
                         if IconOnly is True:
@@ -571,6 +574,9 @@ class ModernMenu(RibbonBar):
                             alignment=Qt.AlignmentFlag.AlignLeft,
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
+                        )
+                        btn.setMinimumWidth(
+                            Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize + 5
                         )
                     elif buttonSize == "large":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
@@ -588,11 +594,15 @@ class ModernMenu(RibbonBar):
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."
                         )
-                    btn.setDefaultAction(action)
+
                     # add dropdown menu if necessary
                     if button.menu() is not None:
                         btn.setMenu(button.menu())
-                        btn.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+                        btn.setPopupMode(
+                            QToolButton.ToolButtonPopupMode.MenuButtonPopup
+                        )
+                        # btn.setStyleSheet("QToolButton::menu-button {width: 16px")
+                    btn.setDefaultAction(action)
 
                 except Exception:
                     continue
