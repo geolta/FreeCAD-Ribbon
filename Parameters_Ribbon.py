@@ -175,5 +175,5 @@ else:
 if Settings.GetBoolSetting("ShowIconText_Large") is True:
     SHOW_ICON_TEXT_LARGE = Settings.GetBoolSetting("ShowIconText_Large")
 else:
-    SHOW_ICON_TEXT_LARGE = bool(True)
-    Settings.SetBoolSetting("ShowIconText_Large", True)
+    SHOW_ICON_TEXT_LARGE = bool(False)
+    Settings.SetBoolSetting("ShowIconText_Large", False)

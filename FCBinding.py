@@ -608,6 +608,8 @@ class ModernMenu(RibbonBar, QMenuBar):
                             showText=showText,
                             fixedHeight=False,
                         )
+
+                        btn.setMinimumWidth(btn.maximumHeight())
                     else:
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."
