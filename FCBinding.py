@@ -33,6 +33,7 @@ from PySide.QtWidgets import (
     QDockWidget,
     QWidget,
     QMenuBar,
+    QMenu,
 )
 from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL
 
@@ -40,6 +41,7 @@ import json
 import os
 import sys
 import webbrowser
+import keyboard
 
 # from pyqtribbon import RibbonBar
 from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
@@ -106,6 +108,7 @@ class ModernMenu(RibbonBar, QMenuBar):
         # get the state of the mainwindow
         self.MainWindowLoaded = True
 
+        # Set these settings and connections at init
         # Set the autohide behavior of the ribbon
         self.setAutoHideRibbon(Parameters_Ribbon.AUTOHIDE_RIBBON)
         # connect the collapsbutton with our own function
@@ -114,8 +117,17 @@ class ModernMenu(RibbonBar, QMenuBar):
             SIGNAL("clicked()"),
             self.onCollapseRibbonButton_clicked,
         )
+
+        # Set the menuBar hidden as standard
+        mw.menuBar().hide()
+        if self.isEnabled() is False:
+            mw.menuBar().show()
+        # connect the alt key to the menuBar
+        keyboard.on_press_key("alt", lambda _: self.ToggleMenuBar())
+
         return
 
+    # implentation to add actions to the Filemenu. Needed for the accessiores menu
     def addAction(self, action: QAction):
         menu = self.findChild(RibbonMenu, "")
         if menu is None:
@@ -123,6 +135,7 @@ class ModernMenu(RibbonBar, QMenuBar):
         menu.addAction(action)
         return
 
+    # Hover functions needed for handling the autohide function of the ribbon
     def enterEvent(self, QEvent):
         TB = mw.findChildren(QDockWidget, "Ribbon")[0]
 
@@ -141,13 +154,23 @@ class ModernMenu(RibbonBar, QMenuBar):
 
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
-        # mw.workbenchActivated.connect(self.onWbActivated)
+        mw.workbenchActivated.connect(self.onWbActivated)
         return
 
     def disconnectSignals(self):
         self.tabBar().currentChanged.disconnect(self.onUserChangedWorkbench)
         mw.workbenchActivated.disconnect(self.onWbActivated)
         return
+
+    def ToggleMenuBar(self):
+        mw = Gui.getMainWindow()
+        menuBar = mw.menuBar()
+        if menuBar.isVisible() is True:
+            menuBar.hide()
+            return
+        if menuBar.isVisible() is False:
+            menuBar.show()
+            return
 
     def createModernMenu(self):
         """
@@ -169,7 +192,6 @@ class ModernMenu(RibbonBar, QMenuBar):
             button.setSizePolicy(
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
             )
-            button.setMaximumWidth(self.iconSize * 1.5)
             self.addQuickAccessButton(button)
 
         # Set the height of the quickaccess toolbar
@@ -262,10 +284,18 @@ class ModernMenu(RibbonBar, QMenuBar):
         self.setApplicationIcon(Gui.getIcon("freecad"))
         Menu = self.addFileMenu()
 
+        # add the menus from the menubar to the application button
+        MenuBar = mw.menuBar()
+        Menu.addActions(MenuBar.actions())
+
         # Add the ribbon design button
+        Menu.addSeparator()
         DesignMenu = Menu.addMenu("Ribbon design")
         DesignButton = DesignMenu.addAction("Design")
         DesignButton.triggered.connect(self.loadDesignMenu)
+        # Add the preference button
+        PreferenceButton = DesignMenu.addAction("Ribbon preferences")
+        PreferenceButton.triggered.connect(self.loadSettingsMenu)
         # Add the script submenu with items
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
         if os.path.exists(ScriptDir) is True:
@@ -278,9 +308,6 @@ class ModernMenu(RibbonBar, QMenuBar):
                         lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1]),
                     )
 
-        # Add the preference button
-        SettingsButton = Menu.addAction("Preferences")
-        SettingsButton.triggered.connect(self.loadSettingsMenu)
         return
 
     def loadDesignMenu(self):
