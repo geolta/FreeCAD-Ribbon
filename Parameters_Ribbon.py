@@ -101,35 +101,27 @@ class Settings:
 
 # Define the resources
 ICON_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "icons")
-STYLESHEET_LOCATION = os.path.join(
-    os.path.dirname(__file__), "Resources", "stylesheets"
-)
+STYLESHEET_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "stylesheets")
 UI_LOCATION = os.path.join(os.path.dirname(__file__), "Resources", "ui")
 
 # Define the icon sizes
-if (
-    Settings.GetIntSetting("IconSize_Small") is not None
-    or Settings.GetIntSetting("IconSize_Small") > 0
-):
+if Settings.GetIntSetting("IconSize_Small") is not None or Settings.GetIntSetting("IconSize_Small") > 0:
     ICON_SIZE_SMALL = Settings.GetIntSetting("IconSize_Small")
 else:
     ICON_SIZE_SMALL = int(30)
+    Settings.SetIntSetting("IconSize_Small", 30)
 
-if (
-    Settings.GetIntSetting("IconSize_Medium") is not None
-    or Settings.GetIntSetting("IconSize_Medium") > 0
-):
+if Settings.GetIntSetting("IconSize_Medium") is not None or Settings.GetIntSetting("IconSize_Medium") > 0:
     ICON_SIZE_MEDIUM = Settings.GetIntSetting("IconSize_Medium")
 else:
     ICON_SIZE_MEDIUM = int(40)
+    Settings.SetIntSetting("IconSize_Medium", 40)
 
-if (
-    Settings.GetIntSetting("IconSize_Large") is not None
-    or Settings.GetIntSetting("IconSize_Large") > 0
-):
+if Settings.GetIntSetting("IconSize_Large") is not None or Settings.GetIntSetting("IconSize_Large") > 0:
     ICON_SIZE_LARGE = Settings.GetIntSetting("IconSize_Large")
 else:
     ICON_SIZE_LARGE = int(50)
+    Settings.SetIntSetting("IconSize_Large", 50)
 
 
 # Backup parameters
@@ -141,6 +133,7 @@ if Settings.GetStringSetting("BackupFolder") != "":
     BACKUP_LOCATION = Settings.GetStringSetting("BackupFolder")
 else:
     BACKUP_LOCATION = os.path.dirname(__file__) + "/Backups"
+    Settings.SetStringSetting("BackupFolder", BACKUP_LOCATION)
 
 # Additional parameter
 HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
@@ -153,19 +146,23 @@ else:
 if Settings.GetStringSetting("Stylesheet") != "":
     STYLESHEET = Settings.GetStringSetting("Stylesheet")
 else:
-    STYLESHEET = os.path.join(STYLESHEET_LOCATION, "base.qss")
+    STYLESHEET = os.path.join(STYLESHEET_LOCATION, "default.qss")
+    Settings.SetStringSetting("Stylesheet", STYLESHEET)
 
 if Settings.GetBoolSetting("ShowIconText_Small") is True:
     SHOW_ICON_TEXT_SMALL = Settings.GetBoolSetting("ShowIconText_Small")
 else:
     SHOW_ICON_TEXT_SMALL = bool(False)
+    Settings.SetBoolSetting("ShowIconText_Small", False)
 
 if Settings.GetBoolSetting("ShowIconText_Medium") is True:
     SHOW_ICON_TEXT_MEDIUM = Settings.GetBoolSetting("ShowIconText_Medium")
 else:
     SHOW_ICON_TEXT_MEDIUM = bool(False)
+    Settings.SetBoolSetting("ShowIconText_Medium", False)
 
 if Settings.GetBoolSetting("ShowIconText_Large") is True:
     SHOW_ICON_TEXT_LARGE = Settings.GetBoolSetting("ShowIconText_Large")
 else:
-    SHOW_ICON_TEXT_LARGE = bool(False)
+    SHOW_ICON_TEXT_LARGE = bool(True)
+    Settings.SetBoolSetting("ShowIconText_Large", True)
