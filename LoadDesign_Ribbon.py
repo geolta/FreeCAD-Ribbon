@@ -1172,21 +1172,36 @@ class LoadDialog(Design_ui.Ui_Form):
         # add separators to the command list.
         index = 0
         if Toolbar != "":
-            for j in range(
-                len(
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                        "toolbars"
-                    ][Toolbar]["order"]
-                )
-            ):
+            if WorkBenchName in self.Dict_RibbonCommandPanel["workbenches"]:
                 if (
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                    "order"
+                    in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
                         "toolbars"
-                    ][Toolbar]["order"][j].lower()
-                    == "separator"
+                    ]
                 ):
-                    ToolbarCommands.insert(j + index, "separator")
-                    index = index + 1
+                    if (
+                        len(
+                            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                "toolbars"
+                            ]["order"]
+                        )
+                        > 0
+                    ):
+                        for j in range(
+                            len(
+                                self.Dict_RibbonCommandPanel["workbenches"][
+                                    WorkBenchName
+                                ]["toolbars"][Toolbar]["order"]
+                            )
+                        ):
+                            if (
+                                self.Dict_RibbonCommandPanel["workbenches"][
+                                    WorkBenchName
+                                ]["toolbars"][Toolbar]["order"][j].lower()
+                                == "separator"
+                            ):
+                                ToolbarCommands.insert(j + index, "separator")
+                                index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
@@ -2311,30 +2326,35 @@ class LoadDialog(Design_ui.Ui_Form):
 
     def SortedToolbarList(self, ToolbarList, WorkBenchName):
         SortedList = []
-        if (
-            "order"
-            in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]
-        ):
+        if WorkBenchName in self.Dict_RibbonCommandPanel["workbenches"]:
             if (
-                len(
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                        "toolbars"
-                    ]["order"]
-                )
-                > 0
-            ):
-                SortedList = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                "order"
+                in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
                     "toolbars"
-                ]["order"]
+                ]
+            ):
+                if (
+                    len(
+                        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                            "toolbars"
+                        ]["order"]
+                    )
+                    > 0
+                ):
+                    SortedList = self.Dict_RibbonCommandPanel["workbenches"][
+                        WorkBenchName
+                    ]["toolbars"]["order"]
 
-                IsInList = False
-                for ToolBar in ToolbarList:
-                    for SortedToolBar in SortedList:
-                        if ToolBar == SortedToolBar:
-                            IsInList = True
+                    IsInList = False
+                    for ToolBar in ToolbarList:
+                        for SortedToolBar in SortedList:
+                            if ToolBar == SortedToolBar:
+                                IsInList = True
 
-                    if IsInList is False:
-                        SortedList.append(ToolBar)
+                        if IsInList is False:
+                            SortedList.append(ToolBar)
+                else:
+                    SortedList = ToolbarList
             else:
                 SortedList = ToolbarList
         else:
