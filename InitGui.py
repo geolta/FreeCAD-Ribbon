@@ -22,7 +22,6 @@
 # *   SOFTWARE.                                                                       *
 # *                                                                                   *
 # *************************************************************************************/
-
 import os
 import FreeCAD as App
 import FreeCADGui as Gui
@@ -32,6 +31,9 @@ __title__ = "FreeCAD-Ribbon"
 __author__ = "A.P. Ebbers"
 __url__ = "https://github.com/APEbbers/FreeCAD-Ribbon"
 
-print("Activating Ribbon Bar...")
-mw = Gui.getMainWindow()
-mw.workbenchActivated.connect(FCBinding.run)
+try:
+    print("Activating Ribbon Bar...")
+    mw = Gui.getMainWindow()
+    mw.workbenchActivated.connect(FCBinding.run)
+except Exception as e:
+    print(e)
