@@ -18,14 +18,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QProgressBar, QSizePolicy,
     QWidget)
 
-class Ui_LoadingwokrbenchesLoadingDialog(object):
-    def setupUi(self, LoadingwokrbenchesLoadingDialog):
-        if not LoadingwokrbenchesLoadingDialog.objectName():
-            LoadingwokrbenchesLoadingDialog.setObjectName(u"LoadingwokrbenchesLoadingDialog")
-        LoadingwokrbenchesLoadingDialog.resize(400, 42)
-        self.gridLayout = QGridLayout(LoadingwokrbenchesLoadingDialog)
+class Ui_Form(object):
+    def setupUi(self, Form):
+        if not Form.objectName():
+            Form.setObjectName(u"Form")
+        Form.resize(400, 42)
+        self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.progressBar = QProgressBar(LoadingwokrbenchesLoadingDialog)
+        self.progressBar = QProgressBar(Form)
         self.progressBar.setObjectName(u"progressBar")
         self.progressBar.setValue(24)
         self.progressBar.setInvertedAppearance(False)
@@ -33,12 +33,12 @@ class Ui_LoadingwokrbenchesLoadingDialog(object):
         self.gridLayout.addWidget(self.progressBar, 0, 0, 1, 1)
 
 
-        self.retranslateUi(LoadingwokrbenchesLoadingDialog)
+        self.retranslateUi(Form)
 
-        QMetaObject.connectSlotsByName(LoadingwokrbenchesLoadingDialog)
+        QMetaObject.connectSlotsByName(Form)
     # setupUi
 
-    def retranslateUi(self, LoadingwokrbenchesLoadingDialog):
-        LoadingwokrbenchesLoadingDialog.setWindowTitle(QCoreApplication.translate("LoadingwokrbenchesLoadingDialog", u"Loading workbenches", None))
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(QCoreApplication.translate("Form", u"Loading workbenches", None))
     # retranslateUi
 
