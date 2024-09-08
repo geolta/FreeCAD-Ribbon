@@ -306,11 +306,11 @@ class ModernMenu(RibbonBar):
 
         # Add the ribbon design button
         Menu.addSeparator()
-        DesignMenu = Menu.addMenu("Ribbon design")
-        DesignButton = DesignMenu.addAction("Design")
+        DesignMenu = Menu.addMenu("Customize...")
+        DesignButton = DesignMenu.addAction("Ribbon Design")
         DesignButton.triggered.connect(self.loadDesignMenu)
         # Add the preference button
-        PreferenceButton = DesignMenu.addAction("Ribbon preferences")
+        PreferenceButton = DesignMenu.addAction("Ribbon Preferences")
         PreferenceButton.triggered.connect(self.loadSettingsMenu)
         # Add the script submenu with items
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
