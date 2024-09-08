@@ -33,6 +33,7 @@ from PySide.QtWidgets import (
     QTableWidget,
     QToolBar,
     QToolButton,
+    QComboBox,
 )
 from PySide.QtCore import Qt, SIGNAL
 import sys
@@ -1011,10 +1012,6 @@ class LoadDialog(Design_ui.Ui_Form):
                         WorkBenchName
                     ].items():
                         if key == CustomPanelTitle:
-                            # remove the custom toolbar from the custom toolbar dict.
-                            del self.Dict_CustomToolbars["customToolbars"][
-                                WorkBenchName
-                            ][key]
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
                                 if (
@@ -1024,11 +1021,29 @@ class LoadDialog(Design_ui.Ui_Form):
                                     == key
                                 ):
                                     self.form.CustomToolbarSelector.removeItem(i)
+                                    self.form.CustomToolbarSelector.setCurrentText(
+                                        self.form.CustomToolbarSelector.itemText(
+                                            i - 1
+                                        ).split(", ")[0]
+                                    )
+
+                            orderList: list = self.Dict_RibbonCommandPanel[
+                                "workbenches"
+                            ][WorkBenchName]["toolbars"]["order"]
+                            orderList.remove(key)
 
                             # remove the custom toolbar also from the workbenches dict
+                            del self.Dict_CustomToolbars["customToolbars"][
+                                WorkBenchName
+                            ][key]
                             del self.Dict_RibbonCommandPanel["workbenches"][
                                 WorkBenchName
                             ]["toolbars"][key]
+
+                            # update the order list
+                            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                                "order"
+                            ] = orderList
 
                             # Enable the apply button
                             if self.CheckChanges() is True:
@@ -1172,36 +1187,21 @@ class LoadDialog(Design_ui.Ui_Form):
         # add separators to the command list.
         index = 0
         if Toolbar != "":
-            if WorkBenchName in self.Dict_RibbonCommandPanel["workbenches"]:
-                if (
-                    "order"
-                    in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+            for j in range(
+                len(
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
                         "toolbars"
-                    ]
+                    ][Toolbar]["order"]
+                )
+            ):
+                if (
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                        "toolbars"
+                    ][Toolbar]["order"][j].lower()
+                    == "separator"
                 ):
-                    if (
-                        len(
-                            self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                                "toolbars"
-                            ]["order"]
-                        )
-                        > 0
-                    ):
-                        for j in range(
-                            len(
-                                self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["order"]
-                            )
-                        ):
-                            if (
-                                self.Dict_RibbonCommandPanel["workbenches"][
-                                    WorkBenchName
-                                ]["toolbars"][Toolbar]["order"][j].lower()
-                                == "separator"
-                            ):
-                                ToolbarCommands.insert(j + index, "separator")
-                                index = index + 1
+                    ToolbarCommands.insert(j + index, "separator")
+                    index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
@@ -2273,29 +2273,43 @@ class LoadDialog(Design_ui.Ui_Form):
                     for CustomToolbar in self.Dict_CustomToolbars["customToolbars"][
                         WorkBenchName
                     ]:
-                        ListCommands = []
-                        Commands = self.Dict_CustomToolbars["customToolbars"][
-                            WorkBenchName
-                        ][CustomToolbar]["commands"]
+                        if (
+                            len(
+                                self.Dict_CustomToolbars["customToolbars"][
+                                    WorkBenchName
+                                ]
+                            )
+                            > 0
+                        ):
+                            ListCommands = []
+                            Commands = self.Dict_CustomToolbars["customToolbars"][
+                                WorkBenchName
+                            ][CustomToolbar]["commands"]
 
-                        WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
+                            WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
 
-                        for key, value in Commands.items():
-                            for i in range(len(self.List_Commands)):
+                            for key, value in Commands.items():
+                                for i in range(len(self.List_Commands)):
+                                    if (
+                                        self.List_Commands[i][2] == key
+                                        and self.List_Commands[i][3] == WorkBenchName
+                                    ):
+                                        Command = self.List_Commands[i][0]
+                                        ListCommands.append(Command)
+
                                 if (
-                                    self.List_Commands[i][2] == key
-                                    and self.List_Commands[i][3] == WorkBenchName
+                                    self.List_IgnoredToolbars_internal.__contains__(
+                                        value
+                                    )
+                                    is False
                                 ):
-                                    Command = self.List_Commands[i][0]
-                                    ListCommands.append(Command)
+                                    self.List_IgnoredToolbars_internal.append(
+                                        f"{value}"
+                                    )
 
-                            if (
-                                self.List_IgnoredToolbars_internal.__contains__(value)
-                                is False
-                            ):
-                                self.List_IgnoredToolbars_internal.append(f"{value}")
-
-                        Toolbars.append([CustomToolbar, WorkbenchTitle, ListCommands])
+                            Toolbars.append(
+                                [CustomToolbar, WorkbenchTitle, ListCommands]
+                            )
                 except Exception:
                     pass
 
@@ -2324,43 +2338,51 @@ class LoadDialog(Design_ui.Ui_Form):
         JsonFile.close()
         return IsChanged
 
-    def SortedToolbarList(self, ToolbarList, WorkBenchName):
-        SortedList = []
-        if WorkBenchName in self.Dict_RibbonCommandPanel["workbenches"]:
+    def SortedToolbarList(self, ToolbarList: list, WorkBenchName):
+        SortedList: list = []
+        if (
+            "order"
+            in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]
+        ):
             if (
-                "order"
-                in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                    "toolbars"
-                ]
+                len(
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                        "toolbars"
+                    ]["order"]
+                )
+                > 0
             ):
-                if (
-                    len(
-                        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                            "toolbars"
-                        ]["order"]
-                    )
-                    > 0
-                ):
-                    SortedList = self.Dict_RibbonCommandPanel["workbenches"][
-                        WorkBenchName
-                    ]["toolbars"]["order"]
+                SortedList = self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                    "toolbars"
+                ]["order"]
 
-                    IsInList = False
-                    for ToolBar in ToolbarList:
-                        for SortedToolBar in SortedList:
-                            if ToolBar == SortedToolBar:
-                                IsInList = True
+                IsInList = False
+                for ToolBar in ToolbarList:
+                    for SortedToolBar in SortedList:
+                        if ToolBar == SortedToolBar:
+                            IsInList = True
 
-                        if IsInList is False:
-                            SortedList.append(ToolBar)
-                else:
-                    SortedList = ToolbarList
+                    if IsInList is False:
+                        SortedList.append(ToolBar)
             else:
                 SortedList = ToolbarList
         else:
             SortedList = ToolbarList
 
-        return SortedList
+        def SortList(toolbar):
+            if toolbar == "":
+                return -1
+
+            position = None
+            try:
+                position = SortedList.index(toolbar)
+            except ValueError:
+                position = 999999
+            return position
+
+        ToolbarList.sort(key=SortList)
+
+        return ToolbarList
 
     # endregion
 

@@ -25,7 +25,7 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap
+from PySide.QtGui import QIcon, QAction, QPixmap, QScrollEvent
 from PySide.QtWidgets import (
     QToolButton,
     QToolBar,
@@ -43,7 +43,6 @@ import sys
 import webbrowser
 import keyboard
 
-# from pyqtribbon import RibbonBar
 from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 import LoadDesign_Ribbon
 import Parameters_Ribbon
@@ -65,7 +64,7 @@ mw = Gui.getMainWindow()
 timer = QTimer()
 
 
-class ModernMenu(RibbonBar, QMenuBar):
+class ModernMenu(RibbonBar):
     """
     Create ModernMenu QWidget.
     """
@@ -78,9 +77,9 @@ class ModernMenu(RibbonBar, QMenuBar):
     MainWindowLoaded = False
 
     # use icon size from FreeCAD preferences
-    iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt(
-        "ToolbarIconSize", 24
-    )
+    # iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt("ToolbarIconSize", 24)
+    iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
+    sizeFactor = 1.2
 
     def __init__(self):
         """
@@ -135,7 +134,22 @@ class ModernMenu(RibbonBar, QMenuBar):
         menu.addAction(action)
         return
 
-    # Hover functions needed for handling the autohide function of the ribbon
+    # used to scroll a ribbon horizontal, when it's wider than the screen
+    def wheelEvent(self, event):
+        x = 0
+        # Get the scroll value (1 or -1)
+        delta = event.angleDelta().y()
+        x += delta and delta // abs(delta)
+
+        # go back or forward based on x.
+        if x == 1:
+            self.currentCategory()._previousButton.click()
+        if x == -1:
+            self.currentCategory()._nextButton.click()
+
+        return
+
+    # region - Hover function needed for handling the autohide function of the ribbon
     def enterEvent(self, QEvent):
         TB = mw.findChildren(QDockWidget, "Ribbon")[0]
 
@@ -151,6 +165,8 @@ class ModernMenu(RibbonBar, QMenuBar):
             TB.setMaximumHeight(45)
             self.setRibbonVisible(False)
         pass
+
+    # endregion
 
     def connectSignals(self):
         self.tabBar().currentChanged.connect(self.onUserChangedWorkbench)
@@ -195,9 +211,9 @@ class ModernMenu(RibbonBar, QMenuBar):
             self.addQuickAccessButton(button)
 
         # Set the height of the quickaccess toolbar
-        self.quickAccessToolBar().setMaximumHeight(self.iconSize * 1.5)
+        self.quickAccessToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * 1.5)
+        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * self.sizeFactor)
         self.quickAccessToolBar().setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
@@ -230,7 +246,7 @@ class ModernMenu(RibbonBar, QMenuBar):
 
         # Set the font size of the ribbon tab titles
         self.tabBar().font().setPointSizeF(10)
-        self.tabBar().setFixedHeight(self.iconSize * 1.5)
+        self.tabBar().setFixedHeight(self.iconSize * self.sizeFactor)
 
         # Set the size of the collpseRibbonButton
         self.collapseRibbonButton().setFixedSize(self.iconSize, self.iconSize)
@@ -240,7 +256,7 @@ class ModernMenu(RibbonBar, QMenuBar):
         self.helpRibbonButton().setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        self.helpRibbonButton().setMaximumWidth(self.iconSize * 1.5)
+        self.helpRibbonButton().setMaximumWidth(self.iconSize * self.sizeFactor)
         # Define an action for the help button
         helpAction = QAction()
         helpIcon = QIcon()
@@ -261,7 +277,7 @@ class ModernMenu(RibbonBar, QMenuBar):
         pinButton.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
-        pinButton.setMaximumWidth(self.iconSize * 1.5)
+        pinButton.setMaximumWidth(self.iconSize * self.sizeFactor)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
             pinButton.setChecked(False)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is False:
@@ -271,8 +287,8 @@ class ModernMenu(RibbonBar, QMenuBar):
 
         # Set the widht of the right toolbar
         i = len(self.rightToolBar().actions())
-        self.rightToolBar().setMinimumWidth(self.iconSize * 1.5 * i)
-        self.rightToolBar().setMaximumHeight(self.iconSize * 1.5)
+        self.rightToolBar().setMinimumWidth(self.iconSize * self.sizeFactor * i)
+        self.rightToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         self.rightToolBar().setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
@@ -601,12 +617,12 @@ class ModernMenu(RibbonBar, QMenuBar):
                         btn = panel.addSmallButton(
                             action.text(),
                             action.icon(),
-                            alignment=Qt.AlignmentFlag.AlignLeft,
+                            alignment=Qt.AlignmentFlag.AlignJustify,
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
                         btn.setMinimumWidth(
-                            Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize + 5
+                            Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize
                         )
                     elif buttonSize == "medium":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
@@ -621,7 +637,7 @@ class ModernMenu(RibbonBar, QMenuBar):
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
                         btn.setMinimumWidth(
-                            Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize + 5
+                            Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize
                         )
                     elif buttonSize == "large":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
