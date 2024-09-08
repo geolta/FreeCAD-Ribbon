@@ -1,7 +1,7 @@
 # *************************************************************************************
 # *   MIT License                                                                     *
 # *                                                                                   *
-# *   Copyright (c) 2024 Paul Ebbers                                                  *
+# *   Copyright (c) 2024 Hakan Seven, Geolta, Paul Ebbers                             *
 # *                                                                                   *
 # *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
 # *   of this software and associated documentation files (the "Software"), to deal   *
@@ -26,10 +26,6 @@ import os
 import FreeCAD as App
 import FreeCADGui as Gui
 import FCBinding
-
-__title__ = "FreeCAD-Ribbon"
-__author__ = "A.P. Ebbers"
-__url__ = "https://github.com/APEbbers/FreeCAD-Ribbon"
 
 try:
     print("Activating Ribbon Bar...")

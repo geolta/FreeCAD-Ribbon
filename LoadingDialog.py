@@ -1,7 +1,7 @@
 # *************************************************************************************
 # *   MIT License                                                                     *
 # *                                                                                   *
-# *   Copyright (c) 2019 Hakan Seven                                                  *
+# *   Copyright (c) 2024 Paul Ebbers                                                  *
 # *                                                                                   *
 # *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
 # *   of this software and associated documentation files (the "Software"), to deal   *
@@ -22,16 +22,66 @@
 # *   SOFTWARE.                                                                       *
 # *                                                                                   *
 # *************************************************************************************/
-
 import FreeCAD as App
 import FreeCADGui as Gui
-from PySide import QtCore, QtGui, QtWidgets
+import os
 
-mw = Gui.getMainWindow()
-mw.menuBar().show()
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import (
+    QProgressBar,
+)
+from PySide6.QtCore import Qt, SIGNAL
+import sys
+import Parameters_Ribbon
+import LoadDesign_Ribbon
 
-WBList = Gui.listWorkbenches()
-for WB in WBList:
-    Gui.activateWorkbench(WB)
-    for tb in mw.findChildren(QtWidgets.QToolBar):
-        tb.show()
+# Get the resources
+pathUI = Parameters_Ribbon.UI_LOCATION
+sys.path.append(pathUI)
+
+
+# import graphical created Ui. (With QtDesigner or QtCreator)
+import LoadingDialog_ui as LoadingDialog_ui
+
+# Define the translation
+translate = App.Qt.translate
+
+
+class LoadingDialog(LoadingDialog_ui.Ui_LoadingwokrbenchesLoadingDialog):
+    No_WorkBenches = 0
+
+    def __init__(self):
+        # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
+        super(LoadingDialog, self).__init__()
+
+        # # this will create a Qt widget from our ui file
+        self.form = Gui.PySideUic.loadUi(os.path.join(pathUI, "LoadingDialog.ui"))
+
+        QProgressBar(self.form.progressBar).setValue(0)
+
+        return
+
+    def LoadWorkBenches(self):
+        List_Workbenches = Gui.listWorkbenches()
+
+        for WorkBenchName in List_Workbenches:
+            if str(WorkBenchName) != "" or WorkBenchName is not None:
+                if str(WorkBenchName) != "NoneWorkbench":
+                    Gui.activateWorkbench(WorkBenchName)
+                    currentValue = QProgressBar(self.form.progressBar).value
+                    NewValue = currentValue + 1
+
+                    QProgressBar(self.form.progressBar).setValue(NewValue)
+
+        LoadDesign_Ribbon.main()
+        self.form.close()
+        return
+
+
+def main():
+    # Get the form
+    Dialog = LoadingDialog.form
+    # Show the form
+    Dialog.show()
+
+    return
