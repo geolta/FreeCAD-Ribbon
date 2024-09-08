@@ -64,6 +64,8 @@ class LoadingDialog(LoadingDialog_ui.Ui_LoadingwokrbenchesLoadingDialog):
     def LoadWorkBenches(self):
         List_Workbenches = Gui.listWorkbenches()
 
+        QProgressBar(self.form.progressBar).setMaximum(len(List_Workbenches))
+
         for WorkBenchName in List_Workbenches:
             if str(WorkBenchName) != "" or WorkBenchName is not None:
                 if str(WorkBenchName) != "NoneWorkbench":
