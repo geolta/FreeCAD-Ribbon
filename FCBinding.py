@@ -45,7 +45,9 @@ import webbrowser
 try:
     import keyboard
 except ImportError:
-    import keyboard_local as keyboard
+    path = os.path.join(os.path.dirname(__file__), "Resources", "packages", "keyboard_local")
+    sys.path.append(path)
+    import keyboard
 
     print("keyboard used local")
 
