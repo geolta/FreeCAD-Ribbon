@@ -25,8 +25,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QPixmap
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -35,7 +35,7 @@ from PySide.QtWidgets import (
     QToolButton,
     QComboBox,
 )
-from PySide.QtCore import Qt, SIGNAL
+from PySide6.QtCore import Qt, SIGNAL, Signal, QObject, QThread
 import sys
 import json
 from datetime import datetime
@@ -43,6 +43,9 @@ import shutil
 import Standard_Functions_RIbbon as StandardFunctions
 import Parameters_Ribbon
 import webbrowser
+import LoadingDialog
+import time
+import threading
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -81,6 +84,10 @@ class LoadDialog(Design_ui.Ui_Form):
     ShowText_Large = False
 
     List_IgnoredToolbars_internal = []
+
+    WorkbenchesActivated = False
+
+    loadingDialog = LoadingDialog.LoadingDialog()
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -126,11 +133,14 @@ class LoadDialog(Design_ui.Ui_Form):
         # Store the current active workbench
         ActiveWB = Gui.activeWorkbench().name()
         # Go through the list of workbenches
+        i = 0
         for WorkBench in self.List_Workbenches:
-            # Activate the workbench. Otherwise, .listToolbars() returns empty
-            Gui.activateWorkbench(WorkBench[0])
-            # Get the toolbars of this workbench
-            wbToolbars: list = Gui.getWorkbench(WorkBench[0]).listToolbars()
+            wbToolbars = []
+            try:
+                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
+            except Exception:
+                Gui.activateWorkbench(WorkBench[0])
+                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
             # Go through the toolbars
             for Toolbar in wbToolbars:
                 # Go through the list of toolbars. If already present, skip it.
@@ -142,6 +152,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 if IsInList is False:
                     self.StringList_Toolbars.append([Toolbar, WorkBench[2]])
+            time.sleep(1)
         CustomToolbars = self.List_ReturnCustomToolbars()
         for Customtoolbar in CustomToolbars:
             self.StringList_Toolbars.append(Customtoolbar)
@@ -2183,8 +2194,6 @@ class LoadDialog(Design_ui.Ui_Form):
         ToolbarList.sort(key=SortList)
 
         return ToolbarList
-
-    # endregion
 
 
 def main():

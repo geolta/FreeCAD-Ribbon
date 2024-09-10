@@ -26,18 +26,20 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import (
-    QProgressBar,
-)
-from PySide6.QtCore import Qt, SIGNAL
+from PySide6.QtGui import QIcon, QPixmap, QShowEvent
+from PySide6.QtWidgets import QProgressBar, QWidget
+from PySide6.QtCore import Qt, SIGNAL, QThread, Signal, QObject, QRunnable, Slot, QThreadPool, QEvent, QTimer
 import sys
 import Parameters_Ribbon
 import LoadDesign_Ribbon
+import time
 
 # Get the resources
 pathUI = Parameters_Ribbon.UI_LOCATION
 sys.path.append(pathUI)
+
+# Define a timer
+timer = QTimer()
 
 
 # import graphical created Ui. (With QtDesigner or QtCreator)
@@ -47,8 +49,8 @@ import LoadingDialog_ui as LoadingDialog_ui
 translate = App.Qt.translate
 
 
-class LoadingDialog(LoadingDialog_ui.Ui_LoadingwokrbenchesLoadingDialog):
-    No_WorkBenches = 0
+class LoadingDialog(LoadingDialog_ui.Ui_Form):
+    List_Workbenches = []
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -57,33 +59,42 @@ class LoadingDialog(LoadingDialog_ui.Ui_LoadingwokrbenchesLoadingDialog):
         # # this will create a Qt widget from our ui file
         self.form = Gui.PySideUic.loadUi(os.path.join(pathUI, "LoadingDialog.ui"))
 
-        QProgressBar(self.form.progressBar).setValue(0)
+        # Get the style from the main window and use it for this form
+        mw = Gui.getMainWindow()
+        palette = mw.palette()
+        self.form.setPalette(palette)
+        Style = mw.style()
+        self.form.setStyle(Style)
 
-        return
+        self.form.setStyleSheet(Parameters_Ribbon.STYLESHEET)
 
-    def LoadWorkBenches(self):
-        List_Workbenches = Gui.listWorkbenches()
+        self.form.progressBar.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint)
 
-        QProgressBar(self.form.progressBar).setMaximum(len(List_Workbenches))
+        # set the progressbar to zero
+        self.form.progressBar.setValue(0)
 
-        for WorkBenchName in List_Workbenches:
+        self.List_Workbenches = Gui.listWorkbenches()
+
+        Maximum = 0
+        for WorkBenchName in self.List_Workbenches:
             if str(WorkBenchName) != "" or WorkBenchName is not None:
                 if str(WorkBenchName) != "NoneWorkbench":
-                    Gui.activateWorkbench(WorkBenchName)
-                    currentValue = QProgressBar(self.form.progressBar).value
-                    NewValue = currentValue + 1
+                    Maximum = Maximum + 1
+        self.form.progressBar.setMaximum(Maximum)
 
-                    QProgressBar(self.form.progressBar).setValue(NewValue)
-
-        LoadDesign_Ribbon.main()
-        self.form.close()
         return
+
+    def reportProgress(self, n):
+        self.form.progressBar.setValue(n)
+
+    # Worker
 
 
 def main():
     # Get the form
-    Dialog = LoadingDialog.form
+    Dialog = LoadingDialog()
     # Show the form
-    Dialog.show()
+    Dialog.form.show()
+    # Dialog.runLongTask()
 
     return

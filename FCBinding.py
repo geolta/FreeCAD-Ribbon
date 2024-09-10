@@ -41,13 +41,26 @@ import json
 import os
 import sys
 import webbrowser
-import keyboard
 
-from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+try:
+    import keyboard
+except ImportError:
+    import keyboard_local as keyboard
+
+    print("keyboard used local")
+
+try:
+    from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+except ImportError:
+    from pyqtribbon_local.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+
+    print("pyqtribbon used local")
+
 import LoadDesign_Ribbon
 import Parameters_Ribbon
 import LoadSettings_Ribbon
 import LoadingDialog
+import Standard_Functions_RIbbon as StandardFunctions
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -306,8 +319,11 @@ class ModernMenu(RibbonBar):
         return
 
     def loadDesignMenu(self):
-        # LoadDesign_Ribbon.main()
-        LoadingDialog.main()
+        message = "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?"
+        result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
+        if result == "yes":
+            LoadDesign_Ribbon.main()
+        # LoadingDialog.main()
         return
 
     def loadSettingsMenu(self):
