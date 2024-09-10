@@ -86,7 +86,9 @@ class RibbonMenu(QtWidgets.QMenu):
         :param spacing: The spacing.
         """
         spacer = QtWidgets.QLabel()
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
+        spacer.setSizePolicy(
+            QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed
+        )
         spacer.setFixedHeight(spacing)
         self.addWidget(spacer)  # noqa
 
