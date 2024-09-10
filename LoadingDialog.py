@@ -26,9 +26,20 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import os
 
-from PySide6.QtGui import QIcon, QPixmap, QShowEvent
-from PySide6.QtWidgets import QProgressBar, QWidget
-from PySide6.QtCore import Qt, SIGNAL, QThread, Signal, QObject, QRunnable, Slot, QThreadPool, QEvent, QTimer
+from PySide.QtGui import QIcon, QPixmap, QShowEvent
+from PySide.QtWidgets import QProgressBar, QWidget
+from PySide.QtCore import (
+    Qt,
+    SIGNAL,
+    QThread,
+    Signal,
+    QObject,
+    QRunnable,
+    Slot,
+    QThreadPool,
+    QEvent,
+    QTimer,
+)
 import sys
 import Parameters_Ribbon
 import LoadDesign_Ribbon
