@@ -48,9 +48,9 @@ def Mbox(
     21 : Inputbox with dropdown     (text, title, style, default, stringlist)\n
     Icontype:                       string: NoIcon, Question, Warning, Critical. Default Information
     """
-    from PySide6.QtWidgets import QMessageBox, QInputDialog
-    from PySide6.QtCore import Qt
-    from PySide6 import QtWidgets
+    from PySide.QtWidgets import QMessageBox, QInputDialog
+    from PySide.QtCore import Qt
+    from PySide import QtWidgets
 
     Icon = QMessageBox.Information
     if IconType == "NoIcon":
@@ -143,7 +143,7 @@ def RestartDialog(includeIcons=False):
         string: returns 'yes' if restart now is clicked.
         otherwise returns 'no'
     """
-    from PySide6.QtWidgets import QMessageBox
+    from PySide.QtWidgets import QMessageBox
 
     # Set the messagebox
     msgBox = QMessageBox()
@@ -326,9 +326,13 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="", SaveAs: bool = True) -
 
     file = ""
     if SaveAs is False:
-        file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
+        file = QFileDialog.getOpenFileName(
+            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
+        )[0]
     if SaveAs is True:
-        file = QFileDialog.getSaveFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
+        file = QFileDialog.getSaveFileName(
+            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
+        )[0]
     return file
 
 
@@ -336,6 +340,8 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
+    Directory = QFileDialog.getExistingDirectory(
+        parent=parent, caption="Select Folder", dir=DefaultPath
+    )
 
     return Directory
