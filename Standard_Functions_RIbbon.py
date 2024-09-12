@@ -23,6 +23,7 @@
 # *                                                                                   *
 # *************************************************************************************/
 import FreeCAD as App
+import FreeCADGui as Gui
 import math
 
 # Define the translation
@@ -47,9 +48,9 @@ def Mbox(
     21 : Inputbox with dropdown     (text, title, style, default, stringlist)\n
     Icontype:                       string: NoIcon, Question, Warning, Critical. Default Information
     """
-    from PySide.QtWidgets import QMessageBox, QInputDialog
-    from PySide.QtCore import Qt
-    from PySide import QtWidgets
+    from PySide6.QtWidgets import QMessageBox, QInputDialog
+    from PySide6.QtCore import Qt
+    from PySide6 import QtWidgets
 
     Icon = QMessageBox.Information
     if IconType == "NoIcon":
@@ -133,6 +134,36 @@ def Mbox(
             # user clicked Cancel
             replyText = reply[0]  # which will be "" if they clicked Cancel
         return str(replyText)
+
+
+def RestartDialog(includeIcons=False):
+    """_summary_
+        shows a restart dialog
+    Returns:
+        string: returns 'yes' if restart now is clicked.
+        otherwise returns 'no'
+    """
+    from PySide6.QtWidgets import QMessageBox
+
+    # Set the messagebox
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Warning)
+    msgBox.setText("You must restart FreeCAD for changes to take effect.")
+    msgBox.setWindowTitle("FreeCAD Ribbon")
+    # Set the buttons and default button
+    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+    msgBox.setDefaultButton(QMessageBox.No)
+    msgBox.button(QMessageBox.Yes).setText("Restart now")
+    msgBox.button(QMessageBox.No).setText("Restart later")
+    if includeIcons is True:
+        msgBox.button(QMessageBox.No).setIcon(Gui.getIcon("Cancel.svg"))
+        msgBox.button(QMessageBox.Yes).setIcon(Gui.getIcon("OK.svg"))
+
+    reply = msgBox.exec_()
+    if reply == QMessageBox.Yes:
+        return "yes"
+    if reply == QMessageBox.No:
+        return "no"
 
 
 def SaveDialog(files, OverWrite: bool = True):
@@ -295,13 +326,9 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="", SaveAs: bool = True) -
 
     file = ""
     if SaveAs is False:
-        file = QFileDialog.getOpenFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     if SaveAs is True:
-        file = QFileDialog.getSaveFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getSaveFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     return file
 
 
@@ -309,8 +336,6 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(
-        parent=parent, caption="Select Folder", dir=DefaultPath
-    )
+    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
 
     return Directory
