@@ -27,7 +27,7 @@ import FreeCADGui as Gui
 
 from PySide6.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
 from PySide6.QtWidgets import QToolButton, QToolBar, QSizePolicy, QDockWidget, QWidget, QMenuBar, QMenu, QMainWindow
-from PySide6.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
 
 import json
 import os
@@ -37,6 +37,15 @@ import LoadDesign_Ribbon
 import Parameters_Ribbon
 import LoadSettings_Ribbon
 import Standard_Functions_RIbbon as StandardFunctions
+import platform
+import time
+
+# import modules for keypress detection based on OS
+if platform.system() == "Linux" or platform.system() == "Darwin":
+    import curses
+if platform.system() == "Windows":
+    import keyboard
+
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -76,10 +85,14 @@ class ModernMenu(RibbonBar):
 
     MainWindowLoaded = False
 
+    UseQtKeyPress = False
+
     # use icon size from FreeCAD preferences
     # iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt("ToolbarIconSize", 24)
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
     sizeFactor = 1.2
+
+    keyPressed = Signal(QEvent)
 
     def __init__(self):
         """
@@ -120,11 +133,38 @@ class ModernMenu(RibbonBar):
         if self.isEnabled() is False:
             mw.menuBar().show()
 
+        # Get the keypress when on linux or mac
+        if platform.system() == "Linux" or platform.system() == "Darwin":
+            try:
+
+                def DetectKey(stdscr):
+                    """checking for keypress"""
+                    stdscr.nodelay(True)  # do not wait for input when calling getch
+                    return stdscr.getch()
+
+                while True:
+                    key = curses.wrapper(DetectKey)
+                    print("key:", key)
+                    if key == curses.BUTTON_ALT:
+                        self.ToggleMenuBar()
+                    time.sleep(1)
+            except Exception:  # Use Qt incase of an error
+                self.UseQtKeyPress = True
+
+        # Get the keypress when on windows
+        if platform.system() == "Windows":
+            try:
+                # connect the alt key to the menuBar
+                keyboard.on_press_key("alt", lambda _: self.ToggleMenuBar())
+            except Exception:  # Use Qt incase of an error
+                self.UseQtKeyPress = True
         return
 
+    # The backup keypress event
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key.Key_Alt or event.key() == Qt.Key.Key_AltGr:
-            self.ToggleMenuBar()
+        if self.UseQtKeyPress is True:
+            if event.key() == Qt.Key.Key_Alt or event.key() == Qt.Key.Key_AltGr:
+                self.ToggleMenuBar()
 
     # implentation to add actions to the Filemenu. Needed for the accessiores menu
     def addAction(self, action: QAction):
@@ -723,7 +763,7 @@ class MainWindow(QMainWindow):
             self.ToggleMenuBar()
 
     def ToggleMenuBar(self):
-        mw = Gui.getMainWindow()
+        mw = self
         menuBar = mw.menuBar()
         if menuBar.isVisible() is True:
             menuBar.hide()
@@ -745,7 +785,6 @@ class run:
         disable = 0
         if name != "NoneWorkbench":
             # Disable connection after activation
-            # mw = Gui.getMainWindow()
             mw.workbenchActivated.disconnect(run)
             if disable:
                 return
