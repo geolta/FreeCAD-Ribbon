@@ -34,6 +34,7 @@ from PySide.QtWidgets import (
     QToolBar,
     QToolButton,
     QComboBox,
+    QPushButton,
 )
 from PySide.QtCore import Qt, SIGNAL, Signal, QObject, QThread
 import sys
@@ -84,8 +85,6 @@ class LoadDialog(Design_ui.Ui_Form):
     List_IgnoredToolbars_internal = []
 
     WorkbenchesActivated = False
-
-    settingChanged = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -460,6 +459,7 @@ class LoadDialog(Design_ui.Ui_Form):
         pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
         helpIcon.addPixmap(pixmap)
         self.form.HelpButton.setIcon(helpIcon)
+        self.form.HelpButton.setMinimumHeight(self.form.GenerateJsonExit.minimumHeight())
         # endregion
 
         return
@@ -1108,15 +1108,16 @@ class LoadDialog(Design_ui.Ui_Form):
                 len(self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"])
             ):
                 if (
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"][j].lower()
-                    == "separator"
+                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"][j]
+                    .lower()
+                    .startswith("separator")
                 ):
                     ToolbarCommands.insert(j + index, "separator")
                     index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
-            if ToolbarCommand == "separator":
+            if ToolbarCommand.startswith("separator"):
                 # Create the row in the table
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
@@ -1159,7 +1160,7 @@ class LoadDialog(Design_ui.Ui_Form):
                 )
                 self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"] = Order
 
-            if ToolbarCommand != "separator":
+            if not ToolbarCommand.startswith("separator"):
                 # Get the command
                 Command = Gui.Command.get(ToolbarCommand)
                 if Command is None:
@@ -1328,6 +1329,8 @@ class LoadDialog(Design_ui.Ui_Form):
         RowNumber = self.form.tableWidget.rowCount()
         if len(self.form.tableWidget.selectedItems()) > 0:
             RowNumber = self.form.tableWidget.currentRow()
+        # update the data
+        TableWidgetItem.setData(Qt.ItemDataRole.UserRole, f"separator_{WorkBenchName}_{RowNumber}")
         self.form.tableWidget.insertRow(RowNumber)
 
         # Add the first cell with the table widget
@@ -1567,10 +1570,9 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.close()
 
         # show the restart dialog
-        if self.settingChanged is True:
-            result = StandardFunctions.RestartDialog(False)
-            if result == "yes":
-                StandardFunctions.restart_freecad()
+        result = StandardFunctions.RestartDialog(True)
+        if result == "yes":
+            StandardFunctions.restart_freecad()
         return
 
     @staticmethod
@@ -2163,10 +2165,6 @@ class LoadDialog(Design_ui.Ui_Form):
             IsChanged = True
 
         JsonFile.close()
-
-        if IsChanged is True:
-            self.settingChanged = True
-
         return IsChanged
 
     def SortedToolbarList(self, ToolbarList: list, WorkBenchName):
