@@ -54,6 +54,8 @@ class LoadDialog(Settings_ui.Ui_Form):
     ShowText_Medium = False
     ShowText_Large = False
 
+    settingChanged = False
+
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
         super(LoadDialog, self).__init__()
@@ -128,6 +130,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.ENABLE_BACKUP = False
             Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", False)
 
+        self.settingChanged = True
         return
 
     def on_BackUpLocation_clicked(self):
@@ -138,19 +141,19 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_4.setText(BackupFolder)
             Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
             Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
-
+            self.settingChanged = True
         return
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
         Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
-
+        self.settingChanged = True
         return
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
         Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
-
+        self.settingChanged = True
         return
 
     def on_StyleSheetLocation_clicked(self):
@@ -165,7 +168,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_7.setText(StyleSheet)
             Parameters_Ribbon.STYLESHEET = StyleSheet
             Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
-
+            self.settingChanged = True
         return
 
     def on_ShowTextSmall_clicked(self):
@@ -177,6 +180,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", False)
             self.ShowText_Small = False
+        self.settingChanged = True
+        return
 
     def on_ShowTextMedium_clicked(self):
         if self.form.ShowText_Medium.isChecked() is True:
@@ -187,6 +192,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Medium", False)
             self.ShowText_Medium = False
+        self.settingChanged = True
+        return
 
     def on_ShowTextLarge_clicked(self):
         if self.form.ShowText_Large.isChecked() is True:
@@ -197,7 +204,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_LARGE = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", False)
             self.ShowText_Large = False
-
+        self.settingChanged = True
         return
 
     @staticmethod
@@ -211,9 +218,10 @@ class LoadDialog(Settings_ui.Ui_Form):
         # Close the form
         self.form.close()
         # show the restart dialog
-        result = StandardFunctions.RestartDialog(True)
-        if result == "yes":
-            StandardFunctions.restart_freecad()
+        if self.settingChanged is True:
+            result = StandardFunctions.RestartDialog(True)
+            if result == "yes":
+                StandardFunctions.restart_freecad()
         return
 
     # endregion---------------------------------------------------------------------------------------

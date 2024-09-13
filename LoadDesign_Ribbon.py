@@ -85,6 +85,8 @@ class LoadDialog(Design_ui.Ui_Form):
 
     WorkbenchesActivated = False
 
+    settingChanged = False
+
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
         super(LoadDialog, self).__init__()
@@ -1565,9 +1567,10 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.close()
 
         # show the restart dialog
-        result = StandardFunctions.RestartDialog(True)
-        if result == "yes":
-            StandardFunctions.restart_freecad()
+        if self.settingChanged is True:
+            result = StandardFunctions.RestartDialog(True)
+            if result == "yes":
+                StandardFunctions.restart_freecad()
         return
 
     @staticmethod
@@ -2160,6 +2163,10 @@ class LoadDialog(Design_ui.Ui_Form):
             IsChanged = True
 
         JsonFile.close()
+
+        if IsChanged is True:
+            self.settingChanged = True
+
         return IsChanged
 
     def SortedToolbarList(self, ToolbarList: list, WorkBenchName):

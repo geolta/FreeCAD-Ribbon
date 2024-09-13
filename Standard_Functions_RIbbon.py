@@ -156,8 +156,8 @@ def RestartDialog(includeIcons=False):
     msgBox.button(QMessageBox.Yes).setText("Restart now")
     msgBox.button(QMessageBox.No).setText("Restart later")
     if includeIcons is True:
-        msgBox.button(QMessageBox.No).setIcon(Gui.getIcon("Cancel.svg"))
-        msgBox.button(QMessageBox.Yes).setIcon(Gui.getIcon("OK.svg"))
+        msgBox.button(QMessageBox.No).setIcon(Gui.getIcon("edit_Cancel.svg"))
+        msgBox.button(QMessageBox.Yes).setIcon(Gui.getIcon("edit_OK.svg"))
 
     reply = msgBox.exec_()
     if reply == QMessageBox.Yes:
