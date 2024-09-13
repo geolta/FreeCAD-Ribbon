@@ -20,6 +20,7 @@ The main *pynput* module.
 This module imports ``keyboard`` and ``mouse``.
 """
 
+
 def _logger(cls):
     """Creates a logger with a name suitable for a specific class.
 
@@ -32,9 +33,10 @@ def _logger(cls):
     :return: a logger
     """
     import logging
-    return logging.getLogger('{}.{}'.format(
-        '.'.join(cls.__module__.split('.', 2)[:2]),
-        cls.__name__))
+
+    return logging.getLogger(
+        "{}.{}".format(".".join(cls.__module__.split(".", 2)[:2]), cls.__name__)
+    )
 
 
 from . import keyboard

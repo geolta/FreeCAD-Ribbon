@@ -37,6 +37,7 @@ class Button(enum.Enum):
     platforms may have additional buttons, but these are guaranteed to be
     present everywhere.
     """
+
     #: An unknown button was pressed
     unknown = 0
 
@@ -51,8 +52,8 @@ class Button(enum.Enum):
 
 
 class Controller(object):
-    """A controller for sending virtual mouse events to the system.
-    """
+    """A controller for sending virtual mouse events to the system."""
+
     def __init__(self):
         self._log = _logger(self.__class__)
 
@@ -135,8 +136,7 @@ class Controller(object):
         return self
 
     def __exit__(self, exc_type, value, traceback):
-        """Ends a series of clicks.
-        """
+        """Ends a series of clicks."""
         pass
 
     def _position_get(self):
@@ -249,15 +249,20 @@ class Listener(AbstractListener):
             If ``self.suppress_event()`` is called, the event is suppressed
             system wide.
     """
-    def __init__(self, on_move=None, on_click=None, on_scroll=None,
-                 suppress=False, **kwargs):
+
+    def __init__(
+        self, on_move=None, on_click=None, on_scroll=None, suppress=False, **kwargs
+    ):
         self._log = _logger(self.__class__)
         option_prefix = prefix(Listener, self.__class__)
         self._options = {
-            key[len(option_prefix):]: value
+            key[len(option_prefix) :]: value
             for key, value in kwargs.items()
-            if key.startswith(option_prefix)}
+            if key.startswith(option_prefix)
+        }
         super(Listener, self).__init__(
-            on_move=on_move, on_click=on_click, on_scroll=on_scroll,
-            suppress=suppress)
+            on_move=on_move, on_click=on_click, on_scroll=on_scroll, suppress=suppress
+        )
+
+
 # pylint: enable=W0223

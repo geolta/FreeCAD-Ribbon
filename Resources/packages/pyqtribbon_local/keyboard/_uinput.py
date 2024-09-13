@@ -43,14 +43,14 @@ from . import _base
 class KeyCode(_base.KeyCode):
     _PLATFORM_EXTENSIONS = (
         # The name for this key
-        '_x_name',
-        '_kernel_name',
+        "_x_name",
+        "_kernel_name",
     )
 
     # Be explicit about fields
     _x_name = None
     _kernel_name = None
-# pylint: enable=W0212
+    # pylint: enable=W0212
 
     @classmethod
     def _from_name(cls, x_name, kernel_name, **kwargs):
@@ -66,103 +66,100 @@ class KeyCode(_base.KeyCode):
             vk = getattr(evdev.ecodes, kernel_name)
         except AttributeError:
             vk = None
-        return cls.from_vk(
-            vk, _x_name=x_name, _kernel_name=kernel_name, **kwargs)
+        return cls.from_vk(vk, _x_name=x_name, _kernel_name=kernel_name, **kwargs)
 
 
 # pylint: disable=W0212
 class Key(enum.Enum):
-    alt = KeyCode._from_name('Alt_L', 'KEY_LEFTALT')
-    alt_l = KeyCode._from_name('Alt_L', 'KEY_LEFTALT')
-    alt_r = KeyCode._from_name('Alt_R', 'KEY_RIGHTALT')
-    alt_gr = KeyCode._from_name('Mode_switch', 'KEY_RIGHTALT')
-    backspace = KeyCode._from_name('BackSpace', 'KEY_BACKSPACE')
-    caps_lock = KeyCode._from_name('Caps_Lock', 'KEY_CAPSLOCK')
-    cmd = KeyCode._from_name('Super_L', 'KEY_LEFTMETA')
-    cmd_l = KeyCode._from_name('Super_L', 'KEY_LEFTMETA')
-    cmd_r = KeyCode._from_name('Super_R', 'KEY_RIGHTMETA')
-    ctrl = KeyCode._from_name('Control_L', 'KEY_LEFTCTRL')
-    ctrl_l = KeyCode._from_name('Control_L', 'KEY_LEFTCTRL')
-    ctrl_r = KeyCode._from_name('Control_R', 'KEY_RIGHTCTRL')
-    delete = KeyCode._from_name('Delete', 'KEY_DELETE')
-    down = KeyCode._from_name('Down', 'KEY_DOWN')
-    end = KeyCode._from_name('End', 'KEY_END')
-    enter = KeyCode._from_name('Return', 'KEY_ENTER')
-    esc = KeyCode._from_name('Escape', 'KEY_ESC')
-    f1 = KeyCode._from_name('F1', 'KEY_F1')
-    f2 = KeyCode._from_name('F2', 'KEY_F2')
-    f3 = KeyCode._from_name('F3', 'KEY_F3')
-    f4 = KeyCode._from_name('F4', 'KEY_F4')
-    f5 = KeyCode._from_name('F5', 'KEY_F5')
-    f6 = KeyCode._from_name('F6', 'KEY_F6')
-    f7 = KeyCode._from_name('F7', 'KEY_F7')
-    f8 = KeyCode._from_name('F8', 'KEY_F8')
-    f9 = KeyCode._from_name('F9', 'KEY_F9')
-    f10 = KeyCode._from_name('F10', 'KEY_F10')
-    f11 = KeyCode._from_name('F11', 'KEY_F11')
-    f12 = KeyCode._from_name('F12', 'KEY_F12')
-    f13 = KeyCode._from_name('F13', 'KEY_F13')
-    f14 = KeyCode._from_name('F14', 'KEY_F14')
-    f15 = KeyCode._from_name('F15', 'KEY_F15')
-    f16 = KeyCode._from_name('F16', 'KEY_F16')
-    f17 = KeyCode._from_name('F17', 'KEY_F17')
-    f18 = KeyCode._from_name('F18', 'KEY_F18')
-    f19 = KeyCode._from_name('F19', 'KEY_F19')
-    f20 = KeyCode._from_name('F20', 'KEY_F20')
-    home = KeyCode._from_name('Home', 'KEY_HOME')
-    left = KeyCode._from_name('Left', 'KEY_LEFT')
-    page_down = KeyCode._from_name('Page_Down', 'KEY_PAGEDOWN')
-    page_up = KeyCode._from_name('Page_Up', 'KEY_PAGEUP')
-    right = KeyCode._from_name('Right', 'KEY_RIGHT')
-    shift = KeyCode._from_name('Shift_L', 'KEY_LEFTSHIFT')
-    shift_l = KeyCode._from_name('Shift_L', 'KEY_LEFTSHIFT')
-    shift_r = KeyCode._from_name('Shift_R', 'KEY_RIGHTSHIFT')
-    space = KeyCode._from_name('space', 'KEY_SPACE', char=' ')
-    tab = KeyCode._from_name('Tab', 'KEY_TAB', char='\t')
-    up = KeyCode._from_name('Up', 'KEY_UP')
+    alt = KeyCode._from_name("Alt_L", "KEY_LEFTALT")
+    alt_l = KeyCode._from_name("Alt_L", "KEY_LEFTALT")
+    alt_r = KeyCode._from_name("Alt_R", "KEY_RIGHTALT")
+    alt_gr = KeyCode._from_name("Mode_switch", "KEY_RIGHTALT")
+    backspace = KeyCode._from_name("BackSpace", "KEY_BACKSPACE")
+    caps_lock = KeyCode._from_name("Caps_Lock", "KEY_CAPSLOCK")
+    cmd = KeyCode._from_name("Super_L", "KEY_LEFTMETA")
+    cmd_l = KeyCode._from_name("Super_L", "KEY_LEFTMETA")
+    cmd_r = KeyCode._from_name("Super_R", "KEY_RIGHTMETA")
+    ctrl = KeyCode._from_name("Control_L", "KEY_LEFTCTRL")
+    ctrl_l = KeyCode._from_name("Control_L", "KEY_LEFTCTRL")
+    ctrl_r = KeyCode._from_name("Control_R", "KEY_RIGHTCTRL")
+    delete = KeyCode._from_name("Delete", "KEY_DELETE")
+    down = KeyCode._from_name("Down", "KEY_DOWN")
+    end = KeyCode._from_name("End", "KEY_END")
+    enter = KeyCode._from_name("Return", "KEY_ENTER")
+    esc = KeyCode._from_name("Escape", "KEY_ESC")
+    f1 = KeyCode._from_name("F1", "KEY_F1")
+    f2 = KeyCode._from_name("F2", "KEY_F2")
+    f3 = KeyCode._from_name("F3", "KEY_F3")
+    f4 = KeyCode._from_name("F4", "KEY_F4")
+    f5 = KeyCode._from_name("F5", "KEY_F5")
+    f6 = KeyCode._from_name("F6", "KEY_F6")
+    f7 = KeyCode._from_name("F7", "KEY_F7")
+    f8 = KeyCode._from_name("F8", "KEY_F8")
+    f9 = KeyCode._from_name("F9", "KEY_F9")
+    f10 = KeyCode._from_name("F10", "KEY_F10")
+    f11 = KeyCode._from_name("F11", "KEY_F11")
+    f12 = KeyCode._from_name("F12", "KEY_F12")
+    f13 = KeyCode._from_name("F13", "KEY_F13")
+    f14 = KeyCode._from_name("F14", "KEY_F14")
+    f15 = KeyCode._from_name("F15", "KEY_F15")
+    f16 = KeyCode._from_name("F16", "KEY_F16")
+    f17 = KeyCode._from_name("F17", "KEY_F17")
+    f18 = KeyCode._from_name("F18", "KEY_F18")
+    f19 = KeyCode._from_name("F19", "KEY_F19")
+    f20 = KeyCode._from_name("F20", "KEY_F20")
+    home = KeyCode._from_name("Home", "KEY_HOME")
+    left = KeyCode._from_name("Left", "KEY_LEFT")
+    page_down = KeyCode._from_name("Page_Down", "KEY_PAGEDOWN")
+    page_up = KeyCode._from_name("Page_Up", "KEY_PAGEUP")
+    right = KeyCode._from_name("Right", "KEY_RIGHT")
+    shift = KeyCode._from_name("Shift_L", "KEY_LEFTSHIFT")
+    shift_l = KeyCode._from_name("Shift_L", "KEY_LEFTSHIFT")
+    shift_r = KeyCode._from_name("Shift_R", "KEY_RIGHTSHIFT")
+    space = KeyCode._from_name("space", "KEY_SPACE", char=" ")
+    tab = KeyCode._from_name("Tab", "KEY_TAB", char="\t")
+    up = KeyCode._from_name("Up", "KEY_UP")
 
-    media_play_pause = KeyCode._from_name('Play', 'KEY_PLAYPAUSE')
-    media_volume_mute = KeyCode._from_name('Mute', 'KEY_MUTE')
-    media_volume_down = KeyCode._from_name('LowerVolume', 'KEY_VOLUMEDOWN')
-    media_volume_up = KeyCode._from_name('RaiseVolume', 'KEY_VOLUMEUP')
-    media_previous = KeyCode._from_name('Prev', 'KEY_PREVIOUSSONG')
-    media_next = KeyCode._from_name('Next', 'KEY_NEXTSONG')
+    media_play_pause = KeyCode._from_name("Play", "KEY_PLAYPAUSE")
+    media_volume_mute = KeyCode._from_name("Mute", "KEY_MUTE")
+    media_volume_down = KeyCode._from_name("LowerVolume", "KEY_VOLUMEDOWN")
+    media_volume_up = KeyCode._from_name("RaiseVolume", "KEY_VOLUMEUP")
+    media_previous = KeyCode._from_name("Prev", "KEY_PREVIOUSSONG")
+    media_next = KeyCode._from_name("Next", "KEY_NEXTSONG")
 
-    insert = KeyCode._from_name('Insert', 'KEY_INSERT')
-    menu = KeyCode._from_name('Menu', 'KEY_MENU')
-    num_lock = KeyCode._from_name('Num_Lock', 'KEY_NUMLOCK')
-    pause = KeyCode._from_name('Pause', 'KEY_PAUSE')
-    print_screen = KeyCode._from_name('Print', 'KEY_SYSRQ')
-    scroll_lock = KeyCode._from_name('Scroll_Lock', 'KEY_SCROLLLOCK')
+    insert = KeyCode._from_name("Insert", "KEY_INSERT")
+    menu = KeyCode._from_name("Menu", "KEY_MENU")
+    num_lock = KeyCode._from_name("Num_Lock", "KEY_NUMLOCK")
+    pause = KeyCode._from_name("Pause", "KEY_PAUSE")
+    print_screen = KeyCode._from_name("Print", "KEY_SYSRQ")
+    scroll_lock = KeyCode._from_name("Scroll_Lock", "KEY_SCROLLLOCK")
+
+
 # pylint: enable=W0212
 
 
 class Layout(object):
-    """A description of the keyboard layout.
-    """
+    """A description of the keyboard layout."""
+
     #: A regular expression to parse keycodes in the dumpkeys output
     #:
     #: The groups are: keycode number, key names.
-    KEYCODE_RE = re.compile(
-        r'keycode\s+(\d+)\s+=(.*)')
+    KEYCODE_RE = re.compile(r"keycode\s+(\d+)\s+=(.*)")
 
     class Key(object):
-        """A key in a keyboard layout.
-        """
+        """A key in a keyboard layout."""
+
         def __init__(self, normal, shifted, alt, alt_shifted):
-            self._values = (
-                normal,
-                shifted,
-                alt,
-                alt_shifted)
+            self._values = (normal, shifted, alt, alt_shifted)
 
         def __str__(self):
-            return ('<'
-                'normal: {}, '
-                'shifted: {}, '
-                'alternative: {}, '
-                'shifted alternative: {}>').format(
-                    self.normal, self.shifted, self.alt, self.alt_shifted)
+            return (
+                "<"
+                "normal: {}, "
+                "shifted: {}, "
+                "alternative: {}, "
+                "shifted alternative: {}>"
+            ).format(self.normal, self.shifted, self.alt, self.alt_shifted)
 
         __repr__ = __str__
 
@@ -174,41 +171,42 @@ class Layout(object):
 
         @property
         def normal(self):
-            """The normal key.
-            """
+            """The normal key."""
             return self._values[0]
 
         @property
         def shifted(self):
-            """The shifted key.
-            """
+            """The shifted key."""
             return self._values[1]
 
         @property
         def alt(self):
-            """The alternative key.
-            """
+            """The alternative key."""
             return self._values[2]
 
         @property
         def alt_shifted(self):
-            """The shifted alternative key.
-            """
+            """The shifted alternative key."""
             return self._values[3]
 
     def __init__(self):
         def as_char(k):
             return k.value.char if isinstance(k, Key) else k.char
+
         self._vk_table = self._load()
         self._char_table = {
             as_char(key): (
                 vk,
-                set()
-                    | {Key.shift} if i & 1 else set()
-                    | {Key.alt_gr} if i & 2 else set())
+                (
+                    set() | {Key.shift}
+                    if i & 1
+                    else set() | {Key.alt_gr} if i & 2 else set()
+                ),
+            )
             for vk, keys in self._vk_table.items()
             for i, key in enumerate(keys)
-            if key is not None and as_char(key) is not None}
+            if key is not None and as_char(key) is not None
+        }
 
     def for_vk(self, vk, modifiers):
         """Reads a key for a virtual key code and modifier state.
@@ -224,7 +222,8 @@ class Layout(object):
         return self._vk_table[vk][
             0
             | (1 if Key.shift in modifiers else 0)
-            | (2 if Key.alt_gr in modifiers else 0)]
+            | (2 if Key.alt_gr in modifiers else 0)
+        ]
 
     def for_char(self, char):
         """Reads a virtual key code and modifier state for a character.
@@ -246,12 +245,12 @@ class Layout(object):
         """
         result = {}
         for keycode, names in self.KEYCODE_RE.findall(
-                subprocess.check_output(
-                    ['dumpkeys', '--full-table', '--keys-only']).decode('utf-8')):
+            subprocess.check_output(["dumpkeys", "--full-table", "--keys-only"]).decode(
+                "utf-8"
+            )
+        ):
             vk = int(keycode)
-            keys = tuple(
-                self._parse(vk, name)
-                for name in names.split()[:4])
+            keys = tuple(self._parse(vk, name) for name in names.split()[:4])
             if any(key is not None for key in keys):
                 result[vk] = self.Key(*keys)
         return result
@@ -267,14 +266,11 @@ class Layout(object):
         """
         try:
             # First try special keys...
-            return next(
-                key
-                for key in Key
-                if key.value._x_name == name)
+            return next(key for key in Key if key.value._x_name == name)
         except StopIteration:
             # ...then characters...
             try:
-                _, char = xorg_keysyms.SYMBOLS[name.lstrip('+')]
+                _, char = xorg_keysyms.SYMBOLS[name.lstrip("+")]
                 if char:
                     return KeyCode.from_char(char, vk=vk)
             except KeyError:
@@ -282,17 +278,20 @@ class Layout(object):
 
             # ...and finally special dumpkeys names
             try:
-                return KeyCode.from_char({
-                    'one': '1',
-                    'two': '2',
-                    'three': '3',
-                    'four': '4',
-                    'five': '5',
-                    'six': '6',
-                    'seven': '7',
-                    'eight': '8',
-                    'nine': '9',
-                    'zero': '0'}[name])
+                return KeyCode.from_char(
+                    {
+                        "one": "1",
+                        "two": "2",
+                        "three": "3",
+                        "four": "4",
+                        "five": "5",
+                        "six": "6",
+                        "seven": "7",
+                        "eight": "8",
+                        "nine": "9",
+                        "zero": "0",
+                    }[name]
+                )
             except KeyError:
                 pass
 
@@ -307,7 +306,7 @@ class Controller(_base.Controller):
         self._dev = evdev.UInput()
 
     def __del__(self):
-        if hasattr(self, '_dev'):
+        if hasattr(self, "_dev"):
             self._dev.close()
 
     def _handle(self, key, is_press):
@@ -324,10 +323,12 @@ class Controller(_base.Controller):
                 vk, required_modifiers = self._layout.for_char(key.char)
                 to_press = {
                     getattr(evdev.ecodes, key.value._kernel_name)
-                    for key in (required_modifiers - modifiers)}
+                    for key in (required_modifiers - modifiers)
+                }
                 to_release = {
                     getattr(evdev.ecodes, key.value._kernel_name)
-                    for key in (modifiers - required_modifiers)}
+                    for key in (modifiers - required_modifiers)
+                }
         else:
             to_release = set()
             to_press = set()
@@ -364,9 +365,9 @@ class Controller(_base.Controller):
 
         :return: a virtual key code and possible required modifiers
         """
-        if hasattr(key, 'vk') and key.vk is not None:
+        if hasattr(key, "vk") and key.vk is not None:
             return (key.vk, None)
-        elif hasattr(key, 'char') and key.char is not None:
+        elif hasattr(key, "char") and key.char is not None:
             return self._layout.for_char(key.char)
         else:
             raise ValueError(key)
@@ -384,8 +385,7 @@ class Controller(_base.Controller):
 
 
 class Listener(ListenerMixin, _base.Listener):
-    _EVENTS = (
-        evdev.ecodes.EV_KEY,)
+    _EVENTS = (evdev.ecodes.EV_KEY,)
 
     #: A
     _MODIFIERS = {
@@ -395,7 +395,8 @@ class Listener(ListenerMixin, _base.Listener):
         Key.alt_gr.value.vk: Key.alt_gr,
         Key.shift.value.vk: Key.shift,
         Key.shift_l.value.vk: Key.shift,
-        Key.shift_r.value.vk: Key.shift}
+        Key.shift_r.value.vk: Key.shift,
+    }
 
     def __init__(self, *args, **kwargs):
         super(Listener, self).__init__(*args, **kwargs)
@@ -419,10 +420,7 @@ class Listener(ListenerMixin, _base.Listener):
             key = self._layout.for_vk(vk, self._modifiers)
         except KeyError:
             try:
-                key = next(
-                    key
-                    for key in Key
-                    if key.value.vk == vk)
+                key = next(key for key in Key if key.value.vk == vk)
             except StopIteration:
                 key = KeyCode.from_vk(vk)
 
@@ -436,10 +434,12 @@ try:
     #: The keyboard layout.
     LAYOUT = Layout()
 except subprocess.CalledProcessError as e:
-    raise ImportError('failed to load keyboard layout: "' + str(e) + (
-        '"; please make sure you are root' if os.getuid() != 1 else '"'))
+    raise ImportError(
+        'failed to load keyboard layout: "'
+        + str(e)
+        + ('"; please make sure you are root' if os.getuid() != 1 else '"')
+    )
 except OSError as e:
-    raise ImportError({
-        errno.ENOENT: 'the binary dumpkeys is not installed'}.get(
-            e.args[0],
-            str(e)))
+    raise ImportError(
+        {errno.ENOENT: "the binary dumpkeys is not installed"}.get(e.args[0], str(e))
+    )
