@@ -39,22 +39,11 @@ from six.moves import queue
 
 #: Possible resolutions for import related errors.
 RESOLUTIONS = {
-<<<<<<< HEAD
-    'darwin': 'Please make sure that you have Python bindings for the '
-        'system frameworks installed',
-    'uinput': 'Please make sure that you are running as root, and that '
-        'the utility dumpkeys is installed',
-    'xorg': 'Please make sure that you have an X server running, and that '
-        'the DISPLAY environment variable is set correctly'}
-=======
-    "darwin": "Please make sure that you have Python bindings for the "
-    "system frameworks installed",
-    "uinput": "Please make sure that you are running as root, and that "
-    "the utility dumpkeys is installed",
+    "darwin": "Please make sure that you have Python bindings for the " "system frameworks installed",
+    "uinput": "Please make sure that you are running as root, and that " "the utility dumpkeys is installed",
     "xorg": "Please make sure that you have an X server running, and that "
     "the DISPLAY environment variable is set correctly",
 }
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 def backend(package):
@@ -63,20 +52,7 @@ def backend(package):
     :param str package: The package for which to load a backend.
     """
     backend_name = os.environ.get(
-<<<<<<< HEAD
-        'PYNPUT_BACKEND_{}'.format(package.rsplit('.')[-1].upper()),
-        os.environ.get('PYNPUT_BACKEND', None))
-    if backend_name:
-        modules = [backend_name]
-    elif sys.platform == 'darwin':
-        modules = ['darwin']
-    elif sys.platform == 'win32':
-        modules = ['win32']
-    else:
-        modules = ['xorg']
-=======
-        "PYNPUT_BACKEND_{}".format(package.rsplit(".")[-1].upper()),
-        os.environ.get("PYNPUT_BACKEND", None),
+        "PYNPUT_BACKEND_{}".format(package.rsplit(".")[-1].upper()), os.environ.get("PYNPUT_BACKEND", None)
     )
     if backend_name:
         modules = [backend_name]
@@ -86,42 +62,23 @@ def backend(package):
         modules = ["win32"]
     else:
         modules = ["xorg"]
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     errors = []
     resolutions = []
     for module in modules:
         try:
-<<<<<<< HEAD
-            return importlib.import_module('._' + module, package)
-=======
             return importlib.import_module("._" + module, package)
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         except ImportError as e:
             errors.append(e)
             if module in RESOLUTIONS:
                 resolutions.append(RESOLUTIONS[module])
 
-<<<<<<< HEAD
-    raise ImportError('this platform is not supported: {}'.format(
-        '; '.join(str(e) for e in errors)) + ('\n\n'
-            'Try one of the following resolutions:\n\n'
-            + '\n\n'.join(
-                ' * {}'.format(s)
-                for s in resolutions))
-            if resolutions else '')
-=======
     raise ImportError(
         "this platform is not supported: {}".format("; ".join(str(e) for e in errors))
-        + (
-            "\n\n"
-            "Try one of the following resolutions:\n\n"
-            + "\n\n".join(" * {}".format(s) for s in resolutions)
-        )
+        + ("\n\n" "Try one of the following resolutions:\n\n" + "\n\n".join(" * {}".format(s) for s in resolutions))
         if resolutions
         else ""
     )
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 def prefix(base, cls):
@@ -131,17 +88,9 @@ def prefix(base, cls):
     The prefix if the name of the module containing the class that is an
     immediate subclass of ``base`` among the super classes of ``cls``.
     """
-<<<<<<< HEAD
-    for super_cls in filter(
-            lambda cls: issubclass(cls, base),
-            cls.__mro__[1:]):
-        if super_cls is base:
-            return cls.__module__.rsplit('.', 1)[-1][1:] + '_'
-=======
     for super_cls in filter(lambda cls: issubclass(cls, base), cls.__mro__[1:]):
         if super_cls is base:
             return cls.__module__.rsplit(".", 1)[-1][1:] + "_"
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         else:
             result = prefix(base, super_cls)
             if result is not None:
@@ -174,18 +123,12 @@ class AbstractListener(threading.Thread):
 
         Any callback that is falsy will be ignored.
     """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     class StopException(Exception):
         """If an event listener callback raises this exception, the current
         listener is stopped.
         """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         pass
 
     #: Exceptions that are handled outside of the emitter and should thus not
@@ -199,10 +142,7 @@ class AbstractListener(threading.Thread):
             def inner(*args):
                 if f(*args) is False:
                     raise self.StopException()
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             return inner
 
         self._suppress = suppress
@@ -221,22 +161,12 @@ class AbstractListener(threading.Thread):
 
     @property
     def suppress(self):
-<<<<<<< HEAD
-        """Whether to suppress events.
-        """
-=======
         """Whether to suppress events."""
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         return self._suppress
 
     @property
     def running(self):
-<<<<<<< HEAD
-        """Whether the listener is currently running.
-        """
-=======
         """Whether the listener is currently running."""
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         return self._running
 
     def stop(self):
@@ -263,24 +193,14 @@ class AbstractListener(threading.Thread):
         self.stop()
 
     def wait(self):
-<<<<<<< HEAD
-        """Waits for this listener to become ready.
-        """
-=======
         """Waits for this listener to become ready."""
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         self._condition.acquire()
         while not self._ready:
             self._condition.wait()
         self._condition.release()
 
     def run(self):
-<<<<<<< HEAD
-        """The thread runner method.
-        """
-=======
         """The thread runner method."""
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         self._running = True
         self._thread = threading.current_thread()
         self._run()
@@ -297,10 +217,7 @@ class AbstractListener(threading.Thread):
         gracefully. If any other exception is caught, it will be propagated to
         the thread calling :meth:`join` and reraised there.
         """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         @functools.wraps(f)
         def inner(self, *args, **kwargs):
             # pylint: disable=W0702; we want to catch all exception
@@ -309,18 +226,8 @@ class AbstractListener(threading.Thread):
             except Exception as e:
                 if not isinstance(e, self._HANDLED_EXCEPTIONS):
                     if not isinstance(e, AbstractListener.StopException):
-<<<<<<< HEAD
-                        self._log.exception(
-                            'Unhandled exception in listener callback')
-                    self._queue.put(
-                        None if isinstance(e, cls.StopException)
-                        else sys.exc_info())
-=======
                         self._log.exception("Unhandled exception in listener callback")
-                    self._queue.put(
-                        None if isinstance(e, cls.StopException) else sys.exc_info()
-                    )
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
+                    self._queue.put(None if isinstance(e, cls.StopException) else sys.exc_info())
                     self.stop()
                 raise
             # pylint: enable=W0702
@@ -355,25 +262,12 @@ class AbstractListener(threading.Thread):
     def join(self, timeout=None, *args):
         start = time.time()
         super(AbstractListener, self).join(timeout, *args)
-<<<<<<< HEAD
-        timeout = max(0.0, timeout - (time.time() - start)) \
-            if timeout is not None \
-            else None
-=======
-        timeout = (
-            max(0.0, timeout - (time.time() - start)) if timeout is not None else None
-        )
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
+        timeout = max(0.0, timeout - (time.time() - start)) if timeout is not None else None
 
         # Reraise any exceptions; make sure not to block if a timeout was
         # provided
         try:
-<<<<<<< HEAD
-            exc_type, exc_value, exc_traceback = self._queue.get(
-                timeout=timeout)
-=======
             exc_type, exc_value, exc_traceback = self._queue.get(timeout=timeout)
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             six.reraise(exc_type, exc_value, exc_traceback)
         except queue.Empty:
             pass
@@ -382,35 +276,15 @@ class AbstractListener(threading.Thread):
 
 
 class Events(object):
-<<<<<<< HEAD
-    """A base class to enable iterating over events.
-    """
-=======
     """A base class to enable iterating over events."""
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     #: The listener class providing events.
     _Listener = None
 
     class Event(object):
         def __str__(self):
-<<<<<<< HEAD
-            return '{}({})'.format(
-                self.__class__.__name__,
-                ', '.join(
-                    '{}={}'.format(k, v)
-                    for (k, v) in vars(self).items()))
-
-        def __eq__(self, other):
-            return self.__class__ == other.__class__ \
-                and dir(self) == dir(other) \
-                and all(
-                    getattr(self, k) == getattr(other, k)
-                    for k in dir(self))
-=======
             return "{}({})".format(
-                self.__class__.__name__,
-                ", ".join("{}={}".format(k, v) for (k, v) in vars(self).items()),
+                self.__class__.__name__, ", ".join("{}={}".format(k, v) for (k, v) in vars(self).items())
             )
 
         def __eq__(self, other):
@@ -419,21 +293,12 @@ class Events(object):
                 and dir(self) == dir(other)
                 and all(getattr(self, k) == getattr(other, k) for k in dir(self))
             )
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     def __init__(self, *args, **kwargs):
         super(Events, self).__init__()
         self._event_queue = queue.Queue()
         self._sentinel = object()
-<<<<<<< HEAD
-        self._listener = self._Listener(*args, **{
-            key: self._event_mapper(value)
-            for (key, value) in kwargs.items()})
-=======
-        self._listener = self._Listener(
-            *args, **{key: self._event_mapper(value) for (key, value) in kwargs.items()}
-        )
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
+        self._listener = self._Listener(*args, **{key: self._event_mapper(value) for (key, value) in kwargs.items()})
         self.start = self._listener.start
 
     def __enter__(self):
@@ -485,10 +350,7 @@ class Events(object):
 
         :return: a callback
         """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         @functools.wraps(event)
         def inner(*args):
             try:
@@ -505,10 +367,7 @@ class NotifierMixin(object):
     This mixin can be used for controllers on platforms where sending fake
     events does not cause a listener to receive a notification.
     """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     def _emit(self, action, *args):
         """Sends a notification to all registered listeners.
 
@@ -539,10 +398,7 @@ class NotifierMixin(object):
         :meth:`_emit` will invoke the named method in the listener instance
         while the block is active.
         """
-<<<<<<< HEAD
-=======
 
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         @contextlib.contextmanager
         def receive(self):
             """Executes a code block with this listener instance registered as
@@ -558,11 +414,7 @@ class NotifierMixin(object):
         listener_class._controller_class = cls
 
         # Make sure this class has the necessary attributes
-<<<<<<< HEAD
-        if not hasattr(cls, '_listener_cache'):
-=======
         if not hasattr(cls, "_listener_cache"):
->>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             cls._listener_cache = set()
             cls._listener_lock = threading.Lock()
 
