@@ -34,7 +34,9 @@ def _logger(cls):
     """
     import logging
 
-    return logging.getLogger("{}.{}".format(".".join(cls.__module__.split(".", 2)[:2]), cls.__name__))
+    return logging.getLogger(
+        "{}.{}".format(".".join(cls.__module__.split(".", 2)[:2]), cls.__name__)
+    )
 
 
 from . import keyboard

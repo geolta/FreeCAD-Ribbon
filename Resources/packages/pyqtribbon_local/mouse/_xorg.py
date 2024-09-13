@@ -87,10 +87,15 @@ class Controller(_base.Controller):
     def _scroll(self, dx, dy):
         dx, dy = self._check_bounds(dx, dy)
         if dy:
-            self.click(button=Button.scroll_up if dy > 0 else Button.scroll_down, count=abs(dy))
+            self.click(
+                button=Button.scroll_up if dy > 0 else Button.scroll_down, count=abs(dy)
+            )
 
         if dx:
-            self.click(button=Button.scroll_right if dx > 0 else Button.scroll_left, count=abs(dx))
+            self.click(
+                button=Button.scroll_right if dx > 0 else Button.scroll_left,
+                count=abs(dx),
+            )
 
     def _press(self, button):
         with display_manager(self._display) as dm:
@@ -149,7 +154,13 @@ class Listener(ListenerMixin, _base.Listener):
 
     def _suppress_start(self, display):
         display.screen().root.grab_pointer(
-            True, self._event_mask, Xlib.X.GrabModeAsync, Xlib.X.GrabModeAsync, 0, 0, Xlib.X.CurrentTime
+            True,
+            self._event_mask,
+            Xlib.X.GrabModeAsync,
+            Xlib.X.GrabModeAsync,
+            0,
+            0,
+            Xlib.X.CurrentTime,
         )
 
     def _suppress_stop(self, display):

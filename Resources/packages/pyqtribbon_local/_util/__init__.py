@@ -39,8 +39,10 @@ from six.moves import queue
 
 #: Possible resolutions for import related errors.
 RESOLUTIONS = {
-    "darwin": "Please make sure that you have Python bindings for the " "system frameworks installed",
-    "uinput": "Please make sure that you are running as root, and that " "the utility dumpkeys is installed",
+    "darwin": "Please make sure that you have Python bindings for the "
+    "system frameworks installed",
+    "uinput": "Please make sure that you are running as root, and that "
+    "the utility dumpkeys is installed",
     "xorg": "Please make sure that you have an X server running, and that "
     "the DISPLAY environment variable is set correctly",
 }
@@ -52,7 +54,8 @@ def backend(package):
     :param str package: The package for which to load a backend.
     """
     backend_name = os.environ.get(
-        "PYNPUT_BACKEND_{}".format(package.rsplit(".")[-1].upper()), os.environ.get("PYNPUT_BACKEND", None)
+        "PYNPUT_BACKEND_{}".format(package.rsplit(".")[-1].upper()),
+        os.environ.get("PYNPUT_BACKEND", None),
     )
     if backend_name:
         modules = [backend_name]
@@ -75,7 +78,11 @@ def backend(package):
 
     raise ImportError(
         "this platform is not supported: {}".format("; ".join(str(e) for e in errors))
-        + ("\n\n" "Try one of the following resolutions:\n\n" + "\n\n".join(" * {}".format(s) for s in resolutions))
+        + (
+            "\n\n"
+            "Try one of the following resolutions:\n\n"
+            + "\n\n".join(" * {}".format(s) for s in resolutions)
+        )
         if resolutions
         else ""
     )
@@ -227,7 +234,9 @@ class AbstractListener(threading.Thread):
                 if not isinstance(e, self._HANDLED_EXCEPTIONS):
                     if not isinstance(e, AbstractListener.StopException):
                         self._log.exception("Unhandled exception in listener callback")
-                    self._queue.put(None if isinstance(e, cls.StopException) else sys.exc_info())
+                    self._queue.put(
+                        None if isinstance(e, cls.StopException) else sys.exc_info()
+                    )
                     self.stop()
                 raise
             # pylint: enable=W0702
@@ -262,7 +271,9 @@ class AbstractListener(threading.Thread):
     def join(self, timeout=None, *args):
         start = time.time()
         super(AbstractListener, self).join(timeout, *args)
-        timeout = max(0.0, timeout - (time.time() - start)) if timeout is not None else None
+        timeout = (
+            max(0.0, timeout - (time.time() - start)) if timeout is not None else None
+        )
 
         # Reraise any exceptions; make sure not to block if a timeout was
         # provided
@@ -284,7 +295,8 @@ class Events(object):
     class Event(object):
         def __str__(self):
             return "{}({})".format(
-                self.__class__.__name__, ", ".join("{}={}".format(k, v) for (k, v) in vars(self).items())
+                self.__class__.__name__,
+                ", ".join("{}={}".format(k, v) for (k, v) in vars(self).items()),
             )
 
         def __eq__(self, other):
@@ -298,7 +310,9 @@ class Events(object):
         super(Events, self).__init__()
         self._event_queue = queue.Queue()
         self._sentinel = object()
-        self._listener = self._Listener(*args, **{key: self._event_mapper(value) for (key, value) in kwargs.items()})
+        self._listener = self._Listener(
+            *args, **{key: self._event_mapper(value) for (key, value) in kwargs.items()}
+        )
         self.start = self._listener.start
 
     def __enter__(self):
