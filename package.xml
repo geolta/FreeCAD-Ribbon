@@ -11,7 +11,7 @@
 
   <maintainer>Paul Ebbers, Geolta</maintainer>
 
-  <license file="LICENSE">MIT License</license>
+  <license file="LICENSE">GPL-3.0 license</license>
 
   <pythonmin>3.8.0</pythonmin>
 
