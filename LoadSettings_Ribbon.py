@@ -98,7 +98,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
-        self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
+        self.form.IconSize_Medium.textChanged.connect(
+            self.on_IconSize_Medium_TextChanged
+        )
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
 
         self.form.ShowText_Small.clicked.connect(self.on_ShowTextSmall_clicked)
@@ -115,7 +117,9 @@ class LoadDialog(Settings_ui.Ui_Form):
         def GenerateJsonExit():
             self.on_Close_clicked(self)
 
-        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
+        self.form.GenerateJsonExit.connect(
+            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
+        )
         # endregion
 
         return
@@ -135,7 +139,9 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_BackUpLocation_clicked(self):
         BackupFolder = ""
-        BackupFolder = StandardFunctions.GetFolder(parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION)
+        BackupFolder = StandardFunctions.GetFolder(
+            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
+        )
         if BackupFolder != "":
             self.pathBackup = BackupFolder
             self.form.label_4.setText(BackupFolder)
@@ -146,13 +152,17 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
-        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Small", int(self.form.IconSize_Small.text())
+        )
         self.settingChanged = True
         return
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
-        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
+        Parameters_Ribbon.Settings.SetIntSetting(
+            "IconSize_Medium", int(self.form.IconSize_Medium.text())
+        )
         self.settingChanged = True
         return
 
