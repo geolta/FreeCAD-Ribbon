@@ -41,12 +41,13 @@ import platform
 import time
 
 
-# import modules for keypress detection based on OS
-if platform.system() == "Linux" or platform.system() == "Darwin":
-    import tty
-    import termios
-if platform.system() == "Windows":
-    import keyboard
+# # import modules for keypress detection based on OS
+# if platform.system() == "Linux" or platform.system() == "Darwin":
+#     import tty
+#     import termios
+# if platform.system() == "Windows":
+#     # import keyboard
+#     from pynput import keyboard
 
 
 # Get the resources
@@ -66,6 +67,13 @@ except ImportError:
     from pyqtribbon_local.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 
     print("pyqtribbon used local")
+
+try:
+    from pynput import keyboard
+except ImportError:
+    from pynput_local import keyboard
+
+    print("pynput used local")
 
 
 # Get the main window of FreeCAD
@@ -169,6 +177,19 @@ class ModernMenu(RibbonBar):
             except Exception:  # Use Qt incase of an error
                 self.UseQtKeyPress = True
         return
+
+    def on_press(self, key):
+        try:
+            print("alphanumeric key {0} pressed".format(key.char))
+        except AttributeError:
+            print("special key {0} pressed".format(key))
+
+    def on_release(self, key):
+        print("{0} released".format(key))
+        if key == keyboard.Key.alt:
+            self.ToggleMenuBar()
+            # Stop listener
+            return False
 
     # The backup keypress event
     def keyPressEvent(self, event):
