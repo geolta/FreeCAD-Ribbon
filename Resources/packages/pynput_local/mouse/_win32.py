@@ -30,7 +30,14 @@ import enum
 from ctypes import windll, wintypes
 
 from pynput._util import NotifierMixin
-from pynput._util.win32 import INPUT, INPUT_union, ListenerMixin, MOUSEINPUT, SendInput, SystemHook
+from pynput._util.win32 import (
+    INPUT,
+    INPUT_union,
+    ListenerMixin,
+    MOUSEINPUT,
+    SendInput,
+    SystemHook,
+)
 from . import _base
 
 #: A constant used as a factor when constructing mouse scroll data.
@@ -74,7 +81,12 @@ class Controller(NotifierMixin, _base.Controller):
                 ctypes.byref(
                     INPUT(
                         type=INPUT.MOUSE,
-                        value=INPUT_union(mi=MOUSEINPUT(dwFlags=MOUSEINPUT.WHEEL, mouseData=int(dy * WHEEL_DELTA))),
+                        value=INPUT_union(
+                            mi=MOUSEINPUT(
+                                dwFlags=MOUSEINPUT.WHEEL,
+                                mouseData=int(dy * WHEEL_DELTA),
+                            )
+                        ),
                     )
                 ),
                 ctypes.sizeof(INPUT),
@@ -86,7 +98,12 @@ class Controller(NotifierMixin, _base.Controller):
                 ctypes.byref(
                     INPUT(
                         type=INPUT.MOUSE,
-                        value=INPUT_union(mi=MOUSEINPUT(dwFlags=MOUSEINPUT.HWHEEL, mouseData=int(dx * WHEEL_DELTA))),
+                        value=INPUT_union(
+                            mi=MOUSEINPUT(
+                                dwFlags=MOUSEINPUT.HWHEEL,
+                                mouseData=int(dx * WHEEL_DELTA),
+                            )
+                        ),
                     )
                 ),
                 ctypes.sizeof(INPUT),
@@ -102,7 +119,11 @@ class Controller(NotifierMixin, _base.Controller):
             ctypes.byref(
                 INPUT(
                     type=INPUT.MOUSE,
-                    value=INPUT_union(mi=MOUSEINPUT(dwFlags=button.value[1], mouseData=button.value[2])),
+                    value=INPUT_union(
+                        mi=MOUSEINPUT(
+                            dwFlags=button.value[1], mouseData=button.value[2]
+                        )
+                    ),
                 )
             ),
             ctypes.sizeof(INPUT),
@@ -114,7 +135,11 @@ class Controller(NotifierMixin, _base.Controller):
             ctypes.byref(
                 INPUT(
                     type=INPUT.MOUSE,
-                    value=INPUT_union(mi=MOUSEINPUT(dwFlags=button.value[0], mouseData=button.value[2])),
+                    value=INPUT_union(
+                        mi=MOUSEINPUT(
+                            dwFlags=button.value[0], mouseData=button.value[2]
+                        )
+                    ),
                 )
             ),
             ctypes.sizeof(INPUT),

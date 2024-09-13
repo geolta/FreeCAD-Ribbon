@@ -46,7 +46,9 @@ class ListenerMixin(object):
 
     def __init__(self, *args, **kwargs):
         super(ListenerMixin, self).__init__(*args, **kwargs)
-        self._dev = self._device(self._options.get("device_paths", evdev.list_devices()))
+        self._dev = self._device(
+            self._options.get("device_paths", evdev.list_devices())
+        )
         if self.suppress:
             self._dev.grab()
 
@@ -75,7 +77,11 @@ class ListenerMixin(object):
 
             # Does this device provide more handled event codes?
             capabilities = next_dev.capabilities()
-            next_count = sum(len(codes) for event, codes in capabilities.items() if event in self._EVENTS)
+            next_count = sum(
+                len(codes)
+                for event, codes in capabilities.items()
+                if event in self._EVENTS
+            )
             if next_count > count:
                 dev = next_dev
                 count = next_count

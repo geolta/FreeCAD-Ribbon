@@ -40,6 +40,7 @@ class KeyCode(object):
     A :class:`KeyCode` represents the description of a key code used by the
     operating system.
     """
+
     #: The names of attributes used as platform extensions.
     _PLATFORM_EXTENSIONS = []
 
@@ -51,7 +52,8 @@ class KeyCode(object):
         if self.is_dead:
             try:
                 self.combining = unicodedata.lookup(
-                    'COMBINING ' + unicodedata.name(self.char))
+                    "COMBINING " + unicodedata.name(self.char)
+                )
             except KeyError:
                 self.is_dead = False
                 self.combining = None
@@ -65,14 +67,13 @@ class KeyCode(object):
         if kwargs:
             raise ValueError(kwargs)
 
-
     def __repr__(self):
         if self.is_dead:
-            return '[%s]' % repr(self.char)
+            return "[%s]" % repr(self.char)
         if self.char is not None:
             return repr(self.char)
         else:
-            return '<%d>' % self.vk
+            return "<%d>" % self.vk
 
     def __str__(self):
         return repr(self)
@@ -84,8 +85,8 @@ class KeyCode(object):
             return self.char == other.char and self.is_dead == other.is_dead
         else:
             return self.vk == other.vk and all(
-                getattr(self, f) == getattr(other, f)
-                for f in self._PLATFORM_EXTENSIONS)
+                getattr(self, f) == getattr(other, f) for f in self._PLATFORM_EXTENSIONS
+            )
 
     def __hash__(self):
         return hash(repr(self))
@@ -111,14 +112,12 @@ class KeyCode(object):
 
         # Joining two of the same keycodes, or joining with space, yields the
         # non-dead version of the key
-        if key.char == ' ' or self == key:
+        if key.char == " " or self == key:
             return self.from_char(self.char)
 
         # Otherwise we combine the characters
         if key.char is not None:
-            combined = unicodedata.normalize(
-                'NFC',
-                key.char + self.combining)
+            combined = unicodedata.normalize("NFC", key.char + self.combining)
             if combined:
                 return self.from_char(combined)
 
@@ -167,6 +166,7 @@ class Key(enum.Enum):
     may have additional buttons, but these are guaranteed to be present
     everywhere.
     """
+
     #: A generic Alt key. This is a modifier.
     alt = KeyCode.from_vk(0)
 
@@ -317,8 +317,8 @@ class Key(enum.Enum):
 
 
 class Controller(object):
-    """A controller for sending virtual keyboard events to the system.
-    """
+    """A controller for sending virtual keyboard events to the system."""
+
     #: The virtual key codes
     _KeyCode = KeyCode
 
@@ -331,6 +331,7 @@ class Controller(object):
 
         Its first argument is the ``key`` parameter.
         """
+
         pass
 
     class InvalidCharacterException(Exception):
@@ -340,6 +341,7 @@ class Controller(object):
         Its first argument is the index of the character in the string, and the
         second the character.
         """
+
         pass
 
     def __init__(self):
@@ -485,6 +487,7 @@ class Controller(object):
             encountered
         """
         from . import _CONTROL_CODES
+
         for i, character in enumerate(string):
             key = _CONTROL_CODES.get(character, character)
             try:
@@ -516,9 +519,7 @@ class Controller(object):
         This ensures that the modifiers cannot be modified by another thread.
         """
         with self._modifiers_lock:
-            yield set(
-                self._as_modifier(modifier)
-                for modifier in self._modifiers)
+            yield set(self._as_modifier(modifier) for modifier in self._modifiers)
 
     @property
     def alt_pressed(self):
@@ -620,6 +621,7 @@ class Controller(object):
             modifier
         """
         from . import _NORMAL_MODIFIERS
+
         return _NORMAL_MODIFIERS.get(key, None)
 
     def _handle(self, key, is_press):
@@ -700,17 +702,20 @@ class Listener(AbstractListener):
             If ``self.suppress_event()`` is called, the event is suppressed
             system wide.
     """
-    def __init__(self, on_press=None, on_release=None, suppress=False,
-                 **kwargs):
+
+    def __init__(self, on_press=None, on_release=None, suppress=False, **kwargs):
         self._log = _logger(self.__class__)
         option_prefix = prefix(Listener, self.__class__)
         self._options = {
-            key[len(option_prefix):]: value
+            key[len(option_prefix) :]: value
             for key, value in kwargs.items()
-            if key.startswith(option_prefix)}
+            if key.startswith(option_prefix)
+        }
         super(Listener, self).__init__(
-            on_press=on_press, on_release=on_release, suppress=suppress)
-# pylint: enable=W0223
+            on_press=on_press, on_release=on_release, suppress=suppress
+        )
+
+    # pylint: enable=W0223
 
     def canonical(self, key):
         """Performs normalisation of a key.
@@ -729,6 +734,7 @@ class Listener(AbstractListener):
         :rtype: Key or KeyCode
         """
         from pynput.keyboard import Key, KeyCode, _NORMAL_MODIFIERS
+
         if isinstance(key, KeyCode) and key.char is not None:
             return KeyCode.from_char(key.char.lower())
         elif isinstance(key, Key) and key.value in _NORMAL_MODIFIERS:

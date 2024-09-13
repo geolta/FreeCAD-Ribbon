@@ -76,33 +76,47 @@ class RibbonTitleWidget(QtWidgets.QFrame):
         # Application
         self._applicationButton = RibbonApplicationButton()  # type: ignore
         self._applicationButton.setIcon(QtGui.QIcon(DataFile("icons/python.png")))
-        self._applicationButton.setIconSize(QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight))
+        self._applicationButton.setIconSize(
+            QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight)
+        )
         self._applicationButton.setText("PyQtRibbon")
         self._applicationButton.setToolTip("PyQtRibbon")
 
         self._quickAccessToolBar = QtWidgets.QToolBar()
-        self._quickAccessToolBar.setIconSize(QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight))
+        self._quickAccessToolBar.setIconSize(
+            QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight)
+        )
         self._quickAccessToolBar.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self._quickAccessToolBar.setMovable(False)
         self._quickAccessToolBar.addWidget(self._applicationButton)
         self._quickAccessToolBarWidget = QtWidgets.QWidget()
-        self._quickAccessToolBarLayout = QtWidgets.QHBoxLayout(self._quickAccessToolBarWidget)
+        self._quickAccessToolBarLayout = QtWidgets.QHBoxLayout(
+            self._quickAccessToolBarWidget
+        )
         self._quickAccessToolBarLayout.setContentsMargins(0, 0, 0, 0)
         self._quickAccessToolBarLayout.setSpacing(0)
-        self._quickAccessToolBarLayout.addWidget(self._quickAccessToolBar, 0, QtCore.Qt.AlignmentFlag.AlignBottom)
+        self._quickAccessToolBarLayout.addWidget(
+            self._quickAccessToolBar, 0, QtCore.Qt.AlignmentFlag.AlignBottom
+        )
 
         # right toolbar
         self._rightToolBar = QtWidgets.QToolBar()
         self._rightToolBar.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self._rightToolBar.setIconSize(QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight))
+        self._rightToolBar.setIconSize(
+            QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight)
+        )
         self._collapseRibbonButton = QtWidgets.QToolButton(self)
-        self._collapseRibbonButton.setIconSize(QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight))
+        self._collapseRibbonButton.setIconSize(
+            QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight)
+        )
         self._collapseRibbonButton.setIcon(QtGui.QIcon(DataFile("icons/up.png")))
         self._collapseRibbonButton.setAutoRaise(True)
         self._collapseRibbonButton.setToolTip("Collapse Ribbon")
         self._collapseRibbonButton.clicked.connect(self.collapseRibbonButtonClicked)  # type: ignore
         self._helpButton = QtWidgets.QToolButton(self)
-        self._helpButton.setIconSize(QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight))
+        self._helpButton.setIconSize(
+            QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight)
+        )
         self._helpButton.setIcon(QtGui.QIcon(DataFile("icons/help.png")))
         self._helpButton.setAutoRaise(True)
         self._helpButton.setToolTip("Help")
@@ -129,10 +143,18 @@ class RibbonTitleWidget(QtWidgets.QFrame):
         font.setPointSize(font.pointSize() + 3)
         self._titleLabel.setFont(font)
 
-        self._tabBarLayout.addWidget(self._quickAccessToolBarWidget, 0, QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self._tabBarLayout.addWidget(self._tabBar, 0, QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self._tabBarLayout.addWidget(self._titleLabel, 1, QtCore.Qt.AlignmentFlag.AlignVCenter)
-        self._tabBarLayout.addWidget(self._rightToolBar, 0, QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self._tabBarLayout.addWidget(
+            self._quickAccessToolBarWidget, 0, QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
+        self._tabBarLayout.addWidget(
+            self._tabBar, 0, QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
+        self._tabBarLayout.addWidget(
+            self._titleLabel, 1, QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
+        self._tabBarLayout.addWidget(
+            self._rightToolBar, 0, QtCore.Qt.AlignmentFlag.AlignVCenter
+        )
 
     def applicationButton(self) -> RibbonApplicationButton:
         """Return the application button."""
@@ -193,7 +215,9 @@ class RibbonTitleWidget(QtWidgets.QFrame):
 
         :param button: The button to add.
         """
-        button.setIconSize(QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight))
+        button.setIconSize(
+            QtCore.QSize(self._quickAccessButtonHeight, self._quickAccessButtonHeight)
+        )
         self._quickAccessButtons.append(button)
         self._quickAccessToolBar.addWidget(button)
 
@@ -203,7 +227,9 @@ class RibbonTitleWidget(QtWidgets.QFrame):
         :param height: The height to set.
         """
         self._quickAccessButtonHeight = height
-        self._applicationButton.setIcon(self._applicationButton.icon().pixmap(height, height))
+        self._applicationButton.setIcon(
+            self._applicationButton.icon().pixmap(height, height)
+        )
         self._quickAccessToolBar.setIconSize(QtCore.QSize(height, height))
 
     def title(self) -> str:
@@ -232,7 +258,9 @@ class RibbonTitleWidget(QtWidgets.QFrame):
 
         :param button: The button to add.
         """
-        button.setIconSize(QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight))
+        button.setIconSize(
+            QtCore.QSize(self._rightButtonHeight, self._rightButtonHeight)
+        )
         self._rightToolButtons.append(button)
         self._rightToolBar.addWidget(button)
 
@@ -300,9 +328,17 @@ class RibbonTitleWidget(QtWidgets.QFrame):
 
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
         relpos = e.pos() - self._start_point if self._start_point else None
-        self.topLevelWidget().move(self._window_point + relpos) if self._window_point and relpos else None
+        (
+            self.topLevelWidget().move(self._window_point + relpos)
+            if self._window_point and relpos
+            else None
+        )
         self.topLevelWidget().windowHandle().startSystemMove()
 
     def mouseDoubleClickEvent(self, e: QtGui.QMouseEvent):
         mainwindow = self.topLevelWidget()
-        mainwindow.showNormal() if mainwindow.isMaximized() else mainwindow.showMaximized()
+        (
+            mainwindow.showNormal()
+            if mainwindow.isMaximized()
+            else mainwindow.showMaximized()
+        )
