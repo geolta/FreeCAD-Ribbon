@@ -41,6 +41,11 @@ def _check_and_initialize():
 
     for group in Xlib.keysymdef.__all__:
         Xlib.XK.load_keysym_group(group)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 _check_and_initialize()
 del _check_and_initialize
 
@@ -49,6 +54,10 @@ class X11Error(Exception):
     """An error that is thrown at the end of a code block managed by a
     :func:`display_manager` if an *X11* error occurred.
     """
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     pass
 
 
@@ -68,8 +77,12 @@ def display_manager(display):
     errors = []
 
     def handler(*args):
+<<<<<<< HEAD
         """The *Xlib* error handler.
         """
+=======
+        """The *Xlib* error handler."""
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         errors.append(args)
 
     old_handler = display.set_error_handler(handler)
@@ -92,8 +105,12 @@ def _find_mask(display, symbol):
     :return: the modifier mask
     """
     # Get the key code for the symbol
+<<<<<<< HEAD
     modifier_keycode = display.keysym_to_keycode(
         Xlib.XK.string_to_keysym(symbol))
+=======
+    modifier_keycode = display.keysym_to_keycode(Xlib.XK.string_to_keysym(symbol))
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     for index, keycodes in enumerate(display.get_modifier_mapping()):
         for keycode in keycodes:
@@ -113,8 +130,13 @@ def alt_mask(display):
 
     :return: the modifier mask
     """
+<<<<<<< HEAD
     if not hasattr(display, '__alt_mask'):
         display.__alt_mask = _find_mask(display, 'Alt_L')
+=======
+    if not hasattr(display, "__alt_mask"):
+        display.__alt_mask = _find_mask(display, "Alt_L")
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     return display.__alt_mask
 
 
@@ -128,8 +150,13 @@ def alt_gr_mask(display):
 
     :return: the modifier mask
     """
+<<<<<<< HEAD
     if not hasattr(display, '__altgr_mask'):
         display.__altgr_mask = _find_mask(display, 'Mode_switch')
+=======
+    if not hasattr(display, "__altgr_mask"):
+        display.__altgr_mask = _find_mask(display, "Mode_switch")
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     return display.__altgr_mask
 
 
@@ -143,8 +170,13 @@ def numlock_mask(display):
 
     :return: the modifier mask
     """
+<<<<<<< HEAD
     if not hasattr(display, '__numlock_mask'):
         display.__numlock_mask = _find_mask(display, 'Num_Lock')
+=======
+    if not hasattr(display, "__numlock_mask"):
+        display.__numlock_mask = _find_mask(display, "Num_Lock")
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     return display.__numlock_mask
 
 
@@ -228,10 +260,18 @@ def keysym_normalize(keysym):
     :return: the tuple ``(group_1, group_2)`` or ``None``
     """
     # Remove trailing NoSymbol
+<<<<<<< HEAD
     stripped = list(reversed(list(
         itertools.dropwhile(
             lambda n: n == Xlib.XK.NoSymbol,
             reversed(keysym)))))
+=======
+    stripped = list(
+        reversed(
+            list(itertools.dropwhile(lambda n: n == Xlib.XK.NoSymbol, reversed(keysym)))
+        )
+    )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     if not stripped:
         return
@@ -239,29 +279,54 @@ def keysym_normalize(keysym):
     elif len(stripped) == 1:
         return (
             keysym_group(stripped[0], Xlib.XK.NoSymbol),
+<<<<<<< HEAD
             keysym_group(stripped[0], Xlib.XK.NoSymbol))
+=======
+            keysym_group(stripped[0], Xlib.XK.NoSymbol),
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     elif len(stripped) == 2:
         return (
             keysym_group(stripped[0], stripped[1]),
+<<<<<<< HEAD
             keysym_group(stripped[0], stripped[1]))
+=======
+            keysym_group(stripped[0], stripped[1]),
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     elif len(stripped) == 3:
         return (
             keysym_group(stripped[0], stripped[1]),
+<<<<<<< HEAD
             keysym_group(stripped[2], Xlib.XK.NoSymbol))
+=======
+            keysym_group(stripped[2], Xlib.XK.NoSymbol),
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     elif len(stripped) >= 6:
         # TODO: Find out why this is necessary; using only the documented
         # behaviour may lead to only a US layout being used?
         return (
             keysym_group(stripped[0], stripped[1]),
+<<<<<<< HEAD
             keysym_group(stripped[4], stripped[5]))
+=======
+            keysym_group(stripped[4], stripped[5]),
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     else:
         return (
             keysym_group(stripped[0], stripped[1]),
+<<<<<<< HEAD
             keysym_group(stripped[2], stripped[3]))
+=======
+            keysym_group(stripped[2], stripped[3]),
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 def index_to_shift(display, index):
@@ -274,9 +339,13 @@ def index_to_shift(display, index):
 
     :return: a shift mask
     """
+<<<<<<< HEAD
     return (
         (1 << 0 if index & 1 else 0) |
         (alt_gr_mask(display) if index & 2 else 0))
+=======
+    return (1 << 0 if index & 1 else 0) | (alt_gr_mask(display) if index & 2 else 0)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 def shift_to_index(display, shift):
@@ -289,9 +358,13 @@ def shift_to_index(display, shift):
 
     :return: a shift mask
     """
+<<<<<<< HEAD
     return (
         (1 if shift & 1 else 0) +
         (2 if shift & alt_gr_mask(display) else 0))
+=======
+    return (1 if shift & 1 else 0) + (2 if shift & alt_gr_mask(display) else 0)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 def keyboard_mapping(display):
@@ -311,8 +384,14 @@ def keyboard_mapping(display):
     # Iterate over all keysym lists in the keyboard mapping
     min_keycode = display.display.info.min_keycode
     keycode_count = display.display.info.max_keycode - min_keycode + 1
+<<<<<<< HEAD
     for index, keysyms in enumerate(display.get_keyboard_mapping(
             min_keycode, keycode_count)):
+=======
+    for index, keysyms in enumerate(
+        display.get_keyboard_mapping(min_keycode, keycode_count)
+    ):
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         key_code = index + min_keycode
 
         # Normalise the keysym list to yield a tuple containing the two groups
@@ -325,9 +404,15 @@ def keyboard_mapping(display):
             for keysym, shift in zip(groups, (False, True)):
                 if not keysym:
                     continue
+<<<<<<< HEAD
                 shift_state = 0 \
                     | (shift_mask if shift else 0) \
                     | (group_mask if group else 0)
+=======
+                shift_state = (
+                    0 | (shift_mask if shift else 0) | (group_mask if group else 0)
+                )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
                 # Prefer already known lesser shift states
                 if keysym in mapping and mapping[keysym][1] < shift_state:
@@ -360,10 +445,19 @@ def symbol_to_keysym(symbol):
     """
     # First try simple translation, the try a module attribute of
     # Xlib.keysymdef.xkb and fall back on our pre-generated table
+<<<<<<< HEAD
     return (0
         or Xlib.XK.string_to_keysym(symbol)
         or getattr(Xlib.keysymdef.xkb, "XK_" + symbol, 0)
         or SYMBOLS.get(symbol, (0,))[0])
+=======
+    return (
+        0
+        or Xlib.XK.string_to_keysym(symbol)
+        or getattr(Xlib.keysymdef.xkb, "XK_" + symbol, 0)
+        or SYMBOLS.get(symbol, (0,))[0]
+    )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 class ListenerMixin(object):
@@ -372,6 +466,10 @@ class ListenerMixin(object):
     Subclasses should set a value for :attr:`_EVENTS` and implement
     :meth:`_handle`.
     """
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     #: The events for which to listen
     _EVENTS = tuple()
 
@@ -386,6 +484,7 @@ class ListenerMixin(object):
             self._context = dm.record_create_context(
                 0,
                 [Xlib.ext.record.AllClients],
+<<<<<<< HEAD
                 [{
                     'core_requests': (0, 0),
                     'core_replies': (0, 0),
@@ -396,6 +495,22 @@ class ListenerMixin(object):
                     'errors': (0, 0),
                     'client_started': False,
                     'client_died': False}])
+=======
+                [
+                    {
+                        "core_requests": (0, 0),
+                        "core_replies": (0, 0),
+                        "ext_requests": (0, 0, 0, 0),
+                        "ext_replies": (0, 0, 0, 0),
+                        "delivered_events": (0, 0),
+                        "device_events": self._EVENTS,
+                        "errors": (0, 0),
+                        "client_started": False,
+                        "client_died": False,
+                    }
+                ],
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
         # pylint: disable=W0702; we want to silence errors
         try:
@@ -404,8 +519,12 @@ class ListenerMixin(object):
             if self.suppress:
                 with display_manager(self._display_stop) as dm:
                     self._suppress_start(dm)
+<<<<<<< HEAD
             self._display_record.record_enable_context(
                 self._context, self._handler)
+=======
+            self._display_record.record_enable_context(self._context, self._handler)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         except:
             # This exception will have been passed to the main thread
             pass
@@ -421,7 +540,11 @@ class ListenerMixin(object):
         # pylint: enable=W0702
 
     def _stop_platform(self):
+<<<<<<< HEAD
         if not hasattr(self, '_context'):
+=======
+        if not hasattr(self, "_context"):
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             self.wait()
 
         # Do this asynchronously to avoid deadlocks
@@ -445,8 +568,12 @@ class ListenerMixin(object):
 
     @property
     def _event_mask(self):
+<<<<<<< HEAD
         """The event mask.
         """
+=======
+        """The event mask."""
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         return functools.reduce(operator.__or__, self._EVENTS, 0)
 
     @AbstractListener._emitter
@@ -466,7 +593,12 @@ class ListenerMixin(object):
 
         while data and len(data):
             event, data = self._EVENT_PARSER.parse_binary_value(
+<<<<<<< HEAD
                 data, self._display_record.display, None, None)
+=======
+                data, self._display_record.display, None, None
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             self._handle(self._display_stop, event)
 
     def _initialize(self, display):

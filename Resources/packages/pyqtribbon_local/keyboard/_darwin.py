@@ -46,12 +46,22 @@ from Quartz import (
     kCGHIDEventTap,
     kCGKeyboardEventKeycode,
     NSEvent,
+<<<<<<< HEAD
     NSSystemDefined)
+=======
+    NSSystemDefined,
+)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 from pynput._util.darwin import (
     get_unicode_to_keycode_map,
     keycode_context,
+<<<<<<< HEAD
     ListenerMixin)
+=======
+    ListenerMixin,
+)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 from pynput._util.darwin_vks import SYMBOLS
 from . import _base
 
@@ -70,6 +80,7 @@ kSystemDefinedEventMediaKeysSubtype = 8
 
 # We extract this here since the name is very long
 otherEventWithType = getattr(
+<<<<<<< HEAD
         NSEvent,
         'otherEventWithType_'
         'location_'
@@ -80,13 +91,30 @@ otherEventWithType = getattr(
         'subtype_'
         'data1_'
         'data2_')
+=======
+    NSEvent,
+    "otherEventWithType_"
+    "location_"
+    "modifierFlags_"
+    "timestamp_"
+    "windowNumber_"
+    "context_"
+    "subtype_"
+    "data1_"
+    "data2_",
+)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 # pylint: enable=C0103
 
 
 class KeyCode(_base.KeyCode):
     _PLATFORM_EXTENSIONS = (
         # Whether this is a media key
+<<<<<<< HEAD
         '_is_media',
+=======
+        "_is_media",
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     )
 
     # Be explicit about fields
@@ -118,20 +146,35 @@ class KeyCode(_base.KeyCode):
             result = otherEventWithType(
                 NSSystemDefined,
                 (0, 0),
+<<<<<<< HEAD
                 0xa00 if is_pressed else 0xb00,
+=======
+                0xA00 if is_pressed else 0xB00,
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
                 0,
                 0,
                 0,
                 8,
+<<<<<<< HEAD
                 (self.vk << 16) | ((0xa if is_pressed else 0xb) << 8),
                 -1).CGEvent()
         else:
             result = CGEventCreateKeyboardEvent(
                 None, 0 if vk is None else vk, is_pressed)
+=======
+                (self.vk << 16) | ((0xA if is_pressed else 0xB) << 8),
+                -1,
+            ).CGEvent()
+        else:
+            result = CGEventCreateKeyboardEvent(
+                None, 0 if vk is None else vk, is_pressed
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
         CGEventSetFlags(
             result,
             0
+<<<<<<< HEAD
             | (kCGEventFlagMaskAlternate
                if Key.alt in modifiers else 0)
 
@@ -147,6 +190,16 @@ class KeyCode(_base.KeyCode):
         if vk is None and self.char is not None:
             CGEventKeyboardSetUnicodeString(
                 result, len(self.char), self.char)
+=======
+            | (kCGEventFlagMaskAlternate if Key.alt in modifiers else 0)
+            | (kCGEventFlagMaskCommand if Key.cmd in modifiers else 0)
+            | (kCGEventFlagMaskControl if Key.ctrl in modifiers else 0)
+            | (kCGEventFlagMaskShift if Key.shift in modifiers else 0),
+        )
+
+        if vk is None and self.char is not None:
+            CGEventKeyboardSetUnicodeString(result, len(self.char), self.char)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
         return result
 
@@ -199,7 +252,11 @@ class Key(enum.Enum):
     shift = KeyCode.from_vk(0x38)
     shift_l = KeyCode.from_vk(0x38)
     shift_r = KeyCode.from_vk(0x3C)
+<<<<<<< HEAD
     space = KeyCode.from_vk(0x31, char=' ')
+=======
+    space = KeyCode.from_vk(0x31, char=" ")
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     tab = KeyCode.from_vk(0x30)
     up = KeyCode.from_vk(0x7E)
 
@@ -209,6 +266,11 @@ class Key(enum.Enum):
     media_volume_up = KeyCode._from_media(NX_KEYTYPE_SOUND_UP)
     media_previous = KeyCode._from_media(NX_KEYTYPE_PREVIOUS)
     media_next = KeyCode._from_media(NX_KEYTYPE_NEXT)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 # pylint: enable=W0212
 
 
@@ -225,23 +287,40 @@ class Controller(_base.Controller):
             CGEventPost(
                 kCGHIDEventTap,
                 (key if key not in (k for k in Key) else key.value)._event(
+<<<<<<< HEAD
                     modifiers, self._mapping, is_press))
+=======
+                    modifiers, self._mapping, is_press
+                ),
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 class Listener(ListenerMixin, _base.Listener):
     #: The events that we listen to
     _EVENTS = (
+<<<<<<< HEAD
         CGEventMaskBit(kCGEventKeyDown) |
         CGEventMaskBit(kCGEventKeyUp) |
         CGEventMaskBit(kCGEventFlagsChanged) |
         CGEventMaskBit(NSSystemDefined)
+=======
+        CGEventMaskBit(kCGEventKeyDown)
+        | CGEventMaskBit(kCGEventKeyUp)
+        | CGEventMaskBit(kCGEventFlagsChanged)
+        | CGEventMaskBit(NSSystemDefined)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     )
 
     # pylint: disable=W0212
     #: A mapping from keysym to special key
+<<<<<<< HEAD
     _SPECIAL_KEYS = {
         (key.value.vk, key.value._is_media): key
         for key in Key}
+=======
+    _SPECIAL_KEYS = {(key.value.vk, key.value._is_media): key for key in Key}
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     # pylint: enable=W0212
 
     #: The event flags set for the various modifier keys
@@ -257,15 +336,24 @@ class Listener(ListenerMixin, _base.Listener):
         Key.ctrl_r: kCGEventFlagMaskControl,
         Key.shift: kCGEventFlagMaskShift,
         Key.shift_l: kCGEventFlagMaskShift,
+<<<<<<< HEAD
         Key.shift_r: kCGEventFlagMaskShift}
+=======
+        Key.shift_r: kCGEventFlagMaskShift,
+    }
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     def __init__(self, *args, **kwargs):
         super(Listener, self).__init__(*args, **kwargs)
         self._flags = 0
         self._context = None
+<<<<<<< HEAD
         self._intercept = self._options.get(
             'intercept',
             None)
+=======
+        self._intercept = self._options.get("intercept", None)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     def _run(self):
         with keycode_context() as context:
@@ -303,10 +391,17 @@ class Listener(ListenerMixin, _base.Listener):
                 if sys_event.subtype() == kSystemDefinedEventMediaKeysSubtype:
                     # The key in the special key dict; True since it is a media
                     # key
+<<<<<<< HEAD
                     key = ((sys_event.data1() & 0xffff0000) >> 16, True)
                     if key in self._SPECIAL_KEYS:
                         flags = sys_event.data1() & 0x0000ffff
                         is_press = ((flags & 0xff00) >> 8) == 0x0a
+=======
+                    key = ((sys_event.data1() & 0xFFFF0000) >> 16, True)
+                    if key in self._SPECIAL_KEYS:
+                        flags = sys_event.data1() & 0x0000FFFF
+                        is_press = ((flags & 0xFF00) >> 8) == 0x0A
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
                         if is_press:
                             self.on_press(self._SPECIAL_KEYS[key])
                         else:
@@ -337,8 +432,12 @@ class Listener(ListenerMixin, _base.Listener):
 
         :raises IndexError: if the key code is invalid
         """
+<<<<<<< HEAD
         vk = CGEventGetIntegerValueField(
             event, kCGKeyboardEventKeycode)
+=======
+        vk = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         event_type = CGEventGetType(event)
         is_media = True if event_type == NSSystemDefined else None
 
@@ -348,15 +447,27 @@ class Listener(ListenerMixin, _base.Listener):
             return self._SPECIAL_KEYS[key]
 
         # ...then try characters...
+<<<<<<< HEAD
         length, chars = CGEventKeyboardGetUnicodeString(
             event, 100, None, None)
+=======
+        length, chars = CGEventKeyboardGetUnicodeString(event, 100, None, None)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         try:
             printable = chars.isprintable()
         except AttributeError:
             printable = chars.isalnum()
+<<<<<<< HEAD
         if not printable and vk in SYMBOLS \
                 and CGEventGetFlags(event) \
                 & kCGEventFlagMaskControl:
+=======
+        if (
+            not printable
+            and vk in SYMBOLS
+            and CGEventGetFlags(event) & kCGEventFlagMaskControl
+        ):
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             return KeyCode.from_char(SYMBOLS[vk], vk=vk)
         elif length > 0:
             return KeyCode.from_char(chars, vk=vk)

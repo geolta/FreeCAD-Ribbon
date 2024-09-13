@@ -37,6 +37,10 @@ class Button(enum.Enum):
     platforms may have additional buttons, but these are guaranteed to be
     present everywhere.
     """
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     #: An unknown button was pressed
     unknown = 0
 
@@ -51,8 +55,13 @@ class Button(enum.Enum):
 
 
 class Controller(object):
+<<<<<<< HEAD
     """A controller for sending virtual mouse events to the system.
     """
+=======
+    """A controller for sending virtual mouse events to the system."""
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     def __init__(self):
         self._log = _logger(self.__class__)
 
@@ -135,8 +144,12 @@ class Controller(object):
         return self
 
     def __exit__(self, exc_type, value, traceback):
+<<<<<<< HEAD
         """Ends a series of clicks.
         """
+=======
+        """Ends a series of clicks."""
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         pass
 
     def _position_get(self):
@@ -249,6 +262,7 @@ class Listener(AbstractListener):
             If ``self.suppress_event()`` is called, the event is suppressed
             system wide.
     """
+<<<<<<< HEAD
     def __init__(self, on_move=None, on_click=None, on_scroll=None,
                  suppress=False, **kwargs):
         self._log = _logger(self.__class__)
@@ -260,4 +274,22 @@ class Listener(AbstractListener):
         super(Listener, self).__init__(
             on_move=on_move, on_click=on_click, on_scroll=on_scroll,
             suppress=suppress)
+=======
+
+    def __init__(
+        self, on_move=None, on_click=None, on_scroll=None, suppress=False, **kwargs
+    ):
+        self._log = _logger(self.__class__)
+        option_prefix = prefix(Listener, self.__class__)
+        self._options = {
+            key[len(option_prefix) :]: value
+            for key, value in kwargs.items()
+            if key.startswith(option_prefix)
+        }
+        super(Listener, self).__init__(
+            on_move=on_move, on_click=on_click, on_scroll=on_scroll, suppress=suppress
+        )
+
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 # pylint: enable=W0223

@@ -47,11 +47,20 @@ class Events(Events):
     :class:`Events.Scroll`
         The device was scrolled.
     """
+<<<<<<< HEAD
     _Listener = Listener
 
     class Move(Events.Event):
         """A move event.
         """
+=======
+
+    _Listener = Listener
+
+    class Move(Events.Event):
+        """A move event."""
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         def __init__(self, x, y):
             #: The X screen coordinate.
             self.x = x
@@ -60,8 +69,13 @@ class Events(Events):
             self.y = y
 
     class Click(Events.Event):
+<<<<<<< HEAD
         """A click event.
         """
+=======
+        """A click event."""
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         def __init__(self, x, y, button, pressed):
             #: The X screen coordinate.
             self.x = x
@@ -76,8 +90,13 @@ class Events(Events):
             self.pressed = pressed
 
     class Scroll(Events.Event):
+<<<<<<< HEAD
         """A scroll event.
         """
+=======
+        """A scroll event."""
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         def __init__(self, x, y, dx, dy):
             #: The X screen coordinate.
             self.x = x
@@ -93,6 +112,11 @@ class Events(Events):
 
     def __init__(self):
         super(Events, self).__init__(
+<<<<<<< HEAD
             on_move=self.Move,
             on_click=self.Click,
             on_scroll=self.Scroll)
+=======
+            on_move=self.Move, on_click=self.Click, on_scroll=self.Scroll
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa

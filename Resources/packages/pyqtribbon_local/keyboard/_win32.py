@@ -43,17 +43,28 @@ from pynput._util.win32 import (
     MapVirtualKey,
     SendInput,
     SystemHook,
+<<<<<<< HEAD
     VkKeyScan)
+=======
+    VkKeyScan,
+)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 from . import _base
 
 
 class KeyCode(_base.KeyCode):
     _PLATFORM_EXTENSIONS = (
         # Any extra flags.
+<<<<<<< HEAD
         '_flags',
 
         #: The scan code.
         '_scan',
+=======
+        "_flags",
+        #: The scan code.
+        "_scan",
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     )
 
     # Be explicit about fields
@@ -74,8 +85,12 @@ class KeyCode(_base.KeyCode):
         """
         if self.vk:
             vk = self.vk
+<<<<<<< HEAD
             scan = self._scan \
                 or MapVirtualKey(vk, MapVirtualKey.MAPVK_VK_TO_VSC)
+=======
+            scan = self._scan or MapVirtualKey(vk, MapVirtualKey.MAPVK_VK_TO_VSC)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
             flags = 0
         elif ord(self.char) > 0xFFFF:
             raise ValueError
@@ -83,18 +98,29 @@ class KeyCode(_base.KeyCode):
             res = VkKeyScan(self.char)
             if (res >> 8) & 0xFF == 0:
                 vk = res & 0xFF
+<<<<<<< HEAD
                 scan = self._scan \
                     or MapVirtualKey(vk, MapVirtualKey.MAPVK_VK_TO_VSC)
+=======
+                scan = self._scan or MapVirtualKey(vk, MapVirtualKey.MAPVK_VK_TO_VSC)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
                 flags = 0
             else:
                 vk = 0
                 scan = ord(self.char)
                 flags = KEYBDINPUT.UNICODE
+<<<<<<< HEAD
         state_flags = (KEYBDINPUT.KEYUP if not is_press else 0)
         return dict(
             dwFlags=(self._flags or 0) | flags | state_flags,
             wVk=vk,
             wScan=scan)
+=======
+        state_flags = KEYBDINPUT.KEYUP if not is_press else 0
+        return dict(
+            dwFlags=(self._flags or 0) | flags | state_flags, wVk=vk, wScan=scan
+        )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     @classmethod
     def _from_ext(cls, vk, **kwargs):
@@ -160,7 +186,11 @@ class Key(enum.Enum):
     shift = KeyCode.from_vk(VK.LSHIFT)
     shift_l = KeyCode.from_vk(VK.LSHIFT)
     shift_r = KeyCode.from_vk(VK.RSHIFT)
+<<<<<<< HEAD
     space = KeyCode.from_vk(VK.SPACE, char=' ')
+=======
+    space = KeyCode.from_vk(VK.SPACE, char=" ")
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
     tab = KeyCode.from_vk(VK.TAB)
     up = KeyCode._from_ext(VK.UP)
 
@@ -177,6 +207,11 @@ class Key(enum.Enum):
     pause = KeyCode.from_vk(VK.PAUSE)
     print_screen = KeyCode._from_ext(VK.SNAPSHOT)
     scroll_lock = KeyCode.from_vk(VK.SCROLL)
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 # pylint: enable=W0212
 
 
@@ -191,15 +226,27 @@ class Controller(_base.Controller):
         try:
             SendInput(
                 1,
+<<<<<<< HEAD
                 ctypes.byref(INPUT(
                     type=INPUT.KEYBOARD,
                     value=INPUT_union(
                         ki=KEYBDINPUT(**key._parameters(is_press))))),
                 ctypes.sizeof(INPUT))
+=======
+                ctypes.byref(
+                    INPUT(
+                        type=INPUT.KEYBOARD,
+                        value=INPUT_union(ki=KEYBDINPUT(**key._parameters(is_press))),
+                    )
+                ),
+                ctypes.sizeof(INPUT),
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         except ValueError:
             # If key._parameters raises ValueError, the key is a unicode
             # characters outsice of the range of a single UTF-16 value, and we
             # must break it up into its surrogates
+<<<<<<< HEAD
             byte_data = bytearray(key.char.encode('utf-16le'))
             surrogates = [
                 byte_data[i] | (byte_data[i + 1] << 8)
@@ -219,6 +266,29 @@ class Controller(_base.Controller):
                                 wScan=scan)))
                     for scan in surrogates)),
                 ctypes.sizeof(INPUT))
+=======
+            byte_data = bytearray(key.char.encode("utf-16le"))
+            surrogates = [
+                byte_data[i] | (byte_data[i + 1] << 8)
+                for i in range(0, len(byte_data), 2)
+            ]
+
+            state_flags = KEYBDINPUT.UNICODE | (KEYBDINPUT.KEYUP if not is_press else 0)
+
+            SendInput(
+                len(surrogates),
+                (INPUT * len(surrogates))(
+                    *(
+                        INPUT(
+                            INPUT.KEYBOARD,
+                            INPUT_union(ki=KEYBDINPUT(dwFlags=state_flags, wScan=scan)),
+                        )
+                        for scan in surrogates
+                    )
+                ),
+                ctypes.sizeof(INPUT),
+            )
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
 
 class Listener(ListenerMixin, _base.Listener):
@@ -245,6 +315,7 @@ class Listener(ListenerMixin, _base.Listener):
     _RELEASE_MESSAGES = (_WM_KEYUP, _WM_SYSKEYUP)
 
     #: Additional window messages to propagate to the subclass handler.
+<<<<<<< HEAD
     _WM_NOTIFICATIONS = (
         _WM_INPUTLANGCHANGE,
     )
@@ -256,17 +327,36 @@ class Listener(ListenerMixin, _base.Listener):
 
     _HANDLED_EXCEPTIONS = (
         SystemHook.SuppressException,)
+=======
+    _WM_NOTIFICATIONS = (_WM_INPUTLANGCHANGE,)
+
+    #: A mapping from keysym to special key
+    _SPECIAL_KEYS = {key.value.vk: key for key in Key}
+
+    _HANDLED_EXCEPTIONS = (SystemHook.SuppressException,)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     class _KBDLLHOOKSTRUCT(ctypes.Structure):
         """Contains information about a mouse event passed to a
         ``WH_KEYBOARD_LL`` hook procedure, ``LowLevelKeyboardProc``.
         """
+<<<<<<< HEAD
         _fields_ = [
             ('vkCode', wintypes.DWORD),
             ('scanCode', wintypes.DWORD),
             ('flags', wintypes.DWORD),
             ('time', wintypes.DWORD),
             ('dwExtraInfo', ctypes.c_void_p)]
+=======
+
+        _fields_ = [
+            ("vkCode", wintypes.DWORD),
+            ("scanCode", wintypes.DWORD),
+            ("flags", wintypes.DWORD),
+            ("time", wintypes.DWORD),
+            ("dwExtraInfo", ctypes.c_void_p),
+        ]
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     #: A pointer to a :class:`KBDLLHOOKSTRUCT`
     _LPKBDLLHOOKSTRUCT = ctypes.POINTER(_KBDLLHOOKSTRUCT)
@@ -274,9 +364,13 @@ class Listener(ListenerMixin, _base.Listener):
     def __init__(self, *args, **kwargs):
         super(Listener, self).__init__(*args, **kwargs)
         self._translator = KeyTranslator()
+<<<<<<< HEAD
         self._event_filter = self._options.get(
             'event_filter',
             lambda msg, data: True)
+=======
+        self._event_filter = self._options.get("event_filter", lambda msg, data: True)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     def _convert(self, code, msg, lpdata):
         if code != SystemHook.HC_ACTION:
@@ -321,6 +415,7 @@ class Listener(ListenerMixin, _base.Listener):
     # pylint: disable=R0201
     @contextlib.contextmanager
     def _receive(self):
+<<<<<<< HEAD
         """An empty context manager; we do not need to fake keyboard events.
         """
         yield
@@ -329,6 +424,15 @@ class Listener(ListenerMixin, _base.Listener):
     def _on_notification(self, code, wparam, lparam):
         """Receives ``WM_INPUTLANGCHANGE`` and updates the cached layout.
         """
+=======
+        """An empty context manager; we do not need to fake keyboard events."""
+        yield
+
+    # pylint: enable=R0201
+
+    def _on_notification(self, code, wparam, lparam):
+        """Receives ``WM_INPUTLANGCHANGE`` and updates the cached layout."""
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         if code == self._WM_INPUTLANGCHANGE:
             self._translator.update_layout()
 
@@ -347,9 +451,13 @@ class Listener(ListenerMixin, _base.Listener):
         if vk in self._SPECIAL_KEYS:
             return self._SPECIAL_KEYS[vk]
         else:
+<<<<<<< HEAD
             return KeyCode(**self._translate(
                 vk,
                 msg in self._PRESS_MESSAGES))
+=======
+            return KeyCode(**self._translate(vk, msg in self._PRESS_MESSAGES))
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
 
     def _translate(self, vk, is_press):
         """Translates a virtual key code to a parameter list passable to
@@ -367,7 +475,11 @@ class Listener(ListenerMixin, _base.Listener):
     def canonical(self, key):
         # If the key has a scan code, and we can find the character for it,
         # return that, otherwise call the super class
+<<<<<<< HEAD
         scan = getattr(key, '_scan', None)
+=======
+        scan = getattr(key, "_scan", None)
+>>>>>>> 28955392c454aa05a9bf6f258b946901e0139cfa
         if scan is not None:
             char = self._translator.char_from_scan(scan)
             if char is not None:
