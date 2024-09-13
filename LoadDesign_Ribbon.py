@@ -1,27 +1,24 @@
-# *************************************************************************************
-# *   MIT License                                                                     *
-# *                                                                                   *
-# *   Copyright (c) 2024 Paul Ebbers                                                  *
-# *                                                                                   *
-# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
-# *   of this software and associated documentation files (the "Software"), to deal   *
-# *   in the Software without restriction, including without limitation the rights    *
-# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
-# *   copies of the Software, and to permit persons to whom the Software is           *
-# *   furnished to do so, subject to the following conditions:                        *
-# *                                                                                   *
-# *   The above copyright notice and this permission notice shall be included in all  *
-# *   copies or substantial portions of the Software.                                 *
-# *                                                                                   *
-# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
-# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
-# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
-# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
-# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
-# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
-# *   SOFTWARE.                                                                       *
-# *                                                                                   *
-# *************************************************************************************/
+# *************************************************************************
+# *                                                                       *
+# * Copyright (c) 2019-2024 Hakan Seven, Geolta, Paul Ebbers              *
+# *                                                                       *
+# * This program is free software; you can redistribute it and/or modify  *
+# * it under the terms of the GNU Lesser General Public License (LGPL)    *
+# * as published by the Free Software Foundation; either version 3 of     *
+# * the License, or (at your option) any later version.                   *
+# * for detail see the LICENCE text file.                                 *
+# *                                                                       *
+# * This program is distributed in the hope that it will be useful,       *
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# * GNU Library General Public License for more details.                  *
+# *                                                                       *
+# * You should have received a copy of the GNU Library General Public     *
+# * License along with this program; if not, write to the Free Software   *
+# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# * USA                                                                   *
+# *                                                                       *
+# *************************************************************************
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
@@ -34,8 +31,9 @@ from PySide.QtWidgets import (
     QToolBar,
     QToolButton,
     QComboBox,
+    QPushButton,
 )
-from PySide.QtCore import Qt, SIGNAL
+from PySide.QtCore import Qt, SIGNAL, Signal, QObject, QThread
 import sys
 import json
 from datetime import datetime
@@ -43,6 +41,7 @@ import shutil
 import Standard_Functions_RIbbon as StandardFunctions
 import Parameters_Ribbon
 import webbrowser
+import time
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
@@ -81,6 +80,8 @@ class LoadDialog(Design_ui.Ui_Form):
     ShowText_Large = False
 
     List_IgnoredToolbars_internal = []
+
+    WorkbenchesActivated = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -128,11 +129,14 @@ class LoadDialog(Design_ui.Ui_Form):
         # Store the current active workbench
         ActiveWB = Gui.activeWorkbench().name()
         # Go through the list of workbenches
+        i = 0
         for WorkBench in self.List_Workbenches:
-            # Activate the workbench. Otherwise, .listToolbars() returns empty
-            Gui.activateWorkbench(WorkBench[0])
-            # Get the toolbars of this workbench
-            wbToolbars: list = Gui.getWorkbench(WorkBench[0]).listToolbars()
+            wbToolbars = []
+            try:
+                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
+            except Exception:
+                Gui.activateWorkbench(WorkBench[0])
+                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
             # Go through the toolbars
             for Toolbar in wbToolbars:
                 # Go through the list of toolbars. If already present, skip it.
@@ -144,6 +148,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 if IsInList is False:
                     self.StringList_Toolbars.append([Toolbar, WorkBench[2]])
+            time.sleep(1)
         CustomToolbars = self.List_ReturnCustomToolbars()
         for Customtoolbar in CustomToolbars:
             self.StringList_Toolbars.append(Customtoolbar)
@@ -423,7 +428,7 @@ class LoadDialog(Design_ui.Ui_Form):
         #
         # Connect the button GenerateJson with the function on_GenerateJson_clicked
         def GenerateJson():
-            self.on_GenerateJson_clicked(self)
+            self.on_Update_clicked(self)
 
         self.form.GenerateJson.connect(
             self.form.GenerateJson, SIGNAL("clicked()"), GenerateJson
@@ -431,7 +436,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
-            self.on_GenerateJsonExit_clicked(self)
+            self.on_Close_clicked(self)
 
         self.form.GenerateJsonExit.connect(
             self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
@@ -485,6 +490,9 @@ class LoadDialog(Design_ui.Ui_Form):
         pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
         helpIcon.addPixmap(pixmap)
         self.form.HelpButton.setIcon(helpIcon)
+        self.form.HelpButton.setMinimumHeight(
+            self.form.GenerateJsonExit.minimumHeight()
+        )
         # endregion
 
         return
@@ -1197,15 +1205,16 @@ class LoadDialog(Design_ui.Ui_Form):
                 if (
                     self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
                         "toolbars"
-                    ][Toolbar]["order"][j].lower()
-                    == "separator"
+                    ][Toolbar]["order"][j]
+                    .lower()
+                    .startswith("separator")
                 ):
                     ToolbarCommands.insert(j + index, "separator")
                     index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
-            if ToolbarCommand == "separator":
+            if ToolbarCommand.startswith("separator"):
                 # Create the row in the table
                 # add a row to the table widget
                 self.form.tableWidget.insertRow(self.form.tableWidget.rowCount())
@@ -1254,7 +1263,7 @@ class LoadDialog(Design_ui.Ui_Form):
                     Toolbar
                 ]["order"] = Order
 
-            if ToolbarCommand != "separator":
+            if not ToolbarCommand.startswith("separator"):
                 # Get the command
                 Command = Gui.Command.get(ToolbarCommand)
                 if Command is None:
@@ -1437,6 +1446,10 @@ class LoadDialog(Design_ui.Ui_Form):
         RowNumber = self.form.tableWidget.rowCount()
         if len(self.form.tableWidget.selectedItems()) > 0:
             RowNumber = self.form.tableWidget.currentRow()
+        # update the data
+        TableWidgetItem.setData(
+            Qt.ItemDataRole.UserRole, f"separator_{WorkBenchName}_{RowNumber}"
+        )
         self.form.tableWidget.insertRow(RowNumber)
 
         # Add the first cell with the table widget
@@ -1679,17 +1692,22 @@ class LoadDialog(Design_ui.Ui_Form):
         return
 
     @staticmethod
-    def on_GenerateJson_clicked(self):
+    def on_Update_clicked(self):
         self.WriteJson()
         # Set the button disabled
         self.form.GenerateJson.setDisabled(True)
         return
 
     @staticmethod
-    def on_GenerateJsonExit_clicked(self):
+    def on_Close_clicked(self):
         self.WriteJson()
         # Close the form
         self.form.close()
+
+        # show the restart dialog
+        result = StandardFunctions.RestartDialog(True)
+        if result == "yes":
+            StandardFunctions.restart_freecad()
         return
 
     @staticmethod
@@ -2383,8 +2401,6 @@ class LoadDialog(Design_ui.Ui_Form):
         ToolbarList.sort(key=SortList)
 
         return ToolbarList
-
-    # endregion
 
 
 def main():

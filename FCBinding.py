@@ -1,31 +1,28 @@
-# *************************************************************************************
-# *   MIT License                                                                     *
-# *                                                                                   *
-# *   Copyright (c) 2024 Paul Ebbers                                                  *
-# *                                                                                   *
-# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
-# *   of this software and associated documentation files (the "Software"), to deal   *
-# *   in the Software without restriction, including without limitation the rights    *
-# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
-# *   copies of the Software, and to permit persons to whom the Software is           *
-# *   furnished to do so, subject to the following conditions:                        *
-# *                                                                                   *
-# *   The above copyright notice and this permission notice shall be included in all  *
-# *   copies or substantial portions of the Software.                                 *
-# *                                                                                   *
-# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
-# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
-# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
-# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
-# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
-# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
-# *   SOFTWARE.                                                                       *
-# *                                                                                   *
-# *************************************************************************************/
+# *************************************************************************
+# *                                                                       *
+# * Copyright (c) 2019-2024 Hakan Seven, Geolta, Paul Ebbers              *
+# *                                                                       *
+# * This program is free software; you can redistribute it and/or modify  *
+# * it under the terms of the GNU Lesser General Public License (LGPL)    *
+# * as published by the Free Software Foundation; either version 3 of     *
+# * the License, or (at your option) any later version.                   *
+# * for detail see the LICENCE text file.                                 *
+# *                                                                       *
+# * This program is distributed in the hope that it will be useful,       *
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# * GNU Library General Public License for more details.                  *
+# *                                                                       *
+# * You should have received a copy of the GNU Library General Public     *
+# * License along with this program; if not, write to the Free Software   *
+# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# * USA                                                                   *
+# *                                                                       *
+# *************************************************************************
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap, QScrollEvent
+from PySide.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
 from PySide.QtWidgets import (
     QToolButton,
     QToolBar,
@@ -34,28 +31,45 @@ from PySide.QtWidgets import (
     QWidget,
     QMenuBar,
     QMenu,
+    QMainWindow,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL
+from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
 
 import json
 import os
 import sys
 import webbrowser
-import keyboard
-
-from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 import LoadDesign_Ribbon
 import Parameters_Ribbon
 import LoadSettings_Ribbon
+import Standard_Functions_RIbbon as StandardFunctions
+import platform
+import time
+
+
+# import modules for keypress detection based on OS
+if platform.system() == "Windows" or platform.system() == "Darwin":
+    import keyboard
+
 
 # Get the resources
 pathIcons = Parameters_Ribbon.ICON_LOCATION
 pathStylSheets = Parameters_Ribbon.STYLESHEET_LOCATION
 pathUI = Parameters_Ribbon.UI_LOCATION
 pathScripts = os.path.join(os.path.dirname(__file__), "Scripts")
+pathPackages = os.path.join(os.path.dirname(__file__), "Resources", "packages")
 sys.path.append(pathIcons)
 sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
+sys.path.append(pathPackages)
+
+try:
+    from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+except ImportError:
+    from pyqtribbon_local.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+
+    print("pyqtribbon used local")
+
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -76,9 +90,11 @@ class ModernMenu(RibbonBar):
 
     MainWindowLoaded = False
 
+    UseQtKeyPress = False
+
     # use icon size from FreeCAD preferences
-    # iconSize: int = App.ParamGet("User parameter:BaseApp/Preferences/General").GetInt("ToolbarIconSize", 24)
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
+
     sizeFactor = 1.2
 
     def __init__(self):
@@ -88,7 +104,22 @@ class ModernMenu(RibbonBar):
         super().__init__(title="", iconSize=self.iconSize)
         self.setObjectName("Ribbon")
 
+        # connect the signals
         self.connectSignals()
+
+        # Set the icon size if parameters has none
+        # Define the icon sizes
+        if (
+            Parameters_Ribbon.Settings.GetIntSetting("IconSize_Small") is None
+            or Parameters_Ribbon.Settings.GetIntSetting("IconSize_Small") == 0
+        ):
+            Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", 30)
+
+        if (
+            Parameters_Ribbon.Settings.GetIntSetting("IconSize_Medium") is None
+            or Parameters_Ribbon.Settings.GetIntSetting("IconSize_Medium") == 0
+        ):
+            Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", 40)
 
         # read ribbon structure from JSON file
         with open(
@@ -121,10 +152,25 @@ class ModernMenu(RibbonBar):
         mw.menuBar().hide()
         if self.isEnabled() is False:
             mw.menuBar().show()
-        # connect the alt key to the menuBar
-        keyboard.on_press_key("alt", lambda _: self.ToggleMenuBar())
 
+        # Get the keypress when on linux
+        if platform.system() == "Linux" or platform.system() == "Darwin":
+            self.UseQtKeyPress = True
+
+        # Get the keypress when on windows or mac
+        if platform.system() == "Windows" or platform.system() == "Darwin":
+            try:
+                # connect the alt key to the menuBar
+                keyboard.on_press_key("alt", lambda _: self.ToggleMenuBar())
+            except Exception:  # Use Qt incase of an error
+                self.UseQtKeyPress = True
         return
+
+    # The backup keypress event
+    def keyPressEvent(self, event):
+        if self.UseQtKeyPress is True:
+            if event.key() == Qt.Key.Key_Alt or event.key() == Qt.Key.Key_AltGr:
+                self.ToggleMenuBar()
 
     # implentation to add actions to the Filemenu. Needed for the accessiores menu
     def addAction(self, action: QAction):
@@ -257,10 +303,11 @@ class ModernMenu(RibbonBar):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
         self.helpRibbonButton().setMaximumWidth(self.iconSize * self.sizeFactor)
+        self.helpRibbonButton().setToolTip("Go to the FreeCAD help page")
         # Define an action for the help button
         helpAction = QAction()
         helpIcon = QIcon()
-        pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
+        pixmap = QPixmap(os.path.join(pathIcons, "help-browser.svg"))
         helpIcon.addPixmap(pixmap)
         helpAction.setIcon(helpIcon)
         helpAction.triggered.connect(self.onHelpClicked)
@@ -274,6 +321,7 @@ class ModernMenu(RibbonBar):
         pinButton.setCheckable(True)
         pinButton.setIcon(pinIcon)
         pinButton.setText("Pin Ribbon")
+        pinButton.setToolTip("Click to toggle the autohide function on or off")
         pinButton.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
@@ -298,6 +346,7 @@ class ModernMenu(RibbonBar):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
         self.setApplicationIcon(Gui.getIcon("freecad"))
+        self.applicationOptionButton().setToolTip("FreeCAD Ribbon")
         Menu = self.addFileMenu()
 
         # add the menus from the menubar to the application button
@@ -327,7 +376,11 @@ class ModernMenu(RibbonBar):
         return
 
     def loadDesignMenu(self):
-        LoadDesign_Ribbon.main()
+        message = "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?"
+        result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
+        if result == "yes":
+            LoadDesign_Ribbon.main()
+        # LoadingDialog.main()
         return
 
     def loadSettingsMenu(self):
@@ -555,7 +608,7 @@ class ModernMenu(RibbonBar):
 
                         if (
                             command == button.text()
-                            and commandPrevious.lower() == "separator"
+                            and commandPrevious.lower().startswith("separator")
                         ):
                             panel.addSeparator()
                             continue
@@ -617,13 +670,14 @@ class ModernMenu(RibbonBar):
                         btn = panel.addSmallButton(
                             action.text(),
                             action.icon(),
-                            alignment=Qt.AlignmentFlag.AlignJustify,
+                            alignment=Qt.AlignmentFlag.AlignLeft,
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_SMALL,
                         )
-                        btn.setMinimumWidth(
-                            Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize
-                        )
+                        if Parameters_Ribbon.SHOW_ICON_TEXT_SMALL is False:
+                            btn.setMinimumWidth(
+                                Parameters_Ribbon.ICON_SIZE_SMALL + self.iconSize
+                            )
                     elif buttonSize == "medium":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
                         if IconOnly is True:
@@ -636,9 +690,10 @@ class ModernMenu(RibbonBar):
                             showText=showText,
                             fixedHeight=Parameters_Ribbon.ICON_SIZE_MEDIUM,
                         )
-                        btn.setMinimumWidth(
-                            Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize
-                        )
+                        if Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM is False:
+                            btn.setMinimumWidth(
+                                Parameters_Ribbon.ICON_SIZE_MEDIUM + self.iconSize
+                            )
                     elif buttonSize == "large":
                         showText = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
                         if IconOnly is True:
@@ -651,8 +706,8 @@ class ModernMenu(RibbonBar):
                             showText=showText,
                             fixedHeight=False,
                         )
-
-                        btn.setMinimumWidth(btn.maximumHeight())
+                        if Parameters_Ribbon.SHOW_ICON_TEXT_LARGE is False:
+                            btn.setMinimumWidth(btn.maximumHeight())
                     else:
                         raise NotImplementedError(
                             "Given button size not implemented, only small, medium and large are available."
@@ -766,6 +821,22 @@ class ModernMenu(RibbonBar):
         return
 
 
+class MainWindow(QMainWindow):
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Alt or event.key() == Qt.Key.Key_AltGr:
+            self.ToggleMenuBar()
+
+    def ToggleMenuBar(self):
+        mw = self
+        menuBar = mw.menuBar()
+        if menuBar.isVisible() is True:
+            menuBar.hide()
+            return
+        if menuBar.isVisible() is False:
+            menuBar.show()
+            return
+
+
 class run:
     """
     Activate Modern UI.
@@ -778,7 +849,6 @@ class run:
         disable = 0
         if name != "NoneWorkbench":
             # Disable connection after activation
-            # mw = Gui.getMainWindow()
             mw.workbenchActivated.disconnect(run)
             if disable:
                 return

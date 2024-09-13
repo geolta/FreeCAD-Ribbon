@@ -1,27 +1,24 @@
-# *************************************************************************************
-# *   MIT License                                                                     *
-# *                                                                                   *
-# *   Copyright (c) 2024 Paul Ebbers                                                  *
-# *                                                                                   *
-# *   Permission is hereby granted, free of charge, to any person obtaining a copy    *
-# *   of this software and associated documentation files (the "Software"), to deal   *
-# *   in the Software without restriction, including without limitation the rights    *
-# *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
-# *   copies of the Software, and to permit persons to whom the Software is           *
-# *   furnished to do so, subject to the following conditions:                        *
-# *                                                                                   *
-# *   The above copyright notice and this permission notice shall be included in all  *
-# *   copies or substantial portions of the Software.                                 *
-# *                                                                                   *
-# *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
-# *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
-# *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
-# *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
-# *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
-# *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
-# *   SOFTWARE.                                                                       *
-# *                                                                                   *
-# *************************************************************************************/
+# *************************************************************************
+# *                                                                       *
+# * Copyright (c) 2019-2024 Hakan Seven, Geolta, Paul Ebbers              *
+# *                                                                       *
+# * This program is free software; you can redistribute it and/or modify  *
+# * it under the terms of the GNU Lesser General Public License (LGPL)    *
+# * as published by the Free Software Foundation; either version 3 of     *
+# * the License, or (at your option) any later version.                   *
+# * for detail see the LICENCE text file.                                 *
+# *                                                                       *
+# * This program is distributed in the hope that it will be useful,       *
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# * GNU Library General Public License for more details.                  *
+# *                                                                       *
+# * You should have received a copy of the GNU Library General Public     *
+# * License along with this program; if not, write to the Free Software   *
+# * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# * USA                                                                   *
+# *                                                                       *
+# *************************************************************************
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
@@ -53,6 +50,8 @@ class LoadDialog(Settings_ui.Ui_Form):
     ShowText_Small = False
     ShowText_Medium = False
     ShowText_Large = False
+
+    settingChanged = False
 
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
@@ -113,7 +112,7 @@ class LoadDialog(Settings_ui.Ui_Form):
 
         # Connect the button GenerateJsonExit with the function on_GenerateJsonExit_clicked
         def GenerateJsonExit():
-            self.on_GenerateJsonExit_clicked(self)
+            self.on_Close_clicked(self)
 
         self.form.GenerateJsonExit.connect(
             self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
@@ -132,6 +131,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.ENABLE_BACKUP = False
             Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", False)
 
+        self.settingChanged = True
         return
 
     def on_BackUpLocation_clicked(self):
@@ -144,7 +144,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_4.setText(BackupFolder)
             Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
             Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
-
+            self.settingChanged = True
         return
 
     def on_IconSize_Small_TextChanged(self):
@@ -152,7 +152,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         Parameters_Ribbon.Settings.SetIntSetting(
             "IconSize_Small", int(self.form.IconSize_Small.text())
         )
-
+        self.settingChanged = True
         return
 
     def on_IconSize_Medium_TextChanged(self):
@@ -160,7 +160,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         Parameters_Ribbon.Settings.SetIntSetting(
             "IconSize_Medium", int(self.form.IconSize_Medium.text())
         )
-
+        self.settingChanged = True
         return
 
     def on_StyleSheetLocation_clicked(self):
@@ -175,7 +175,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             self.form.label_7.setText(StyleSheet)
             Parameters_Ribbon.STYLESHEET = StyleSheet
             Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
-
+            self.settingChanged = True
         return
 
     def on_ShowTextSmall_clicked(self):
@@ -187,6 +187,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", False)
             self.ShowText_Small = False
+        self.settingChanged = True
+        return
 
     def on_ShowTextMedium_clicked(self):
         if self.form.ShowText_Medium.isChecked() is True:
@@ -197,6 +199,8 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Medium", False)
             self.ShowText_Medium = False
+        self.settingChanged = True
+        return
 
     def on_ShowTextLarge_clicked(self):
         if self.form.ShowText_Large.isChecked() is True:
@@ -207,7 +211,7 @@ class LoadDialog(Settings_ui.Ui_Form):
             Parameters_Ribbon.SHOW_ICON_TEXT_LARGE = False
             Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", False)
             self.ShowText_Large = False
-
+        self.settingChanged = True
         return
 
     @staticmethod
@@ -217,9 +221,14 @@ class LoadDialog(Settings_ui.Ui_Form):
         return
 
     @staticmethod
-    def on_GenerateJsonExit_clicked(self):
+    def on_Close_clicked(self):
         # Close the form
         self.form.close()
+        # show the restart dialog
+        if self.settingChanged is True:
+            result = StandardFunctions.RestartDialog()
+            if result == "yes":
+                StandardFunctions.restart_freecad()
         return
 
     # endregion---------------------------------------------------------------------------------------

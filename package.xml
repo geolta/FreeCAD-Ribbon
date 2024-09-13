@@ -9,9 +9,9 @@
 
   <date>2024-07-28</date>
 
-  <maintainer>Paul Ebbers</maintainer>
+  <maintainer>Paul Ebbers, Geolta</maintainer>
 
-  <license file="LICENSE">MIT License</license>
+  <license file="LICENSE">GPL-3.0 license</license>
 
   <pythonmin>3.8.0</pythonmin>
 
@@ -27,7 +27,7 @@
       <icon>Resources/Icons/FreecadNew.svg</icon>
       <depend optional="False" type="python">pyqtribbon</depend>
       <depend optional="False" type="python">qtpy</depend>
-      <depend optional="False" type="python">keyboard</depend>
+      <depend optional="True" type="python">pynput</depend>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
