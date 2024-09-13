@@ -15,27 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
-The main *pynput* module.
+This module contains a dummy implementation.
 
-This module imports ``keyboard`` and ``mouse``.
+It cannot be used, but importing it will not raise any exceptions.
 """
 
-def _logger(cls):
-    """Creates a logger with a name suitable for a specific class.
-
-    This function takes into account that implementations for classes reside in
-    platform dependent modules, and thus removes the final part of the module
-    name.
-
-    :param type cls: The class for which to create a logger.
-
-    :return: a logger
-    """
-    import logging
-    return logging.getLogger('{}.{}'.format(
-        '.'.join(cls.__module__.split('.', 2)[:2]),
-        cls.__name__))
-
-
-from . import keyboard
-from . import mouse
+from ._base import Controller, Key, KeyCode, Listener
