@@ -27,7 +27,8 @@ import unicodedata
 #: The regular expression used to extract normal values; they are on the form:
 #:
 #:     #define XK_<name> <hex keysym> /* <unicode point> <character name> */
-KEYSYM_RE = re.compile(r'''(?mx)
+KEYSYM_RE = re.compile(
+    r"""(?mx)
     # name
     \#define \s+ XK_([a-zA-Z0-9_]+)\s+
 
@@ -38,15 +39,17 @@ KEYSYM_RE = re.compile(r'''(?mx)
     /\*\s* U\+([0-9a-fA-F]+)\s+.*?\*/
 
     # description, not present
-    ()''')
+    ()"""
+)
 
 #: The prefix used for dead keys
-DEAD_PREFIX = 'dead_'
+DEAD_PREFIX = "dead_"
 
 #: The regular expression used to extract dead key values; they are on the form:
 #:
 #:     #define XK_dead_<name> <hex keysym> [/* description */]
-DEAD_KEYSYM_RE = re.compile(r'''(?mx)
+DEAD_KEYSYM_RE = re.compile(
+    r"""(?mx)
     # name
     \#define \s+ XK_(%s[a-zA-Z0-9_]+)\s+
 
@@ -57,16 +60,19 @@ DEAD_KEYSYM_RE = re.compile(r'''(?mx)
     ()
 
     # description
-    (?:/\*(.*?)\*/)?''' % DEAD_PREFIX)
+    (?:/\*(.*?)\*/)?"""
+    % DEAD_PREFIX
+)
 
 #: The prefix used for keypad keys
-KEYPAD_PREFIX = 'KP_'
+KEYPAD_PREFIX = "KP_"
 
 #: The regular expression used to extract keypad key values; they are on the
 #: form:
 #:
 #:     #define XK_KP_<name> <hex keysym> [/* description */]
-KP_KEYPAD_RE = re.compile(r'''(?mx)
+KP_KEYPAD_RE = re.compile(
+    r"""(?mx)
     # name
     \#define \s+ XK_(%s[a-zA-Z0-9_]+)\s+
 
@@ -77,7 +83,9 @@ KP_KEYPAD_RE = re.compile(r'''(?mx)
     ()
 
     # description
-    (?:/\*(.*?)\*/)?''' % KEYPAD_PREFIX)
+    (?:/\*(.*?)\*/)?"""
+    % KEYPAD_PREFIX
+)
 
 
 def lookup(name):
@@ -89,49 +97,50 @@ def lookup(name):
     :return: a hex number as a string or ``None``
     """
     try:
-        return '%04X' % ord(unicodedata.lookup(name))
+        return "%04X" % ord(unicodedata.lookup(name))
     except KeyError:
         return None
 
+
 # A mapping from dead keys to their unicode codepoints
 DEAD_CODEPOINTS = {
-    name: (
-        lookup('COMBINING ' + codepoint),
-        lookup(codepoint))
+    name: (lookup("COMBINING " + codepoint), lookup(codepoint))
     for name, codepoint in {
-        'abovecomma': 'COMMA ABOVE RIGHT',
-        'abovedot': 'DOT ABOVE',
-        'abovereversedcomma': 'TURNED COMMA ABOVE',
-        'abovering': 'RING ABOVE',
-        'aboveverticalline': 'VERTICAL LINE ABOVE',
-        'acute': 'ACUTE ACCENT',
-        'belowbreve': 'BREVE BELOW',
-        'belowcircumflex': 'CIRCUMFLEX ACCENT BELOW',
-        'belowcomma': 'COMMA BELOW',
-        'belowdiaeresis': 'DIAERESIS BELOW',
-        'belowdot': 'DOT BELOW',
-        'belowmacron': 'MACRON BELOW',
-        'belowring': 'RING BELOW',
-        'belowtilde': 'TILDE BELOW',
-        'belowverticalline': 'VERTICAL LINE BELOW',
-        'breve': 'BREVE',
-        'caron': 'CARON',
-        'cedilla': 'CEDILLA',
-        'circumflex': 'CIRCUMFLEX ACCENT',
-        'diaeresis': 'DIAERESIS',
-        'doubleacute': 'DOUBLE ACUTE ACCENT',
-        'doublegrave': 'DOUBLE GRAVE ACCENT',
-        'grave': 'GRAVE ACCENT',
-        'hook': 'HOOK ABOVE',
-        'horn': 'HORN',
-        'invertedbreve': 'INVERTED BREVE BELOW',
-        'iota': 'GREEK YPOGEGRAMMENI',
-        'longsolidusoverlay': 'LONG SOLIDUS OVERLAY',
-        'lowline': 'LOW LINE',
-        'macron': 'MACRON',
-        'ogonek': 'OGONEK',
-        'stroke': 'SHORT STROKE OVERLAY',
-        'tilde': 'TILDE'}.items()}
+        "abovecomma": "COMMA ABOVE RIGHT",
+        "abovedot": "DOT ABOVE",
+        "abovereversedcomma": "TURNED COMMA ABOVE",
+        "abovering": "RING ABOVE",
+        "aboveverticalline": "VERTICAL LINE ABOVE",
+        "acute": "ACUTE ACCENT",
+        "belowbreve": "BREVE BELOW",
+        "belowcircumflex": "CIRCUMFLEX ACCENT BELOW",
+        "belowcomma": "COMMA BELOW",
+        "belowdiaeresis": "DIAERESIS BELOW",
+        "belowdot": "DOT BELOW",
+        "belowmacron": "MACRON BELOW",
+        "belowring": "RING BELOW",
+        "belowtilde": "TILDE BELOW",
+        "belowverticalline": "VERTICAL LINE BELOW",
+        "breve": "BREVE",
+        "caron": "CARON",
+        "cedilla": "CEDILLA",
+        "circumflex": "CIRCUMFLEX ACCENT",
+        "diaeresis": "DIAERESIS",
+        "doubleacute": "DOUBLE ACUTE ACCENT",
+        "doublegrave": "DOUBLE GRAVE ACCENT",
+        "grave": "GRAVE ACCENT",
+        "hook": "HOOK ABOVE",
+        "horn": "HORN",
+        "invertedbreve": "INVERTED BREVE BELOW",
+        "iota": "GREEK YPOGEGRAMMENI",
+        "longsolidusoverlay": "LONG SOLIDUS OVERLAY",
+        "lowline": "LOW LINE",
+        "macron": "MACRON",
+        "ogonek": "OGONEK",
+        "stroke": "SHORT STROKE OVERLAY",
+        "tilde": "TILDE",
+    }.items()
+}
 
 
 def definitions(data):
@@ -153,30 +162,30 @@ def definitions(data):
                 if codepoint:
                     # If the code point is specified, this keysym corresponds
                     # to a normal character
-                    yield (
-                        name,
-                        (keysym, (codepoint, codepoint)))
+                    yield (name, (keysym, (codepoint, codepoint)))
                     break
 
                 elif name.startswith(DEAD_PREFIX) and (
-                        not description or 'alias for' not in description):
+                    not description or "alias for" not in description
+                ):
                     yield (
                         name,
-                        (keysym, DEAD_CODEPOINTS.get(
-                            name[len(DEAD_PREFIX):],
-                            (None, None))))
+                        (
+                            keysym,
+                            DEAD_CODEPOINTS.get(name[len(DEAD_PREFIX) :], (None, None)),
+                        ),
+                    )
                     break
 
                 elif name.startswith(KEYPAD_PREFIX):
-                    yield (
-                        name,
-                        (keysym, (None, None)))
+                    yield (name, (keysym, (None, None)))
                     break
 
 
 def main():
     syms = sorted(list(definitions(sys.stdin.read().splitlines())))
-    sys.stdout.write('''# coding: utf-8
+    sys.stdout.write(
+        """# coding: utf-8
 # pynput
 # Copyright (C) 2015-2024-%d Moses Palmér
 #
@@ -213,24 +222,26 @@ KEYSYMS = {
     keysym: name
     for name, (keysym, codepoint) in SYMBOLS.items()
     if codepoint}
-''' % (
-        datetime.date.today().year,
-        ',\n'.join(
-            '    \'%s\': (0x%s, %s)' % (
-                    name,
-                    keysym,
-                    'u\'\\u%s\'' % first if first else None)
-            for name, (keysym, (first, second)) in syms),
-        ',\n'.join(
-            '    %s: %s' % (
-                    'u\'\\u%s\'' % first,
-                    'u\'\\u%s\'' % second)
-            for name, (keysym, (first, second)) in syms
-            if name.startswith(DEAD_PREFIX)
-                and first and second and first != second),
-        ',\n'.join(
-            '    \'%s\': 0x%s' % (name, keysym)
-            for name, (keysym, (first, second)) in syms
-            if name.startswith(KEYPAD_PREFIX))))
+"""
+        % (
+            datetime.date.today().year,
+            ",\n".join(
+                "    '%s': (0x%s, %s)"
+                % (name, keysym, "u'\\u%s'" % first if first else None)
+                for name, (keysym, (first, second)) in syms
+            ),
+            ",\n".join(
+                "    %s: %s" % ("u'\\u%s'" % first, "u'\\u%s'" % second)
+                for name, (keysym, (first, second)) in syms
+                if name.startswith(DEAD_PREFIX) and first and second and first != second
+            ),
+            ",\n".join(
+                "    '%s': 0x%s" % (name, keysym)
+                for name, (keysym, (first, second)) in syms
+                if name.startswith(KEYPAD_PREFIX)
+            ),
+        )
+    )
+
 
 main()

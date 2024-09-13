@@ -32,90 +32,77 @@ from . import notify
 class KeyboardHotKeyTest(unittest.TestCase):
     def test_parse_invalid(self):
         with self.assertRaises(ValueError) as e:
-            HotKey.parse('invalid')
-        self.assertEqual(e.exception.args, ('invalid',))
+            HotKey.parse("invalid")
+        self.assertEqual(e.exception.args, ("invalid",))
 
         with self.assertRaises(ValueError) as e:
-            HotKey.parse('a+')
-        self.assertEqual(e.exception.args, ('a+',))
+            HotKey.parse("a+")
+        self.assertEqual(e.exception.args, ("a+",))
 
         with self.assertRaises(ValueError) as e:
-            HotKey.parse('<ctrl>+<halt>')
-        self.assertEqual(e.exception.args, ('<halt>',))
+            HotKey.parse("<ctrl>+<halt>")
+        self.assertEqual(e.exception.args, ("<halt>",))
 
         with self.assertRaises(ValueError) as e:
-            HotKey.parse('<ctrl>+a+a')
-        self.assertEqual(e.exception.args, ('<ctrl>+a+a',))
+            HotKey.parse("<ctrl>+a+a")
+        self.assertEqual(e.exception.args, ("<ctrl>+a+a",))
 
         with self.assertRaises(ValueError) as e:
-            HotKey.parse('<ctrl>+a+A')
-        self.assertEqual(e.exception.args, ('<ctrl>+a+A',))
+            HotKey.parse("<ctrl>+a+A")
+        self.assertEqual(e.exception.args, ("<ctrl>+a+A",))
 
     def test_parse_valid(self):
+        self.assertSequenceEqual(HotKey.parse("a"), [kc.from_char("a")])
+        self.assertSequenceEqual(HotKey.parse("A"), [kc.from_char("a")])
+        self.assertSequenceEqual(HotKey.parse("<ctrl>+a"), [k.ctrl, kc.from_char("a")])
         self.assertSequenceEqual(
-            HotKey.parse('a'),
-            [
-                kc.from_char('a')])
+            HotKey.parse("<ctrl>+<alt>+a"), [k.ctrl, k.alt, kc.from_char("a")]
+        )
         self.assertSequenceEqual(
-            HotKey.parse('A'),
-            [
-                kc.from_char('a')])
-        self.assertSequenceEqual(
-            HotKey.parse('<ctrl>+a'),
-            [
-                k.ctrl,
-                kc.from_char('a')])
-        self.assertSequenceEqual(
-            HotKey.parse('<ctrl>+<alt>+a'),
-            [
-                k.ctrl,
-                k.alt,
-                kc.from_char('a')])
-        self.assertSequenceEqual(
-            HotKey.parse('<ctrl>+<123456>'),
-            [
-                k.ctrl,
-                kc.from_vk(123456)])
+            HotKey.parse("<ctrl>+<123456>"), [k.ctrl, kc.from_vk(123456)]
+        )
 
     def test_activate_single(self):
         activations = []
+
         def on_activate():
             activations.append(True)
 
-        hk = HotKey({kc.from_char('a')}, on_activate)
+        hk = HotKey({kc.from_char("a")}, on_activate)
 
-        hk.press(kc.from_char('b'))
+        hk.press(kc.from_char("b"))
         self.assertEqual(0, len(activations))
-        hk.release(kc.from_char('b'))
+        hk.release(kc.from_char("b"))
         self.assertEqual(0, len(activations))
 
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         self.assertEqual(1, len(activations))
-        hk.release(kc.from_char('a'))
+        hk.release(kc.from_char("a"))
         self.assertEqual(1, len(activations))
 
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         self.assertEqual(2, len(activations))
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         self.assertEqual(2, len(activations))
-        hk.release(kc.from_char('a'))
+        hk.release(kc.from_char("a"))
         self.assertEqual(2, len(activations))
 
     def test_activate_combo(self):
         activations = []
+
         def on_activate():
             activations.append(True)
 
-        hk = HotKey({k.ctrl, kc.from_char('a')}, on_activate)
+        hk = HotKey({k.ctrl, kc.from_char("a")}, on_activate)
 
-        hk.press(kc.from_char('b'))
+        hk.press(kc.from_char("b"))
         self.assertEqual(0, len(activations))
-        hk.release(kc.from_char('b'))
+        hk.release(kc.from_char("b"))
         self.assertEqual(0, len(activations))
 
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         self.assertEqual(0, len(activations))
-        hk.release(kc.from_char('a'))
+        hk.release(kc.from_char("a"))
         self.assertEqual(0, len(activations))
 
         hk.press(k.ctrl)
@@ -123,31 +110,34 @@ class KeyboardHotKeyTest(unittest.TestCase):
         hk.release(k.ctrl)
         self.assertEqual(0, len(activations))
 
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         hk.press(k.ctrl)
         self.assertEqual(1, len(activations))
-        hk.press(kc.from_char('a'))
+        hk.press(kc.from_char("a"))
         hk.press(k.ctrl)
         self.assertEqual(1, len(activations))
         hk.release(k.ctrl)
         hk.press(k.ctrl)
         self.assertEqual(2, len(activations))
-        hk.release(kc.from_char('a'))
-        hk.press(kc.from_char('a'))
+        hk.release(kc.from_char("a"))
+        hk.press(kc.from_char("a"))
         self.assertEqual(3, len(activations))
 
     def test_hotkeys(self):
         q = queue.Queue()
 
-        with GlobalHotKeys({
-                '<ctrl>+<shift>+a': lambda: q.put('a'),
-                '<ctrl>+<shift>+b': lambda: q.put('b'),
-                '<ctrl>+<shift>+c': lambda: q.put('c')}):
-            notify('Press <ctrl>+<shift>+a')
-            self.assertEqual('a', q.get())
+        with GlobalHotKeys(
+            {
+                "<ctrl>+<shift>+a": lambda: q.put("a"),
+                "<ctrl>+<shift>+b": lambda: q.put("b"),
+                "<ctrl>+<shift>+c": lambda: q.put("c"),
+            }
+        ):
+            notify("Press <ctrl>+<shift>+a")
+            self.assertEqual("a", q.get())
 
-            notify('Press <ctrl>+<shift>+b')
-            self.assertEqual('b', q.get())
+            notify("Press <ctrl>+<shift>+b")
+            self.assertEqual("b", q.get())
 
-            notify('Press <ctrl>+<shift>+c')
-            self.assertEqual('c', q.get())
+            notify("Press <ctrl>+<shift>+c")
+            self.assertEqual("c", q.get())
