@@ -219,7 +219,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.close()
         # show the restart dialog
         if self.settingChanged is True:
-            result = StandardFunctions.RestartDialog(True)
+            result = StandardFunctions.RestartDialog()
             if result == "yes":
                 StandardFunctions.restart_freecad()
         return
