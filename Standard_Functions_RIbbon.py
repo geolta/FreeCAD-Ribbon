@@ -143,6 +143,9 @@ def RestartDialog(includeIcons=False):
     """
     from PySide.QtWidgets import QMessageBox
 
+    # Save the preferences before restarting
+    App.saveParameter()
+
     # Set the messagebox
     msgBox = QMessageBox()
     msgBox.setIcon(QMessageBox.Warning)
@@ -171,9 +174,7 @@ def restart_freecad():
 
     args = QtWidgets.QApplication.arguments()[1:]
     if Gui.getMainWindow().close():
-        QtCore.QProcess.startDetached(
-            QtWidgets.QApplication.applicationFilePath(), args
-        )
+        QtCore.QProcess.startDetached(QtWidgets.QApplication.applicationFilePath(), args)
 
     return
 
@@ -338,13 +339,9 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="", SaveAs: bool = True) -
 
     file = ""
     if SaveAs is False:
-        file = QFileDialog.getOpenFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     if SaveAs is True:
-        file = QFileDialog.getSaveFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getSaveFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     return file
 
 
@@ -352,9 +349,7 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(
-        parent=parent, caption="Select Folder", dir=DefaultPath
-    )
+    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
 
     return Directory
 
