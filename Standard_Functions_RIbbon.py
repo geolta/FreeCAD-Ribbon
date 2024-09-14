@@ -351,7 +351,7 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     return Directory
 
 
-def getReproAdress(self, base_path):
+def getReproAdress(base_path):
     import pathlib
 
     git_dir = pathlib.Path(base_path) / ".git"

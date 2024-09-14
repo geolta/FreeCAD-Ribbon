@@ -112,6 +112,7 @@ class ModernMenu(RibbonBar):
         # connect the signals
         self.connectSignals()
 
+        # Get the adress of the reporisaty adress
         self.ReproAdress = StandardFunctions.getReproAdress(os.path.dirname(__file__))
         print(self.ReproAdress)
 
