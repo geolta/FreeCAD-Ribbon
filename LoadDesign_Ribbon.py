@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QPixmap
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QPixmap, QAction
+from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -32,8 +32,9 @@ from PySide.QtWidgets import (
     QToolButton,
     QComboBox,
     QPushButton,
+    QMenu,
 )
-from PySide.QtCore import Qt, SIGNAL, Signal, QObject, QThread
+from PySide6.QtCore import Qt, SIGNAL, Signal, QObject, QThread
 import sys
 import json
 from datetime import datetime
@@ -61,6 +62,7 @@ translate = App.Qt.translate
 
 
 class LoadDialog(Design_ui.Ui_Form):
+    ReproAdress: str = ""
 
     # Define list of the workbenches, toolbars and commands on class level
     List_Workbenches = []
@@ -89,6 +91,9 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # # this will create a Qt widget from our ui file
         self.form = Gui.PySideUic.loadUi(os.path.join(pathUI, "Design.ui"))
+
+        # Get the adress of the reporisaty adress
+        self.ReproAdress = StandardFunctions.getReproAdress(os.path.dirname(__file__))
 
         # Make sure that the dialog stays on top
         self.form.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
@@ -426,7 +431,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Connect the help buttons
         def Help():
-            self.on_Helpbutton_clicked()
+            self.on_Helpbutton_clicked(self)
 
         self.form.HelpButton.connect(self.form.HelpButton, SIGNAL("clicked()"), Help)
 
@@ -452,9 +457,11 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.ToolbarsOrder.hide()
 
         # -- Form buttons --
-        helpIcon = QIcon()
-        pixmap = QPixmap(os.path.join(pathIcons, "Help-browser.svg"))
-        helpIcon.addPixmap(pixmap)
+        # Get the icon from the FreeCAD help
+        helpMenu = mw.findChildren(QMenu, "&Help")[0]
+        helpAction = helpMenu.actions()[0]
+        helpIcon = helpAction.icon()
+
         self.form.HelpButton.setIcon(helpIcon)
         self.form.HelpButton.setMinimumHeight(self.form.GenerateJsonExit.minimumHeight())
         # endregion
@@ -1579,9 +1586,13 @@ class LoadDialog(Design_ui.Ui_Form):
         return
 
     @staticmethod
-    def on_Helpbutton_clicked():
-        HelpAdress = os.path.join(StandardFunctions.getReproAdress(os.path.dirname(__file__)), "/wiki")
-        webbrowser.open(HelpAdress, new=2, autoraise=True)
+    def on_Helpbutton_clicked(self):
+        if self.ReproAdress != "" or self.ReproAdress is not None:
+            if not self.ReproAdress.endswith("/"):
+                self.ReproAdress = self.ReproAdress + "/"
+
+            AboutAdress = self.ReproAdress + "wiki"
+            webbrowser.open(AboutAdress, new=2, autoraise=True)
         return
 
     # endregion
