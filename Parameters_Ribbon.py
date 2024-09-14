@@ -132,7 +132,6 @@ else:
     ICON_SIZE_LARGE = int(50)
     Settings.SetIntSetting("IconSize_Large", 50)
 
-
 # Backup parameters
 if Settings.GetBoolSetting("BackupEnabled") is True:
     ENABLE_BACKUP = Settings.GetBoolSetting("BackupEnabled")
@@ -143,9 +142,6 @@ if Settings.GetStringSetting("BackupFolder") != "":
 else:
     BACKUP_LOCATION = os.path.dirname(__file__) + "/Backups"
     Settings.SetStringSetting("BackupFolder", BACKUP_LOCATION)
-
-# Additional parameter
-HELP_ADRESS = str("https://wiki.freecad.org/Main_Page")
 
 # Ribbon settings
 if Settings.GetBoolSetting("AutoHideRibbon") is True:

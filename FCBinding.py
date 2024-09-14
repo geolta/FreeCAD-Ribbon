@@ -32,6 +32,7 @@ from PySide.QtWidgets import (
     QMenuBar,
     QMenu,
     QMainWindow,
+    QLayout,
 )
 from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
 
@@ -44,7 +45,7 @@ import Parameters_Ribbon
 import LoadSettings_Ribbon
 import Standard_Functions_RIbbon as StandardFunctions
 import platform
-import time
+import subprocess
 
 
 # import modules for keypress detection based on OS
@@ -70,6 +71,7 @@ except ImportError:
 
     print("pyqtribbon used local")
 
+from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -83,6 +85,8 @@ class ModernMenu(RibbonBar):
     Create ModernMenu QWidget.
     """
 
+    ReproAdress: str = ""
+
     ribbonStructure = {}
 
     wbNameMapping = {}
@@ -95,6 +99,7 @@ class ModernMenu(RibbonBar):
     # use icon size from FreeCAD preferences
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
 
+    # Set a sixe factor for the buttons
     sizeFactor = 1.2
 
     def __init__(self):
@@ -106,6 +111,10 @@ class ModernMenu(RibbonBar):
 
         # connect the signals
         self.connectSignals()
+
+        # Get the adress of the reporisaty adress
+        self.ReproAdress = StandardFunctions.getReproAdress(os.path.dirname(__file__))
+        print(f"FreeCAD Ribbon: {self.ReproAdress}")
 
         # Set the icon size if parameters has none
         # Define the icon sizes
@@ -250,19 +259,23 @@ class ModernMenu(RibbonBar):
             elif len(QuickAction) > 1:
                 print(f"{commandName} has more than one action")
 
+            # Add the action
             button.setDefaultAction(QuickAction[0])
-            button.setSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
+
+            # Add the button to the quickaccess toolbar
             self.addQuickAccessButton(button)
 
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         # Set the width of the quickaccess toolbar.
         self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * self.sizeFactor)
+        # Set the size policy
         self.quickAccessToolBar().setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
+        # Set the layout
+        Layout = self.quickAccessToolBar().layout()
+        Layout.setContentsMargins(1, 1, 1, 1)
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
@@ -304,13 +317,9 @@ class ModernMenu(RibbonBar):
         )
         self.helpRibbonButton().setMaximumWidth(self.iconSize * self.sizeFactor)
         self.helpRibbonButton().setToolTip("Go to the FreeCAD help page")
-        # Define an action for the help button
-        helpAction = QAction()
-        helpIcon = QIcon()
-        pixmap = QPixmap(os.path.join(pathIcons, "help-browser.svg"))
-        helpIcon.addPixmap(pixmap)
-        helpAction.setIcon(helpIcon)
-        helpAction.triggered.connect(self.onHelpClicked)
+        # Get the default help action from FreeCAD
+        helpMenu = mw.findChildren(QMenu, "&Help")[0]
+        helpAction = helpMenu.actions()[0]
         self.helpRibbonButton().setDefaultAction(helpAction)
 
         # Add a button the enable or disable AutoHide
@@ -372,7 +381,10 @@ class ModernMenu(RibbonBar):
                         ListScripts[i],
                         lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1]),
                     )
-
+        # Add a about button for this ribbon
+        DesignMenu.addSeparator()
+        AboutButton = DesignMenu.addAction("About FreeCAD Ribbon")
+        AboutButton.triggered.connect(self.on_AboutButton_clicked)
         return
 
     def loadDesignMenu(self):
@@ -385,6 +397,15 @@ class ModernMenu(RibbonBar):
 
     def loadSettingsMenu(self):
         LoadSettings_Ribbon.main()
+        return
+
+    def on_AboutButton_clicked(self):
+        if self.ReproAdress != "" or self.ReproAdress is not None:
+            if not self.ReproAdress.endswith("/"):
+                self.ReproAdress = self.ReproAdress + "/"
+
+            AboutAdress = self.ReproAdress + "wiki/About"
+            webbrowser.open(AboutAdress, new=2, autoraise=True)
         return
 
     def onCollapseRibbonButton_clicked(self):
@@ -409,14 +430,6 @@ class ModernMenu(RibbonBar):
             self.onCollapseRibbonButton_clicked()
             return
 
-        return
-
-    def onHelpClicked(self):
-        HelpParam = "User parameter:BaseApp/Preferences/Mod/Help"
-        HelpAdress = App.ParamGet(HelpParam).GetString("Location")
-        if HelpAdress == "":
-            HelpAdress = Parameters_Ribbon.HELP_ADRESS
-        webbrowser.open(HelpAdress, new=2, autoraise=True)
         return
 
     def onUserChangedWorkbench(self):
@@ -719,7 +732,6 @@ class ModernMenu(RibbonBar):
                         btn.setPopupMode(
                             QToolButton.ToolButtonPopupMode.MenuButtonPopup
                         )
-                        # btn.setStyleSheet("QToolButton::menu-button {width: 16px")
                     btn.setDefaultAction(action)
 
                 except Exception:
@@ -728,8 +740,13 @@ class ModernMenu(RibbonBar):
                 # add the button text to the shadowList for checking if buttons are already there.
                 shadowList.append(button.text())
 
+            # remove any suffix
             if panel.title().endswith("_custom"):
                 panel.setTitle(panel.title().replace("_custom", ""))
+
+            # Set the margings. In linux seems the style behavior different than on Windows
+            Layout = panel.layout()
+            Layout.setContentsMargins(3, 3, 3, 3)
 
         self.isWbLoaded[tabName] = True
 
@@ -819,22 +836,6 @@ class ModernMenu(RibbonBar):
             if script.endswith(".py"):
                 App.loadFile(script)
         return
-
-
-class MainWindow(QMainWindow):
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key.Key_Alt or event.key() == Qt.Key.Key_AltGr:
-            self.ToggleMenuBar()
-
-    def ToggleMenuBar(self):
-        mw = self
-        menuBar = mw.menuBar()
-        if menuBar.isVisible() is True:
-            menuBar.hide()
-            return
-        if menuBar.isVisible() is False:
-            menuBar.show()
-            return
 
 
 class run:
