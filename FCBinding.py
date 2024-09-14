@@ -161,11 +161,10 @@ class ModernMenu(RibbonBar):
             mw.menuBar().show()
 
         # make sure that the ribbon cannot "dissapear"
-        TB = mw.findChildren(QDockWidget, "Ribbon")[0]
         if self.ribbonVisible() is False:
-            TB.setMaximumHeight(45)
+            self.setMaximumHeight(45)
         else:
-            TB.setMaximumHeight(200)
+            self.setMaximumHeight(200)
 
         # Get the keypress when on linux
         if platform.system() == "Linux" or platform.system() == "Darwin":
