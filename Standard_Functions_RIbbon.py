@@ -134,7 +134,7 @@ def Mbox(
         return str(replyText)
 
 
-def RestartDialog(includeIcons=False):
+def RestartDialog(message="", includeIcons=False):
     """_summary_
         shows a restart dialog
     Returns:
@@ -146,10 +146,14 @@ def RestartDialog(includeIcons=False):
     # Save the preferences before restarting
     App.saveParameter()
 
+    # Set the message
+    if message == "":
+        message = "You must restart FreeCAD for changes to take effect."
+
     # Set the messagebox
     msgBox = QMessageBox()
     msgBox.setIcon(QMessageBox.Warning)
-    msgBox.setText("You must restart FreeCAD for changes to take effect.")
+    msgBox.setText(message)
     msgBox.setWindowTitle("FreeCAD Ribbon")
     # Set the buttons and default button
     msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -174,9 +178,7 @@ def restart_freecad():
 
     args = QtWidgets.QApplication.arguments()[1:]
     if Gui.getMainWindow().close():
-        QtCore.QProcess.startDetached(
-            QtWidgets.QApplication.applicationFilePath(), args
-        )
+        QtCore.QProcess.startDetached(QtWidgets.QApplication.applicationFilePath(), args)
 
     return
 
@@ -341,13 +343,9 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="", SaveAs: bool = True) -
 
     file = ""
     if SaveAs is False:
-        file = QFileDialog.getOpenFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     if SaveAs is True:
-        file = QFileDialog.getSaveFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getSaveFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     return file
 
 
@@ -355,9 +353,7 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(
-        parent=parent, caption="Select Folder", dir=DefaultPath
-    )
+    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
 
     return Directory
 
