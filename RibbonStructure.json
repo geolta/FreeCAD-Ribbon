@@ -9,8 +9,10 @@
         "Workbench"
     ],
     "iconOnlyToolbars": [
-        "Structure",
-        "Individual views"
+        "BOM Commands",
+        "Create BOM_custom",
+        "Individual views",
+        "Structure"
     ],
     "quickAccessCommands": [
         "Std_New",
@@ -24,6 +26,7 @@
     ],
     "ignoredWorkbenches": [
         "Inspection",
+        "Material",
         "OpenSCAD",
         "Points",
         "Reverse Engineering",
@@ -31,8 +34,21 @@
         "Test Framework"
     ],
     "customToolbars": {
+        "TechDrawWorkbench": {
+            "TechDraw Dimensions_custom": {
+                "commands": {
+                    "Dimension": "TechDraw Dimensions",
+                    "Insert Balloon Annotation": "TechDraw Dimensions",
+                    "Axonometric length dimension": "TechDraw Dimensions",
+                    "Insert Landmark Dimension - EXPERIMENTAL": "TechDraw Dimensions",
+                    "Repair Dimension References": "TechDraw Dimensions",
+                    "Insert '\u2300' Prefix": "TechDraw Extend Dimensions",
+                    "Increase Decimal Places": "TechDraw Extend Dimensions"
+                }
+            }
+        },
         "FemWorkbench": {
-            "Loads & boundary conditions": {
+            "Loads & Constraints_custom": {
                 "commands": {
                     "Electromagnetic boundary conditions": "Electromagnetic boundary conditions",
                     "Initial flow velocity condition": "Fluid boundary conditions",
@@ -56,9 +72,6 @@
             }
         }
     },
-    "showTextSmall": false,
-    "showTextMedium": false,
-    "showTextLarge": true,
     "workbenches": {
         "PartDesignWorkbench": {
             "toolbars": {
@@ -196,8 +209,8 @@
                             "icon": ""
                         },
                         "PartDesign_Boolean": {
-                            "size": "small",
-                            "text": "Boolean operation",
+                            "size": "large",
+                            "text": "Boolean",
                             "icon": "PartDesign_Boolean"
                         }
                     }
@@ -526,7 +539,13 @@
                     "Structure",
                     "Assembly",
                     "Assembly Joints",
-                    "Create BOM_custom"
+                    "Create BOM_custom",
+                    "File",
+                    "Edit",
+                    "Clipboard",
+                    "Workbench",
+                    "Macro",
+                    "View"
                 ],
                 "Structure": {
                     "order": [
@@ -835,13 +854,7 @@
                         }
                     }
                 },
-                "order": [
-                    "Individual views",
-                    "Structure",
-                    "Assembly",
-                    "Assembly Joints",
-                    "Create BOM_custom"
-                ],
+                "order": [],
                 "Individual views": {
                     "order": [
                         "Isometric",
@@ -950,8 +963,33 @@
                     "commands": {
                         "CAM_Inspect": {
                             "size": "large",
-                            "text": "Inspect toolPath Commands",
+                            "text": "Inspect toolPath",
                             "icon": "CAM_Inspect"
+                        },
+                        "CAM_Simulator": {
+                            "size": "small",
+                            "text": "CAM Simulator",
+                            "icon": "CAM_Simulator"
+                        },
+                        "CAM_SimulatorGL": {
+                            "size": "small",
+                            "text": "New CAM Simulator",
+                            "icon": "CAM_SimulatorGL"
+                        },
+                        "CAM_SelectLoop": {
+                            "size": "small",
+                            "text": "Finish Selecting Loop",
+                            "icon": "CAM_SelectLoop"
+                        },
+                        "CAM_OpActiveToggle": {
+                            "size": "small",
+                            "text": "Toggle the Active State of the Operation",
+                            "icon": "CAM_OpActive"
+                        },
+                        "CAM_ToolBitDock": {
+                            "size": "small",
+                            "text": "ToolBit Dock",
+                            "icon": "CAM_ToolTable"
                         }
                     }
                 },
@@ -983,8 +1021,67 @@
                     "commands": {
                         "CAM_OperationCopy": {
                             "size": "large",
-                            "text": "Copy the operation in the job",
+                            "text": "Copy operation",
                             "icon": "CAM_OpCopy"
+                        },
+                        "CAM_Array": {
+                            "size": "small",
+                            "text": "Array",
+                            "icon": "CAM_Array"
+                        },
+                        "CAM_SimpleCopy": {
+                            "size": "small",
+                            "text": "Simple Copy",
+                            "icon": "CAM_SimpleCopy"
+                        }
+                    }
+                },
+                "order": [],
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
                         }
                     }
                 }
@@ -1168,8 +1265,18 @@
                     "commands": {
                         "FEM_ConstraintPlaneRotation": {
                             "size": "large",
-                            "text": "Plane multi-point constraint",
+                            "text": "Multi-point constraint",
                             "icon": "FEM_ConstraintPlaneRotation"
+                        },
+                        "FEM_ConstraintSectionPrint": {
+                            "size": "small",
+                            "text": "Section print feature",
+                            "icon": "FEM_ConstraintSectionPrint"
+                        },
+                        "FEM_ConstraintTransform": {
+                            "size": "small",
+                            "text": "Local coordinate system",
+                            "icon": "FEM_ConstraintTransform"
                         }
                     }
                 },
@@ -1236,8 +1343,33 @@
                     "commands": {
                         "FEM_MeshNetgenFromShape": {
                             "size": "large",
-                            "text": "FEM mesh from shape by Netgen",
+                            "text": "Netgen mesh",
                             "icon": "FEM_MeshNetgenFromShape"
+                        },
+                        "FEM_MeshGmshFromShape": {
+                            "size": "small",
+                            "text": "FEM mesh from shape by Gmsh",
+                            "icon": "FEM_MeshGmshFromShape"
+                        },
+                        "FEM_MeshBoundaryLayer": {
+                            "size": "small",
+                            "text": "FEM mesh boundary layer",
+                            "icon": "FEM_MeshBoundaryLayer"
+                        },
+                        "FEM_MeshRegion": {
+                            "size": "small",
+                            "text": "FEM mesh refinement",
+                            "icon": "FEM_MeshRegion"
+                        },
+                        "FEM_MeshGroup": {
+                            "size": "small",
+                            "text": "FEM mesh group",
+                            "icon": "FEM_MeshGroup"
+                        },
+                        "FEM_FEMMesh2Mesh": {
+                            "size": "small",
+                            "text": "FEM mesh to mesh",
+                            "icon": "FEM_FEMMesh2Mesh"
                         }
                     }
                 },
@@ -1255,8 +1387,43 @@
                     "commands": {
                         "FEM_SolverCalculiXCcxTools": {
                             "size": "large",
-                            "text": "Solver CalculiX Standard",
+                            "text": "CalculiX solver",
                             "icon": "FEM_SolverStandard"
+                        },
+                        "FEM_CompMechEquations": {
+                            "size": "small",
+                            "text": "Mechanical equations",
+                            "icon": ""
+                        },
+                        "FEM_CompEmEquations": {
+                            "size": "small",
+                            "text": "Electromagnetic equations",
+                            "icon": ""
+                        },
+                        "FEM_EquationFlow": {
+                            "size": "small",
+                            "text": "Flow equation",
+                            "icon": "FEM_EquationFlow"
+                        },
+                        "FEM_EquationFlux": {
+                            "size": "small",
+                            "text": "Flux equation",
+                            "icon": "FEM_EquationFlux"
+                        },
+                        "FEM_EquationHeat": {
+                            "size": "small",
+                            "text": "Heat equation",
+                            "icon": "FEM_EquationHeat"
+                        },
+                        "FEM_SolverControl": {
+                            "size": "small",
+                            "text": "Solver job control",
+                            "icon": "FEM_SolverControl"
+                        },
+                        "FEM_SolverRun": {
+                            "size": "small",
+                            "text": "Run solver calculations",
+                            "icon": "FEM_SolverRun"
                         }
                     }
                 },
@@ -1281,6 +1448,66 @@
                             "size": "large",
                             "text": "Purge results",
                             "icon": "FEM_ResultsPurge"
+                        },
+                        "FEM_ResultShow": {
+                            "size": "small",
+                            "text": "Show result",
+                            "icon": "FEM_ResultShow"
+                        },
+                        "FEM_PostApplyChanges": {
+                            "size": "small",
+                            "text": "Apply changes to pipeline",
+                            "icon": "view-refresh"
+                        },
+                        "FEM_PostPipelineFromResult": {
+                            "size": "small",
+                            "text": "Post pipeline from result",
+                            "icon": "FEM_PostPipelineFromResult"
+                        },
+                        "FEM_PostFilterWarp": {
+                            "size": "small",
+                            "text": "Warp filter",
+                            "icon": "FEM_PostFilterWarp"
+                        },
+                        "FEM_PostFilterClipScalar": {
+                            "size": "small",
+                            "text": "Scalar clip filter",
+                            "icon": "FEM_PostFilterClipScalar"
+                        },
+                        "FEM_PostFilterCutFunction": {
+                            "size": "small",
+                            "text": "Function cut filter",
+                            "icon": "FEM_PostFilterCutFunction"
+                        },
+                        "FEM_PostFilterClipRegion": {
+                            "size": "small",
+                            "text": "Region clip filter",
+                            "icon": "FEM_PostFilterClipRegion"
+                        },
+                        "FEM_PostFilterContours": {
+                            "size": "small",
+                            "text": "Contours filter",
+                            "icon": "FEM_PostFilterContours"
+                        },
+                        "FEM_PostFilterDataAlongLine": {
+                            "size": "small",
+                            "text": "Line clip filter",
+                            "icon": "FEM_PostFilterDataAlongLine"
+                        },
+                        "FEM_PostFilterLinearizedStresses": {
+                            "size": "small",
+                            "text": "Stress linearization plot",
+                            "icon": "FEM_PostFilterLinearizedStresses"
+                        },
+                        "FEM_PostFilterDataAtPoint": {
+                            "size": "small",
+                            "text": "Data at point clip filter",
+                            "icon": "FEM_PostFilterDataAtPoint"
+                        },
+                        "FEM_PostCreateFunctions": {
+                            "size": "small",
+                            "text": "Filter functions",
+                            "icon": ""
                         }
                     }
                 },
@@ -1293,8 +1520,18 @@
                     "commands": {
                         "FEM_ClippingPlaneAdd": {
                             "size": "large",
-                            "text": "Clipping plane on face",
+                            "text": "Clipping plane",
                             "icon": "FEM_ClippingPlaneAdd"
+                        },
+                        "FEM_ClippingPlaneRemoveAll": {
+                            "size": "small",
+                            "text": "Remove all clipping planes",
+                            "icon": "FEM_ClippingPlaneRemoveAll"
+                        },
+                        "FEM_Examples": {
+                            "size": "small",
+                            "text": "Open FEM examples",
+                            "icon": "FemWorkbench"
                         }
                     }
                 },
@@ -1302,8 +1539,8 @@
                     "Individual views",
                     "Structure",
                     "Model",
-                    "Boundaty conditions & loads_custom",
                     "Geometrical analysis features",
+                    "Loads & Constraints_custom",
                     "Mesh",
                     "Solve",
                     "Results",
@@ -1357,7 +1594,37 @@
                         }
                     }
                 },
-                "Boundaty conditions & loads_custom": {
+                "Structure": {
+                    "order": [
+                        "Create part",
+                        "Create group",
+                        "Link actions",
+                        "Create a variable set"
+                    ],
+                    "commands": {
+                        "Std_Part": {
+                            "size": "small",
+                            "text": "Create part",
+                            "icon": "Geofeaturegroup"
+                        },
+                        "Std_Group": {
+                            "size": "small",
+                            "text": "Create group",
+                            "icon": "folder"
+                        },
+                        "Std_LinkActions": {
+                            "size": "small",
+                            "text": "Link actions",
+                            "icon": ""
+                        },
+                        "Std_VarSet": {
+                            "size": "small",
+                            "text": "Create a variable set",
+                            "icon": "VarSet"
+                        }
+                    }
+                },
+                "Loads & Constraints_custom": {
                     "order": [
                         "Fixed boundary condition",
                         "Rigid body constraint",
@@ -1365,25 +1632,26 @@
                         "Contact constraint",
                         "Tie constraint",
                         "Spring",
-                        "Separator",
+                        "separator_FemWorkbench_6",
                         "Force load",
                         "Pressure load",
                         "Centrifugal load",
                         "Gravity load",
-                        "Separator",
+                        "separator_FemWorkbench_11",
                         "Electromagnetic boundary conditions",
                         "Initial flow velocity condition",
                         "Initial pressure condition",
                         "Flow velocity boundary condition",
-                        "Separator",
+                        "separator_FemWorkbench_16",
                         "Initial temperature",
                         "Heat flux load",
-                        "Temperature boundary condition"
+                        "Temperature boundary condition",
+                        "Body heat source"
                     ],
                     "commands": {
                         "FEM_CompEmConstraints": {
-                            "size": "small",
-                            "text": "Electromagnetic boundary conditions",
+                            "size": "large",
+                            "text": "Electromagnetic constraints",
                             "icon": ""
                         },
                         "FEM_ConstraintInitialFlowVelocity": {
@@ -1403,7 +1671,7 @@
                         },
                         "FEM_ConstraintFixed": {
                             "size": "large",
-                            "text": "Fixed boundary condition",
+                            "text": "Fixed constraint",
                             "icon": "FEM_ConstraintFixed"
                         },
                         "FEM_ConstraintRigidBody": {
@@ -1413,7 +1681,7 @@
                         },
                         "FEM_ConstraintDisplacement": {
                             "size": "small",
-                            "text": "Displacement boundary condition",
+                            "text": "Displacement constraint",
                             "icon": "FEM_ConstraintDisplacement"
                         },
                         "FEM_ConstraintContact": {
@@ -1452,7 +1720,7 @@
                             "icon": "FEM_ConstraintSelfWeight"
                         },
                         "FEM_ConstraintInitialTemperature": {
-                            "size": "small",
+                            "size": "large",
                             "text": "Initial temperature",
                             "icon": "FEM_ConstraintInitialTemperature"
                         },
@@ -1470,36 +1738,6 @@
                             "size": "small",
                             "text": "Body heat source",
                             "icon": "FEM_ConstraintBodyHeatSource"
-                        }
-                    }
-                },
-                "Structure": {
-                    "order": [
-                        "Create part",
-                        "Create group",
-                        "Link actions",
-                        "Create a variable set"
-                    ],
-                    "commands": {
-                        "Std_Part": {
-                            "size": "small",
-                            "text": "Create part",
-                            "icon": "Geofeaturegroup"
-                        },
-                        "Std_Group": {
-                            "size": "small",
-                            "text": "Create group",
-                            "icon": "folder"
-                        },
-                        "Std_LinkActions": {
-                            "size": "small",
-                            "text": "Link actions",
-                            "icon": ""
-                        },
-                        "Std_VarSet": {
-                            "size": "small",
-                            "text": "Create a variable set",
-                            "icon": "VarSet"
                         }
                     }
                 }
@@ -1682,6 +1920,69 @@
                             "icon": "Mesh_Evaluation"
                         }
                     }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Model",
+                    "Electromagnetic boundary conditions",
+                    "Fluid boundary conditions",
+                    "Geometrical analysis features",
+                    "Mechanical boundary conditions and loads",
+                    "Thermal boundary conditions and loads",
+                    "Mesh",
+                    "Solve",
+                    "Results",
+                    "Utilities",
+                    "Constraints and loads_custom"
+                ],
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
+                        }
+                    }
                 }
             }
         },
@@ -1789,10 +2090,12 @@
                         "Scale...",
                         "Fillet...",
                         "Chamfer...",
+                        "separator_PartWorkbench_7",
                         "Make face from wires",
                         "Create ruled surface",
                         "Loft...",
                         "Sweep...",
+                        "separator_PartWorkbench_12",
                         "Section",
                         "Cross-sections...",
                         "Offset:",
@@ -1805,6 +2108,86 @@
                             "size": "large",
                             "text": "Create sketch",
                             "icon": "Sketcher_NewSketch"
+                        },
+                        "Part_Extrude": {
+                            "size": "small",
+                            "text": "Extrude...",
+                            "icon": "Part_Extrude"
+                        },
+                        "Part_Revolve": {
+                            "size": "small",
+                            "text": "Revolve...",
+                            "icon": "Part_Revolve"
+                        },
+                        "Part_Mirror": {
+                            "size": "small",
+                            "text": "Mirroring",
+                            "icon": "Part_Mirror"
+                        },
+                        "Part_Scale": {
+                            "size": "small",
+                            "text": "Scale",
+                            "icon": "Part_Scale"
+                        },
+                        "Part_Fillet": {
+                            "size": "small",
+                            "text": "Fillet",
+                            "icon": "Part_Fillet"
+                        },
+                        "Part_Chamfer": {
+                            "size": "small",
+                            "text": "Chamfer",
+                            "icon": "Part_Chamfer"
+                        },
+                        "Part_MakeFace": {
+                            "size": "small",
+                            "text": "Make face from wires",
+                            "icon": "Part_MakeFace"
+                        },
+                        "Part_RuledSurface": {
+                            "size": "small",
+                            "text": "Create ruled surface",
+                            "icon": "Part_RuledSurface"
+                        },
+                        "Part_Loft": {
+                            "size": "small",
+                            "text": "Loft",
+                            "icon": "Part_Loft"
+                        },
+                        "Part_Sweep": {
+                            "size": "small",
+                            "text": "Sweep",
+                            "icon": "Part_Sweep"
+                        },
+                        "Part_Section": {
+                            "size": "small",
+                            "text": "Section",
+                            "icon": "Part_Section"
+                        },
+                        "Part_CrossSections": {
+                            "size": "small",
+                            "text": "Cross-sections",
+                            "icon": "Part_CrossSections"
+                        },
+                        "Part_CompOffset": {
+                            "size": "small",
+                            "text": "Offset:",
+                            "icon": ""
+                        },
+                        "Part_Thickness": {
+                            "size": "small",
+                            "text": "Thickness",
+                            "icon": "Part_Thickness"
+                        },
+                        "Part_ProjectionOnSurface": {
+                            "size": "small",
+                            "text": "Create projection on surface",
+                            "icon": "Part_ProjectionOnSurface"
+                        },
+                        "Part_ColorPerFace": {
+                            "size": "small",
+                            "text": "Color per face",
+                            "icon": "Part_ColorFace"
                         }
                     }
                 },
@@ -1825,6 +2208,46 @@
                             "size": "large",
                             "text": "Compound tools",
                             "icon": ""
+                        },
+                        "Part_Boolean": {
+                            "size": "small",
+                            "text": "Boolean",
+                            "icon": "Part_Booleans"
+                        },
+                        "Part_Cut": {
+                            "size": "small",
+                            "text": "Cut",
+                            "icon": "Part_Cut"
+                        },
+                        "Part_Fuse": {
+                            "size": "small",
+                            "text": "Union",
+                            "icon": "Part_Fuse"
+                        },
+                        "Part_Common": {
+                            "size": "small",
+                            "text": "Intersection",
+                            "icon": "Part_Common"
+                        },
+                        "Part_CompJoinFeatures": {
+                            "size": "small",
+                            "text": "Join objects",
+                            "icon": ""
+                        },
+                        "Part_CompSplitFeatures": {
+                            "size": "small",
+                            "text": "Split objects",
+                            "icon": ""
+                        },
+                        "Part_CheckGeometry": {
+                            "size": "small",
+                            "text": "Check Geometry",
+                            "icon": "Part_CheckGeometry"
+                        },
+                        "Part_Defeaturing": {
+                            "size": "small",
+                            "text": "Defeaturing",
+                            "icon": "Part_Defeaturing"
                         }
                     }
                 },
@@ -1965,6 +2388,36 @@
                             "size": "large",
                             "text": "Create sketch",
                             "icon": "Sketcher_NewSketch"
+                        },
+                        "Sketcher_EditSketch": {
+                            "size": "small",
+                            "text": "Edit sketch",
+                            "icon": "Sketcher_EditSketch"
+                        },
+                        "Sketcher_MapSketch": {
+                            "size": "small",
+                            "text": "Attach sketch",
+                            "icon": "Sketcher_MapSketch"
+                        },
+                        "Sketcher_ReorientSketch": {
+                            "size": "small",
+                            "text": "Reorient sketch",
+                            "icon": "Sketcher_ReorientSketch"
+                        },
+                        "Sketcher_ValidateSketch": {
+                            "size": "small",
+                            "text": "Validate sketch...",
+                            "icon": "Sketcher_ValidateSketch"
+                        },
+                        "Sketcher_MergeSketches": {
+                            "size": "small",
+                            "text": "Merge sketches",
+                            "icon": "Sketcher_MergeSketch"
+                        },
+                        "Sketcher_MirrorSketch": {
+                            "size": "small",
+                            "text": "Mirror sketch",
+                            "icon": "Sketcher_MirrorSketch"
                         }
                     }
                 },
@@ -1979,13 +2432,23 @@
                             "size": "large",
                             "text": "Leave sketch",
                             "icon": "Sketcher_LeaveSketch"
+                        },
+                        "Sketcher_ViewSketch": {
+                            "size": "small",
+                            "text": "View sketch",
+                            "icon": "Sketcher_ViewSketch"
+                        },
+                        "Sketcher_ViewSection": {
+                            "size": "small",
+                            "text": "View section",
+                            "icon": "Sketcher_ViewSection"
                         }
                     }
                 },
                 "Sketcher geometries": {
                     "order": [
-                        "Create point",
                         "Create polyline",
+                        "Create point",
                         "Create line",
                         "Create arc",
                         "Create conic",
@@ -1997,9 +2460,54 @@
                     ],
                     "commands": {
                         "Sketcher_CreatePoint": {
-                            "size": "large",
+                            "size": "small",
                             "text": "Create point",
                             "icon": "Sketcher_CreatePoint"
+                        },
+                        "Sketcher_CreatePolyline": {
+                            "size": "large",
+                            "text": "Create polyline",
+                            "icon": "Sketcher_CreatePolyline"
+                        },
+                        "Sketcher_CreateLine": {
+                            "size": "small",
+                            "text": "Create line",
+                            "icon": "Sketcher_CreateLine"
+                        },
+                        "Sketcher_CompCreateArc": {
+                            "size": "small",
+                            "text": "Create arc",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateConic": {
+                            "size": "small",
+                            "text": "Create conic",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateRectangles": {
+                            "size": "small",
+                            "text": "Create rectangle",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateRegularPolygon": {
+                            "size": "small",
+                            "text": "Create regular polygon",
+                            "icon": ""
+                        },
+                        "Sketcher_CompSlot": {
+                            "size": "small",
+                            "text": "Slots",
+                            "icon": ""
+                        },
+                        "Sketcher_CompCreateBSpline": {
+                            "size": "small",
+                            "text": "Create B-spline",
+                            "icon": ""
+                        },
+                        "Sketcher_ToggleConstruction": {
+                            "size": "small",
+                            "text": "Toggle construction geometry",
+                            "icon": "Sketcher_ToggleConstruction"
                         }
                     }
                 },
@@ -2028,6 +2536,86 @@
                             "size": "large",
                             "text": "Dimension",
                             "icon": "Constraint_Dimension"
+                        },
+                        "Sketcher_ConstrainDistanceX": {
+                            "size": "small",
+                            "text": "Constrain horizontal distance",
+                            "icon": "Constraint_HorizontalDistance"
+                        },
+                        "Sketcher_ConstrainDistanceY": {
+                            "size": "small",
+                            "text": "Constrain vertical distance",
+                            "icon": "Constraint_VerticalDistance"
+                        },
+                        "Sketcher_ConstrainDistance": {
+                            "size": "small",
+                            "text": "Constrain distance",
+                            "icon": "Constraint_Length"
+                        },
+                        "Sketcher_CompConstrainRadDia": {
+                            "size": "small",
+                            "text": "Constrain arc or circle",
+                            "icon": ""
+                        },
+                        "Sketcher_ConstrainAngle": {
+                            "size": "small",
+                            "text": "Constrain angle",
+                            "icon": "Constraint_InternalAngle"
+                        },
+                        "Sketcher_ConstrainLock": {
+                            "size": "small",
+                            "text": "Constrain lock",
+                            "icon": "Constraint_Lock"
+                        },
+                        "Sketcher_ConstrainCoincident": {
+                            "size": "small",
+                            "text": "Constrain coincident",
+                            "icon": "Constraint_PointOnPoint"
+                        },
+                        "Sketcher_ConstrainPointOnObject": {
+                            "size": "small",
+                            "text": "Constrain point on object",
+                            "icon": "Constraint_PointOnObject"
+                        },
+                        "Sketcher_CompHorVer": {
+                            "size": "small",
+                            "text": "Constrain horizontal/vertical",
+                            "icon": ""
+                        },
+                        "Sketcher_ConstrainParallel": {
+                            "size": "small",
+                            "text": "Constrain parallel",
+                            "icon": "Constraint_Parallel"
+                        },
+                        "Sketcher_ConstrainPerpendicular": {
+                            "size": "small",
+                            "text": "Constrain perpendicular",
+                            "icon": "Constraint_Perpendicular"
+                        },
+                        "Sketcher_ConstrainTangent": {
+                            "size": "small",
+                            "text": "Constrain tangent or collinear",
+                            "icon": "Constraint_Tangent"
+                        },
+                        "Sketcher_ConstrainEqual": {
+                            "size": "small",
+                            "text": "Constrain equal",
+                            "icon": "Constraint_EqualLength"
+                        },
+                        "Sketcher_ConstrainSymmetric": {
+                            "size": "small",
+                            "text": "Constrain symmetric",
+                            "icon": "Constraint_Symmetric"
+                        },
+                        "Sketcher_ConstrainBlock": {
+                            "size": "small",
+                            "text": "Constrain block",
+                            "icon": "Constraint_Block"
+                        },
+                        "Sketcher_CompToggleConstraints": {
+                            "size": "small",
+                            "text": "Toggle constraints",
+                            "icon": ""
                         }
                     }
                 },
@@ -2047,8 +2635,53 @@
                     "commands": {
                         "Sketcher_CompCreateFillets": {
                             "size": "large",
-                            "text": "Create fillet or chamfer",
+                            "text": "Create Fillet/Chamfer",
                             "icon": ""
+                        },
+                        "Sketcher_CompCurveEdition": {
+                            "size": "small",
+                            "text": "Curve Edition",
+                            "icon": ""
+                        },
+                        "Sketcher_External": {
+                            "size": "small",
+                            "text": "Create external geometry",
+                            "icon": "Sketcher_External"
+                        },
+                        "Sketcher_CarbonCopy": {
+                            "size": "small",
+                            "text": "Create carbon copy",
+                            "icon": "Sketcher_CarbonCopy"
+                        },
+                        "Sketcher_Translate": {
+                            "size": "small",
+                            "text": "Move / Array transform",
+                            "icon": "Sketcher_Translate"
+                        },
+                        "Sketcher_Rotate": {
+                            "size": "small",
+                            "text": "Rotate / Polar transform",
+                            "icon": "Sketcher_Rotate"
+                        },
+                        "Sketcher_Scale": {
+                            "size": "small",
+                            "text": "Scale transform",
+                            "icon": "Sketcher_Scale"
+                        },
+                        "Sketcher_Offset": {
+                            "size": "small",
+                            "text": "Offset geometry",
+                            "icon": "Sketcher_Offset"
+                        },
+                        "Sketcher_Symmetry": {
+                            "size": "small",
+                            "text": "Symmetry",
+                            "icon": "Sketcher_Symmetry"
+                        },
+                        "Sketcher_RemoveAxesAlignment": {
+                            "size": "small",
+                            "text": "Remove axes alignment",
+                            "icon": "Sketcher_RemoveAxesAlignment"
                         }
                     }
                 },
@@ -2064,8 +2697,33 @@
                     "commands": {
                         "Sketcher_BSplineConvertToNURBS": {
                             "size": "large",
-                            "text": "Convert geometry to B-spline",
+                            "text": "Convert to B-spline",
                             "icon": "Sketcher_BSplineConvertToNURBS"
+                        },
+                        "Sketcher_BSplineIncreaseDegree": {
+                            "size": "small",
+                            "text": "Increase B-spline degree",
+                            "icon": "Sketcher_BSplineIncreaseDegree"
+                        },
+                        "Sketcher_BSplineDecreaseDegree": {
+                            "size": "small",
+                            "text": "Decrease B-spline degree",
+                            "icon": "Sketcher_BSplineDecreaseDegree"
+                        },
+                        "Sketcher_CompModifyKnotMultiplicity": {
+                            "size": "small",
+                            "text": "Modify knot multiplicity",
+                            "icon": ""
+                        },
+                        "Sketcher_BSplineInsertKnot": {
+                            "size": "small",
+                            "text": "Insert knot",
+                            "icon": "Sketcher_BSplineInsertKnot"
+                        },
+                        "Sketcher_JoinCurves": {
+                            "size": "small",
+                            "text": "Join curves",
+                            "icon": "Sketcher_JoinCurves"
                         }
                     }
                 },
@@ -2081,8 +2739,33 @@
                     "commands": {
                         "Sketcher_SelectConstraints": {
                             "size": "large",
-                            "text": "Select associated constraints",
+                            "text": "Select constraints",
                             "icon": "Sketcher_SelectConstraints"
+                        },
+                        "Sketcher_SelectElementsAssociatedWithConstraints": {
+                            "size": "small",
+                            "text": "Select associated geometry",
+                            "icon": "Sketcher_SelectElementsAssociatedWithConstraints"
+                        },
+                        "Sketcher_ArcOverlay": {
+                            "size": "small",
+                            "text": "Show/hide circular helper for arcs",
+                            "icon": "Sketcher_ArcOverlay"
+                        },
+                        "Sketcher_CompBSplineShowHideGeometryInformation": {
+                            "size": "small",
+                            "text": "Show/hide B-spline information layer",
+                            "icon": ""
+                        },
+                        "Sketcher_RestoreInternalAlignmentGeometry": {
+                            "size": "small",
+                            "text": "Show/hide internal geometry",
+                            "icon": "Sketcher_Element_Ellipse_All"
+                        },
+                        "Sketcher_SwitchVirtualSpace": {
+                            "size": "small",
+                            "text": "Switch virtual space",
+                            "icon": "Sketcher_SwitchVirtualSpace"
                         }
                     }
                 },
@@ -2097,6 +2780,76 @@
                             "size": "large",
                             "text": "Toggle grid",
                             "icon": ""
+                        },
+                        "Sketcher_Snap": {
+                            "size": "small",
+                            "text": "Toggle snap",
+                            "icon": ""
+                        },
+                        "Sketcher_RenderingOrder": {
+                            "size": "small",
+                            "text": "Configure rendering order",
+                            "icon": ""
+                        }
+                    }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Sketcher",
+                    "Sketcher edit mode",
+                    "Sketcher geometries",
+                    "Sketcher constraints",
+                    "Sketcher tools",
+                    "Sketcher B-spline tools",
+                    "Sketcher visual",
+                    "Sketcher edit tools"
+                ],
+                "Individual views": {
+                    "order": [
+                        "Isometric",
+                        "Front",
+                        "Top",
+                        "Right",
+                        "Rear",
+                        "Bottom",
+                        "Left"
+                    ],
+                    "commands": {
+                        "Std_ViewIsometric": {
+                            "size": "small",
+                            "text": "Isometric",
+                            "icon": "view-axonometric"
+                        },
+                        "Std_ViewFront": {
+                            "size": "small",
+                            "text": "Front",
+                            "icon": "view-front"
+                        },
+                        "Std_ViewTop": {
+                            "size": "small",
+                            "text": "Top",
+                            "icon": "view-top"
+                        },
+                        "Std_ViewRight": {
+                            "size": "small",
+                            "text": "Right",
+                            "icon": "view-right"
+                        },
+                        "Std_ViewRear": {
+                            "size": "small",
+                            "text": "Rear",
+                            "icon": "view-rear"
+                        },
+                        "Std_ViewBottom": {
+                            "size": "small",
+                            "text": "Bottom",
+                            "icon": "view-bottom"
+                        },
+                        "Std_ViewLeft": {
+                            "size": "small",
+                            "text": "Left",
+                            "icon": "view-left"
                         }
                     }
                 }
@@ -2109,14 +2862,17 @@
                         "Create spreadsheet",
                         "Import spreadsheet",
                         "Export spreadsheet",
+                        "separator_SpreadsheetWorkbench_3",
                         "Merge cells",
                         "Split cell",
+                        "separator_SpreadsheetWorkbench_6",
                         "Align left",
                         "Align center",
                         "Align right",
                         "Align top",
                         "Vertically center-align",
                         "Align bottom",
+                        "separator_SpreadsheetWorkbench_13",
                         "Bold text",
                         "Italic text",
                         "Underline text",
@@ -2127,16 +2883,83 @@
                             "size": "large",
                             "text": "Create spreadsheet",
                             "icon": "Spreadsheet"
+                        },
+                        "Spreadsheet_Import": {
+                            "size": "small",
+                            "text": "Import spreadsheet",
+                            "icon": "SpreadsheetImport"
+                        },
+                        "Spreadsheet_Export": {
+                            "size": "small",
+                            "text": "Export spreadsheet",
+                            "icon": "SpreadsheetExport"
+                        },
+                        "Spreadsheet_MergeCells": {
+                            "size": "small",
+                            "text": "Merge cells",
+                            "icon": "SpreadsheetMergeCells"
+                        },
+                        "Spreadsheet_SplitCell": {
+                            "size": "small",
+                            "text": "Split cell",
+                            "icon": "SpreadsheetSplitCell"
+                        },
+                        "Spreadsheet_AlignLeft": {
+                            "size": "small",
+                            "text": "Align left",
+                            "icon": "SpreadsheetAlignLeft"
+                        },
+                        "Spreadsheet_AlignCenter": {
+                            "size": "small",
+                            "text": "Align center",
+                            "icon": "SpreadsheetAlignCenter"
+                        },
+                        "Spreadsheet_AlignRight": {
+                            "size": "small",
+                            "text": "Align right",
+                            "icon": "SpreadsheetAlignRight"
+                        },
+                        "Spreadsheet_AlignTop": {
+                            "size": "small",
+                            "text": "Align top",
+                            "icon": "SpreadsheetAlignTop"
+                        },
+                        "Spreadsheet_AlignVCenter": {
+                            "size": "small",
+                            "text": "Vertically center-align",
+                            "icon": "SpreadsheetAlignVCenter"
+                        },
+                        "Spreadsheet_AlignBottom": {
+                            "size": "small",
+                            "text": "Align bottom",
+                            "icon": "SpreadsheetAlignBottom"
+                        },
+                        "Spreadsheet_StyleBold": {
+                            "size": "small",
+                            "text": "Bold text",
+                            "icon": "SpreadsheetStyleBold"
+                        },
+                        "Spreadsheet_StyleItalic": {
+                            "size": "small",
+                            "text": "Italic text",
+                            "icon": "SpreadsheetStyleItalic"
+                        },
+                        "Spreadsheet_StyleUnderline": {
+                            "size": "small",
+                            "text": "Underline text",
+                            "icon": "SpreadsheetStyleUnderline"
+                        },
+                        "Spreadsheet_SetAlias": {
+                            "size": "small",
+                            "text": "Set alias",
+                            "icon": "SpreadsheetAlias"
                         }
                     }
                 },
                 "order": [
                     "Individual views",
                     "Structure",
-                    "Create BOM_custom",
-                    "Solids",
-                    "Part tools",
-                    "Boolean"
+                    "Spreadsheet"
                 ],
                 "Individual views": {
                     "order": [
@@ -2202,11 +3025,41 @@
                     "commands": {
                         "Surface_Filling": {
                             "size": "large",
-                            "text": "Filling...",
+                            "text": "Filling",
                             "icon": "Surface_Filling"
+                        },
+                        "Surface_GeomFillSurface": {
+                            "size": "small",
+                            "text": "Fill boundary curves",
+                            "icon": "Surface_GeomFillSurface"
+                        },
+                        "Surface_Sections": {
+                            "size": "small",
+                            "text": "Sections",
+                            "icon": "Surface_Sections"
+                        },
+                        "Surface_ExtendFace": {
+                            "size": "small",
+                            "text": "Extend face",
+                            "icon": "Surface_ExtendFace"
+                        },
+                        "Surface_CurveOnMesh": {
+                            "size": "small",
+                            "text": "Curve on mesh",
+                            "icon": "Surface_CurveOnMesh"
+                        },
+                        "Surface_BlendCurve": {
+                            "size": "small",
+                            "text": "Blend Curve",
+                            "icon": "Surface_BlendCurve"
                         }
                     }
-                }
+                },
+                "order": [
+                    "Individual views",
+                    "Structure",
+                    "Surface"
+                ]
             }
         },
         "TechDrawWorkbench": {
@@ -2224,6 +3077,26 @@
                             "size": "large",
                             "text": "Insert Default Page",
                             "icon": "actions/TechDraw_PageDefault"
+                        },
+                        "TechDraw_PageTemplate": {
+                            "size": "small",
+                            "text": "Insert Page using Template",
+                            "icon": "actions/TechDraw_PageTemplate"
+                        },
+                        "TechDraw_FillTemplateFields": {
+                            "size": "small",
+                            "text": "Update template fields",
+                            "icon": "actions/TechDraw_FillTemplateFields.svg"
+                        },
+                        "TechDraw_RedrawPage": {
+                            "size": "small",
+                            "text": "Redraw Page",
+                            "icon": "actions/TechDraw_RedrawPage"
+                        },
+                        "TechDraw_PrintAll": {
+                            "size": "small",
+                            "text": "Print All Pages",
+                            "icon": "actions/TechDraw_PrintAll"
                         }
                     }
                 },
@@ -2242,6 +3115,36 @@
                             "size": "large",
                             "text": "Insert View",
                             "icon": "actions/TechDraw_View"
+                        },
+                        "TechDraw_BrokenView": {
+                            "size": "small",
+                            "text": "Insert Broken View",
+                            "icon": "actions/TechDraw_BrokenView"
+                        },
+                        "TechDraw_ActiveView": {
+                            "size": "small",
+                            "text": "Insert Active View (3D View)",
+                            "icon": "actions/TechDraw_ActiveView"
+                        },
+                        "TechDraw_SectionGroup": {
+                            "size": "small",
+                            "text": "Insert a simple or complex Section View",
+                            "icon": ""
+                        },
+                        "TechDraw_DetailView": {
+                            "size": "small",
+                            "text": "Insert Detail View",
+                            "icon": "actions/TechDraw_DetailView"
+                        },
+                        "TechDraw_DraftView": {
+                            "size": "small",
+                            "text": "Insert Draft Workbench Object",
+                            "icon": "actions/TechDraw_DraftView"
+                        },
+                        "TechDraw_ClipGroup": {
+                            "size": "small",
+                            "text": "Insert Clip Group",
+                            "icon": "actions/TechDraw_ClipGroup"
                         }
                     }
                 },
@@ -2252,7 +3155,7 @@
                     "commands": {
                         "TechDraw_StackGroup": {
                             "size": "large",
-                            "text": "Adjust stacking order of views",
+                            "text": "View stacking order",
                             "icon": ""
                         }
                     }
@@ -2285,8 +3188,33 @@
                     "commands": {
                         "TechDraw_ExtensionSelectLineAttributes": {
                             "size": "large",
-                            "text": "Select Line Attributes, Cascade Spacing and Delta Distance",
+                            "text": "Line properties",
                             "icon": "TechDraw_ExtensionSelectLineAttributes"
+                        },
+                        "TechDraw_ExtensionChangeLineAttributes": {
+                            "size": "small",
+                            "text": "Change Line Attributes",
+                            "icon": "TechDraw_ExtensionChangeLineAttributes"
+                        },
+                        "TechDraw_ExtensionExtendShortenLineGroup": {
+                            "size": "small",
+                            "text": "Extend Line",
+                            "icon": ""
+                        },
+                        "TechDraw_ExtensionLockUnlockView": {
+                            "size": "small",
+                            "text": "Lock/Unlock View",
+                            "icon": "TechDraw_ExtensionLockUnlockView"
+                        },
+                        "TechDraw_ExtensionPositionSectionView": {
+                            "size": "small",
+                            "text": "Position Section View",
+                            "icon": "TechDraw_ExtensionPositionSectionView.svg"
+                        },
+                        "TechDraw_ExtensionCustomizeFormat": {
+                            "size": "small",
+                            "text": "Customize Format Label",
+                            "icon": "TechDraw_ExtensionCustomizeFormat"
                         }
                     }
                 },
@@ -2301,7 +3229,32 @@
                     "commands": {
                         "TechDraw_ExtensionCircleCenterLinesGroup": {
                             "size": "large",
-                            "text": "Add Circle Centerlines",
+                            "text": "Circle Centerlines",
+                            "icon": ""
+                        },
+                        "TechDraw_ExtensionThreadsGroup": {
+                            "size": "small",
+                            "text": "Cosmetic Thread",
+                            "icon": ""
+                        },
+                        "TechDraw_CommandVertexCreationGroup": {
+                            "size": "small",
+                            "text": "test",
+                            "icon": "TechDraw_ExtensionVertexAtIntersection"
+                        },
+                        "TechDraw_ExtensionDrawCirclesGroup": {
+                            "size": "small",
+                            "text": "Add Cosmetic Circle",
+                            "icon": ""
+                        },
+                        "TechDraw_CosmeticCircle": {
+                            "size": "small",
+                            "text": "Add Cosmetic Circle",
+                            "icon": "actions/TechDraw_CosmeticCircle"
+                        },
+                        "TechDraw_ExtensionLinePPGroup": {
+                            "size": "small",
+                            "text": "Add Cosmetic Parallel Line",
                             "icon": ""
                         }
                     }
@@ -2327,22 +3280,37 @@
                     "commands": {
                         "TechDraw_ExportPageSVG": {
                             "size": "large",
-                            "text": "Export Page as SVG",
+                            "text": "Export SVG",
                             "icon": "actions/TechDraw_ExportPageSVG"
+                        },
+                        "TechDraw_ExportPageDXF": {
+                            "size": "small",
+                            "text": "Export DXF",
+                            "icon": "actions/TechDraw_ExportPageDXF"
                         }
                     }
                 },
                 "TechDraw Decoration": {
                     "order": [
-                        "Hatch a Face using Image File",
                         "Apply Geometric Hatch to Face",
+                        "Hatch a Face using Image File",
                         "Turn View Frames On/Off"
                     ],
                     "commands": {
                         "TechDraw_Hatch": {
-                            "size": "large",
-                            "text": "Hatch a Face using Image File",
+                            "size": "small",
+                            "text": "Hatch (Image file)",
                             "icon": "actions/TechDraw_Hatch"
+                        },
+                        "TechDraw_GeometricHatch": {
+                            "size": "large",
+                            "text": "Hatch",
+                            "icon": "actions/TechDraw_GeometricHatch"
+                        },
+                        "TechDraw_ToggleFrame": {
+                            "size": "small",
+                            "text": "Turn View Frames On/Off",
+                            "icon": "actions/TechDraw_ToggleFrame"
                         }
                     }
                 },
@@ -2380,6 +3348,16 @@
                             "size": "large",
                             "text": "Populate titleblock",
                             "icon": "FillTitleBlock.svg"
+                        },
+                        "ImportFreeCAD": {
+                            "size": "small",
+                            "text": "Import data from the FreeCAD source file",
+                            "icon": "ImportFreeCAD.svg"
+                        },
+                        "FillSpreadsheet": {
+                            "size": "small",
+                            "text": "Import data from titleblock",
+                            "icon": "FillSpreadsheet.svg"
                         }
                     }
                 },
@@ -2388,8 +3366,8 @@
                     "Structure",
                     "TechDraw Pages",
                     "TechDraw Views",
-                    "TechDraw Dimensions_custom",
                     "TechDraw Stacking",
+                    "TechDraw Dimensions_custom",
                     "TechDraw Attributes",
                     "TechDraw Centerlines",
                     "TechDraw File Access",
@@ -2445,696 +3423,52 @@
                             "icon": "view-left"
                         }
                     }
-                }
-            }
-        },
-        "TestWorkbench": {
-            "toolbars": {
-                "TestTools": {
+                },
+                "TechDraw Dimensions_custom": {
                     "order": [
-                        "Self-test...",
-                        "Test all",
-                        "Test Document",
-                        "Test base"
+                        "Dimension",
+                        "Insert Balloon Annotation",
+                        "Axonometric length dimension",
+                        "Insert Landmark Dimension - EXPERIMENTAL",
+                        "Repair Dimension References",
+                        "Insert '\u2300' Prefix",
+                        "Increase Decimal Places"
                     ],
                     "commands": {
-                        "Test_Test": {
+                        "TechDraw_CompDimensionTools": {
                             "size": "large",
-                            "text": "Self-test...",
+                            "text": "Dimension",
                             "icon": ""
-                        }
-                    }
-                }
-            }
-        },
-        "ScriptXWorkbench": {
-            "toolbars": {
-                "My Scripts": {
-                    "order": [
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text",
-                        "Short text"
-                    ],
-                    "commands": {
-                        "Scale_Imperial_mm": {
-                            "size": "large",
-                            "text": "Short text",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\3D_Printing_Tools\\Resources\\icons/Inch_mm.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "Assembly4Workbench": {
-            "toolbars": {
-                "Assembly": {
-                    "order": [
-                        "New Assembly",
-                        "New Part",
-                        "New Body",
-                        "New Group",
-                        "Edit Part Information",
-                        "Insert Part",
-                        "Create a variant Part",
-                        "Fasteners",
-                        "New Sketch",
-                        "Create Datum Object",
-                        "Import Datum object",
-                        "Create a shape binder",
-                        "Edit Placement of a Part",
-                        "Release from Attachment",
-                        "Solve and Update Assembly",
-                        "Create mirror",
-                        "Create a linear array",
-                        "Create a circular array",
-                        "Create an expression driven Array",
-                        "Variables",
-                        "Animate Assembly",
-                        "Measure",
-                        "Bill of Materials",
-                        "Structure tree of the assembly",
-                        "Show LCS",
-                        "Hide LCS",
-                        "Check Intereferences",
-                        "Open configurations panel"
-                    ],
-                    "commands": {
-                        "Asm4_newAssembly": {
-                            "size": "large",
-                            "text": "New Assembly",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\Assembly4\\.\\Resources/icons\\Asm4_Model.svg"
-                        }
-                    }
-                },
-                "Selection Filter": {
-                    "order": [
-                        "Select only Vertices",
-                        "Select only Edges",
-                        "Select only Faces",
-                        "Enable/Disable 3D View selection mode",
-                        "Clear all selection filters"
-                    ],
-                    "commands": {
-                        "Asm4_SelectionFilterVertexCmd": {
-                            "size": "large",
-                            "text": "Select only Vertices",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\Assembly4\\.\\Resources/icons\\Snap_Vertex.svg"
-                        }
-                    }
-                },
-                "order": [
-                    "Individual views",
-                    "Structure",
-                    "Assembly",
-                    "Create BOM_custom",
-                    "Selection Filter"
-                ],
-                "Individual views": {
-                    "order": [
-                        "Isometric",
-                        "Front",
-                        "Top",
-                        "Right",
-                        "Rear",
-                        "Bottom",
-                        "Left"
-                    ],
-                    "commands": {
-                        "Std_ViewIsometric": {
-                            "size": "small",
-                            "text": "Isometric",
-                            "icon": "view-axonometric"
                         },
-                        "Std_ViewFront": {
+                        "TechDraw_Balloon": {
                             "size": "small",
-                            "text": "Front",
-                            "icon": "view-front"
+                            "text": "Insert Balloon Annotation",
+                            "icon": "TechDraw_Balloon"
                         },
-                        "Std_ViewTop": {
+                        "TechDraw_AxoLengthDimension": {
                             "size": "small",
-                            "text": "Top",
-                            "icon": "view-top"
+                            "text": "Axonometric length dimension",
+                            "icon": "actions/TechDraw_AxoLengthDimension.svg"
                         },
-                        "Std_ViewRight": {
+                        "TechDraw_LandmarkDimension": {
                             "size": "small",
-                            "text": "Right",
-                            "icon": "view-right"
+                            "text": "Insert Landmark Dimension - EXPERIMENTAL",
+                            "icon": "TechDraw_LandmarkDimension"
                         },
-                        "Std_ViewRear": {
+                        "TechDraw_DimensionRepair": {
                             "size": "small",
-                            "text": "Rear",
-                            "icon": "view-rear"
+                            "text": "Repair Dimension References",
+                            "icon": "TechDraw_DimensionRepair"
                         },
-                        "Std_ViewBottom": {
+                        "TechDraw_ExtensionInsertPrefixGroup": {
                             "size": "small",
-                            "text": "Bottom",
-                            "icon": "view-bottom"
-                        },
-                        "Std_ViewLeft": {
-                            "size": "small",
-                            "text": "Left",
-                            "icon": "view-left"
-                        }
-                    }
-                }
-            }
-        },
-        "CfdOFWorkbench": {
-            "toolbars": {
-                "CfdOF": {
-                    "order": [
-                        "Analysis container",
-                        "CFD mesh",
-                        "Mesh refinement",
-                        "Dynamic mesh refinement",
-                        "Select models",
-                        "Add fluid properties",
-                        "Fluid boundary",
-                        "Initialise",
-                        "Initialisation zone",
-                        "Porous zone",
-                        "Reporting function",
-                        "Cfd scalar transport function",
-                        "Solver job control"
-                    ],
-                    "commands": {
-                        "CfdOF_Analysis": {
-                            "size": "large",
-                            "text": "Analysis container",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\CfdOF\\Gui\\Icons\\cfd_analysis.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "FastenersWorkbench": {
-            "toolbars": {
-                "FS Commands": {
-                    "order": [
-                        "Invert fastener",
-                        "Move fastener",
-                        "Simplify shape",
-                        "Match for tap hole",
-                        "Match for pass hole",
-                        "Generate BOM",
-                        "Screw calculator",
-                        "Change fastener parameters"
-                    ],
-                    "commands": {
-                        "Fasteners_Flip": {
-                            "size": "large",
-                            "text": "Invert fastener",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\fasteners\\.\\Icons\\IconFlip.svg"
-                        }
-                    }
-                },
-                "FS Screws": {
-                    "order": [
-                        "Misc head",
-                        "Hex head",
-                        "Hexagon socket",
-                        "Hexalobular socket",
-                        "Slotted",
-                        "H cross",
-                        "Set screws",
-                        "Thumb screws",
-                        "Nut",
-                        "T-Slot Fasteners",
-                        "Washer",
-                        "ThreadedRod",
-                        "Inserts",
-                        "Retaining Rings",
-                        "Nails",
-                        "Pins"
-                    ],
-                    "commands": {
-                        "Misc head": {
-                            "size": "large",
-                            "text": "Misc head",
+                            "text": "Insert '\u2300' Prefix",
                             "icon": ""
-                        }
-                    }
-                }
-            }
-        },
-        "FEMbyGEN": {
-            "toolbars": {
-                "Commands": {
-                    "order": [
-                        "Initiate",
-                        "Set alias",
-                        "Generate",
-                        "FEA Generations",
-                        "Create Geo Generations",
-                        "Show Results",
-                        "Topology"
-                    ],
-                    "commands": {
-                        "Initiate": {
-                            "size": "large",
-                            "text": "Initiate",
-                            "icon": ":/icons/Spreadsheet.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "FrontISTR": {
-            "toolbars": {
-                "FrontISTR tools": {
-                    "order": [
-                        "FrontISTR Solver",
-                        "FrontISTR constraint temperature"
-                    ],
-                    "commands": {
-                        "FISTR_solver": {
-                            "size": "large",
-                            "text": "FrontISTR Solver",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod/FEM_FrontISTR/Resources/FrontISTR_solver.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "DapWorkbenchC": {
-            "toolbars": {
-                "NikraDAP Commands": {
-                    "order": [
-                        "Create a New Dap Container",
-                        "Body Definition",
-                        "Add New Joint Between Bodies",
-                        "Define material properties",
-                        "Add Force",
-                        "Run the analysis",
-                        "Animate solution"
-                    ],
-                    "commands": {
-                        "DapContainerAlias": {
-                            "size": "large",
-                            "text": "Create a New Dap Container",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\NikraDAP\\.\\icons\\Icon2n.png"
-                        }
-                    }
-                }
-            }
-        },
-        "RenderWorkbench": {
-            "toolbars": {
-                "Render": {
-                    "order": [
-                        "Projects",
-                        "Camera",
-                        "Lights",
-                        "Rendering View",
-                        "Libraries",
-                        "Materials",
-                        "Render project",
-                        "Render settings",
-                        "Help"
-                    ],
-                    "commands": {
-                        "Render_Projects": {
-                            "size": "large",
-                            "text": "Projects",
+                        },
+                        "TechDraw_ExtensionIncreaseDecreaseGroup": {
+                            "size": "small",
+                            "text": "Increase Decimal Places",
                             "icon": ""
-                        }
-                    }
-                }
-            }
-        },
-        "SMWorkbench": {
-            "toolbars": {
-                "Sheet Metal": {
-                    "order": [
-                        "Make Base Wall",
-                        "Make Wall",
-                        "Extend Face",
-                        "Fold a Wall",
-                        "Unfold",
-                        "Unattended Unfold",
-                        "Add Corner Relief",
-                        "Make Relief",
-                        "Make Junction",
-                        "Make Bend",
-                        "Sketch On Sheet metal",
-                        "Make Forming in Wall",
-                        "Add base shape"
-                    ],
-                    "commands": {
-                        "SheetMetal_AddBase": {
-                            "size": "large",
-                            "text": "Make Base Wall",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\sheetmetal\\.\\Resources\\icons\\SheetMetal_AddBase.svg"
-                        }
-                    }
-                },
-                "order": [
-                    "Individual views",
-                    "Structure",
-                    "Assembly",
-                    "Assembly Joints",
-                    "BoM Toolbar - AssemblyWorkbench"
-                ]
-            }
-        },
-        "TitleBlockWB": {
-            "toolbars": {
-                "TitleBlock extra": {
-                    "order": [
-                        "Export data to the excel source file",
-                        "Export settings to the excel source file",
-                        "Import settings from the excel source file",
-                        "Open the excel source file",
-                        "Export data to the FreeCAD source file",
-                        "Export settings to the FreeCAD source file",
-                        "Import settings from the FreeCAD source file",
-                        "Open the FreeCAD source file"
-                    ],
-                    "commands": {
-                        "ExportSpreadSheet_Excel": {
-                            "size": "large",
-                            "text": "Export data to the excel source file",
-                            "icon": "ExportExcel.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "WorkFeatureWorkbench": {
-            "toolbars": {
-                "WF General": {
-                    "order": [
-                        "Hide/Show Dynamic parametric Objects",
-                        "Hide/Show Interactive parametric Objects",
-                        "Hide/Show Interactive parametric Objects",
-                        "Update parametric Objects"
-                    ],
-                    "commands": {
-                        "ShowHideDynamic": {
-                            "size": "large",
-                            "text": "Hide/Show Dynamic parametric Objects",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_showHideDynamic.svg"
-                        }
-                    }
-                },
-                "WF Points": {
-                    "order": [
-                        "Point(s) = center(Line)",
-                        "Point(s) = Extrema(Line) ",
-                        "Point(s) = along(Line, Point)",
-                        "Point = center(Points)",
-                        "Point = center(Plane)",
-                        "Point = projected(Points)"
-                    ],
-                    "commands": {
-                        "CenterLinePoint": {
-                            "size": "large",
-                            "text": "Point(s) = center(Line)",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_centerLinePoint.svg"
-                        }
-                    }
-                },
-                "WF Lines": {
-                    "order": [
-                        "Line(s) = (Point, Point)",
-                        "Line = SVD(Points)"
-                    ],
-                    "commands": {
-                        "TwoPointsLine": {
-                            "size": "large",
-                            "text": "Line(s) = (Point, Point)",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_twoPointsLine.svg"
-                        }
-                    }
-                },
-                "WF Planes": {
-                    "order": [
-                        "Plane = (3 Points)",
-                        "Plane = (Point, Line)"
-                    ],
-                    "commands": {
-                        "ThreePointsPlane": {
-                            "size": "large",
-                            "text": "Plane = (3 Points)",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\WorkFeature-WB\\Resources\\Icons\\WF_threePointsPlane.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "GearWorkbench": {
-            "toolbars": {
-                "Gear": {
-                    "order": [
-                        "Involute Gear",
-                        "Internal Involute Gear",
-                        "Involute Rack",
-                        "Cycloid Gear",
-                        "Cycloid Rack",
-                        "Bevel Gear",
-                        "Crown Gear",
-                        "Worm Gear",
-                        "Timing Gear T-shape",
-                        "Timing Gear",
-                        "Lantern Gear",
-                        "HypoCycloid Gear",
-                        "Combine two gears"
-                    ],
-                    "commands": {
-                        "CreateInvoluteGear": {
-                            "size": "large",
-                            "text": "Involute Gear",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\freecad.gears\\.\\freecad\\gears\\icons\\involutegear.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "FrameWorkbench": {
-            "toolbars": {
-                "Frame": {
-                    "order": [
-                        "Beam",
-                        "Miter Cut",
-                        "Plane Cut",
-                        "Shape Cut",
-                        "Refresh"
-                    ],
-                    "commands": {
-                        "Beam": {
-                            "size": "large",
-                            "text": "Beam",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\frame\\.\\freecad\\frametools\\icons\\beam.svg"
-                        }
-                    }
-                },
-                "Box": {
-                    "order": [
-                        "Linked Face",
-                        "Extruded Face",
-                        "Flat Face",
-                        "FEM Solver",
-                        "create Screw"
-                    ],
-                    "commands": {
-                        "LinkedFace": {
-                            "size": "large",
-                            "text": "Linked Face",
-                            "icon": "C:\\Users\\APEbbers\\AppData\\Roaming\\FreeCAD\\Mod\\frame\\.\\freecad\\frametools\\icons\\linked_face.svg"
-                        }
-                    }
-                }
-            }
-        },
-        "Assembly3Workbench": {
-            "toolbars": {
-                "Assembly3": {
-                    "order": [
-                        "Create assembly",
-                        "Group objects",
-                        "Create element",
-                        "Import from STEP",
-                        "Solve constraints",
-                        "Quick solve",
-                        "Move part",
-                        "Axial move part",
-                        "Quick move",
-                        "Lock mover",
-                        "Toggle part visibility",
-                        "Trace part move",
-                        "Auto recompute",
-                        "Smart recompute",
-                        "Auto fix element",
-                        "Element style",
-                        "Workplane and origin",
-                        "Move item up",
-                        "Move item down",
-                        "Multiply constraint"
-                    ],
-                    "commands": {
-                        "asm3CmdNew": {
-                            "size": "large",
-                            "text": "Create assembly",
-                            "icon": "Assembly_New_Assembly"
-                        }
-                    }
-                },
-                "Assembly3 Constraints": {
-                    "order": [
-                        "Create \"Locked\" constraint",
-                        "Create \"PlaneAlignment\" constraint",
-                        "Create \"PlaneCoincident\" constraint",
-                        "Create \"AttachmentGroup\" constraint",
-                        "Create \"AxialAlignment\" constraint",
-                        "Create \"SameOrientation\" constraint",
-                        "Create \"MultiParallel\" constraint",
-                        "Create \"Angle\" constraint",
-                        "Create \"Perpendicular\" constraint",
-                        "Create \"PointsCoincident\" constraint",
-                        "Create \"PointInPlane\" constraint",
-                        "Create \"PointOnLine\" constraint",
-                        "Create \"PointsOnCircle\" constraint",
-                        "Create \"PointsDistance\" constraint",
-                        "Create \"PointsPlaneDistance\" constraint",
-                        "Create \"PointLineDistance\" constraint",
-                        "Create \"Symmetric\" constraint",
-                        "Create \"More\" constraint"
-                    ],
-                    "commands": {
-                        "asm3AddLocked": {
-                            "size": "large",
-                            "text": "Create \"Locked\" constraint",
-                            "icon": "Assembly_ConstraintLock"
-                        }
-                    }
-                },
-                "Assembly3 Constraints2": {
-                    "order": [
-                        "Create \"PointDistance\" constraint",
-                        "Create \"EqualAngle\" constraint",
-                        "Create \"PointsSymmetric\" constraint",
-                        "Create \"SymmetricHorizontal\" constraint",
-                        "Create \"SymmetricVertical\" constraint",
-                        "Create \"SymmetricLine\" constraint",
-                        "Create \"PointsHorizontal\" constraint",
-                        "Create \"PointsVertical\" constraint",
-                        "Create \"LineHorizontal\" constraint",
-                        "Create \"LineVertical\" constraint",
-                        "Create \"ArcLineTangent\" constraint"
-                    ],
-                    "commands": {
-                        "asm3AddPointDistance": {
-                            "size": "large",
-                            "text": "Create \"PointDistance\" constraint",
-                            "icon": "Assembly_ConstraintPointDistance"
-                        }
-                    }
-                },
-                "Assembly3 Sketch Constraints": {
-                    "order": [
-                        "Create \"SketchPlane\" constraint",
-                        "Create \"LineLength\" constraint",
-                        "Create \"EqualLength\" constraint",
-                        "Create \"LengthRatio\" constraint",
-                        "Create \"LengthDifference\" constraint",
-                        "Create \"EqualLengthPointLineDistance\" constraint",
-                        "Create \"EqualLineArcLength\" constraint",
-                        "Create \"MidPoint\" constraint",
-                        "Create \"Diameter\" constraint",
-                        "Create \"EqualRadius\" constraint",
-                        "Create \"PointsProjectDistance\" constraint",
-                        "Create \"EqualPointLineDistance\" constraint",
-                        "Create \"Colinear\" constraint"
-                    ],
-                    "commands": {
-                        "asm3AddSketchPlane": {
-                            "size": "large",
-                            "text": "Create \"SketchPlane\" constraint",
-                            "icon": "Assembly_ConstraintSketchPlane"
-                        }
-                    }
-                },
-                "Assembly3 Measurements": {
-                    "order": [
-                        "Create \"MeasurePoints\"",
-                        "Create \"MeasurePointLine\"",
-                        "Create \"MeasurePointPlane\"",
-                        "Create \"MeasureAngle\""
-                    ],
-                    "commands": {
-                        "asm3AddMeasurePoints": {
-                            "size": "large",
-                            "text": "Create \"MeasurePoints\"",
-                            "icon": "Assembly_MeasurePointDistance"
-                        }
-                    }
-                },
-                "Assembly3 Navigation": {
-                    "order": [
-                        "Go to relation",
-                        "Select linked object",
-                        "Select linked final"
-                    ],
-                    "commands": {
-                        "asm3CmdGotoRelation": {
-                            "size": "large",
-                            "text": "Go to relation",
-                            "icon": "Assembly_GotoRelation"
-                        }
-                    }
-                },
-                "order": [
-                    "Individual views",
-                    "Structure",
-                    "Assembly",
-                    "Assembly Joints",
-                    "BoM Toolbar - AssemblyWorkbench"
-                ]
-            }
-        },
-        "PlotWorkbench": {
-            "toolbars": {
-                "Plot edition tools": {
-                    "order": [
-                        "Save plot",
-                        "Configure axes",
-                        "Configure series",
-                        "Show/Hide grid",
-                        "Show/Hide legend",
-                        "Set labels",
-                        "Set positions and sizes"
-                    ],
-                    "commands": {
-                        "Plot_SaveFig": {
-                            "size": "large",
-                            "text": "Save plot",
-                            "icon": "Plot_Save"
                         }
                     }
                 }
