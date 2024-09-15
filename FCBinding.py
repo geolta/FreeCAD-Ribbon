@@ -784,6 +784,7 @@ class ModernMenu(RibbonBar):
             self.disconnectSignals()
             self.tabBar().setCurrentIndex(currentWbIndex)
             self.connectSignals()
+        self.ApplicationMenu()
         return
 
     def hideClassicToolbars(self):
