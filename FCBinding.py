@@ -415,8 +415,8 @@ class ModernMenu(RibbonBar):
                         lambda i=i + 1: self.LoadMarcoFreeCAD(ListScripts[i - 1]),
                     )
         # Add a about button for this ribbon
-        DesignMenu.addSeparator()
-        AboutButton = DesignMenu.addAction("About FreeCAD Ribbon")
+        Menu.addSeparator()
+        AboutButton = Menu.addAction("About FreeCAD Ribbon")
         AboutButton.triggered.connect(self.on_AboutButton_clicked)
 
     def loadDesignMenu(self):
