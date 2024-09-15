@@ -625,34 +625,35 @@ class ModernMenu(RibbonBar):
                     allButtons.sort(key=sortButtons)
 
             # add separators to the command list.
-            if (
-                toolbar != ""
-                and toolbar
-                in self.ribbonStructure["workbenches"][workbenchName]["toolbars"]
-            ):
+            if workbenchName in self.ribbonStructure["workbenches"]:
                 if (
-                    "order"
-                    in self.ribbonStructure["workbenches"][workbenchName]["toolbars"][
-                        toolbar
-                    ]
+                    toolbar != ""
+                    and toolbar
+                    in self.ribbonStructure["workbenches"][workbenchName]["toolbars"]
                 ):
-                    for j in range(
-                        len(
-                            self.ribbonStructure["workbenches"][workbenchName][
-                                "toolbars"
-                            ][toolbar]["order"]
-                        )
+                    if (
+                        "order"
+                        in self.ribbonStructure["workbenches"][workbenchName][
+                            "toolbars"
+                        ][toolbar]
                     ):
-                        if (
-                            self.ribbonStructure["workbenches"][workbenchName][
-                                "toolbars"
-                            ][toolbar]["order"][j]
-                            .lower()
-                            .startswith("separator")
+                        for j in range(
+                            len(
+                                self.ribbonStructure["workbenches"][workbenchName][
+                                    "toolbars"
+                                ][toolbar]["order"]
+                            )
                         ):
-                            separator = QToolButton()
-                            separator.setText("separator")
-                            allButtons.insert(j, separator)
+                            if (
+                                self.ribbonStructure["workbenches"][workbenchName][
+                                    "toolbars"
+                                ][toolbar]["order"][j]
+                                .lower()
+                                .startswith("separator")
+                            ):
+                                separator = QToolButton()
+                                separator.setText("separator")
+                                allButtons.insert(j, separator)
 
             # add buttons to panel
             shadowList = (
