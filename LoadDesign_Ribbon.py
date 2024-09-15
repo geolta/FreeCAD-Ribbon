@@ -1107,17 +1107,18 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # add separators to the command list.
         index = 0
-        if Toolbar != "" and "order":
-            for j in range(
-                len(self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"])
-            ):
-                if (
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"][j]
-                    .lower()
-                    .startswith("separator")
+        if Toolbar != "" and Toolbar in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]:
+            if "order" in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]:
+                for j in range(
+                    len(self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"])
                 ):
-                    ToolbarCommands.insert(j + index, "separator")
-                    index = index + 1
+                    if (
+                        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"][Toolbar]["order"][j]
+                        .lower()
+                        .startswith("separator")
+                    ):
+                        ToolbarCommands.insert(j + index, "separator")
+                        index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
