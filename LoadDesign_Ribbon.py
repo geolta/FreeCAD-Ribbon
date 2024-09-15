@@ -1688,7 +1688,11 @@ class LoadDialog(Design_ui.Ui_Form):
             StandardFunctions.Print(
                 f"Ribbonbar set back to settings from: {result}!", "Warning"
             )
-            StandardFunctions.Mbox(f"Settings reset to {SelectedDile}!")
+
+            message = f"Settings reset to {SelectedDile}!\nYou must restart FreeCAD for changes to take effect."
+            anwser = StandardFunctions.RestartDialog(message=message)
+            if anwser == "yes":
+                StandardFunctions.restart_freecad()
 
         self.form.close()
         return
@@ -1701,9 +1705,13 @@ class LoadDialog(Design_ui.Ui_Form):
 
         BackupFile = os.path.join(JsonPath, "RibbonStructure_default.json")
 
+        message = "Settings reset to default!\nYou must restart FreeCAD for changes to take effect."
+
         result = shutil.copy(BackupFile, JsonFile)
         StandardFunctions.Print(f"Ribbonbar reset from {result}!", "Warning")
-        StandardFunctions.Mbox("Settings reset to default!")
+        anwser = StandardFunctions.RestartDialog(message=message)
+        if anwser == "yes":
+            StandardFunctions.restart_freecad()
 
         self.form.close()
         return
@@ -1722,7 +1730,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.close()
 
         # show the restart dialog
-        result = StandardFunctions.RestartDialog(True)
+        result = StandardFunctions.RestartDialog(includeIcons=True)
         if result == "yes":
             StandardFunctions.restart_freecad()
         return

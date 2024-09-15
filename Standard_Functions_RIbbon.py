@@ -134,7 +134,7 @@ def Mbox(
         return str(replyText)
 
 
-def RestartDialog(includeIcons=False):
+def RestartDialog(message="", includeIcons=False):
     """_summary_
         shows a restart dialog
     Returns:
@@ -146,10 +146,14 @@ def RestartDialog(includeIcons=False):
     # Save the preferences before restarting
     App.saveParameter()
 
+    # Set the message
+    if message == "":
+        message = "You must restart FreeCAD for changes to take effect."
+
     # Set the messagebox
     msgBox = QMessageBox()
     msgBox.setIcon(QMessageBox.Warning)
-    msgBox.setText("You must restart FreeCAD for changes to take effect.")
+    msgBox.setText(message)
     msgBox.setWindowTitle("FreeCAD Ribbon")
     # Set the buttons and default button
     msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
