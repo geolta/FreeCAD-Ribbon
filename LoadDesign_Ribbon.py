@@ -1201,23 +1201,33 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # add separators to the command list.
         index = 0
-        if Toolbar != "":
-            for j in range(
-                len(
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                        "toolbars"
-                    ][Toolbar]["order"]
-                )
+        if (
+            Toolbar != ""
+            and Toolbar
+            in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName]["toolbars"]
+        ):
+            if (
+                "order"
+                in self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                    "toolbars"
+                ][Toolbar]
             ):
-                if (
-                    self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
-                        "toolbars"
-                    ][Toolbar]["order"][j]
-                    .lower()
-                    .startswith("separator")
+                for j in range(
+                    len(
+                        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                            "toolbars"
+                        ][Toolbar]["order"]
+                    )
                 ):
-                    ToolbarCommands.insert(j + index, "separator")
-                    index = index + 1
+                    if (
+                        self.Dict_RibbonCommandPanel["workbenches"][WorkBenchName][
+                            "toolbars"
+                        ][Toolbar]["order"][j]
+                        .lower()
+                        .startswith("separator")
+                    ):
+                        ToolbarCommands.insert(j + index, "separator")
+                        index = index + 1
 
         # Go through the list of toolbar commands
         for ToolbarCommand in ToolbarCommands:
@@ -1689,7 +1699,7 @@ class LoadDialog(Design_ui.Ui_Form):
         JsonPath = os.path.dirname(__file__)
         JsonFile = os.path.join(JsonPath, "RibbonStructure.json")
 
-        BackupFile = [os.path.join(JsonPath, "RibbonStructure_default.json")]
+        BackupFile = os.path.join(JsonPath, "RibbonStructure_default.json")
 
         result = shutil.copy(BackupFile, JsonFile)
         StandardFunctions.Print(f"Ribbonbar reset from {result}!", "Warning")
