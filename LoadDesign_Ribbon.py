@@ -1135,6 +1135,8 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 # Get the last rownumber and set this row with the TableWidgetItem
                 RowNumber = self.form.tableWidget.rowCount() - 1
+                # update the data
+                TableWidgetItem.setData(Qt.ItemDataRole.UserRole, f"separator_{WorkBenchName}_{RowNumber}")
 
                 # Add the first cell with the table widget
                 self.form.tableWidget.setItem(RowNumber, 0, TableWidgetItem)
