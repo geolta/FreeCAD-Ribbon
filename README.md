@@ -2,6 +2,9 @@
 
 An Ribbon UI for FreeCAD, based on the PyQtRibbon library (https://github.com/haiiliin/pyqtribbon).  
 This ribbon is based on the work of HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.
+Current developers are:
+* Paul Ebbers (https://github.com/APEbbers/FreeCAD-Ribbon)
+* Geolta (https://github.com/geolta/FreeCAD-Ribbon)
 
 ![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/Develop/Resources/Images/Screenshot.svg)
 
