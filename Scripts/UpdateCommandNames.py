@@ -21,12 +21,15 @@
 # *************************************************************************
 
 # This script can be used to update "RibbonStructure.json" with modified command text from CommandList.json.
+# An backup will be created in the folder ../Backupss
 
 
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
 import json
+from datetime import datetime
+import shutil
 
 ParentPath = os.path.dirname(os.path.dirname(__file__))
 
@@ -34,9 +37,9 @@ ParentPath = os.path.dirname(os.path.dirname(__file__))
 # JsonPath = os.path.dirname(__file__)
 JsonPath = ParentPath
 
-# Set the file name. Default is "CommandList.json".
+# Set the file name. Default is "RibbonStructure.json".
 # This is the file used to reset the ribbon.
-JsonName = "RibbonStructure_update.json"
+JsonName = "RibbonStructure.json"
 
 # Define list of the workbenches, toolbars and commands on class level
 List_Workbenches = []
@@ -56,6 +59,16 @@ def ReadJson():
     # Open the JsonFile and load the data
     JsonFile = open(os.path.join(JsonPath, "RibbonStructure.json"))
     data = json.load(JsonFile)
+
+    # Create a backup file
+    OriginalPath = os.path.join(JsonPath, "RibbonStructure.json")
+    Suffix = datetime.now().strftime("%Y%m%d_%H%M%S")
+    BackupName = f"RibbonStructure_{Suffix}.json"
+    pathBackup = os.path.dirname(__file__) + "/Backups"
+    if os.path.exists(pathBackup) is False:
+        os.makedirs(pathBackup)
+    BackupFile = os.path.join(pathBackup, BackupName)
+    shutil.copy(OriginalPath, BackupFile)
 
     # Get the dict with the customized date for the buttons
     try:
