@@ -49,9 +49,6 @@ import Standard_Functions_RIbbon as StandardFunctions
 import platform
 import subprocess
 
-import pyqtribbon.styles
-
-
 # import modules for keypress detection based on OS
 if platform.system() == "Windows" or platform.system() == "Darwin":
     import keyboard
@@ -288,9 +285,29 @@ class ModernMenu(RibbonBar):
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
-        WorkbenchOrderedList = (
+        WorkbenchOrderedList: list = (
             App.ParamGet(WorkbenchOrderParam).GetString("Ordered").split(",")
         )
+        # There is an issue with the internal assembly wb showing the wrong panel
+        # when assembly4 wb is installed and positioned for the internal assemmbly wb
+        for i in range(len(WorkbenchOrderedList)):
+            if (
+                WorkbenchOrderedList[i] == "Assembly4Workbench"
+                or WorkbenchOrderedList[i] == "Assembly3Workbench"
+            ):
+                index_1 = WorkbenchOrderedList.index(WorkbenchOrderedList[i])
+                index_2 = WorkbenchOrderedList.index("AssemblyWorkbench")
+
+                WorkbenchOrderedList.pop(index_2)
+                WorkbenchOrderedList.insert(index_1 - 1, "AssemblyWorkbench")
+                break
+        param_string = ""
+        for i in range(len(WorkbenchOrderedList)):
+            param_string = param_string + "," + WorkbenchOrderedList[i]
+        Parameters_Ribbon.Settings.SetStringSetting(
+            WorkbenchOrderParam + "/Ordered", param_string
+        )
+
         # add category for each workbench
         for i in range(len(WorkbenchOrderedList)):
             for workbenchName, workbench in Gui.listWorkbenches().items():
@@ -365,6 +382,13 @@ class ModernMenu(RibbonBar):
         )
         self.setApplicationIcon(Gui.getIcon("freecad"))
         self.applicationOptionButton().setToolTip("FreeCAD Ribbon")
+
+        # add the menus from the menubar to the application button
+        self.ApplicationMenu()
+
+        return
+
+    def ApplicationMenu(self):
         Menu = self.addFileMenu()
 
         # add the menus from the menubar to the application button
@@ -394,7 +418,6 @@ class ModernMenu(RibbonBar):
         DesignMenu.addSeparator()
         AboutButton = DesignMenu.addAction("About FreeCAD Ribbon")
         AboutButton.triggered.connect(self.on_AboutButton_clicked)
-        return
 
     def loadDesignMenu(self):
         message = "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?"
@@ -454,6 +477,7 @@ class ModernMenu(RibbonBar):
         tabName = tabName.replace("&", "")
         Gui.activateWorkbench(self.wbNameMapping[tabName])
         self.onWbActivated()
+        self.ApplicationMenu()
         return
 
     def onWbActivated(self):
@@ -590,7 +614,9 @@ class ModernMenu(RibbonBar):
 
                         position = None
                         try:
-                            position = positionsList.index(button.text())
+                            position = positionsList.index(
+                                button.defaultAction().text()
+                            )
                         except ValueError:
                             position = 999999
 
