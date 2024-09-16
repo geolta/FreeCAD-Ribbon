@@ -947,10 +947,10 @@ class LoadDialog(Design_ui.Ui_Form):
                 WorkBenchName = WorkBench[0]
                 try:
                     for key, value in self.Dict_CustomToolbars["customToolbars"][WorkBenchName].items():
-                        if key == CustomPanelTitle:
+                        if key.split("_")[0] == CustomPanelTitle:
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
-                                if self.form.CustomToolbarSelector.itemText(i).split(", ")[0] == key:
+                                if self.form.CustomToolbarSelector.itemText(i).split(", ")[0] == key.split("_")[0]:
                                     self.form.CustomToolbarSelector.removeItem(i)
                                     self.form.CustomToolbarSelector.setCurrentText(
                                         self.form.CustomToolbarSelector.itemText(i - 1).split(", ")[0]
