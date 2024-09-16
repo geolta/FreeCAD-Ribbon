@@ -85,6 +85,8 @@ class LoadDialog(Design_ui.Ui_Form):
 
     WorkbenchesActivated = False
 
+    Update_StringList_Toolbars = False
+
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
         super(LoadDialog, self).__init__()
@@ -131,27 +133,54 @@ class LoadDialog(Design_ui.Ui_Form):
         self.StringList_Toolbars.clear()
         # Store the current active workbench
         ActiveWB = Gui.activeWorkbench().name()
+        # Ask the user if he or she wants to update the list with toolbars or use the current one
+        message = (
+            "a list with toolbars is stored locally. Do you want to update this list?\n This can take a while!\n"
+            + "press 'yes'to update or 'no' to continue with the current list."
+        )
+        result = StandardFunctions.Mbox(message, "FreeCAD Ribbon", 1, "Question")
+        if result == "yes":
+            self.Update_StringList_Toolbars = True
         # Go through the list of workbenches
         i = 0
         for WorkBench in self.List_Workbenches:
             wbToolbars = []
-            try:
-                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
-            except Exception:
-                Gui.activateWorkbench(WorkBench[0])
-                wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
-            # Go through the toolbars
-            for Toolbar in wbToolbars:
-                # Go through the list of toolbars. If already present, skip it.
-                # Otherwise add it the the list.
-                IsInList = False
-                for i in range(len(self.StringList_Toolbars)):
-                    if Toolbar == self.StringList_Toolbars[i][0]:
-                        IsInList = True
+            if self.Update_StringList_Toolbars is True:
+                try:
+                    wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
+                except Exception:
+                    Gui.activateWorkbench(WorkBench[0])
+                    wbToolbars = Gui.getWorkbench(WorkBench[0]).listToolbars()
+                # Go through the toolbars
+                for Toolbar in wbToolbars:
+                    # Go through the list of toolbars. If already present, skip it.
+                    # Otherwise add it the the list.
+                    IsInList = False
+                    for i in range(len(self.StringList_Toolbars)):
+                        if Toolbar == self.StringList_Toolbars[i][0]:
+                            IsInList = True
 
-                if IsInList is False:
-                    self.StringList_Toolbars.append([Toolbar, WorkBench[2]])
-            time.sleep(1)
+                    if IsInList is False:
+                        self.StringList_Toolbars.append([Toolbar, WorkBench[2]])
+
+                    JsonPath = os.path.dirname(__file__)
+                    JsonFile = os.path.join(JsonPath, "StringList_Toolbars.json")
+
+                    resultingDict = {}
+                    resultingDict.update(self.StringList_Toolbars)
+
+                    # Writing to sample.json
+                    with open(JsonFile, "w") as outfile:
+                        json.dump(resultingDict, outfile, indent=4)
+
+                time.sleep(1)
+            if self.Update_StringList_Toolbars is False:
+                # Open the JsonFile and load the data
+                JsonFile = open(os.path.join(os.path.dirname(__file__), "StringList_Toolbars.json"))
+                data = json.load(JsonFile)
+
+                self.StringList_Toolbars = data
+
         CustomToolbars = self.List_ReturnCustomToolbars()
         for Customtoolbar in CustomToolbars:
             self.StringList_Toolbars.append(Customtoolbar)
