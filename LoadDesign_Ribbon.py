@@ -85,6 +85,8 @@ class LoadDialog(Design_ui.Ui_Form):
 
     WorkbenchesActivated = False
 
+    Update_StringList_Toolbars = False
+
     def __init__(self):
         # Makes "self.on_CreateBOM_clicked" listen to the changed control values instead initial values
         super(LoadDialog, self).__init__()
@@ -151,7 +153,19 @@ class LoadDialog(Design_ui.Ui_Form):
 
                 if IsInList is False:
                     self.StringList_Toolbars.append([Toolbar, WorkBench[2]])
+
+                JsonPath = os.path.dirname(__file__)
+                JsonFile = os.path.join(JsonPath, "StringList_Toolbars.json")
+
+                resultingDict = {}
+                resultingDict.update(self.StringList_Toolbars)
+
+                # Writing to sample.json
+                with open(JsonFile, "w") as outfile:
+                    json.dump(resultingDict, outfile, indent=4)
+
             time.sleep(1)
+
         CustomToolbars = self.List_ReturnCustomToolbars()
         for Customtoolbar in CustomToolbars:
             self.StringList_Toolbars.append(Customtoolbar)
@@ -947,10 +961,10 @@ class LoadDialog(Design_ui.Ui_Form):
                 WorkBenchName = WorkBench[0]
                 try:
                     for key, value in self.Dict_CustomToolbars["customToolbars"][WorkBenchName].items():
-                        if key == CustomPanelTitle:
+                        if key.split("_")[0] == CustomPanelTitle:
                             # remove the custom toolbar from the combobox
                             for i in range(self.form.CustomToolbarSelector.count()):
-                                if self.form.CustomToolbarSelector.itemText(i).split(", ")[0] == key:
+                                if self.form.CustomToolbarSelector.itemText(i).split(", ")[0] == key.split("_")[0]:
                                     self.form.CustomToolbarSelector.removeItem(i)
                                     self.form.CustomToolbarSelector.setCurrentText(
                                         self.form.CustomToolbarSelector.itemText(i - 1).split(", ")[0]
