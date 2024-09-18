@@ -111,18 +111,24 @@ def add_keys_nested_dict(dict, keys):
 
 
 def UpdateCommands():
+    # Go through the workbenches in the dict
     for WorkBench in Dict_RibbonCommandPanel["workbenches"]:
+        # Go through the toolbars of the workbench
         for ToolBar in Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"]:
+            # Continue if the "Toolbar" is not named order. This is the orderlist for the toolbars
             if ToolBar != "order":
-                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench][
-                    "toolbars"
-                ][ToolBar]["commands"]:
+                # Go through the commands in the toolbar
+                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"]:
+                    # Get the command (key) and its custom name (value) from the commandlist
+                    # And compare them with the command in the Dict_RibbonCommandPanel
                     for key, value in Dict_Commands.items():
+                        # If the command and key are equal and value is not empty or three dots,
+                        # Get the custom name and change the text in the Dict_RibbonCommandPanel
                         if Command == key:
                             if value[2] != "" and value[2] != "...":
-                                Dict_RibbonCommandPanel["workbenches"][WorkBench][
-                                    "toolbars"
-                                ][ToolBar]["commands"][Command]["text"] = value[2]
+                                Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"][
+                                    Command
+                                ]["text"] = value[2]
 
 
 def WriteJson():
