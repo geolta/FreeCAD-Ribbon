@@ -411,7 +411,7 @@ class ModernMenu(RibbonBar):
             if not self.ReproAdress.endswith("/"):
                 self.ReproAdress = self.ReproAdress + "/"
 
-            AboutAdress = self.ReproAdress + "wiki/About"
+            AboutAdress = self.ReproAdress + "wiki"
             webbrowser.open(AboutAdress, new=2, autoraise=True)
         return
 
