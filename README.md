@@ -6,7 +6,7 @@ Current developers are:
 * Paul Ebbers (https://github.com/APEbbers/FreeCAD-Ribbon)
 * Geolta (https://github.com/geolta/FreeCAD-Ribbon)
 
-![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/Develop/Resources/Images/Screenshot.svg)
+![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/Resources/Images/Screenshot.png)
 
 The FreeCAD ribbon provides the following functions and features:
 * Replace the default toolbars with a ribbon based on the original toolbars
