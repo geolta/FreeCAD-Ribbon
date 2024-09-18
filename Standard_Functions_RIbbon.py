@@ -178,9 +178,7 @@ def restart_freecad():
 
     args = QtWidgets.QApplication.arguments()[1:]
     if Gui.getMainWindow().close():
-        QtCore.QProcess.startDetached(
-            QtWidgets.QApplication.applicationFilePath(), args
-        )
+        QtCore.QProcess.startDetached(QtWidgets.QApplication.applicationFilePath(), args)
 
     return
 
@@ -218,14 +216,6 @@ def SaveDialog(files, OverWrite: bool = True):
 
 
 def GetLetterFromNumber(number: int, UCase: bool = True):
-    # from openpyxl.utils import get_column_letter
-
-    # Letter = get_column_letter(number)
-
-    # # If UCase is true, convert to upper case
-    # if UCase is True:
-    #     Letter = Letter.upper()
-
     """Number to Excel-style column name, e.g., 1 = A, 26 = Z, 27 = AA, 703 = AAA."""
     Letter = ""
     while number > 0:
@@ -235,10 +225,6 @@ def GetLetterFromNumber(number: int, UCase: bool = True):
 
 
 def GetNumberFromLetter(Letter):
-    # from openpyxl.utils import column_index_from_string
-
-    # Number = column_index_from_string(Letter)
-
     """Excel-style column name to number, e.g., A = 1, Z = 26, AA = 27, AAA = 703."""
     number = 0
     for c in Letter:
@@ -345,13 +331,9 @@ def GetFileDialog(Filter="", parent=None, DefaultPath="", SaveAs: bool = True) -
 
     file = ""
     if SaveAs is False:
-        file = QFileDialog.getOpenFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getOpenFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     if SaveAs is True:
-        file = QFileDialog.getSaveFileName(
-            parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter
-        )[0]
+        file = QFileDialog.getSaveFileName(parent=parent, caption="Select a file", dir=DefaultPath, filter=Filter)[0]
     return file
 
 
@@ -359,9 +341,7 @@ def GetFolder(parent=None, DefaultPath="") -> str:
     from PySide.QtWidgets import QFileDialog
 
     Directory = ""
-    Directory = QFileDialog.getExistingDirectory(
-        parent=parent, caption="Select Folder", dir=DefaultPath
-    )
+    Directory = QFileDialog.getExistingDirectory(parent=parent, caption="Select Folder", dir=DefaultPath)
 
     return Directory
 
