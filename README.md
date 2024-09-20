@@ -37,7 +37,7 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 1. Remove the folder of this in the `Mod` folder of your FreeCAD installation
 1. Restart FreeCAD.
 1. When you restarted you don't see any toolbar.
-1. Download the file
+1. Create a new macro (Macro menu -> macros...-> create macro)
 1. Paste this code in to macro.
     ```python
     from PySide import QtCore, QtGui, QtWidgets
