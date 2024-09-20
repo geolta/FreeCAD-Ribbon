@@ -47,6 +47,9 @@ translate = App.Qt.translate
 
 
 class LoadDialog(Settings_ui.Ui_Form):
+    Backup = False
+    BackupLocation = pathBackup
+    StyleSheet = Parameters_Ribbon.STYLESHEET
     ShowText_Small = False
     ShowText_Medium = False
     ShowText_Large = False
@@ -95,9 +98,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         self.form.EnableBackup.clicked.connect(self.on_EnableBackup_clicked)
         self.form.BackUpLocation.clicked.connect(self.on_BackUpLocation_clicked)
         self.form.IconSize_Small.textChanged.connect(self.on_IconSize_Small_TextChanged)
-        self.form.IconSize_Medium.textChanged.connect(
-            self.on_IconSize_Medium_TextChanged
-        )
+        self.form.IconSize_Medium.textChanged.connect(self.on_IconSize_Medium_TextChanged)
         self.form.StyleSheetLocation.clicked.connect(self.on_StyleSheetLocation_clicked)
 
         self.form.ShowText_Small.clicked.connect(self.on_ShowTextSmall_clicked)
@@ -114,9 +115,7 @@ class LoadDialog(Settings_ui.Ui_Form):
         def GenerateJsonExit():
             self.on_Close_clicked(self)
 
-        self.form.GenerateJsonExit.connect(
-            self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit
-        )
+        self.form.GenerateJsonExit.connect(self.form.GenerateJsonExit, SIGNAL("clicked()"), GenerateJsonExit)
         # endregion
 
         return
@@ -126,40 +125,32 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_EnableBackup_clicked(self):
         if self.form.EnableBackup.isChecked() is True:
             Parameters_Ribbon.ENABLE_BACKUP = True
-            Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", True)
+            self.Backup = True
         if self.form.EnableBackup.isChecked() is False:
             Parameters_Ribbon.ENABLE_BACKUP = False
-            Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", False)
+            self.Backup = False
 
         self.settingChanged = True
         return
 
     def on_BackUpLocation_clicked(self):
         BackupFolder = ""
-        BackupFolder = StandardFunctions.GetFolder(
-            parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION
-        )
+        BackupFolder = StandardFunctions.GetFolder(parent=None, DefaultPath=Parameters_Ribbon.BACKUP_LOCATION)
         if BackupFolder != "":
             self.pathBackup = BackupFolder
             self.form.label_4.setText(BackupFolder)
             Parameters_Ribbon.BACKUP_LOCATION = BackupFolder
-            Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", BackupFolder)
+            self.BackupLocation = BackupFolder
             self.settingChanged = True
         return
 
     def on_IconSize_Small_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_SMALL = int(self.form.IconSize_Small.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Small", int(self.form.IconSize_Small.text())
-        )
         self.settingChanged = True
         return
 
     def on_IconSize_Medium_TextChanged(self):
         Parameters_Ribbon.ICON_SIZE_MEDIUM = int(self.form.IconSize_Medium.text())
-        Parameters_Ribbon.Settings.SetIntSetting(
-            "IconSize_Medium", int(self.form.IconSize_Medium.text())
-        )
         self.settingChanged = True
         return
 
@@ -174,18 +165,16 @@ class LoadDialog(Settings_ui.Ui_Form):
         if StyleSheet != "":
             self.form.label_7.setText(StyleSheet)
             Parameters_Ribbon.STYLESHEET = StyleSheet
-            Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", StyleSheet)
+            self.StyleSheet = StyleSheet
             self.settingChanged = True
         return
 
     def on_ShowTextSmall_clicked(self):
         if self.form.ShowText_Small.isChecked() is True:
             Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = True
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", True)
             self.ShowText_Small = True
         if self.form.ShowText_Small.isChecked() is False:
             Parameters_Ribbon.SHOW_ICON_TEXT_SMALL = False
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", False)
             self.ShowText_Small = False
         self.settingChanged = True
         return
@@ -193,11 +182,9 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_ShowTextMedium_clicked(self):
         if self.form.ShowText_Medium.isChecked() is True:
             Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM = True
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Medium", True)
             self.ShowText_Medium = True
         if self.form.ShowText_Medium.isChecked() is False:
             Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM = False
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Medium", False)
             self.ShowText_Medium = False
         self.settingChanged = True
         return
@@ -205,11 +192,9 @@ class LoadDialog(Settings_ui.Ui_Form):
     def on_ShowTextLarge_clicked(self):
         if self.form.ShowText_Large.isChecked() is True:
             Parameters_Ribbon.SHOW_ICON_TEXT_LARGE = True
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", True)
             self.ShowText_Large = True
         if self.form.ShowText_Large.isChecked() is False:
             Parameters_Ribbon.SHOW_ICON_TEXT_LARGE = False
-            Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", False)
             self.ShowText_Large = False
         self.settingChanged = True
         return
@@ -222,6 +207,15 @@ class LoadDialog(Settings_ui.Ui_Form):
 
     @staticmethod
     def on_Close_clicked(self):
+        Parameters_Ribbon.Settings.SetBoolSetting("BackupEnabled", self.Backup)
+        Parameters_Ribbon.Settings.SetStringSetting("BackupFolder", self.BackupLocation)
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Small", int(self.form.IconSize_Small.text()))
+        Parameters_Ribbon.Settings.SetIntSetting("IconSize_Medium", int(self.form.IconSize_Medium.text()))
+        Parameters_Ribbon.Settings.SetStringSetting("Stylesheet", self.StyleSheet)
+        Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Small", self.ShowText_Small)
+        Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Medium", self.ShowText_Medium)
+        Parameters_Ribbon.Settings.SetBoolSetting("ShowIconText_Large", self.ShowText_Large)
+
         # Close the form
         self.form.close()
         # show the restart dialog
