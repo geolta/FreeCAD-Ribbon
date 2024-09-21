@@ -62,6 +62,7 @@ List_IconOnlyToolbars = [
 ]
 List_QuickAccessCommands = [
     "Std_New",
+    "Std_Open",
     "Std_Save",
     "Std_Undo",
     "Std_Redo",
@@ -101,41 +102,44 @@ def CreateLists():
                     WorkbenchTitle = Gui.getWorkbench(WorkBenchName).MenuText
                     List_Workbenches.append([str(WorkBenchName), Icon, WorkbenchTitle])
 
+    # Store the current active workbench
+    ActiveWB = Gui.activeWorkbench().name()
     # Create a list of all commands with their icon
     List_Commands.clear()
     # Create a list of command names
     CommandNames = []
-    for i in range(len(List_Workbenches)):
-        WorkBench = Gui.getWorkbench(List_Workbenches[i][0])
-        ToolbarItems = WorkBench.getToolbarItems()
-        for key, value in ToolbarItems.items():
-            MustBeIgnored = False
-            for ToolBar in List_IconOnlyToolbars:
-                if ToolBar == key:
-                    MustBeIgnored = True
-            for ToolBar in List_IgnoredToolbars:
-                if ToolBar == key:
-                    MustBeIgnored = True
+    for WorkBenchItem in List_Workbenches:
+        WorkBench = Gui.getWorkbench(WorkBenchItem[0])
+        if str(WorkBenchItem[0]) != "NoneWorkbench":
+            print(WorkBenchItem[0])
+            Gui.activateWorkbench(WorkBenchItem[0])
+            ToolbarItems = WorkBench.getToolbarItems()
+            for key, value in ToolbarItems.items():
+                MustBeIgnored = False
+                for ToolBar in List_IconOnlyToolbars:
+                    if ToolBar == key:
+                        MustBeIgnored = True
+                for ToolBar in List_IgnoredToolbars:
+                    if ToolBar == key:
+                        MustBeIgnored = True
 
-            if MustBeIgnored is False:
-                for j in range(len(value)):
-                    Item = [value[j], List_Workbenches[i][0]]
-                    # if CommandNames.__contains__(Item) is False:
-                    IsInList = False
-                    for k in range(len(CommandNames)):
-                        if CommandNames[k][0] == value[j]:
-                            IsInList = True
-                    if IsInList is False:
-                        CommandNames.append(Item)
+                if MustBeIgnored is False:
+                    for j in range(len(value)):
+                        Item = [value[j], WorkBenchItem[0]]
+                        # if CommandNames.__contains__(Item) is False:
+                        IsInList = False
+                        for k in range(len(CommandNames)):
+                            if CommandNames[k][0] == value[j]:
+                                IsInList = True
+                        if IsInList is False:
+                            CommandNames.append(Item)
 
     # Go through the list
     for CommandName in CommandNames:
         # get the command with this name
         command = Gui.Command.get(CommandName[0])
         WorkBenchName = CommandName[1]
-        if command is not None and not List_QuickAccessCommands.__contains__(
-            CommandName[0]
-        ):
+        if command is not None and not List_QuickAccessCommands.__contains__(CommandName[0]):
             # get the icon for this command
             if command.getInfo()["pixmap"] != "":
                 Icon = Gui.getIcon(command.getInfo()["pixmap"])
@@ -143,7 +147,8 @@ def CreateLists():
                 Icon = None
             MenuName = command.getInfo()["menuText"].replace("&", "")
             List_Commands.append([CommandName[0], Icon, MenuName, WorkBenchName])
-    # endregion ----------------------------------------------------------------------
+
+    Gui.activateWorkbench(ActiveWB)
 
     return
 
