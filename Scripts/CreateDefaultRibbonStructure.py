@@ -32,19 +32,7 @@ import os
 
 import json
 
-from PySide.QtWidgets import (
-    QListWidgetItem,
-    QTableWidgetItem,
-    QListWidget,
-    QTableWidget,
-    QSpinBox,
-    QWidget,
-    QToolBar,
-    QComboBox,
-    QPushButton,
-    QToolButton,
-    QTabWidget,
-)
+from PySide.QtWidgets import QToolBar, QToolButton
 
 ParentPath = os.path.dirname(os.path.dirname(__file__))
 
