@@ -112,6 +112,27 @@ class ModernMenu(RibbonBar):
         # connect the signals
         self.connectSignals()
 
+        # if FreeCAD is version 0.21 create a custom toolbar "Invidual Views"
+        if int(App.Version()[0]) == 1 and int(App.Version()[1]) <= 21:
+            StandardFunctions.CreateToolbar(
+                Name="Individual views",
+                WorkBenchName="Global",
+                ButtonList=[
+                    "Std_ViewIsometric",
+                    "Std_ViewRight",
+                    "Std_ViewLeft",
+                    "Std_ViewFront",
+                    "Std_ViewRear",
+                    "Std_ViewTop",
+                    "Std_ViewBottom",
+                ],
+            )
+        if int(App.Version()[1]) == 1 and int(App.Version()[1]) >= 0:
+            StandardFunctions.RemoveWorkBenchToolbars(
+                Name="Individual views",
+                WorkBenchName="Global",
+            )
+
         # Get the adress of the reporisaty adress
         self.ReproAdress = StandardFunctions.getReproAdress(os.path.dirname(__file__))
         print(f"FreeCAD Ribbon: {self.ReproAdress}")

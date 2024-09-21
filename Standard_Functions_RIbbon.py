@@ -358,3 +358,49 @@ def getReproAdress(base_path):
         ref = head.readline().split(" ")[-1].strip()
 
         return ref
+
+
+def CreateToolbar(Name: str, WorkBenchName: str = "Global", ButtonList: list = []):
+    # Define the name for the ToolbarGroup in the FreeCAD Parameters
+    ToolbarGroupName = WorkBenchName
+    # Define the name for the toolbar
+    ToolBarName = Name
+    # define the parameter path for the toolbar
+    WorkbenchToolBarsParamPath = "User parameter:BaseApp/Workbench/" + ToolbarGroupName + "/Toolbar/"
+
+    # add the ToolbarGroup in the FreeCAD Parameters
+    WorkbenchToolbar = App.ParamGet(WorkbenchToolBarsParamPath + ToolbarGroupName)
+
+    # Set the name.
+    WorkbenchToolbar.SetString("Name", ToolBarName)
+
+    # Set the toolbar active
+    WorkbenchToolbar.SetBool("Active", True)
+
+    # add the commands
+    for Button in ButtonList:
+        WorkbenchToolbar.SetString(Button, "FreeCAD")
+    # endregion
+
+    # Force the toolbars to be recreated
+    wb = Gui.activeWorkbench()
+    if int(App.Version()[1]) == 1 and int(App.Version()[1]) >= 0:
+        wb.reloadActive()
+    return ToolBarName
+
+
+def RemoveWorkBenchToolbars(Name: str, WorkBenchName: str = "Global") -> None:
+    # Define the name for the ToolbarGroup in the FreeCAD Parameters
+    ToolbarGroupName = WorkBenchName
+    # Define the name for the toolbar
+    ToolBarName = Name
+    # define the parameter path for the toolbar
+    ToolBarsParamPath = "User parameter:BaseApp/Workbench/" + ToolbarGroupName + "/Toolbar/"
+
+    custom_toolbars = App.ParamGet(ToolBarsParamPath).GetGroups()
+    for toolbar in custom_toolbars:
+        group_name = toolbar.GetString("Name", "")
+        if group_name == ToolBarName:
+            custom_toolbars.RemGroup(toolbar)
+
+    return
