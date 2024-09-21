@@ -28,6 +28,7 @@
       <depend optional="False" type="python">pyqtribbon</depend>
       <depend optional="False" type="python">qtpy</depend>
       <depend optional="True" type="python">keyboard</depend>
+      <conflict>PieMenu</conflict>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>
