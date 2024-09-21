@@ -16,6 +16,7 @@
     ],
     "quickAccessCommands": [
         "Std_New",
+        "Std_Open",
         "Std_Save",
         "Std_Undo",
         "Std_Redo",

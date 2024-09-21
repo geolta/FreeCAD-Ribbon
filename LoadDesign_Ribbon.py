@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 import os
-from PySide.QtGui import QIcon, QPixmap, QAction
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QPixmap, QAction
+from PySide6.QtWidgets import (
     QListWidgetItem,
     QTableWidgetItem,
     QListWidget,
@@ -34,7 +34,7 @@ from PySide.QtWidgets import (
     QPushButton,
     QMenu,
 )
-from PySide.QtCore import Qt, SIGNAL, Signal, QObject, QThread
+from PySide6.QtCore import Qt, SIGNAL, Signal, QObject, QThread
 import sys
 import json
 from datetime import datetime
@@ -478,6 +478,14 @@ class LoadDialog(Design_ui.Ui_Form):
 
         self.form.HelpButton.setIcon(helpIcon)
         self.form.HelpButton.setMinimumHeight(self.form.GenerateJsonExit.minimumHeight())
+
+        # Disable and hide the restore button if the backup function is disabled
+        if Parameters_Ribbon.ENABLE_BACKUP is False:
+            self.form.RestoreJson.setDisabled(True)
+            self.form.RestoreJson.setHidden(True)
+        else:
+            self.form.RestoreJson.setEnabled(True)
+            self.form.RestoreJson.setVisible(True)
         # endregion
 
         return
