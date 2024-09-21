@@ -481,11 +481,11 @@ class LoadDialog(Design_ui.Ui_Form):
 
         # Disable and hide the restore button if the backup function is disabled
         if Parameters_Ribbon.ENABLE_BACKUP is False:
-            QPushButton(self.form.RestoreJson).setDisabled(True)
-            QPushButton(self.form.RestoreJson).setHidden(True)
+            self.form.RestoreJson.setDisabled(True)
+            self.form.RestoreJson.setHidden(True)
         else:
-            QPushButton(self.form.RestoreJson).setEnabled(True)
-            QPushButton(self.form.RestoreJson).setVisible(True)
+            self.form.RestoreJson.setEnabled(True)
+            self.form.RestoreJson.setVisible(True)
         # endregion
 
         return
