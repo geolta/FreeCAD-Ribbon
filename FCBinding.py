@@ -113,7 +113,7 @@ class ModernMenu(RibbonBar):
         self.connectSignals()
 
         # if FreeCAD is version 0.21 create a custom toolbar "Invidual Views"
-        if int(App.Version()[0]) == 1 and int(App.Version()[1]) <= 21:
+        if int(App.Version()[0]) == 0 and int(App.Version()[1]) <= 21:
             StandardFunctions.CreateToolbar(
                 Name="Individual views",
                 WorkBenchName="Global",
@@ -127,7 +127,7 @@ class ModernMenu(RibbonBar):
                     "Std_ViewBottom",
                 ],
             )
-        if int(App.Version()[1]) == 1 and int(App.Version()[1]) >= 0:
+        if int(App.Version()[0]) == 1 and int(App.Version()[1]) >= 0:
             StandardFunctions.RemoveWorkBenchToolbars(
                 Name="Individual views",
                 WorkBenchName="Global",
@@ -512,6 +512,8 @@ class ModernMenu(RibbonBar):
 
         # Get the list of toolbars from the active workbench
         ListToolbars: list = workbench.listToolbars()
+        if int(App.Version()[0]) == 0 and int(App.Version()[1]) <= 21:
+            ListToolbars.append("Individual views")
         # Get custom toolbars that are created in the toolbar enviroment and add them to the list of toolbars
         CustomToolbars = self.List_ReturnCustomToolbars()
         for CustomToolbar in CustomToolbars:
