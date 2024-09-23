@@ -22,8 +22,8 @@
 import FreeCAD as App
 import FreeCADGui as Gui
 
-from PySide.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
+from PySide6.QtWidgets import (
     QToolButton,
     QToolBar,
     QSizePolicy,
@@ -36,7 +36,7 @@ from PySide.QtWidgets import (
     QSpacerItem,
     QLayoutItem,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
 
 import json
 import os
@@ -274,26 +274,33 @@ class ModernMenu(RibbonBar):
         """
         # add quick access buttons
         i = 2  # Start value for button count. Used for width of quixkaccess toolbar
+        toolBarWidth = (self.iconSize * self.sizeFactor) * i
         for commandName in self.ribbonStructure["quickAccessCommands"]:
             i = i + 1
+            width = 0
             button = QToolButton()
             QuickAction = Gui.Command.get(commandName).getAction()
-            # XXX for debugging purposes
-            if len(QuickAction) == 0:
-                print(f"{commandName} has no action")
-            elif len(QuickAction) > 1:
-                print(f"{commandName} has more than one action")
 
-            # Add the action
-            button.setDefaultAction(QuickAction[0])
+            if len(QuickAction) <= 1:
+                button.setDefaultAction(QuickAction[0])
+                width = self.iconSize * self.sizeFactor
+                button.setFixedSize(width, self.iconSize * self.sizeFactor)
+            elif len(QuickAction) > 1:
+                button.addActions(QuickAction)
+                button.setDefaultAction(QuickAction[0])
+                width = (self.iconSize * self.sizeFactor) + self.iconSize
+                button.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+                button.setFixedSize(width, self.iconSize * self.sizeFactor)
 
             # Add the button to the quickaccess toolbar
             self.addQuickAccessButton(button)
 
+            toolBarWidth = toolBarWidth + width
+
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * self.sizeFactor)
+        self.quickAccessToolBar().setMinimumWidth(toolBarWidth)
         # Set the size policy
         self.quickAccessToolBar().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         # Set the layout
