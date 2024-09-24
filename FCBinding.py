@@ -21,6 +21,7 @@
 # *************************************************************************
 import FreeCAD as App
 import FreeCADGui as Gui
+from pathlib import Path
 
 from PySide6.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
 from PySide6.QtWidgets import (
@@ -72,6 +73,8 @@ except ImportError:
     from pyqtribbon_local.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 
     print("pyqtribbon used local")
+
+from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -161,7 +164,7 @@ class ModernMenu(RibbonBar):
         self.onUserChangedWorkbench()
 
         # Set the custom stylesheet
-        self.setStyleSheet(Parameters_Ribbon.STYLESHEET)
+        self.setStyleSheet(Path(Parameters_Ribbon.STYLESHEET).read_text())
 
         # get the state of the mainwindow
         self.MainWindowLoaded = True
@@ -208,7 +211,7 @@ class ModernMenu(RibbonBar):
 
     # implentation to add actions to the Filemenu. Needed for the accessiores menu
     def addAction(self, action: QAction):
-        menu = self.findChild(RibbonMenu, "")
+        menu = self.findChild(RibbonMenu, "Ribbon")
         if menu is None:
             menu = self.addFileMenu()
         menu.addAction(action)
@@ -444,8 +447,10 @@ class ModernMenu(RibbonBar):
         return
 
     def onCollapseRibbonButton_clicked(self):
+        # Get the ribbon
         TB = mw.findChildren(QDockWidget, "Ribbon")[0]
 
+        # Set the height based on visibility of the ribbon
         if self.ribbonVisible() is False:
             TB.setMaximumHeight(45)
         else:
@@ -786,6 +791,8 @@ class ModernMenu(RibbonBar):
                             if button.menu() is not None:
                                 btn.setMenu(button.menu())
                                 btn.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+
+                            # Set the default actiom
                             btn.setDefaultAction(action)
 
                             # add the button text to the shadowList for checking if buttons are already there.
