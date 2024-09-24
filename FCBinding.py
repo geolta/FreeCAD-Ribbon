@@ -103,7 +103,7 @@ class ModernMenu(RibbonBar):
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
 
     # Set a sixe factor for the buttons
-    sizeFactor = 1.2
+    sizeFactor = 1.3
 
     def __init__(self):
         """
@@ -287,13 +287,13 @@ class ModernMenu(RibbonBar):
             if len(QuickAction) <= 1:
                 button.setDefaultAction(QuickAction[0])
                 width = self.iconSize * self.sizeFactor
-                button.setFixedSize(width, self.iconSize * self.sizeFactor)
+                button.setMinimumWidth(width)
             elif len(QuickAction) > 1:
                 button.addActions(QuickAction)
                 button.setDefaultAction(QuickAction[0])
                 width = (self.iconSize * self.sizeFactor) + self.iconSize
                 button.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
-                button.setFixedSize(width, self.iconSize * self.sizeFactor)
+                button.setMinimumWidth(width)
 
             # Add the button to the quickaccess toolbar
             self.addQuickAccessButton(button)
@@ -306,9 +306,6 @@ class ModernMenu(RibbonBar):
         self.quickAccessToolBar().setMinimumWidth(toolBarWidth)
         # Set the size policy
         self.quickAccessToolBar().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        # Set the layout
-        Layout = self.quickAccessToolBar().layout()
-        Layout.setContentsMargins(1, 1, 1, 1)
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
@@ -353,7 +350,6 @@ class ModernMenu(RibbonBar):
         # Set the helpbutton
         self.helpRibbonButton().setEnabled(True)
         self.helpRibbonButton().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.helpRibbonButton().setMaximumWidth(self.iconSize * self.sizeFactor)
         self.helpRibbonButton().setToolTip("Go to the FreeCAD help page")
         # Get the default help action from FreeCAD
         helpMenu = mw.findChildren(QMenu, "&Help")[0]
@@ -370,7 +366,6 @@ class ModernMenu(RibbonBar):
         pinButton.setText("Pin Ribbon")
         pinButton.setToolTip("Click to toggle the autohide function on or off")
         pinButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        pinButton.setMaximumWidth(self.iconSize * self.sizeFactor)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
             pinButton.setChecked(False)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is False:
@@ -381,11 +376,10 @@ class ModernMenu(RibbonBar):
         # Set the widht of the right toolbar
         i = len(self.rightToolBar().actions())
         self.rightToolBar().setMinimumWidth(self.iconSize * self.sizeFactor * i)
-        self.rightToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         self.rightToolBar().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Set the application button
-        self.applicationOptionButton().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.applicationOptionButton().setMinimumWidth(self.iconSize * self.sizeFactor)
         self.setApplicationIcon(Gui.getIcon("freecad"))
         self.applicationOptionButton().setToolTip("FreeCAD Ribbon")
 
@@ -430,7 +424,6 @@ class ModernMenu(RibbonBar):
         result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
         if result == "yes":
             LoadDesign_Ribbon.main()
-        # LoadingDialog.main()
         return
 
     def loadSettingsMenu(self):
@@ -781,7 +774,7 @@ class ModernMenu(RibbonBar):
                                     fixedHeight=False,
                                 )
                                 if Parameters_Ribbon.SHOW_ICON_TEXT_LARGE is False:
-                                    btn.setMinimumWidth(btn.maximumHeight())
+                                    btn.setMinimumWidth(btn.maximumHeight() - 10)
                             else:
                                 raise NotImplementedError(
                                     "Given button size not implemented, only small, medium and large are available."
