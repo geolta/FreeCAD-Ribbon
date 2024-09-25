@@ -1,6 +1,6 @@
 RibbonBar {
     border: none;
-    background-color: transparent;
+    /*background-color: transparent;*/
 }
 
 RibbonApplicationButton::menu-indicator {
@@ -24,6 +24,9 @@ QToolButton, RibbonApplicationButton{
 	border-radius: 4px; 
 	text-align:left;
 	}
+	QToolButton:hover{
+		border: 0.5px solid;/* do not change this line */
+		}
 	QToolButton::menu-arrow {
 		width: 20px;
 		subcontrol-origin: content;
@@ -37,7 +40,7 @@ QToolButton, RibbonApplicationButton{
 		subcontrol-position: right center;
 		}
 	QToolButton::menu-button:hover{
-		border-left: 0.5px solid;
+		border-left: 0.5px solid;/* do not change this line */
 	}
 	QToolButton[popupMode="1"] { /* only for MenuButtonPopup */
 		padding-right: 20px; /* make way for the popup button */
@@ -51,7 +54,8 @@ QToolButton, RibbonApplicationButton{
 		}
 
 QToolBar {
-	margin: 1px 1px 1px 1px;
+	margin: 3px 3px 3px 3px;
 	padding: 2px;
+	/*background-color: transparent;*/
 }
 
