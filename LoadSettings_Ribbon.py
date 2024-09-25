@@ -47,12 +47,12 @@ translate = App.Qt.translate
 
 
 class LoadDialog(Settings_ui.Ui_Form):
-    Backup = False
+    Backup = Parameters_Ribbon.ENABLE_BACKUP
     BackupLocation = pathBackup
     StyleSheet = Parameters_Ribbon.STYLESHEET
-    ShowText_Small = False
-    ShowText_Medium = False
-    ShowText_Large = False
+    ShowText_Small = Parameters_Ribbon.SHOW_ICON_TEXT_SMALL
+    ShowText_Medium = Parameters_Ribbon.SHOW_ICON_TEXT_MEDIUM
+    ShowText_Large = Parameters_Ribbon.SHOW_ICON_TEXT_LARGE
 
     settingChanged = False
 

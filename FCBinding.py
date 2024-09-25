@@ -21,9 +21,10 @@
 # *************************************************************************
 import FreeCAD as App
 import FreeCADGui as Gui
+from pathlib import Path
 
-from PySide.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
-from PySide.QtWidgets import (
+from PySide6.QtGui import QIcon, QAction, QPixmap, QScrollEvent, QKeyEvent
+from PySide6.QtWidgets import (
     QToolButton,
     QToolBar,
     QSizePolicy,
@@ -36,7 +37,7 @@ from PySide.QtWidgets import (
     QSpacerItem,
     QLayoutItem,
 )
-from PySide.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
+from PySide6.QtCore import Qt, QTimer, Signal, QObject, QMetaMethod, SIGNAL, QEvent
 
 import json
 import os
@@ -73,6 +74,8 @@ except ImportError:
 
     print("pyqtribbon used local")
 
+from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
 
@@ -100,7 +103,7 @@ class ModernMenu(RibbonBar):
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
 
     # Set a sixe factor for the buttons
-    sizeFactor = 1.2
+    sizeFactor = 1.3
 
     def __init__(self):
         """
@@ -161,7 +164,7 @@ class ModernMenu(RibbonBar):
         self.onUserChangedWorkbench()
 
         # Set the custom stylesheet
-        self.setStyleSheet(Parameters_Ribbon.STYLESHEET)
+        self.setStyleSheet(Path(Parameters_Ribbon.STYLESHEET).read_text())
 
         # get the state of the mainwindow
         self.MainWindowLoaded = True
@@ -208,7 +211,7 @@ class ModernMenu(RibbonBar):
 
     # implentation to add actions to the Filemenu. Needed for the accessiores menu
     def addAction(self, action: QAction):
-        menu = self.findChild(RibbonMenu, "")
+        menu = self.findChild(RibbonMenu, "Ribbon")
         if menu is None:
             menu = self.addFileMenu()
         menu.addAction(action)
@@ -274,31 +277,35 @@ class ModernMenu(RibbonBar):
         """
         # add quick access buttons
         i = 2  # Start value for button count. Used for width of quixkaccess toolbar
+        toolBarWidth = (self.iconSize * self.sizeFactor) * i
         for commandName in self.ribbonStructure["quickAccessCommands"]:
             i = i + 1
+            width = 0
             button = QToolButton()
             QuickAction = Gui.Command.get(commandName).getAction()
-            # XXX for debugging purposes
-            if len(QuickAction) == 0:
-                print(f"{commandName} has no action")
-            elif len(QuickAction) > 1:
-                print(f"{commandName} has more than one action")
 
-            # Add the action
-            button.setDefaultAction(QuickAction[0])
+            if len(QuickAction) <= 1:
+                button.setDefaultAction(QuickAction[0])
+                width = self.iconSize * self.sizeFactor
+                button.setMinimumWidth(width)
+            elif len(QuickAction) > 1:
+                button.addActions(QuickAction)
+                button.setDefaultAction(QuickAction[0])
+                width = (self.iconSize * self.sizeFactor) + self.iconSize
+                button.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+                button.setMinimumWidth(width)
 
             # Add the button to the quickaccess toolbar
             self.addQuickAccessButton(button)
 
+            toolBarWidth = toolBarWidth + width
+
         # Set the height of the quickaccess toolbar
         self.quickAccessToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         # Set the width of the quickaccess toolbar.
-        self.quickAccessToolBar().setMinimumWidth(self.iconSize * i * self.sizeFactor)
+        self.quickAccessToolBar().setMinimumWidth(toolBarWidth)
         # Set the size policy
         self.quickAccessToolBar().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        # Set the layout
-        Layout = self.quickAccessToolBar().layout()
-        Layout.setContentsMargins(1, 1, 1, 1)
 
         # Get the order of workbenches from Parameters
         WorkbenchOrderParam = "User parameter:BaseApp/Preferences/Workbenches/"
@@ -343,7 +350,6 @@ class ModernMenu(RibbonBar):
         # Set the helpbutton
         self.helpRibbonButton().setEnabled(True)
         self.helpRibbonButton().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.helpRibbonButton().setMaximumWidth(self.iconSize * self.sizeFactor)
         self.helpRibbonButton().setToolTip("Go to the FreeCAD help page")
         # Get the default help action from FreeCAD
         helpMenu = mw.findChildren(QMenu, "&Help")[0]
@@ -360,7 +366,6 @@ class ModernMenu(RibbonBar):
         pinButton.setText("Pin Ribbon")
         pinButton.setToolTip("Click to toggle the autohide function on or off")
         pinButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        pinButton.setMaximumWidth(self.iconSize * self.sizeFactor)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
             pinButton.setChecked(False)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is False:
@@ -371,11 +376,10 @@ class ModernMenu(RibbonBar):
         # Set the widht of the right toolbar
         i = len(self.rightToolBar().actions())
         self.rightToolBar().setMinimumWidth(self.iconSize * self.sizeFactor * i)
-        self.rightToolBar().setMaximumHeight(self.iconSize * self.sizeFactor)
         self.rightToolBar().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Set the application button
-        self.applicationOptionButton().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.applicationOptionButton().setMinimumWidth(self.iconSize * self.sizeFactor)
         self.setApplicationIcon(Gui.getIcon("freecad"))
         self.applicationOptionButton().setToolTip("FreeCAD Ribbon")
 
@@ -420,7 +424,6 @@ class ModernMenu(RibbonBar):
         result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
         if result == "yes":
             LoadDesign_Ribbon.main()
-        # LoadingDialog.main()
         return
 
     def loadSettingsMenu(self):
@@ -437,8 +440,10 @@ class ModernMenu(RibbonBar):
         return
 
     def onCollapseRibbonButton_clicked(self):
+        # Get the ribbon
         TB = mw.findChildren(QDockWidget, "Ribbon")[0]
 
+        # Set the height based on visibility of the ribbon
         if self.ribbonVisible() is False:
             TB.setMaximumHeight(45)
         else:
@@ -769,7 +774,7 @@ class ModernMenu(RibbonBar):
                                     fixedHeight=False,
                                 )
                                 if Parameters_Ribbon.SHOW_ICON_TEXT_LARGE is False:
-                                    btn.setMinimumWidth(btn.maximumHeight())
+                                    btn.setMinimumWidth(btn.maximumHeight() - 10)
                             else:
                                 raise NotImplementedError(
                                     "Given button size not implemented, only small, medium and large are available."
@@ -779,6 +784,8 @@ class ModernMenu(RibbonBar):
                             if button.menu() is not None:
                                 btn.setMenu(button.menu())
                                 btn.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+
+                            # Set the default actiom
                             btn.setDefaultAction(action)
 
                             # add the button text to the shadowList for checking if buttons are already there.
