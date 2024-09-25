@@ -99,6 +99,8 @@ class ModernMenu(RibbonBar):
 
     UseQtKeyPress = False
 
+    borderColor = ""
+
     # use icon size from FreeCAD preferences
     iconSize = Parameters_Ribbon.ICON_SIZE_SMALL
 
@@ -164,7 +166,15 @@ class ModernMenu(RibbonBar):
         self.onUserChangedWorkbench()
 
         # Set the custom stylesheet
-        self.setStyleSheet(Path(Parameters_Ribbon.STYLESHEET).read_text())
+        StyleSheet = Path(Parameters_Ribbon.STYLESHEET).read_text()
+        # modify the stylesheet to set the border for a toolbar menu
+        #
+        # Get the border color
+        StandardColors = mw.style().standardPalette()
+        rgb = StandardColors.light().color().toTuple()
+        hexColor = f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
+        StyleSheet = StyleSheet.replace("border-left: 0.5px solid;", "border-left: 0.5px solid " + hexColor + ";")
+        self.setStyleSheet(StyleSheet)
 
         # get the state of the mainwindow
         self.MainWindowLoaded = True

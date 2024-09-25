@@ -37,7 +37,7 @@ QToolButton, RibbonApplicationButton{
 		subcontrol-position: right center;
 		}
 	QToolButton::menu-button:hover{
-		border-left: 0.5px solid;
+		border-left: 0.5px solid;/* do not change this line */
 	}
 	QToolButton[popupMode="1"] { /* only for MenuButtonPopup */
 		padding-right: 20px; /* make way for the popup button */
