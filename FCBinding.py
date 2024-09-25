@@ -174,6 +174,7 @@ class ModernMenu(RibbonBar):
         rgb = StandardColors.light().color().toTuple()
         hexColor = f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
         StyleSheet = StyleSheet.replace("border-left: 0.5px solid;", "border-left: 0.5px solid " + hexColor + ";")
+        StyleSheet = StyleSheet.replace("border: 0.5px solid;", "border: 0.5px solid " + hexColor + ";")
         self.setStyleSheet(StyleSheet)
 
         # get the state of the mainwindow
