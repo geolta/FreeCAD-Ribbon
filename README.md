@@ -1,7 +1,7 @@
 ## FreeCAD Ribbon UI
 
-An Ribbon UI for FreeCAD, based on the PyQtRibbon library (https://github.com/haiiliin/pyqtribbon).  
-This ribbon is based the work of Geolta (https://github.com/geolta/FreeCAD-Ribbon) and HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.  
+An Ribbon UI for FreeCAD, based on the PyQtRibbon library (https://github.com/haiiliin/pyqtribbon).
+This ribbon is based the work of Geolta (https://github.com/geolta/FreeCAD-Ribbon) and HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.
 
 ![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/Resources/Images/Screenshot.png)
 
@@ -51,7 +51,7 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 1. Restart FreeCAD.
 
 ## Discussion
-Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). 
+Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235).
 
 ## Known Issues
 - To retrieve all toolbars and command per workbench, all workbenches must be activated. Unfortunally, this results in a longer loading time for the Ribbon Design menu. (up to a few minutes)
@@ -59,4 +59,3 @@ Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org
 
 ## License
 GPL v3.0 (see [LICENSE](LICENSE))
-

@@ -21,7 +21,7 @@ RibbonStackedWidget {
 QToolButton, RibbonApplicationButton{
 	margin: 1px 3px 1px 3px;
 	padding: 0px;
-	border-radius: 4px; 
+	border-radius: 4px;
 	text-align:left;
 	}
 	QToolButton:hover{
@@ -32,7 +32,7 @@ QToolButton, RibbonApplicationButton{
 		subcontrol-origin: content;
 		subcontrol-position: center center;
 		}
-	QToolButton::menu-button {		
+	QToolButton::menu-button {
 		border-radius: 2px;
 		padding: 1px;
 		border-radius: 2px;
@@ -58,4 +58,3 @@ QToolBar {
 	padding: 2px;
 	/*background-color: transparent;*/
 }
-

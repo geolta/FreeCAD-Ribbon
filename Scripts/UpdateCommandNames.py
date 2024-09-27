@@ -118,7 +118,9 @@ def UpdateCommands():
             # Continue if the "Toolbar" is not named order. This is the orderlist for the toolbars
             if ToolBar != "order":
                 # Go through the commands in the toolbar
-                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"]:
+                for Command in Dict_RibbonCommandPanel["workbenches"][WorkBench][
+                    "toolbars"
+                ][ToolBar]["commands"]:
                     # Get the command (key) and its custom name (value) from the commandlist
                     # And compare them with the command in the Dict_RibbonCommandPanel
                     for key, value in Dict_Commands.items():
@@ -126,9 +128,9 @@ def UpdateCommands():
                         # Get the custom name and change the text in the Dict_RibbonCommandPanel
                         if Command == key:
                             if value[2] != "" and value[2] != "...":
-                                Dict_RibbonCommandPanel["workbenches"][WorkBench]["toolbars"][ToolBar]["commands"][
-                                    Command
-                                ]["text"] = value[2]
+                                Dict_RibbonCommandPanel["workbenches"][WorkBench][
+                                    "toolbars"
+                                ][ToolBar]["commands"][Command]["text"] = value[2]
 
 
 def WriteJson():
