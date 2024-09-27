@@ -1,10 +1,7 @@
 ## FreeCAD Ribbon UI
 
 An Ribbon UI for FreeCAD, based on the PyQtRibbon library (https://github.com/haiiliin/pyqtribbon).  
-This ribbon is based on the work of HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.  
-Current developers are:
-* Paul Ebbers (https://github.com/APEbbers/FreeCAD-Ribbon)
-* Geolta (https://github.com/geolta/FreeCAD-Ribbon)
+This ribbon is based the work of Geolta (https://github.com/geolta/FreeCAD-Ribbon) and HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.  
 
 ![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/Resources/Images/Screenshot.png)
 
@@ -23,7 +20,7 @@ The FreeCAD ribbon provides the following functions and features:
 * Scripts are provided to help setup your own customized Ribbon
 * Much more...
 
-See the wiki page for more details and a manual on how to customize the Ribbon to your liking.
+See the [wiki page](https://github.com/APEbbers/FreeCAD-Ribbon/wiki) for more details and how to customize the Ribbon to your preference.
 
 
 ## Installation
