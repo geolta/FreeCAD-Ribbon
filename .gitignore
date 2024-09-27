@@ -134,3 +134,4 @@ __pycache__
 .pre-commit-search-and-replace.yaml
 .pttx
 *.pptx
+/CreateTranslations.bat
