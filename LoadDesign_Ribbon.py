@@ -1564,7 +1564,15 @@ class LoadDialog(Design_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedFile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
+            SelectedFile = StandardFunctions.Mbox(
+                translate("FreeCAD Ribbon"),
+                translate("FreeCAD Ribbon", "Select a backup file"),
+                "",
+                21,
+                "NoIcon",
+                BackupFiles[0],
+                BackupFiles,
+            )
             BackupFile = os.path.join(pathBackup, SelectedFile)
             result = shutil.copy(BackupFile, JsonFile)
             StandardFunctions.Print(
