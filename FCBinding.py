@@ -408,7 +408,7 @@ class ModernMenu(RibbonBar):
 
         # Add the ribbon design button
         Menu.addSeparator()
-        DesignMenu = Menu.addMenu(translate("FreeCAD Ribbon", ()"Customize..."))
+        DesignMenu = Menu.addMenu(translate("FreeCAD Ribbon", "Customize..."))
         DesignButton = DesignMenu.addAction(translate("FreeCAD Ribbon", "Ribbon Design"))
         DesignButton.triggered.connect(self.loadDesignMenu)
         # Add the preference button
@@ -431,7 +431,10 @@ class ModernMenu(RibbonBar):
         AboutButton.triggered.connect(self.on_AboutButton_clicked)
 
     def loadDesignMenu(self):
-        message = translate("FreeCAD Ribbon", "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?")
+        message = translate(
+            "FreeCAD Ribbon",
+            "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?",
+        )
         result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
         if result == "yes":
             LoadDesign_Ribbon.main()
@@ -788,7 +791,10 @@ class ModernMenu(RibbonBar):
                                     btn.setMinimumWidth(btn.maximumHeight() - 10)
                             else:
                                 raise NotImplementedError(
-                                    translate("FreeCAD Ribbon", "Given button size not implemented, only small, medium and large are available.")
+                                    translate(
+                                        "FreeCAD Ribbon",
+                                        "Given button size not implemented, only small, medium and large are available.",
+                                    )
                                 )
 
                             # add dropdown menu if necessary
