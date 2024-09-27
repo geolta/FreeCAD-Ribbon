@@ -105,7 +105,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.ToolbarsOrder.hide()
 
         # Set the window title
-        self.form.setWindowTitle("Ribbon design")
+        self.form.setWindowTitle(translate("FreeCAD Ribbon", "Ribbon design"))
 
         # Get the style from the main window and use it for this form
         mw = Gui.getMainWindow()
@@ -258,7 +258,7 @@ class LoadDialog(Design_ui.Ui_Form):
         self.QuickAccessCommands()
 
         # -- Custom panel tab --
-        self.form.CustomToolbarSelector.addItem("New")
+        self.form.CustomToolbarSelector.addItem(translate("FreeCAD Ribbon", "New"))
         try:
             for WorkBenchName in self.Dict_CustomToolbars["customToolbars"]:
                 WorkBenchTitle = ""
@@ -817,7 +817,9 @@ class LoadDialog(Design_ui.Ui_Form):
         if self.form.ToolbarName.text() != "":
             CustomPanelTitle = self.form.ToolbarName.text()
         if self.form.ToolbarName.text() == "":
-            StandardFunctions.Mbox("Enter a name for your custom panel first!", "", 0, "Warning")
+            StandardFunctions.Mbox(
+                translate("FreeCAD Ribbon", "Enter a name for your custom panel first!"), "", 0, "Warning"
+            )
             return
 
         # Go through the list of workbenches
@@ -1562,12 +1564,19 @@ class LoadDialog(Design_ui.Ui_Form):
                     BackupFiles.append(name)
 
         if len(BackupFiles) > 0:
-            SelectedDile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
-            BackupFile = os.path.join(pathBackup, SelectedDile)
+            SelectedFile = StandardFunctions.Mbox("Select backup file", "", 21, "NoIcon", BackupFiles[0], BackupFiles)
+            BackupFile = os.path.join(pathBackup, SelectedFile)
             result = shutil.copy(BackupFile, JsonFile)
-            StandardFunctions.Print(f"Ribbonbar set back to settings from: {result}!", "Warning")
+            StandardFunctions.Print(
+                translate("FreeCAD Ribbon", "Ribbonbar set back to settings from: ") + f"{result}!", "Warning"
+            )
 
-            message = f"Settings reset to {SelectedDile}!\nYou must restart FreeCAD for changes to take effect."
+            message = (
+                translate("FreeCAD Ribbon", "Settings reset to ")
+                + SelectedFile
+                + "!\n"
+                + translate("FreeCAD Ribbon", "You must restart FreeCAD for changes to take effect.")
+            )
             anwser = StandardFunctions.RestartDialog(message=message)
             if anwser == "yes":
                 StandardFunctions.restart_freecad()
@@ -1583,10 +1592,14 @@ class LoadDialog(Design_ui.Ui_Form):
 
         BackupFile = os.path.join(JsonPath, "RibbonStructure_default.json")
 
-        message = "Settings reset to default!\nYou must restart FreeCAD for changes to take effect."
+        message = (
+            translate("FreeCAD Ribbon", "Settings reset to default!")
+            + "\n"
+            + translate("FreeCAD Ribbon", "You must restart FreeCAD for changes to take effect.")
+        )
 
         result = shutil.copy(BackupFile, JsonFile)
-        StandardFunctions.Print(f"Ribbonbar reset from {result}!", "Warning")
+        StandardFunctions.Print(translate("FreeCAD Ribbon", "Ribbonbar reset from ") + f"{result}!", "Warning")
         anwser = StandardFunctions.RestartDialog(message=message)
         if anwser == "yes":
             StandardFunctions.restart_freecad()
@@ -1641,8 +1654,9 @@ class LoadDialog(Design_ui.Ui_Form):
         self.form.WorkbenchesSelected.clear()
         self.form.WorkbenchList_2.clear()
 
-        self.form.ListCategory_1.addItem("All")
-        self.form.ListCategory_2.addItem("All")
+        All_KeyWord = translate("FreeCAD Ribbon", "All")
+        self.form.ListCategory_1.addItem(All_KeyWord)
+        self.form.ListCategory_2.addItem(All_KeyWord)
 
         for workbench in self.List_Workbenches:
             # Default a workbench is selected
@@ -1671,8 +1685,8 @@ class LoadDialog(Design_ui.Ui_Form):
             self.form.ListCategory_1.addItem(icon, workbench[2])
             self.form.ListCategory_2.addItem(icon, workbench[2])
 
-        self.form.ListCategory_1.setCurrentText("All")
-        self.form.ListCategory_2.setCurrentText("All")
+        self.form.ListCategory_1.setCurrentText(All_KeyWord)
+        self.form.ListCategory_2.setCurrentText(All_KeyWord)
 
         # Set the text in the combobox to the name of the active workbench
         self.form.WorkbenchList.setCurrentText(Gui.activeWorkbench().name())
@@ -1775,7 +1789,7 @@ class LoadDialog(Design_ui.Ui_Form):
 
                                 # There are a few dropdown buttons that need to be corrected
                                 if CommandName == "PartDesign_CompSketches":
-                                    MenuName = "Create sketch"
+                                    MenuName = translate("FreeCAD Ribbon", "Create sketch")
 
                                 # Get the checkedstate from the clicked cell
                                 # CheckState = self.form.tableWidget.item(row, column).checkState()

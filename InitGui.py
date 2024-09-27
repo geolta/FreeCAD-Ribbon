@@ -24,8 +24,15 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import FCBinding
 
+
+def QT_TRANSLATE_NOOP(context, text):
+    return text
+
+
+translate = App.Qt.translate
+
 try:
-    print("Activating Ribbon Bar...")
+    print(translate("FreeCAD Ribbon", "Activating Ribbon Bar..."))
     mw = Gui.getMainWindow()
     mw.workbenchActivated.connect(FCBinding.run)
 except Exception as e:

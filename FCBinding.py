@@ -66,15 +66,15 @@ sys.path.append(pathStylSheets)
 sys.path.append(pathUI)
 sys.path.append(pathPackages)
 
+translate = App.Qt.translate
+
 try:
     from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 except ImportError:
     import pyqtribbon_local as pyqtribbon
     from pyqtribbon_local.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
 
-    print("pyqtribbon used local")
-
-from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
+    print(translate("FreeCAD Ribbon", "pyqtribbon used local"))
 
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
@@ -140,7 +140,7 @@ class ModernMenu(RibbonBar):
 
         # Get the adress of the reporisaty adress
         self.ReproAdress = StandardFunctions.getReproAdress(os.path.dirname(__file__))
-        print(f"FreeCAD Ribbon: {self.ReproAdress}")
+        print(translate("FreeCAD Ribbon", "FreeCAD Ribbon: ") + self.ReproAdress)
 
         # Set the icon size if parameters has none
         # Define the icon sizes
@@ -361,7 +361,7 @@ class ModernMenu(RibbonBar):
         # Set the helpbutton
         self.helpRibbonButton().setEnabled(True)
         self.helpRibbonButton().setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.helpRibbonButton().setToolTip("Go to the FreeCAD help page")
+        self.helpRibbonButton().setToolTip(translate("FreeCAD Ribbon", "Go to the FreeCAD help page"))
         # Get the default help action from FreeCAD
         helpMenu = mw.findChildren(QMenu, "&Help")[0]
         helpAction = helpMenu.actions()[0]
@@ -374,8 +374,8 @@ class ModernMenu(RibbonBar):
         pinButton = QToolButton()
         pinButton.setCheckable(True)
         pinButton.setIcon(pinIcon)
-        pinButton.setText("Pin Ribbon")
-        pinButton.setToolTip("Click to toggle the autohide function on or off")
+        pinButton.setText(translate("FreeCAD Ribbon", "Pin Ribbon"))
+        pinButton.setToolTip(translate("FreeCAD Ribbon", "Click to toggle the autohide function on or off"))
         pinButton.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         if Parameters_Ribbon.AUTOHIDE_RIBBON is True:
             pinButton.setChecked(False)
@@ -392,7 +392,7 @@ class ModernMenu(RibbonBar):
         # Set the application button
         self.applicationOptionButton().setMinimumWidth(self.iconSize * self.sizeFactor)
         self.setApplicationIcon(Gui.getIcon("freecad"))
-        self.applicationOptionButton().setToolTip("FreeCAD Ribbon")
+        self.applicationOptionButton().setToolTip(translate("FreeCAD Ribbon", "FreeCAD Ribbon"))
 
         # add the menus from the menubar to the application button
         self.ApplicationMenu()
@@ -408,18 +408,18 @@ class ModernMenu(RibbonBar):
 
         # Add the ribbon design button
         Menu.addSeparator()
-        DesignMenu = Menu.addMenu("Customize...")
-        DesignButton = DesignMenu.addAction("Ribbon Design")
+        DesignMenu = Menu.addMenu(translate("FreeCAD Ribbon", ()"Customize..."))
+        DesignButton = DesignMenu.addAction(translate("FreeCAD Ribbon", "Ribbon Design"))
         DesignButton.triggered.connect(self.loadDesignMenu)
         # Add the preference button
-        PreferenceButton = DesignMenu.addAction("Ribbon Preferences")
+        PreferenceButton = DesignMenu.addAction(translate("FreeCAD Ribbon", "Ribbon Preferences"))
         PreferenceButton.triggered.connect(self.loadSettingsMenu)
         # Add the script submenu with items
         ScriptDir = os.path.join(os.path.dirname(__file__), "Scripts")
         if os.path.exists(ScriptDir) is True:
             ListScripts = os.listdir(ScriptDir)
             if len(ListScripts) > 0:
-                ScriptButtonMenu = DesignMenu.addMenu("Scripts")
+                ScriptButtonMenu = DesignMenu.addMenu(translate("FreeCAD Ribbon", "Scripts"))
                 for i in range(len(ListScripts)):
                     ScriptButtonMenu.addAction(
                         ListScripts[i],
@@ -427,11 +427,11 @@ class ModernMenu(RibbonBar):
                     )
         # Add a about button for this ribbon
         Menu.addSeparator()
-        AboutButton = Menu.addAction("About FreeCAD Ribbon")
+        AboutButton = Menu.addAction(translate("FreeCAD Ribbon", "About FreeCAD Ribbon"))
         AboutButton.triggered.connect(self.on_AboutButton_clicked)
 
     def loadDesignMenu(self):
-        message = "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?"
+        message = translate("FreeCAD Ribbon", "All workbenches need to be loaded.\nThis can take a couple of minutes.\nDo you want to proceed?")
         result = StandardFunctions.Mbox(message, "", 1, IconType="Question")
         if result == "yes":
             LoadDesign_Ribbon.main()
@@ -788,7 +788,7 @@ class ModernMenu(RibbonBar):
                                     btn.setMinimumWidth(btn.maximumHeight() - 10)
                             else:
                                 raise NotImplementedError(
-                                    "Given button size not implemented, only small, medium and large are available."
+                                    translate("FreeCAD Ribbon", "Given button size not implemented, only small, medium and large are available.")
                                 )
 
                             # add dropdown menu if necessary
