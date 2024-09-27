@@ -5,27 +5,29 @@
 
   <description>A Ribbon for FreeCAD</description>
 
-  <version>0.0.2</version>
+  <version>1.0.0</version>
 
   <date>2024-07-28</date>
 
-  <maintainer>geolta</maintainer>
+  <maintainer>Paul Ebbers, Geolta</maintainer>
 
-  <license file="LICENSE">GPL v3.0</license>
+  <license file="LICENSE">GPL-3.0 license</license>
 
   <pythonmin>3.8.0</pythonmin>
 
-  <url type="website">https://github.com/geolta/FreeCAD-Ribbon/wiki</url>
+  <url type="website">https://github.com/APEbbers/FreeCAD-Ribbon/wiki</url>
 
-  <url branch="main" type="repository">https://github.com/geolta/FreeCAD-Ribbon</url>
+  <url branch="main" type="repository">https://github.com/APEbbers/FreeCAD-Ribbon</url>
 
-  <url type="readme">https://github.com/geolta/FreeCAD-Ribbon/blob/main/README.md</url>
-
-  <icon></icon>
+  <url type="readme">https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/README.md</url>
 
   <content>
     <workbench>
       <freecadmin>0.21.0</freecadmin>
+      <icon>Resources/Icons/FreecadNew.svg</icon>
+      <depend optional="False" type="python">pyqtribbon</depend>
+      <depend optional="False" type="python">qtpy</depend>
+      <depend optional="True" type="python">keyboard</depend>
       <subdirectory>./</subdirectory>
     </workbench>
   </content>

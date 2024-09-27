@@ -1,4 +1,4 @@
-- search: PySide
+- search: PySide6
   replacement: PySide
-- search: PySide
+- search: PySide2
   replacement: PySide
