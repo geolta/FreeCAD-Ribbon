@@ -74,8 +74,6 @@ except ImportError:
 
     print("pyqtribbon used local")
 
-from pyqtribbon.ribbonbar import RibbonMenu, RibbonBar, RibbonStyle
-
 # Get the main window of FreeCAD
 mw = Gui.getMainWindow()
 
