@@ -1,40 +1,19 @@
 ## FreeCAD Ribbon UI
 
-An Ribbon UI for FreeCAD, based on the PyQtRibbon library (https://github.com/haiiliin/pyqtribbon).
-This ribbon is based the work of Geolta (https://github.com/geolta/FreeCAD-Ribbon) and HakanSeven (https://github.com/HakanSeven12/Modern-UI) for the Modern-UI workbench.
+A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [HakanSeven](https://github.com/HakanSeven12/Modern-UI) and the [PyQtRibbon library](https://github.com/haiiliin/pyqtribbon) that got slight modifications for this purpose.
 
-![](https://github.com/APEbbers/FreeCAD-Ribbon/blob/main/Resources/Images/Screenshot.png)
+![Screenshots of FreeCAD with the Ribbon UI](Screenshot.png)
 
-The FreeCAD ribbon provides the following functions and features:
-* Replace the default toolbars with a ribbon based on the original toolbars
-* The ribbon design is stored in a Json file for easy modification of the ribbon design.
-* A Ribbon Design dialog is provided for easy customization. (The changes are stored in the Json file). With this dialog you can:
-  * Include/exclude toolbars to be used as a panel in the ribbon
-  * Include/exclude workbenches
-  * Create your own panels based on one or more toolbars
-  * Change the order of the panels
-  * Change the order of the buttons
-  * Customize button text
-  * Set the button size to small, medium or large
-* You can apply your own stylesheet
-* Scripts are provided to help setup your own customized Ribbon
-* Much more...
-
-See the [wiki page](https://github.com/APEbbers/FreeCAD-Ribbon/wiki) for more details and how to customize the Ribbon to your preference.
-
+This is not finished or intended for production use, but rather to look at where the limitations of this approach, implementing it as an external Python addon, lie.
 
 ## Installation
-There are two options for installing this addon:
-### Custom Repository for Addon Manager
-Go to `Edit/Preferences/Addon-Manager` and add the custom repository `https://github.com/APEbbers/FreeCAD-Ribbon.git` with the branch `main`. Now you can go to the Addon Manager (`Tools/Addon-Manager`) and install "FreeCAD Ribbon" (maybe you have to update your local cache first). Now restart FreeCAD and you will see a ribbon interface :)
-### Manual Installation
 Download this repository, extract the folder and copy it to the `Mod` folder of FreeCAD, detailed information can be found at the [FreeCAD Wiki](https://wiki.freecad.org/Installing_more_workbenches). Now restart FreeCAD and you will see a ribbon interface :)
 
 ## Uninstallation
 1. Remove the folder of this in the `Mod` folder of your FreeCAD installation
 1. Restart FreeCAD.
 1. When you restarted you don't see any toolbar.
-1. Create a new macro (Macro menu -> macros...-> create macro)
+1. Create a macro.
 1. Paste this code in to macro.
     ```python
     from PySide import QtCore, QtGui, QtWidgets
@@ -50,12 +29,26 @@ Download this repository, extract the folder and copy it to the `Mod` folder of 
 1. Execute the macro
 1. Restart FreeCAD.
 
+## Settings
+
+Since this addon is more like a draft, there is no preferences page, all settings can be accessed via  `RibbonStructure.json`, you can find the file in the folder of this addon. The file determines
+- which toolbars are ignored and not displayed (`ignoredToolbars`)
+- which toolbars will always display icons only, regardless of the `showText` variable (see below) (`iconOnlyToolbars`)
+- which commands are displayed in the tab bar (`quickAccessCommands`)
+- which workbenches do not appear in the tab bar (`ignoredWorkbenches`)
+- whether small buttons display text as well (`showText`)
+- the order of tools in the toolbars (`toolbars / <toolbar name> / order`)
+- the size of a tool button (`toolbars / <toolbar name> / commands / <command name> / size`)
+- an alternative text of a tool button (`toolbars / <toolbar name> / commands / <command name> / text`)
+
+Until now, there are only a few defaults, more or less for testing, feel free to change something and restart FreeCAD to see the results :)
+
 ## Discussion
-Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235).
+Feel free to discuss this addon on the [FreeCAD Forum](https://forum.freecad.org/viewtopic.php?t=79235). This is also the place where I discuss the limitations of this approach as a Python Addon.
 
 ## Known Issues
-- To retrieve all toolbars and command per workbench, all workbenches must be activated. Unfortunally, this results in a longer loading time for the Ribbon Design menu. (up to a few minutes)
-- When the Assembly4 Workbench is installed, make sure that the internal assembly workbench is placed before the Assembly4 workbench. If not, the ribbon for the internal assembly will show the wrong panel named "Assembly".
+- When working in the PartDesign workbench, the automatic switching to the Sketcher workbench and back doesn't work, you have to do it manually.
+- The workbench that should be loaded on startup is ignored, it will always start with the Arch workbench and you have to switch manually.
 
 ## License
 GPL v3.0 (see [LICENSE](LICENSE))
