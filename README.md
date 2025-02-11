@@ -1,3 +1,7 @@
+**The basic work done in this repository has been greatly extended by Paul Ebbers and his fork of this repository: https://github.com/APEbbers/FreeCAD-Ribbon**
+
+**His addon has much more features and is actively developed. Please switch to use his Ribbon UI. This repository will be archived and is not maintained anymore.**
+
 ## FreeCAD Ribbon UI
 
 A draft to implement a proper Ribbon UI for FreeCAD, based on the work of [HakanSeven](https://github.com/HakanSeven12/Modern-UI) and the [PyQtRibbon library](https://github.com/haiiliin/pyqtribbon) that got slight modifications for this purpose.
